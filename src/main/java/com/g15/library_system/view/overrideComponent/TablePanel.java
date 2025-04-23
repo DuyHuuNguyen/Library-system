@@ -1,11 +1,14 @@
 package com.g15.library_system.view.overrideComponent;
 
+import com.g15.library_system.enums.BookStatus;
 import java.awt.*;
+import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-public class TablePanel extends Panel {
+@Deprecated
+public class TablePanel extends Panel implements TableService {
   private String[] columns;
   private Object[][] data;
   private int height;
@@ -32,6 +35,13 @@ public class TablePanel extends Panel {
         };
 
     table = new JTable(model);
+    table.getColumn(columns[0]).setCellRenderer(new CheckBoxRenderer());
+
+    var checkColumn = table.getColumnModel().getColumn(0);
+    checkColumn.setMaxWidth(40);
+    checkColumn.setMinWidth(40);
+    checkColumn.setPreferredWidth(40);
+
     table.setRowHeight(30);
     table.setFont(new Font("SansSerif", Font.PLAIN, 14));
     table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -63,10 +73,37 @@ public class TablePanel extends Panel {
           }
         });
 
-    table.getColumnModel().getColumn(6).setCellRenderer(new StatusRenderer());
+    table.getColumnModel().getColumn(this.columns.length - 1).setCellRenderer(new StatusRenderer());
 
     scrollPane = new JScrollPane(table);
     add(scrollPane, BorderLayout.CENTER);
+  }
+
+  public void reload() {
+    this.model.setRowCount(0);
+    for (var datum : this.data) {
+      this.model.addRow(datum);
+    }
+  }
+
+  public void find(String text) {
+
+    String[][] result =
+        Arrays.stream(data)
+            .filter(
+                row ->
+                    Arrays.stream(row)
+                        .anyMatch(
+                            cell -> cell.toString().toLowerCase().contains(text.toLowerCase())))
+            .toArray(String[][]::new);
+    for (var datum : result) {
+      this.model.addRow(datum);
+    }
+  }
+
+  public void updateData(Object[][] data) {
+    this.data = data;
+    this.reload();
   }
 
   static class StatusRenderer extends DefaultTableCellRenderer {
@@ -78,7 +115,7 @@ public class TablePanel extends Panel {
       label.setFont(new Font("SansSerif", Font.BOLD, 13));
 
       switch (value.toString()) {
-        case "Available":
+        case "demo":
           label.setBackground(new Color(200, 255, 220, 120));
           label.setForeground(new Color(0, 150, 90));
           break;
@@ -100,47 +137,60 @@ public class TablePanel extends Panel {
   }
 
   public static void main(String[] args) {
-
+    BookStatus.DEMO.getStatus();
     String[] columnNames = {
-      "Book ID", "Book Title", "Author(s)", "Genre/Category", "Language", "Total Copies", "Status"
+      "",
+      "Book ID",
+      "Book Title",
+      "Author(s)",
+      "Genre/Category",
+      "Language",
+      "Total Copies",
+      "Status"
     };
 
     Object[][] data = {
       {
-        "ASP-BO-01",
-        "The Great Gatsby",
-        "F. Scott Fitzgerald",
+        !true,
+        "ASP-BO-06",
+        "The Catcher in the Rye",
+        "John Peter",
         "Fiction",
         "English",
-        10,
-        "Available"
-      },
-      {
-        "ASP-BO-02",
-        "To Kill a Mockingbird",
-        "George Orwell",
-        "Ux-UI Design Book",
-        "English",
         5,
-        "Available"
-      },
-      {"ASP-BO-03", "Pirates of the Caribbean", "Jane Austen", "Non-Fiction", "Tamil", 3, "Lended"},
-      {"ASP-BO-04", "Pride and Prejudice", "J.D. Salinger", "Romance", "English", 2, "Available"},
-      {
-        "ASP-BO-05",
-        "Sapiens: A Brief History",
-        "Stephen Hawking",
-        "Ux-UI Design Book",
-        "English",
-        1,
         "Damaged"
       },
-      {"ASP-BO-06", "The Catcher in the Rye", "John Peter", "Fiction", "English", 5, "Damaged"},
-      {"ASP-BO-07", "The Alchemist", "Sara Jones", "Non-Fiction", "English", 10, "Lended"},
-      {"ASP-BO-08", "A Brief History of Time", "Will Turner", "Science", "English", 20, "Lended"},
-      {"ASP-BO-09", "The Diary of a Young", "Dwayne Smith", "Memoir", "English", 30, "Lended"},
-      {"ASP-BO-10", "Ux-UI Design Book", "Anne Frank", "Visual Design", "English", 50, "Lended"},
-
+      {!true, "ASP-BO-07", "The Alchemist", "Sara Jones", "Non-Fiction", "English", 10, "Lended"},
+      {
+        !true,
+        "ASP-BO-08",
+        "A Brief History of Time",
+        "Will Turner",
+        "Science",
+        "English",
+        20,
+        "Lended"
+      },
+      {
+        !true,
+        "ASP-BO-09",
+        "The Diary of a Young",
+        "Dwayne Smith",
+        "Memoir",
+        "English",
+        30,
+        "Lended"
+      },
+      {
+        true,
+        "ASP-BO-10",
+        "Ux-UI Design Book",
+        "Anne Frank",
+        "Visual Design",
+        "English",
+        50,
+        "Lended"
+      },
     };
     SwingUtilities.invokeLater(
         () -> {

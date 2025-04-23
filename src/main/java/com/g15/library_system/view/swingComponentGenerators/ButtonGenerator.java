@@ -151,7 +151,7 @@ public class ButtonGenerator {
     ImageIcon showPasswd =
         new ImageIcon(
             "src/main/java/Icon/showPasswd_Icon.png"); // image representing the password being
-                                                       // displayed
+    // displayed
     ImageIcon hidePasswd =
         new ImageIcon(
             "src/main/java/Icon/hidePasswd_Icon.png"); // image representing hidden password
