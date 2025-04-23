@@ -81,13 +81,13 @@ public class Style {
   public static final Color CHART_BAR_COLOR_YELLOW = new Color(255, 235, 59);
 
   public static final Color GREEN_MAIN_THEME = new Color(46, 139, 87);
-//  public static final Color GREEN_MAIN_THEME =  new Color(34, 139, 34);// look good to me!
-public static final Color GREEN_MAIN_THEME_DARKER = new Color(25, 117, 64);
+  //  public static final Color GREEN_MAIN_THEME =  new Color(34, 139, 34);// look good to me!
+  public static final Color GREEN_MAIN_THEME_DARKER = new Color(25, 117, 64);
 
-  //Library system
+  // Library system
 
-  //Color
-  public static final Color PURPLE_MAIN_THEME =  new Color(107, 67, 196);
+  // Color
+  public static final Color PURPLE_MAIN_THEME = new Color(107, 67, 196);
   public static final Color PURPLE_MAIN_THEME_DARKER = new Color(83, 45, 176);
   public static final Color HOVER_WHITE_DARKER = new Color(220, 220, 220);
   public static final Color LOGOUT_RED = new Color(225, 76, 76);
@@ -98,11 +98,8 @@ public static final Color GREEN_MAIN_THEME_DARKER = new Color(25, 117, 64);
   public static final Color LIGHT_GREEN_HOVER = new Color(224, 255, 224);
   public static final Color LIGHT_BLUE_BACKGROUND = new Color(221, 228, 228);
 
-
-  //font
+  // font
   public static final Font FONT_SANSERIF_PLAIN_16 = new Font("SansSerif", Font.PLAIN, 16);
   public static final Font FONT_SANSERIF_BOLD_16 = new Font("SansSerif", Font.BOLD, 16);
   public static final Color YELLOW_DARKER = new Color(230, 165, 52);
-
-
 }

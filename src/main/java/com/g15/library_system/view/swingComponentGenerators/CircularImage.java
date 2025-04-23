@@ -1,14 +1,13 @@
 package com.g15.library_system.view.swingComponentGenerators;
 
-import lombok.Getter;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import lombok.Getter;
 
 // create a logo, avatar in circle
 @Getter

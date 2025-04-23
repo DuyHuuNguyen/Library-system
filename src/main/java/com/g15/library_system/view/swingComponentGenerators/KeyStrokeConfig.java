@@ -1,7 +1,7 @@
 package com.g15.library_system.view.swingComponentGenerators;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
+import javax.swing.*;
 
 public class KeyStrokeConfig {
   public static final String addKey = "control N";
