@@ -28,7 +28,7 @@ public class NavigationPanel extends JPanel {
 
   public NavigationPanel() {
     setLayout(new FlowLayout());
-    setPreferredSize(new Dimension(250, 900));
+    setPreferredSize(new Dimension(220, 900));
     setBackground(Color.WHITE);
 //    gbc = new GridBagConstraints();
 //    gbc.gridx = 1;
@@ -98,8 +98,8 @@ public class NavigationPanel extends JPanel {
 
       gbc.gridx = 0;
       gbc.gridy = 0;
-      gbc.insets = new Insets(10, 0, 15, 0);
-      gbc.anchor = GridBagConstraints.WEST;
+      gbc.insets = new Insets(10, 5, 15, 5);
+      gbc.anchor = GridBagConstraints.CENTER;
       gbc.fill = GridBagConstraints.NONE;
 
       appLogo = ButtonGenerator.createCustomButton(
@@ -119,7 +119,7 @@ public class NavigationPanel extends JPanel {
       gbc.gridy++;
 
       JSeparator separatorBot = new JSeparator(SwingConstants.HORIZONTAL);
-      separatorBot.setPreferredSize(new Dimension(220, 1));
+      separatorBot.setPreferredSize(new Dimension(200, 1));
       gbc.insets = new Insets(5, 0, 5, 0);
       add(separatorBot, gbc);
       gbc.gridy++;
@@ -130,9 +130,9 @@ public class NavigationPanel extends JPanel {
               Color.WHITE,
               Style.PURPLE_MAIN_THEME,
               Style.HOVER_WHITE_DARKER,
-              20,
+              12,
               SwingConstants.LEFT,
-              new Dimension(220, 45));
+              new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/Icon/dashboardIcon.png", dashBoardBt, 20);
       add(dashBoardBt, gbc);
       gbc.gridy++;
@@ -143,9 +143,9 @@ public class NavigationPanel extends JPanel {
               Color.BLACK,
               Color.WHITE,
               Style.HOVER_WHITE_DARKER,
-              20,
+              12,
               SwingConstants.LEFT,
-              new Dimension(220, 45));
+              new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/view/LibraryUI/icons/manageBook.png", manageBookBt, 18);
       add(manageBookBt, gbc);
       gbc.gridy++;
@@ -156,9 +156,9 @@ public class NavigationPanel extends JPanel {
               Color.BLACK,
               Color.WHITE,
               Style.HOVER_WHITE_DARKER,
-              20,
+              12,
               SwingConstants.LEFT,
-              new Dimension(220, 45));
+              new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/view/LibraryUI/icons/lendBookIcon.png", lendedBookBt, 15);
       add(lendedBookBt, gbc);
       gbc.gridy++;
@@ -169,9 +169,9 @@ public class NavigationPanel extends JPanel {
               Color.BLACK,
               Color.WHITE,
               Style.HOVER_WHITE_DARKER,
-              20,
+              12,
               SwingConstants.LEFT,
-              new Dimension(220, 45));
+              new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/Icon/customerIcon.png", returnBookBt, 20);
       add(returnBookBt, gbc);
       gbc.gridy++;
@@ -182,9 +182,9 @@ public class NavigationPanel extends JPanel {
               Color.BLACK,
               Color.WHITE,
               Style.HOVER_WHITE_DARKER,
-              20,
+              12,
               SwingConstants.LEFT,
-              new Dimension(220, 45));
+              new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/Icon/orderIcon.png", readerBt, 20);
       add(readerBt, gbc);
       gbc.gridy++;
@@ -195,9 +195,9 @@ public class NavigationPanel extends JPanel {
               Color.BLACK,
               Color.WHITE,
               Style.HOVER_WHITE_DARKER,
-              20,
+              12,
               SwingConstants.LEFT,
-              new Dimension(220, 45));
+              new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/Icon/inventoryIcon.png", librarianBt, 20);
       add(librarianBt, gbc);
       gbc.gridy++;
@@ -208,9 +208,9 @@ public class NavigationPanel extends JPanel {
               Color.BLACK,
               Color.WHITE,
               Style.HOVER_WHITE_DARKER,
-              20,
+              12,
               SwingConstants.LEFT,
-              new Dimension(220, 45));
+              new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/Icon/user_15094854.png", settingBt, 20);
       add(settingBt, gbc);
       gbc.gridy++;
@@ -221,9 +221,9 @@ public class NavigationPanel extends JPanel {
               Color.BLACK,
               Color.WHITE,
               Style.HOVER_WHITE_DARKER,
-              20,
+              12,
               SwingConstants.LEFT,
-              new Dimension(220, 45));
+              new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/Icon/iconNotification.png", myAccountBt, 20);
       add(myAccountBt, gbc);
       gbc.gridy++;
@@ -234,13 +234,13 @@ public class NavigationPanel extends JPanel {
               Style.LOGOUT_RED,
               Color.WHITE,
               Style.HOVER_WHITE_DARKER,
-              20,
+              12,
               SwingConstants.LEFT,
-              new Dimension(220, 45));
+              new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/view/LibraryUI/icons/logoutIcon.png", logoutBt, 25);
       Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
       int height = (int) screenSize.getHeight();
-      int buttonHeight = 50+ 75+ 50*8+5+50;
+      int buttonHeight = 50+ 75+ 45*8 +5+50;
       int logoutHeight = 40 +45;
       gbc.insets = new Insets(height - (buttonHeight + logoutHeight), 0, 5, 0);
       add(logoutBt, gbc);

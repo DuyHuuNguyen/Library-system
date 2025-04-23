@@ -109,101 +109,113 @@ public class LoginFrame extends JFrame{
             gbc.insets = new Insets(10, 10, 10, 10);
             gbc.fill = GridBagConstraints.HORIZONTAL;
 
-            signInLabel = LabelGenerator.createLabel("Sign In",Style.FONT_TITLE_BOLD_45,Style.PURPLE_MAIN_THEME, SwingConstants.CENTER);
-//            OutlinedLabel signIn = new OutlinedLabel("Sign In",Style.FONT_TITLE_BOLD_45,Style.PURPLE_MAIN_THEME,new Color(255, 215, 0));
+            // Sign In title
+            signInLabel = LabelGenerator.createLabel("Sign In", Style.FONT_TITLE_BOLD_45, Style.PURPLE_MAIN_THEME, SwingConstants.CENTER);
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.gridwidth = 2;
             gbc.anchor = GridBagConstraints.CENTER;
             add(signInLabel, gbc);
 
-
+// Reset lại gridwidth cho các thành phần kế tiếp
             gbc.gridwidth = 1;
+            gbc.anchor = GridBagConstraints.WEST;
+
+// Role ComboBox
             gbc.gridy++;
             gbc.gridx = 0;
-            JLabel roleIcon = LabelGenerator.createImageLabel("src/main/java/view/LibraryUI/icons/roleIcon2.png",35,35);
-            add(roleIcon, gbc);
             String[] roles = {"Librarian", "Admin"};
             roleComboBox = new JComboBox<>(roles);
             roleComboBox.setPreferredSize(new Dimension(320, 45));
             roleComboBox.setFont(Style.FONT_PLAIN_20);
             roleComboBox.setBackground(Color.WHITE);
-
-            roleComboBox.setBorder(
-                    BorderFactory.createLineBorder(Style.PURPLE_MAIN_THEME, 1));
-            gbc.gridx = 1;
+            roleComboBox.setBorder(BorderFactory.createLineBorder(Style.PURPLE_MAIN_THEME, 1));
+            gbc.gridwidth = 2; // Cho ComboBox chiếm hết dòng
             add(roleComboBox, gbc);
 
-            gbc.gridwidth = 1;
+// User Email Label
             gbc.gridy++;
             gbc.gridx = 0;
-            JLabel nameIcon = LabelGenerator.createImageLabel("src/main/java/view/LibraryUI/icons/green_user_icon.png",30,30);
-            add(nameIcon, gbc);
+            gbc.gridwidth = 2;
+            JLabel userEmailLabel = LabelGenerator.createLabel("User Email", Style.FONT_BOLD_16, Color.BLACK, SwingConstants.LEFT);
+            add(userEmailLabel, gbc);
 
-            gbc.gridx = 1;
-            emailField =
-                    TextFieldGenerator.createTextFieldWithPlaceholder(
-                            "User Email", Style.FONT_PLAIN_20, Color.GRAY, Style.PURPLE_MAIN_THEME,new Dimension(320, 45));
+// Email TextField
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.gridwidth = 2;
+            emailField = TextFieldGenerator.createTextFieldWithPlaceholder(
+                    "User Email", Style.FONT_PLAIN_20, Color.GRAY, Style.PURPLE_MAIN_THEME, new Dimension(320, 45)
+            );
             emailField.addActionListener(e -> signInButton.doClick());
             add(emailField, gbc);
 
+// Password Label
             gbc.gridy++;
             gbc.gridx = 0;
-            JLabel passwordIcon = LabelGenerator.createImageLabel("src/main/java/view/LibraryUI/icons/lockIcon.png",40,40);
-            add(passwordIcon, gbc);
+            gbc.gridwidth = 2;
+            JLabel passwordLabel = LabelGenerator.createLabel("Password", Style.FONT_BOLD_16, Color.BLACK, SwingConstants.LEFT);
+            add(passwordLabel, gbc);
 
-            gbc.gridx = 1;
-            passwdFieldSignIn =
-                    PasswordFieldGenerator.createPasswordFieldWithPlaceHolder(
-                            "Password", Style.FONT_PLAIN_20, Style.PURPLE_MAIN_THEME, new Dimension(320, 45));
+// Password Field
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.gridwidth = 2;
+            passwdFieldSignIn = PasswordFieldGenerator.createPasswordFieldWithPlaceHolder(
+                    "Password", Style.FONT_PLAIN_20, Style.PURPLE_MAIN_THEME, new Dimension(320, 45)
+            );
             passwdFieldSignIn.addActionListener(e -> signInButton.doClick());
             add(passwdFieldSignIn, gbc);
 
+// Show Password Checkbox
             gbc.gridy++;
-            gbc.gridx = 1;
+            gbc.gridx = 0;
+            gbc.gridwidth = 2;
             showPasswdCB = new JCheckBox("Show Password");
             showPasswdCB.setPreferredSize(new Dimension(300, 15));
             showPasswdCB.setFocusPainted(false);
             showPasswdCB.setFont(Style.FONT_PLAIN_13);
             showPasswdCB.setFocusable(false);
             showPasswdCB.setBackground(Color.WHITE);
-//            showPasswdCB.setOpaque(false);
             showPasswdCB.setForeground(Style.PURPLE_MAIN_THEME);
             showPasswdCB.addActionListener(
                     e -> {
-                            String passwd = new String(passwdFieldSignIn.getPassword());
-                            if (passwd.equals("Password")) {
-                                showPasswdCB.setSelected(false);
+                        String passwd = new String(passwdFieldSignIn.getPassword());
+                        if (passwd.equals("Password")) {
+                            showPasswdCB.setSelected(false);
+                        } else {
+                            if (showPasswdCB.isSelected()) {
+                                passwdFieldSignIn.setEchoChar((char) 0); // Hiện mật khẩu
                             } else {
-                                if (showPasswdCB.isSelected()) {
-                                    passwdFieldSignIn.setEchoChar((char) 0); // Hiện mật khẩu
-                                } else {
-                                    passwdFieldSignIn.setEchoChar('*'); // Ẩn mật khẩu
-                                }
+                                passwdFieldSignIn.setEchoChar('*'); // Ẩn mật khẩu
                             }
-                    });
+                        }
+                    }
+            );
             add(showPasswdCB, gbc);
 
+// Sign In Button
             gbc.gridy++;
             gbc.gridx = 0;
             gbc.gridwidth = 2;
-            signInButton =
-                    ButtonGenerator.createCustomButton(
-                            "Sign In",
-                            Style.FONT_BOLD_24,
-                            Color.white,
-                            Style.PURPLE_MAIN_THEME,
-                            Style.PURPLE_MAIN_THEME_DARKER,
-                            Style.PURPLE_MAIN_THEME,
-                            1,
-                            20,
-                            SwingConstants.CENTER,
-                            new Dimension(350, 45));
-            signInButton.addActionListener(e ->{
-                        loginFrame.dispose();
-                        new MainFrame();
-                    });
+            signInButton = ButtonGenerator.createCustomButton(
+                    "Sign In",
+                    Style.FONT_BOLD_24,
+                    Color.white,
+                    Style.PURPLE_MAIN_THEME,
+                    Style.PURPLE_MAIN_THEME_DARKER,
+                    Style.PURPLE_MAIN_THEME,
+                    1,
+                    20,
+                    SwingConstants.CENTER,
+                    new Dimension(350, 45)
+            );
+            signInButton.addActionListener(e -> {
+                loginFrame.dispose();
+                new MainFrame();
+            });
             add(signInButton, gbc);
+
 
             forgotPasswdBt = ButtonGenerator.createJButton("You forgot your Password?",Style.FONT_PLAIN_13,Style.PURPLE_MAIN_THEME,Color.WHITE);
 //            forgotPasswdBt.setOpaque(false);
