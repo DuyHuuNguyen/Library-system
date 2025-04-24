@@ -4,43 +4,43 @@ import java.awt.*;
 import javax.swing.*;
 
 public class ComboBoxBuilder<T> {
-  private T[] items;
-  private Font font;
-  private Color backgroundColor;
-  private Color textColor;
-  private boolean editable;
 
-  public ComboBoxBuilder<T> setItems(T[] items) {
-    this.items = items;
+  private final JComboBox<T> comboBox;
+
+  private ComboBoxBuilder() {
+    comboBox = new JComboBox<>();
+  }
+
+  public static <T> ComboBoxBuilder<T> builder() {
+    return new ComboBoxBuilder<>();
+  }
+
+  public ComboBoxBuilder<T> items(T[] items) {
+    comboBox.setModel(new DefaultComboBoxModel<>(items));
     return this;
   }
 
-  public ComboBoxBuilder<T> setFont(Font font) {
-    this.font = font;
+  public ComboBoxBuilder<T> font(Font font) {
+    comboBox.setFont(font);
     return this;
   }
 
-  public ComboBoxBuilder<T> setBackgroundColor(Color backgroundColor) {
-    this.backgroundColor = backgroundColor;
+  public ComboBoxBuilder<T> backgroundColor(Color backgroundColor) {
+    comboBox.setBackground(backgroundColor);
     return this;
   }
 
-  public ComboBoxBuilder<T> setTextColor(Color textColor) {
-    this.textColor = textColor;
+  public ComboBoxBuilder<T> textColor(Color textColor) {
+    comboBox.setForeground(textColor);
     return this;
   }
 
-  public ComboBoxBuilder<T> setEditable(boolean editable) {
-    this.editable = editable;
+  public ComboBoxBuilder<T> editable(boolean editable) {
+    comboBox.setEditable(editable);
     return this;
   }
 
   public JComboBox<T> build() {
-    JComboBox<T> comboBox = new JComboBox<>(this.items);
-    if (this.font != null) comboBox.setFont(this.font);
-    if (this.backgroundColor != null) comboBox.setBackground(this.backgroundColor);
-    if (this.textColor != null) comboBox.setForeground(this.textColor);
-    comboBox.setEditable(this.editable);
     return comboBox;
   }
 }

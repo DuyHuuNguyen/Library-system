@@ -139,7 +139,7 @@ public class NavigationPanel extends JPanel {
 
       //      dashBoardBt = new CustomButtonBuilder("Login").getFont(Style.FONT_PLAIN_13);
 
-      JTextField field = new TextFieldBuilder().setText("hello").build();
+      JTextField field = TextFieldBuilder.builder().text("hello");
 
       add(dashBoardBt, gbc);
       gbc.gridy++;

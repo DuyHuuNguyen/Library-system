@@ -3,51 +3,34 @@ package com.g15.library_system.view.swingComponentBuilders;
 import java.awt.*;
 import javax.swing.*;
 
-public class TextFieldBuilder {
-  private String text;
-  private Font font;
-  private Color textColor;
-  private Color backgroundColor;
-  private Dimension size;
-  private boolean editable;
+public class TextFieldBuilder extends JTextField {
 
-  public TextFieldBuilder setText(String text) {
-    this.text = text;
+  public static TextFieldBuilder builder() {
+    return new TextFieldBuilder();
+  }
+
+  public TextFieldBuilder text(String text) {
+    this.setText(text);
     return this;
   }
 
-  public TextFieldBuilder setFont(Font font) {
-    this.font = font;
+  public TextFieldBuilder font(Font font) {
+    this.setFont(font);
     return this;
   }
 
-  public TextFieldBuilder setTextColor(Color textColor) {
-    this.textColor = textColor;
+  public TextFieldBuilder textColor(Color color) {
+    this.setForeground(color);
     return this;
   }
 
-  public TextFieldBuilder setBackgroundColor(Color backgroundColor) {
-    this.backgroundColor = backgroundColor;
+  public TextFieldBuilder preferredSize(Dimension dimension) {
+    this.setPreferredSize(dimension);
     return this;
   }
 
-  public TextFieldBuilder setSize(Dimension size) {
-    this.size = size;
+  public TextFieldBuilder editable(boolean editable) {
+    this.setEditable(editable);
     return this;
-  }
-
-  public TextFieldBuilder setEditable(boolean editable) {
-    this.editable = editable;
-    return this;
-  }
-
-  public JTextField build() {
-    JTextField textField = new JTextField(this.text);
-    if (this.font != null) textField.setFont(this.font);
-    if (this.textColor != null) textField.setForeground(this.textColor);
-    if (this.backgroundColor != null) textField.setBackground(this.backgroundColor);
-    if (this.size != null) textField.setPreferredSize(this.size);
-    textField.setEditable(this.editable);
-    return textField;
   }
 }

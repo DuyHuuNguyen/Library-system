@@ -3,44 +3,34 @@ package com.g15.library_system.view.swingComponentBuilders;
 import java.awt.*;
 import javax.swing.*;
 
-public class CheckBoxBuilder {
-  private String text;
-  private boolean selected;
-  private Font font;
-  private Color textColor;
-  private Color backgroundColor;
+public class CheckBoxBuilder extends JCheckBox {
 
-  public CheckBoxBuilder setText(String text) {
-    this.text = text;
+  public static CheckBoxBuilder builder() {
+    return new CheckBoxBuilder();
+  }
+
+  public CheckBoxBuilder text(String text) {
+    this.setText(text);
     return this;
   }
 
-  public CheckBoxBuilder setSelected(boolean selected) {
-    this.selected = selected;
+  public CheckBoxBuilder selected(boolean selected) {
+    this.setSelected(selected);
     return this;
   }
 
-  public CheckBoxBuilder setFont(Font font) {
-    this.font = font;
+  public CheckBoxBuilder font(Font font) {
+    this.setFont(font);
     return this;
   }
 
-  public CheckBoxBuilder setTextColor(Color textColor) {
-    this.textColor = textColor;
+  public CheckBoxBuilder textColor(Color textColor) {
+    this.setForeground(textColor);
     return this;
   }
 
-  public CheckBoxBuilder setBackgroundColor(Color backgroundColor) {
-    this.backgroundColor = backgroundColor;
+  public CheckBoxBuilder backgroundColor(Color backgroundColor) {
+    this.setBackground(backgroundColor);
     return this;
-  }
-
-  public JCheckBox build() {
-    JCheckBox checkBox = new JCheckBox(this.text);
-    checkBox.setSelected(this.selected);
-    if (this.font != null) checkBox.setFont(this.font);
-    if (this.textColor != null) checkBox.setForeground(this.textColor);
-    if (this.backgroundColor != null) checkBox.setBackground(this.backgroundColor);
-    return checkBox;
   }
 }
