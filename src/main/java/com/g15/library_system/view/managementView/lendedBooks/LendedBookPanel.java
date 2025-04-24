@@ -9,14 +9,25 @@ import java.awt.*;
 public class LendedBookPanel extends JPanel {
 
   public LendedBookPanel() {
-    setLayout(new BorderLayout());
-    add(new FormPanel(), BorderLayout.CENTER);
-    add(new ButtonPanel(), BorderLayout.SOUTH);
+    setLayout(new FlowLayout(FlowLayout.CENTER));
+    ContainerPn containerPn =  new  ContainerPn();
+    containerPn.setPreferredSize(new Dimension(1200, 750));
+
+    add(containerPn);
+  }
+
+  private class ContainerPn extends RoundedPanel {
+    ContainerPn(){
+      super(10, Color.WHITE, null);
+      setLayout(new BorderLayout());
+      add(new FormPanel(), BorderLayout.CENTER);
+      add(new ButtonPanel(), BorderLayout.SOUTH);
+    }
   }
 
   private class FormPanel extends RoundedPanel {
     public FormPanel() {
-      super(10, Color.WHITE, null);
+      super(20, Color.WHITE, null);
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
       add(new UserPanel());
       add(Box.createVerticalStrut(10));

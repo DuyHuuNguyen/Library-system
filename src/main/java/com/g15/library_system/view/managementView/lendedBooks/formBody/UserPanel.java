@@ -21,7 +21,6 @@ public class UserPanel extends JPanel {
     private void init() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 5, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
 
@@ -33,6 +32,11 @@ public class UserPanel extends JPanel {
 
         contactNumberL = LabelGenerator.createRequireLabel("Contact Number");
         contactNumberTF = TextFieldGenerator.createTextFieldWithPlaceholder("www.example.com", Style.FONT_PLAIN_13, Color.GRAY, Style.PURPLE_MAIN_THEME, new Dimension(200, 25));
+
+        JSeparator separatorBot = new JSeparator(SwingConstants.HORIZONTAL);
+        separatorBot.setPreferredSize(new Dimension(200, 1));
+        gbc.insets = new Insets(5, 0, 5, 0);
+        add(separatorBot, gbc);
 
         gbc.gridy = 0;
         add(nameL, gbc);

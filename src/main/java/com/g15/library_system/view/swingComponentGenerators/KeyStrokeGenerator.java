@@ -3,7 +3,7 @@ package com.g15.library_system.view.swingComponentGenerators;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-public class KeyStrokeConfig {
+public class KeyStrokeGenerator {
   public static final String addKey = "control N";
   public static final String modifyKey = "control M";
   public static final String deleteKey = "DELETE";

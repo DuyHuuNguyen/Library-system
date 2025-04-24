@@ -4,6 +4,7 @@ package com.g15.library_system.view.managementView;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CircularImage;
 import com.g15.library_system.view.overrideComponent.CustomButton;
+import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import com.g15.library_system.view.swingComponentGenerators.ButtonGenerator;
 
 import javax.swing.*;
@@ -134,6 +135,12 @@ public class NavigationPanel extends JPanel {
               SwingConstants.LEFT,
               new Dimension(200, 40));
       ButtonGenerator.setButtonIcon("src/main/java/Icon/dashboardIcon.png", dashBoardBt, 20);
+
+//      dashBoardBt = new CustomButtonBuilder("Login").getFont(Style.FONT_PLAIN_13);
+
+      JTextField field = new TextFieldBuilder().setText("hello").build();
+
+
       add(dashBoardBt, gbc);
       gbc.gridy++;
 

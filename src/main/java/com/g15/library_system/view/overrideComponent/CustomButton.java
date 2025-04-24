@@ -11,7 +11,7 @@ public class CustomButton extends JButton {
   private Color hoverColor;
   private Color textColor = Color.BLACK;
   private int thickness = 3;
-  private int borderRadius = 15;
+  private int borderRadius = 0;
   private boolean drawBorder = true;
   private boolean isDarkerWhenPress = true;
 

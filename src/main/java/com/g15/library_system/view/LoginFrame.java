@@ -44,7 +44,7 @@ public class LoginFrame extends JFrame{
         JLabel welcomeLabel, subTextLabel;
 
 //        private String imagePath ="src/main/java/view/LibraryUI/images/NLULibrary.jpg";
-        private String imagePath ="src/main/java/view/LibraryUI/images/hogwarts2.png";
+        private String imagePath ="src/main/java/com/g15/library_system/view/images/hogwarts2.png";
 
         public WelcomePanel() {
             setPreferredSize(new Dimension(550, 700));
