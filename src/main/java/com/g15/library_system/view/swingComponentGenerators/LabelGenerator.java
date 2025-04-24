@@ -1,7 +1,6 @@
 package com.g15.library_system.view.swingComponentGenerators;
 
 import com.g15.library_system.view.Style;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -37,25 +36,22 @@ public class LabelGenerator {
     return label;
   }
 
-  public static JLabel createRequireLabel(
-          String text) {
-    JLabel label = new JLabel("<html>" + text+"<span style='color: red';> *</span></html>");
+  public static JLabel createRequireLabel(String text) {
+    JLabel label = new JLabel("<html>" + text + "<span style='color: red';> *</span></html>");
     label.setForeground(Style.WORD_COLOR_BLACK);
     label.setFont(Style.FONT_PLAIN_13);
     label.setHorizontalAlignment(SwingConstants.LEFT);
     return label;
   }
 
-  public static JLabel createRequireLabel(
-          String text,int horizontal, int vertical) {
-    JLabel label = new JLabel("<html>" + text+"<span style='color: red';> *</span></html>");
+  public static JLabel createRequireLabel(String text, int horizontal, int vertical) {
+    JLabel label = new JLabel("<html>" + text + "<span style='color: red';> *</span></html>");
     label.setForeground(Style.WORD_COLOR_BLACK);
     label.setFont(Style.FONT_PLAIN_13);
     label.setHorizontalAlignment(horizontal);
     label.setVerticalAlignment(vertical);
     return label;
   }
-
 
   /**
    * attach, insert icon or image to label

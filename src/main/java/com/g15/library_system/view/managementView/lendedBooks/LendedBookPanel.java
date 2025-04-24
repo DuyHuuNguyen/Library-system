@@ -2,22 +2,21 @@ package com.g15.library_system.view.managementView.lendedBooks;
 
 import com.g15.library_system.view.managementView.lendedBooks.formBody.*;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class LendedBookPanel extends JPanel {
 
   public LendedBookPanel() {
     setLayout(new FlowLayout(FlowLayout.CENTER));
-    ContainerPn containerPn =  new  ContainerPn();
+    ContainerPn containerPn = new ContainerPn();
     containerPn.setPreferredSize(new Dimension(1200, 750));
 
     add(containerPn);
   }
 
   private class ContainerPn extends RoundedPanel {
-    ContainerPn(){
+    ContainerPn() {
       super(10, Color.WHITE, null);
       setLayout(new BorderLayout());
       add(new FormPanel(), BorderLayout.CENTER);
@@ -49,4 +48,3 @@ public class LendedBookPanel extends JPanel {
     }
   }
 }
-
