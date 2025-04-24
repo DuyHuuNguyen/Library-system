@@ -1,7 +1,7 @@
 package com.g15.library_system.view.overrideComponent;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class CustomButton extends JButton {
   private Color borderColor = Color.BLUE;
@@ -11,7 +11,7 @@ public class CustomButton extends JButton {
   private Color hoverColor;
   private Color textColor = Color.BLACK;
   private int thickness = 3;
-  private int borderRadius = 15;
+  private int borderRadius = 0;
   private boolean drawBorder = true;
   private boolean isDarkerWhenPress = true;
 
@@ -28,9 +28,9 @@ public class CustomButton extends JButton {
     if (getModel().isPressed() && isDarkerWhenPress) {
       g.setColor(backgroundColor.darker());
     } else if (getModel().isRollover() && hoverColor != null) {
-      if(backgroundColor != hoverColor) {
+      if (backgroundColor != hoverColor) {
         g.setColor(backgroundColor.darker());
-      }else g.setColor(hoverColor);
+      } else g.setColor(hoverColor);
     } else {
       g.setColor(backgroundColor);
     }
@@ -96,6 +96,7 @@ public class CustomButton extends JButton {
     this.drawBorder = drawBorder;
     repaint();
   }
+
   public void setIsDarkerWhenPress(boolean isDarkerWhenPress) {
     this.isDarkerWhenPress = isDarkerWhenPress;
   }

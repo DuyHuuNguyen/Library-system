@@ -1,14 +1,15 @@
 package com.g15.library_system.view.swingComponentGenerators;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import javax.swing.*;
 
 public class TextFieldGenerator {
 
   /**
    * Create a normal textField
+   *
    * @param text
    * @param font
    * @param textColor
@@ -17,7 +18,7 @@ public class TextFieldGenerator {
    * @return textField
    */
   public static JTextField createTextField(
-          String text, Font font, Color textColor, Color borderColor, Dimension size) {
+      String text, Font font, Color textColor, Color borderColor, Dimension size) {
     JTextField field = new JTextField(text);
     field.setForeground(textColor);
     field.setPreferredSize(size);
@@ -27,9 +28,9 @@ public class TextFieldGenerator {
     return field;
   }
 
-
   /**
    * Create a textField with placeholder and border
+   *
    * @param placeholderText
    * @param font
    * @param textColor
@@ -49,6 +50,7 @@ public class TextFieldGenerator {
   }
   /**
    * Create a normal textField. It cannot be written or edited, it is only used to display data.
+   *
    * @param text
    * @param font
    * @param textColor
@@ -57,12 +59,7 @@ public class TextFieldGenerator {
    * @return textField
    */
   public static JTextField createNonEditableTextField(
-      String text,
-      Font font,
-      Color textColor,
-      Color borderColor,
-      Dimension size
-      ) {
+      String text, Font font, Color textColor, Color borderColor, Dimension size) {
     JTextField field = new JTextField(text);
     field.setForeground(textColor);
     field.setPreferredSize(size);
@@ -112,5 +109,4 @@ public class TextFieldGenerator {
           }
         });
   }
-
 }

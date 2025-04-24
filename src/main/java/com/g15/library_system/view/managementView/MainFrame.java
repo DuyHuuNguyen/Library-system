@@ -4,9 +4,8 @@ import com.g15.library_system.enums.NavigationType;
 import com.g15.library_system.view.LoginFrame;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class MainFrame extends JFrame {
   private NavigationPanel navigationPanel;
@@ -14,77 +13,78 @@ public class MainFrame extends JFrame {
 
   public MainFrame() {
     setTitle("Library Management");
-      Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      int width = (int) screenSize.getWidth();
-      int height = (int) screenSize.getHeight();
-    setSize(new Dimension(width, height-40));
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int width = (int) screenSize.getWidth();
+    int height = (int) screenSize.getHeight();
+    setSize(new Dimension(width, height - 40));
     setResizable(true);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
-//    setIconImage(new ImageIcon("src/main/java/Icon/logo.png").getImage());
-      setIconImage(new ImageIcon("src/main/java/view/LibraryUI/icons/libraryIconLogo.png").getImage());
-      try {
-          UIManager.put("ComboBox.focus", UIManager.get("ComboBox.background"));
-          UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-          SwingUtilities.updateComponentTreeUI(this);
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
+    //    setIconImage(new ImageIcon("src/main/java/Icon/logo.png").getImage());
+    setIconImage(
+        new ImageIcon("src/main/java/view/LibraryUI/icons/libraryIconLogo.png").getImage());
+    try {
+      UIManager.put("ComboBox.focus", UIManager.get("ComboBox.background"));
+      UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+      SwingUtilities.updateComponentTreeUI(this);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     navigationPanel = new NavigationPanel();
-      workspacePanel = new WorkspacePanel();
+    workspacePanel = new WorkspacePanel();
     add(navigationPanel, BorderLayout.WEST);
     add(workspacePanel, BorderLayout.CENTER);
 
-      navigationPanel.setDashBoardBtListener(
+    navigationPanel.setDashBoardBtListener(
         e -> {
-            workspacePanel.showPanel(NavigationType.DASHBOARD);
-            setHover(NavigationType.DASHBOARD);
+          workspacePanel.showPanel(NavigationType.DASHBOARD);
+          setHover(NavigationType.DASHBOARD);
         });
 
-      navigationPanel.setManageBookButtonListener(
+    navigationPanel.setManageBookButtonListener(
         e -> {
-            workspacePanel.showPanel(NavigationType.MANAGE_BOOKS);
-            setHover(NavigationType.MANAGE_BOOKS);
+          workspacePanel.showPanel(NavigationType.MANAGE_BOOKS);
+          setHover(NavigationType.MANAGE_BOOKS);
         });
 
-      navigationPanel.setLendedBookButtonListener(
+    navigationPanel.setLendedBookButtonListener(
         e -> {
-            workspacePanel.showPanel(NavigationType.LENDED_BOOKS);
+          workspacePanel.showPanel(NavigationType.LENDED_BOOKS);
           setHover(NavigationType.LENDED_BOOKS);
         });
 
-      navigationPanel.setReturnBookButtonListener(
+    navigationPanel.setReturnBookButtonListener(
         e -> {
-            workspacePanel.showPanel(NavigationType.RETURN_BOOKS);
+          workspacePanel.showPanel(NavigationType.RETURN_BOOKS);
           setHover(NavigationType.RETURN_BOOKS);
         });
 
-      navigationPanel.setReaderButtonListener(
+    navigationPanel.setReaderButtonListener(
         e -> {
-            workspacePanel.showPanel(NavigationType.READERS);
+          workspacePanel.showPanel(NavigationType.READERS);
           setHover(NavigationType.READERS);
         });
 
-      navigationPanel.setLibrarianButtonListener(
+    navigationPanel.setLibrarianButtonListener(
         e -> {
-            workspacePanel.showPanel(NavigationType.LIBRARIANS);
-            setHover(NavigationType.LIBRARIANS);
+          workspacePanel.showPanel(NavigationType.LIBRARIANS);
+          setHover(NavigationType.LIBRARIANS);
         });
 
-      navigationPanel.setSettingButtonListener(
-              e -> {
-                  workspacePanel.showPanel(NavigationType.SETTINGS);
+    navigationPanel.setSettingButtonListener(
+        e -> {
+          workspacePanel.showPanel(NavigationType.SETTINGS);
           setHover(NavigationType.SETTINGS);
-              });
+        });
 
-      navigationPanel.setMyAccountButtonListener(
-              e -> {
-                  workspacePanel.showPanel(NavigationType.MY_ACCOUNT);
+    navigationPanel.setMyAccountButtonListener(
+        e -> {
+          workspacePanel.showPanel(NavigationType.MY_ACCOUNT);
           setHover(NavigationType.MY_ACCOUNT);
-              });
+        });
 
-      navigationPanel.setLogoutButtonListener(
+    navigationPanel.setLogoutButtonListener(
         e -> {
           int confirmed =
               JOptionPane.showConfirmDialog(
@@ -99,57 +99,63 @@ public class MainFrame extends JFrame {
           }
         });
 
-      workspacePanel.setTotalBooksCardButtonListener(e ->{
+    workspacePanel.setTotalBooksCardButtonListener(
+        e -> {
           workspacePanel.showPanel(NavigationType.MANAGE_BOOKS);
           setHover(NavigationType.MANAGE_BOOKS);
-      });
+        });
 
-      workspacePanel.setLendedBooksCardButtonListener(e ->{
+    workspacePanel.setLendedBooksCardButtonListener(
+        e -> {
           workspacePanel.showPanel(NavigationType.LENDED_BOOKS);
           setHover(NavigationType.LENDED_BOOKS);
-      });
+        });
 
-      workspacePanel.setReturnedBooksCardButtonListener(e ->{
+    workspacePanel.setReturnedBooksCardButtonListener(
+        e -> {
           workspacePanel.showPanel(NavigationType.RETURN_BOOKS);
           setHover(NavigationType.RETURN_BOOKS);
-      });
+        });
 
-      workspacePanel.setTotalUsersCardButtonListener(e ->{
+    workspacePanel.setTotalUsersCardButtonListener(
+        e -> {
           workspacePanel.showPanel(NavigationType.READERS);
           setHover(NavigationType.READERS);
-      });
+        });
 
     setVisible(true);
   }
 
   public void setHover(NavigationType navigationType) {
     CustomButton[] buttons = {
-            navigationPanel.dashBoardBt,
-            navigationPanel.manageBookBt,
-            navigationPanel.lendedBookBt,
-            navigationPanel.returnBookBt,
-            navigationPanel.readerBt,
-            navigationPanel.librarianBt,
-            navigationPanel.settingBt,
-            navigationPanel.myAccountBt,
+      navigationPanel.dashBoardBt,
+      navigationPanel.manageBookBt,
+      navigationPanel.lendedBookBt,
+      navigationPanel.returnBookBt,
+      navigationPanel.readerBt,
+      navigationPanel.librarianBt,
+      navigationPanel.settingBt,
+      navigationPanel.myAccountBt,
     };
 
     NavigationType[] constraints = {
-            NavigationType.DASHBOARD,
-            NavigationType.MANAGE_BOOKS,
-            NavigationType.LENDED_BOOKS,
-            NavigationType.RETURN_BOOKS,
-            NavigationType.READERS,
-            NavigationType.LIBRARIANS,
-            NavigationType.SETTINGS,
-            NavigationType.MY_ACCOUNT,
+      NavigationType.DASHBOARD,
+      NavigationType.MANAGE_BOOKS,
+      NavigationType.LENDED_BOOKS,
+      NavigationType.RETURN_BOOKS,
+      NavigationType.READERS,
+      NavigationType.LIBRARIANS,
+      NavigationType.SETTINGS,
+      NavigationType.MY_ACCOUNT,
     };
     for (int i = 0; i < buttons.length; i++) {
-      buttons[i].setBackgroundColor(navigationType.equals(constraints[i]) ? Style.PURPLE_MAIN_THEME :  Color.WHITE);
+      buttons[i].setBackgroundColor(
+          navigationType.equals(constraints[i]) ? Style.PURPLE_MAIN_THEME : Color.WHITE);
       buttons[i].setTextColor(navigationType.equals(constraints[i]) ? Color.WHITE : Color.BLACK);
     }
   }
-    public static void main(String[] args) {
-        new MainFrame();
-    }
+
+  public static void main(String[] args) {
+    new MainFrame();
+  }
 }

@@ -1,10 +1,8 @@
 package com.g15.library_system.view.overrideComponent;
 
-
 import com.g15.library_system.view.Style;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class ToastNotification {
 

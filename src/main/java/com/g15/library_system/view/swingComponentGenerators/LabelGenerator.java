@@ -1,15 +1,17 @@
 package com.g15.library_system.view.swingComponentGenerators;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import com.g15.library_system.view.Style;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 public class LabelGenerator {
 
   /**
    * create a simple JLabel
+   *
    * @param text
    * @param font
    * @param textColor
@@ -29,13 +31,31 @@ public class LabelGenerator {
     JLabel label = new JLabel(text);
     label.setForeground(textColor);
     label.setFont(font);
-    label.setHorizontalAlignment(horizontal);//the horizontal text position
-    label.setVerticalAlignment(vertical);// the vertical text position
+    label.setHorizontalAlignment(horizontal); // the horizontal text position
+    label.setVerticalAlignment(vertical); // the vertical text position
+    return label;
+  }
+
+  public static JLabel createRequireLabel(String text) {
+    JLabel label = new JLabel("<html>" + text + "<span style='color: red';> *</span></html>");
+    label.setForeground(Style.WORD_COLOR_BLACK);
+    label.setFont(Style.FONT_PLAIN_13);
+    label.setHorizontalAlignment(SwingConstants.LEFT);
+    return label;
+  }
+
+  public static JLabel createRequireLabel(String text, int horizontal, int vertical) {
+    JLabel label = new JLabel("<html>" + text + "<span style='color: red';> *</span></html>");
+    label.setForeground(Style.WORD_COLOR_BLACK);
+    label.setFont(Style.FONT_PLAIN_13);
+    label.setHorizontalAlignment(horizontal);
+    label.setVerticalAlignment(vertical);
     return label;
   }
 
   /**
    * attach, insert icon or image to label
+   *
    * @param label
    * @param iconPath
    * @param iconWidth
@@ -45,8 +65,7 @@ public class LabelGenerator {
     try {
       ImageIcon icon = new ImageIcon(ImageIO.read(new File(iconPath)));
       Image image = icon.getImage();
-      Image scaledImage = image.getScaledInstance(
-              iconWidth, iconHeight, Image.SCALE_SMOOTH);
+      Image scaledImage = image.getScaledInstance(iconWidth, iconHeight, Image.SCALE_SMOOTH);
 
       label.setIcon(new ImageIcon(scaledImage));
 
@@ -57,6 +76,7 @@ public class LabelGenerator {
 
   /**
    * create a new label and insert image to that label ( This label can only display image.)
+   *
    * @param imagePath
    * @param width
    * @param height
@@ -72,5 +92,4 @@ public class LabelGenerator {
     label.setPreferredSize(new Dimension(width, height));
     return label;
   }
-
 }
