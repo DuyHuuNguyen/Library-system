@@ -14,7 +14,18 @@ public enum ErrorCode {
   USER_ALREADY_EXISTS("1009", "User already exists"),
   USER_NOT_FOUND("1009", "User not found"),
   BLOCK_USER("1010", "Was blocked"),
-  ROLE_NOT_FOUND("1011", "Role not found");
+  ROLE_NOT_FOUND("1011", "Role not found"),
+
+  BOOK_NOT_FOUND("112", "Book not found"),
+  FINE_NOT_FOUND("113", "Fine not found"),
+  LIBRARIAN_NOT_FOUND("114", "Librarian not found"),
+  LIBRARY_NOT_FOUND("115", "Library not found"),
+  LIBRARY_CARD_NOT_FOUND("116", "LibraryCard not found"),
+  READER_NOT_FOUND("117", "Reader not found"),
+  STUDENT_READER_TYPE_NOT_FOUND("119", "StudentReaderType not found"),
+  SUBJECT_NOT_FOUND("120", "Subject not found"),
+  TRANSACTION_NOT_FOUND("121", "Transaction not found"),
+  USER_ROLE_NOT_FOUND("122", "UserRole not found");
 
   private final String code;
   private final String message;
