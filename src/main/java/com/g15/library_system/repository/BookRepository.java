@@ -8,4 +8,6 @@ public interface BookRepository {
   List<Book> findAll();
 
   Optional<Book> findById(long id);
+
+  void deleteById(long id);
 }

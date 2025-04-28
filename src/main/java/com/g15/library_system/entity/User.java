@@ -35,4 +35,14 @@ public class User extends BaseEntity implements Observer {
 
   @Override
   public void updateNewEvent(String newEvent) {}
+
+  @Override
+  public boolean isSameId(long id) {
+    return id == super.getId();
+  }
+
+  @Override
+  public boolean isSameEmail(String email) {
+    return this.email.equals(email);
+  }
 }

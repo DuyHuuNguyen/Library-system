@@ -20,4 +20,15 @@ public class BookRepositoryImpl implements BookRepository {
   public Optional<Book> findById(long id) {
     return bookData.getBooks().stream().filter(book -> book.hasSameId(id)).findFirst();
   }
+
+  @Override
+  public void deleteById(long id) {
+    var bookIterator = bookData.getBooks().iterator();
+    while (bookIterator.hasNext()) {
+      var book = bookIterator.next();
+      if (book.hasSameId(id)) {
+        bookIterator.remove();
+      }
+    }
+  }
 }
