@@ -4,10 +4,10 @@ import java.awt.*;
 import javax.swing.*;
 
 public class CustomButton extends JButton {
-  private Color borderColor = Color.BLUE;
-  private Color startGradientColor = Color.CYAN;
-  private Color endGradientColor = Color.BLUE;
-  private Color backgroundColor = new Color(230, 245, 255);
+  private Color backgroundColor = Color.WHITE;
+  private Color borderColor;
+  private Color startGradientColor = backgroundColor;
+  private Color endGradientColor= backgroundColor;
   private Color hoverColor;
   private Color textColor = Color.BLACK;
   private int thickness = 3;
@@ -25,16 +25,25 @@ public class CustomButton extends JButton {
 
   @Override
   protected void paintComponent(Graphics g) {
+    Graphics2D g2d = (Graphics2D) g.create();
+    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
     if (getModel().isPressed() && isDarkerWhenPress) {
-      g.setColor(backgroundColor.darker());
+      if (backgroundColor.getAlpha() != 0) {
+        g2d.setColor(backgroundColor.darker());
+        g2d.fillRoundRect(0, 0, getWidth(), getHeight(), borderRadius, borderRadius);
+      }
     } else if (getModel().isRollover() && hoverColor != null) {
-      if (backgroundColor != hoverColor) {
-        g.setColor(backgroundColor.darker());
-      } else g.setColor(hoverColor);
+      g2d.setColor(hoverColor);
+      g2d.fillRoundRect(0, 0, getWidth(), getHeight(), borderRadius, borderRadius);
     } else {
-      g.setColor(backgroundColor);
+      if (backgroundColor.getAlpha() != 0) {
+        g2d.setColor(backgroundColor);
+        g2d.fillRoundRect(0, 0, getWidth(), getHeight(), borderRadius, borderRadius);
+      }
     }
-    g.fillRoundRect(0, 0, getWidth(), getHeight(), borderRadius, borderRadius);
+
+    g2d.dispose();
     super.paintComponent(g);
   }
 

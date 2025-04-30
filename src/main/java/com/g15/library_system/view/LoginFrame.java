@@ -2,7 +2,9 @@ package com.g15.library_system.view;
 
 import com.g15.library_system.view.managementView.MainFrame;
 import com.g15.library_system.view.overrideComponent.CustomButton;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentGenerators.*;
+import com.g15.library_system.view.overrideComponent.toast.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Timer;
@@ -23,7 +25,7 @@ public class LoginFrame extends JFrame {
     setSize(1300, 700);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
-    setIconImage(new ImageIcon("src/main/java/view/LibraryUI/icons/li2ng").getImage());
+    setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());
     try {
       UIManager.put("ComboBox.focus", UIManager.get("ComboBox.background"));
       UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -106,7 +108,7 @@ public class LoginFrame extends JFrame {
       setLayout(new GridBagLayout());
       setBackground(Color.WHITE);
       GridBagConstraints gbc = new GridBagConstraints();
-      gbc.insets = new Insets(10, 10, 10, 10);
+      gbc.insets = new Insets(5, 10, 5, 10);
       gbc.fill = GridBagConstraints.HORIZONTAL;
 
       // Sign In title
@@ -119,20 +121,18 @@ public class LoginFrame extends JFrame {
       gbc.anchor = GridBagConstraints.CENTER;
       add(signInLabel, gbc);
 
-      // Reset lại gridwidth cho các thành phần kế tiếp
       gbc.gridwidth = 1;
       gbc.anchor = GridBagConstraints.WEST;
 
-      // Role ComboBox
       gbc.gridy++;
       gbc.gridx = 0;
       String[] roles = {"Librarian", "Admin"};
       roleComboBox = new JComboBox<>(roles);
-      roleComboBox.setPreferredSize(new Dimension(320, 45));
+      roleComboBox.setPreferredSize(new Dimension(300, 38));
       roleComboBox.setFont(Style.FONT_PLAIN_20);
       roleComboBox.setBackground(Color.WHITE);
       roleComboBox.setBorder(BorderFactory.createLineBorder(Style.PURPLE_MAIN_THEME, 1));
-      gbc.gridwidth = 2; // Cho ComboBox chiếm hết dòng
+      gbc.gridwidth = 2;
       add(roleComboBox, gbc);
 
       // User Email Label
@@ -154,7 +154,7 @@ public class LoginFrame extends JFrame {
               Style.FONT_PLAIN_20,
               Color.GRAY,
               Style.PURPLE_MAIN_THEME,
-              new Dimension(320, 45));
+              new Dimension(300, 38));
       emailField.addActionListener(e -> signInButton.doClick());
       add(emailField, gbc);
 
@@ -173,7 +173,7 @@ public class LoginFrame extends JFrame {
       gbc.gridwidth = 2;
       passwdFieldSignIn =
           PasswordFieldGenerator.createPasswordFieldWithPlaceHolder(
-              "Password", Style.FONT_PLAIN_20, Style.PURPLE_MAIN_THEME, new Dimension(320, 45));
+              "Password", Style.FONT_PLAIN_20, Style.PURPLE_MAIN_THEME, new Dimension(300, 38));
       passwdFieldSignIn.addActionListener(e -> signInButton.doClick());
       add(passwdFieldSignIn, gbc);
 
@@ -218,11 +218,13 @@ public class LoginFrame extends JFrame {
               1,
               20,
               SwingConstants.CENTER,
-              new Dimension(350, 45));
+              new Dimension(300, 38));
       signInButton.addActionListener(
           e -> {
             loginFrame.dispose();
             new MainFrame();
+//            ToastNotification panel = new ToastNotification(this.loginFrame, ToastNotification.Type.INFO, ToastNotification.Location.TOP_CENTER, "Message info notification type");
+//            panel.showNotification();
           });
       add(signInButton, gbc);
 

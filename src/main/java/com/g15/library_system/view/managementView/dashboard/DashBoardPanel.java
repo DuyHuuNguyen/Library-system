@@ -3,6 +3,9 @@ package com.g15.library_system.view.managementView.dashboard;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.AnimatedGradientTextLabel;
 import com.g15.library_system.view.overrideComponent.CustomButton;
+import com.g15.library_system.view.overrideComponent.GradientTextLabel;
+import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
+import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
 import com.g15.library_system.view.swingComponentGenerators.ButtonGenerator;
 import com.g15.library_system.view.swingComponentGenerators.TableGenerator;
 import java.awt.*;
@@ -10,14 +13,14 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class DashBoardPanel extends JPanel {
-  private String userName = "Huy Hoang";
+  private String userName = "Admin";
   private WelcomePanel welcomePanel;
   private ContentPanel contentPanel;
   private QuickAccessPanel quickAccessPanel;
 
   public DashBoardPanel() {
     this.setLayout(new BorderLayout());
-    setBackground(Style.LIGHT_BLUE_BACKGROUND);
+    setBackground(Style.LIGHT_WHITE_BACKGROUND);
     welcomePanel = new WelcomePanel();
     this.add(welcomePanel, BorderLayout.NORTH);
 
@@ -25,53 +28,55 @@ public class DashBoardPanel extends JPanel {
     JScrollPane scrollPane = new JScrollPane(contentPanel);
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     TableGenerator.setColorScrollPane(
-        scrollPane, Style.PURPLE_MAIN_THEME, Style.CHART_BACKGROUND_COLOR);
+        scrollPane, Style.BLUE_MENU_BACKGROUND_COLOR, Style.CHART_BACKGROUND_COLOR);
+    scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+    scrollPane.setBorder(null);
     add(scrollPane, BorderLayout.CENTER);
   }
 
   public class WelcomePanel extends JPanel {
     WelcomePanel() {
       this.setLayout(new GridBagLayout());
-      setBackground(Style.LIGHT_BLUE_BACKGROUND);
+      setBackground(Style.LIGHT_WHITE_BACKGROUND);
       GridBagConstraints gbc = new GridBagConstraints();
-      gbc.insets = new Insets(10, 5, 10, 10);
+      gbc.insets = new Insets(10, 40, 10, 10);
       gbc.gridy = 0;
       gbc.fill = GridBagConstraints.NONE;
 
-      AnimatedGradientTextLabel text3 =
-          new AnimatedGradientTextLabel(
-              "Hello, " + userName + "!",
-              Style.FONT_BOLD_30,
-              new Dimension(300, 50),
-              SwingConstants.LEFT);
+//      AnimatedGradientTextLabel text3 =
+//          new AnimatedGradientTextLabel(
+//              "Hello, " + userName + "!",
+//              Style.FONT_BOLD_30,
+//              new Dimension(300, 50),
+//              SwingConstants.LEFT);
+      JLabel greeting = LabelBuilder.builder().text("<html><span style='color:black;'>Welcome, </span>"+ userName+"!</html>")
+              .font(Style.FONT_BOLD_30).textColor( new  Color(11, 124, 172)).preferredSize(new Dimension(400,50)).horizontal(SwingConstants.LEFT);
       gbc.gridx = 0;
       gbc.weightx = 0;
       gbc.anchor = GridBagConstraints.WEST;
-      this.add(text3, gbc);
+      this.add(greeting, gbc);
 
       gbc.gridx = 1;
       gbc.weightx = 1;
+      gbc.insets = new Insets(10, 10, 10, 10);
       gbc.fill = GridBagConstraints.HORIZONTAL;
       JPanel glue = new JPanel();
       glue.setOpaque(false);
       this.add(glue, gbc);
 
-      CustomButton operatingNotifyBt =
-          ButtonGenerator.createCustomButton(
-              "Operating Hours: Monday to Saturday: 9 AM to 7 PM, Sunday: Closed",
-              Style.FONT_BOLD_15,
-              new Color(207, 156, 63),
-              new Color(251, 242, 222),
-              null,
-              new Color(207, 156, 63),
-              1,
-              10,
-              SwingConstants.LEFT,
-              new Dimension(570, 40));
-      operatingNotifyBt.setIsDarkerWhenPress(false);
-      ButtonGenerator.setButtonIcon(
-          "src/main/java/view/LibraryUI/icons/infoYellowIcon.png", operatingNotifyBt, 23);
-
+      CustomButton operatingNotifyBt = CustomButtonBuilder.builder()
+              .text(" Operating Hours: Monday to Saturday: 9 AM to 7 PM, Sunday: Closed")
+              .font(Style.FONT_BOLD_15)
+              .textColor(new Color(207, 156, 63))
+              .backgroundColor(new Color(251, 242, 222))
+              .hoverColor(null)
+              .borderColor(new Color(207, 156, 63))
+              .thickness(1)
+              .radius(10)
+              .alignment(SwingConstants.LEFT)
+              .preferredSize(new Dimension(580, 40))
+              .icon("/icons/infoYellowIcon.png", 20)
+              .darkerWhenPress(false);
       gbc.gridx = 2;
       gbc.weightx = 0;
       gbc.fill = GridBagConstraints.NONE;
@@ -87,7 +92,7 @@ public class DashBoardPanel extends JPanel {
     private LendingTrendsChartPanel lendingTrendsChartPanel;
 
     public ContentPanel() {
-      setBackground(Style.LIGHT_BLUE_BACKGROUND);
+      setBackground(Style.LIGHT_WHITE_BACKGROUND);
       setLayout(new GridBagLayout());
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(5, 5, 5, 5);

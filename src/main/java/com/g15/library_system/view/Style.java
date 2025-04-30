@@ -10,6 +10,7 @@ public class Style {
 
   // 15
   public static final Font FONT_PLAIN_15 = new Font("Arial", Font.PLAIN, 15);
+  public static final Font FONT_SANS_SERIF_PLAIN_15 = new Font("Sans-serif", Font.PLAIN, 15);
   public static final Font FONT_BOLD_15 = new Font("Arial", Font.BOLD, 15);
 
   // 16
@@ -97,6 +98,12 @@ public class Style {
   public static final Color LIGHT_RED_2 = new Color(241, 179, 179);
   public static final Color LIGHT_GREEN_HOVER = new Color(224, 255, 224);
   public static final Color LIGHT_BLUE_BACKGROUND = new Color(221, 228, 228);
+  public static final Color LIGHT_WHITE_BACKGROUND = new Color(244, 244, 244);
+
+  public static final Color BLUE_MENU_HOVER_COLOR = new Color(138, 166, 192);
+  public static final Color BLUE_MENU_BUTTON_COLOR = new Color(113, 197, 219);
+  public static final Color BLUE_MENU_BACKGROUND_COLOR = new  Color(23, 159, 219);
+
 
   // font
   public static final Font FONT_SANSERIF_PLAIN_16 = new Font("SansSerif", Font.PLAIN, 16);

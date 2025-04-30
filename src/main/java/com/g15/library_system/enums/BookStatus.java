@@ -1,7 +1,17 @@
 package com.g15.library_system.enums;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum BookStatus {
-  AVAILABLE,
-  BORROWED,
-  DEMO
+  AVAILABLE("ccc"),
+  BORROWED("cc"),
+  DEMO("cc");
+  private final String status;
+
+  public boolean isDemo() {
+    return this == DEMO;
+  }
 }

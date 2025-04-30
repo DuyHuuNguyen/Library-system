@@ -36,7 +36,7 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel {
 
   LendingTrendsChartPanel() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
-    setPreferredSize(new Dimension(780, 450));
+    setPreferredSize(new Dimension(730, 450));
     setLayout(new BorderLayout());
 
     JPanel titlePn = new JPanel(new GridLayout(1, 2));

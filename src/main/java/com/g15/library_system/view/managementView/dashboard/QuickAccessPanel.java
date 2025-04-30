@@ -1,10 +1,12 @@
 package com.g15.library_system.view.managementView.dashboard;
 
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class QuickAccessPanel extends RoundedPanel {
+public class QuickAccessPanel extends RoundedShadowPanel {
   DashboardCard totalBooksCard,
       lendedBooksCard,
       returnedBookCard,
@@ -13,32 +15,32 @@ public class QuickAccessPanel extends RoundedPanel {
       overdueBooksCard;
 
   QuickAccessPanel() {
-    super(20, Color.WHITE, null);
+    super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
     // Total Books
     totalBooksCard =
         new DashboardCard(
-            "src/main/java/view/LibraryUI/icons/manageBook2.png", // icon path
+            "/icons/totalBook2.png",
             "Total Books",
             "2000",
-            new Color(255, 238, 215), // Màu nền thẻ (Cam nhạt)
-            new Color(255, 160, 0), // Màu nền icon (Cam)
+            new Color(255, 238, 215),
+            new Color(255, 160, 0),
             new Color(170, 105, 0));
 
     // Lended Books
     lendedBooksCard =
         new DashboardCard(
-            "src/main/java/view/LibraryUI/icons/lendBookIcon.png", // icon path
+            "/icons/lendBook.png",
             "Lended Books",
             "500",
-            new Color(255, 245, 200), // Màu nền thẻ (Vàng nhạt)
-            new Color(255, 204, 0), // Màu nền icon (Vàng)
-            new Color(145, 117, 17) // Màu viền thẻ (Vàng đậm/Nâu)
+            new Color(255, 245, 200), // Màu nền thẻ
+            new Color(255, 204, 0), // Màu nền icon
+            new Color(145, 117, 17) // Màu viền thẻ
             );
 
     returnedBookCard =
         new DashboardCard(
-            "src/main/java/view/LibraryUI/icons/manageBook2.png", // icon path
+            "/icons/returnedBook.png",
             "Returned Books",
             "200",
             new Color(235, 235, 255), // Màu nền thẻ (Tím nhạt - Lavender)
@@ -48,7 +50,7 @@ public class QuickAccessPanel extends RoundedPanel {
     // Available Books
     availableBooksCard =
         new DashboardCard(
-            "src/main/java/view/LibraryUI/icons/manageBook2.png",
+            "/icons/availableBook.png",
             "Available Books",
             "800",
             new Color(230, 255, 255), // Màu nền thẻ (Xanh ngọc nhạt - Pale Cyan/Aqua)
@@ -58,7 +60,7 @@ public class QuickAccessPanel extends RoundedPanel {
     // Overdue Books
     overdueBooksCard =
         new DashboardCard(
-            "src/main/java/view/LibraryUI/icons/overdueIcon.png",
+            "/icons/overdue.png",
             "Overdue Books",
             "300",
             new Color(230, 255, 230), // Màu nền thẻ (Xanh lá cây nhạt)
@@ -69,7 +71,7 @@ public class QuickAccessPanel extends RoundedPanel {
     // Total Users
     totalUsersCard =
         new DashboardCard(
-            "src/main/java/view/LibraryUI/icons/totalUserIcon.png",
+            "/icons/users2.png",
             "Total Users",
             "500",
             new Color(255, 235, 235), // Màu nền thẻ (Hồng nhạt)

@@ -39,13 +39,13 @@ public class BookAvailabilityChartPanel extends RoundedShadowPanel {
   public BookAvailabilityChartPanel() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     setLayout(new BorderLayout());
-    setPreferredSize(new Dimension(480, 450));
+    setPreferredSize(new Dimension(500, 450));
 
-    JPanel titlePn = new JPanel(new GridLayout(1, 2));
+    JPanel titlePn = new JPanel(new BorderLayout());
     titlePn.setBackground(Color.WHITE);
     JLabel chartTitle =
         LabelGenerator.createLabel(
-            "   Books Lending Trends", Style.FONT_BOLD_18, Color.BLACK, SwingConstants.LEFT);
+            " Books Availability", Style.FONT_BOLD_18, Color.BLACK, SwingConstants.LEFT);
 
     JPanel sortBarPn = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     sortBarPn.setBackground(Color.WHITE);
@@ -69,8 +69,8 @@ public class BookAvailabilityChartPanel extends RoundedShadowPanel {
     sortBarPn.add(monthComboBox);
     sortBarPn.add(yearLabel);
     sortBarPn.add(yearComboBox);
-    titlePn.add(chartTitle);
-    titlePn.add(sortBarPn);
+    titlePn.add(chartTitle, BorderLayout.WEST);
+    titlePn.add(sortBarPn, BorderLayout.EAST);
     add(titlePn, BorderLayout.NORTH);
     ChartPanel chartPanel = new ChartPanel();
     add(chartPanel, BorderLayout.CENTER);
