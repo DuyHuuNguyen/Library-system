@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * how to use:
- * ToastNotification panel = new ToastNotification(this.loginFrame, ToastNotification.Type.INFO, ToastNotification.Location.TOP_CENTER, "Message info notification type");
+ * ToastNotification panel = new ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.INFO, ToastNotification.Location.TOP_CENTER, "Message info notification type");
  * panel.showNotification();
  */
 public class ToastNotification extends javax.swing.JComponent {
@@ -240,11 +240,12 @@ public class ToastNotification extends javax.swing.JComponent {
         lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/toastIcons/success.png")));
         panel.setOpaque(false);
 
-        lbMessage.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        lbMessage.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lbMessage.setForeground(new Color(38, 38, 38));
         lbMessage.setText("Message");
 
         lbMessageText.setForeground(new Color(127, 127, 127));
+        lbMessageText.setFont(new Font("SansSerif", Font.PLAIN, 16));
         lbMessageText.setText("Message Text");
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);

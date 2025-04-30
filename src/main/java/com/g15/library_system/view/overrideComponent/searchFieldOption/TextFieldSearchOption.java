@@ -233,7 +233,7 @@ public class TextFieldSearchOption extends JTextField {
         int iconY = (getHeight() + fm.getAscent()) / 2 - 2;
         g2.drawString("🔎", 10, iconY);
 
-        g2.setStroke(new BasicStroke(2f));
+        g2.setStroke(new BasicStroke(3f));
         g2.setColor(borderColor);
         g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arc, arc);
 
