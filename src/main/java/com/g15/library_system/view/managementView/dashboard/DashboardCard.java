@@ -3,6 +3,7 @@ package com.g15.library_system.view.managementView.dashboard;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
+import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentGenerators.ButtonGenerator;
 import com.g15.library_system.view.swingComponentGenerators.LabelGenerator;
 import java.awt.*;
@@ -58,22 +59,21 @@ public class DashboardCard extends RoundedPanel {
     numberLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
     numberLabel.setAlignmentX(CENTER_ALIGNMENT);
 
-    viewButton =
-        ButtonGenerator.createCustomButton(
-            "View Details",
-            Style.FONT_SANSERIF_BOLD_16,
-            Color.BLACK,
-            Color.white,
-            Color.white.darker(),
-            Color.GRAY,
-            1,
-            10,
-            SwingConstants.CENTER,
-            new Dimension(150, 40));
+    viewButton = CustomButtonBuilder.builder()
+            .text("View Details")
+            .font(Style.FONT_SANSERIF_BOLD_16)
+            .textColor(Color.BLACK)
+            .backgroundColor(Color.WHITE)
+            .hoverColor(Color.WHITE.darker())
+            .borderColor(Color.GRAY)
+            .thickness(2)
+            .radius(12)
+            .alignment(SwingConstants.CENTER)
+            .contentAreaFilled(false)
+            .preferredSize(new Dimension(150, 40));
 
+//    viewButton.setFocusPainted(false);
     viewButton.setAlignmentX(CENTER_ALIGNMENT);
-    viewButton.setFocusPainted(false);
-
     add(iconPanel);
     add(Box.createVerticalStrut(10));
     add(titleLabel);

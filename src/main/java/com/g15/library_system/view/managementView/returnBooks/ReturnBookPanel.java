@@ -1,7 +1,7 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class ReturnBookPanel extends JPanel {
   public ReturnBookPanel() {
@@ -11,9 +11,5 @@ public class ReturnBookPanel extends JPanel {
     add(new ContentPanel(), BorderLayout.CENTER);
 
     add(new JLabel("return book"));
-
-
   }
-
-
 }

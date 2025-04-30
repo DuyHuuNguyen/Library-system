@@ -2,9 +2,8 @@ package com.g15.library_system.view;
 
 import com.g15.library_system.view.managementView.MainFrame;
 import com.g15.library_system.view.overrideComponent.CustomButton;
-import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
-import com.g15.library_system.view.swingComponentGenerators.*;
 import com.g15.library_system.view.overrideComponent.toast.*;
+import com.g15.library_system.view.swingComponentGenerators.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Timer;
@@ -223,8 +222,10 @@ public class LoginFrame extends JFrame {
           e -> {
             loginFrame.dispose();
             new MainFrame();
-//            ToastNotification panel = new ToastNotification(this.loginFrame, ToastNotification.Type.INFO, ToastNotification.Location.TOP_CENTER, "Message info notification type");
-//            panel.showNotification();
+            //            ToastNotification panel = new ToastNotification(this.loginFrame,
+            // ToastNotification.Type.INFO, ToastNotification.Location.TOP_CENTER, "Message info
+            // notification type");
+            //            panel.showNotification();
           });
       add(signInButton, gbc);
 

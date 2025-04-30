@@ -44,8 +44,8 @@ public class ReaderTypesChartPanel extends RoundedShadowPanel {
     JPanel titlePn = new JPanel(new BorderLayout());
     titlePn.setBackground(Color.WHITE);
     JLabel chartTitle =
-            LabelGenerator.createLabel(
-                    "Reader Types", Style.FONT_BOLD_18, Color.BLACK, SwingConstants.LEFT);
+        LabelGenerator.createLabel(
+            "Reader Types", Style.FONT_BOLD_18, Color.BLACK, SwingConstants.LEFT);
 
     JPanel sortBarPn = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     sortBarPn.setBackground(Color.WHITE);
