@@ -9,13 +9,11 @@ public class EmailFormPanel extends JPanel {
   public EmailFormPanel() {
     setLayout(new BorderLayout(10, 10));
 
-    // Panel chính chứa form
     JPanel formPanel = new JPanel(new GridBagLayout());
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.insets = new Insets(10, 10, 10, 10);
     gbc.anchor = GridBagConstraints.WEST;
 
-    // Các thành phần form
     JLabel toLabel = new JLabel("To (email):");
     JTextField toField = new JTextField(25);
 
@@ -28,7 +26,6 @@ public class EmailFormPanel extends JPanel {
 
     JButton sendButton = new JButton("Send");
 
-    // Layout các thành phần
     gbc.gridx = 0;
     gbc.gridy = 0;
     formPanel.add(toLabel, gbc);
