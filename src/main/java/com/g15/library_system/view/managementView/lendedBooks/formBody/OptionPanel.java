@@ -2,60 +2,92 @@ package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.SwitchButton;
+import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
+import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import com.g15.library_system.view.swingComponentGenerators.*;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class OptionPanel extends JPanel {
-  private JLabel finePolicyL, lendingStatusL, notificationL;
-  private SwitchButton notificationSB;
-  private JTextField fineTF;
+  private JLabel lendingStatusL, finePolicyL, notificationL;
   private JComboBox<String> statusCB;
+  private JTextField fineTF;
+  private SwitchButton notificationCB;
 
   public OptionPanel() {
-    setBorder(BorderFactory.createTitledBorder("Additional Options"));
+    Border whiteLine = BorderFactory.createLineBorder(Color.WHITE);
+    Border titled =
+        BorderFactory.createTitledBorder(whiteLine, "Additional Options", 0, 0, Style.FONT_BOLD_20);
+    Border padding = BorderFactory.createEmptyBorder(0, 20, 10, 20);
+    setBorder(BorderFactory.createCompoundBorder(padding, titled));
+    setOpaque(false);
     init();
   }
 
   private void init() {
     setLayout(new GridBagLayout());
     GridBagConstraints gbc = new GridBagConstraints();
-    gbc.insets = new Insets(5, 10, 5, 10);
     gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(5, 5, 5, 5);
     gbc.gridx = 0;
-
-    notificationL =
-        LabelGenerator.createLabel(
-            "Notifications", Style.FONT_PLAIN_13, Style.WORD_COLOR_BLACK, SwingConstants.LEFT, 0);
-    notificationSB = new SwitchButton();
-
-    finePolicyL = LabelGenerator.createRequireLabel("Fine Policy");
-    fineTF =
-        TextFieldGenerator.createTextFieldWithPlaceholder(
-            "Enter Amount",
-            Style.FONT_PLAIN_13,
-            Color.GRAY,
-            Style.PURPLE_MAIN_THEME,
-            new Dimension(200, 25));
 
     lendingStatusL = LabelGenerator.createRequireLabel("Lending Status");
     statusCB = new JComboBox<>();
 
+    finePolicyL =
+        LabelBuilder.builder()
+            .text("Fine Policy")
+            .font(Style.FONT_PLAIN_13)
+            .horizontal(SwingConstants.LEFT);
+    fineTF =
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
+
+    notificationL =
+        LabelBuilder.builder()
+            .text("Notification")
+            .font(Style.FONT_PLAIN_13)
+            .horizontal(SwingConstants.LEFT);
+    notificationCB = new SwitchButton();
+
     gbc.gridy = 0;
+    gbc.gridwidth = 4;
+    gbc.weightx = 1;
+    JSeparator separatorBot = new JSeparator(SwingConstants.HORIZONTAL);
+    add(separatorBot, gbc);
+
+    gbc.insets = new Insets(5, 5, 5, 100);
+    gbc.gridwidth = 1;
+    gbc.weightx = 0;
+
+    gbc.gridx++;
+    gbc.gridy = 1;
     add(notificationL, gbc);
-    gbc.gridy = 1;
-    add(notificationSB, gbc);
+    gbc.gridy = 2;
+    add(notificationCB, gbc);
 
     gbc.gridx++;
-    gbc.gridy = 0;
-    add(finePolicyL, gbc);
     gbc.gridy = 1;
-    add(fineTF, gbc);
-
-    gbc.gridx++;
-    gbc.gridy = 0;
     add(lendingStatusL, gbc);
-    gbc.gridy = 1;
+    gbc.gridy = 2;
     add(statusCB, gbc);
+
+    gbc.gridx++;
+    gbc.gridy = 1;
+    add(finePolicyL, gbc);
+    gbc.gridy = 2;
+    add(fineTF, gbc);
+  }
+
+  public void cancel() {
+    if (notificationCB.isSelected()) notificationCB.doClick();
+    JComboBox[] CBs = {statusCB};
+    for (JComboBox CB : CBs) {
+      if (CB.getItemCount() > 0) CB.setSelectedIndex(0);
+    }
+    fineTF.setText("");
   }
 }
