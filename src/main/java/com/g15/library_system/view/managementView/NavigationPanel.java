@@ -4,8 +4,6 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CircularImage;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
-import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
-import com.g15.library_system.view.swingComponentGenerators.ButtonGenerator;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -37,11 +35,12 @@ public class NavigationPanel extends JPanel {
     gbc.anchor = GridBagConstraints.WEST;
     gbc.fill = GridBagConstraints.NONE;
 
-    appLogo = CustomButtonBuilder.builder()
+    appLogo =
+        CustomButtonBuilder.builder()
             .text("  FIT NLU")
             .font(Style.FONT_BOLD_25)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(null)
             .radius(10)
             .alignment(SwingConstants.CENTER)
@@ -50,7 +49,7 @@ public class NavigationPanel extends JPanel {
             .darkerWhenPress(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(220, 60));
-//            .icon("src/main/java/com/g15/library_system/view/icons/library1.png", 20);
+    //            .icon("src/main/java/com/g15/library_system/view/icons/library1.png", 20);
     add(appLogo, gbc);
     gbc.gridy++;
 
@@ -61,8 +60,9 @@ public class NavigationPanel extends JPanel {
     add(separatorTop, gbc);
     gbc.gridy++;
 
-
-    dashBoardBt = CustomButtonBuilder.builder().text("   Dashboard")
+    dashBoardBt =
+        CustomButtonBuilder.builder()
+            .text("   Dashboard")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BUTTON_COLOR)
@@ -77,12 +77,12 @@ public class NavigationPanel extends JPanel {
     add(dashBoardBt, gbc);
     gbc.gridy++;
 
-
-    manageBookBt = CustomButtonBuilder.builder()
+    manageBookBt =
+        CustomButtonBuilder.builder()
             .text("   Manage Books")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(12)
             .alignment(SwingConstants.LEFT)
@@ -94,11 +94,12 @@ public class NavigationPanel extends JPanel {
     add(manageBookBt, gbc);
     gbc.gridy++;
 
-    lendedBookBt = CustomButtonBuilder.builder()
+    lendedBookBt =
+        CustomButtonBuilder.builder()
             .text("   Lended Books")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(12)
             .alignment(SwingConstants.LEFT)
@@ -110,11 +111,12 @@ public class NavigationPanel extends JPanel {
     add(lendedBookBt, gbc);
     gbc.gridy++;
 
-    returnBookBt = CustomButtonBuilder.builder()
+    returnBookBt =
+        CustomButtonBuilder.builder()
             .text("   Return Books")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(12)
             .alignment(SwingConstants.LEFT)
@@ -126,11 +128,12 @@ public class NavigationPanel extends JPanel {
     add(returnBookBt, gbc);
     gbc.gridy++;
 
-    overdueBookBt = CustomButtonBuilder.builder()
+    overdueBookBt =
+        CustomButtonBuilder.builder()
             .text("   Overdue Books")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(12)
             .alignment(SwingConstants.LEFT)
@@ -148,11 +151,12 @@ public class NavigationPanel extends JPanel {
     add(separatorMid, gbc);
     gbc.gridy++;
 
-    readerBt = CustomButtonBuilder.builder()
+    readerBt =
+        CustomButtonBuilder.builder()
             .text("   Readers")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(12)
             .alignment(SwingConstants.LEFT)
@@ -164,11 +168,12 @@ public class NavigationPanel extends JPanel {
     add(readerBt, gbc);
     gbc.gridy++;
 
-    librarianBt = CustomButtonBuilder.builder()
+    librarianBt =
+        CustomButtonBuilder.builder()
             .text("   Librarians")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(12)
             .alignment(SwingConstants.LEFT)
@@ -186,11 +191,12 @@ public class NavigationPanel extends JPanel {
     add(separatorBot, gbc);
     gbc.gridy++;
 
-    myAccountBt = CustomButtonBuilder.builder()
+    myAccountBt =
+        CustomButtonBuilder.builder()
             .text("   My Account")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(12)
             .alignment(SwingConstants.LEFT)
@@ -202,12 +208,12 @@ public class NavigationPanel extends JPanel {
     add(myAccountBt, gbc);
     gbc.gridy++;
 
-
-    settingBt = CustomButtonBuilder.builder()
+    settingBt =
+        CustomButtonBuilder.builder()
             .text("   Settings")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(12)
             .alignment(SwingConstants.LEFT)
@@ -219,12 +225,12 @@ public class NavigationPanel extends JPanel {
     add(settingBt, gbc);
     gbc.gridy++;
 
-
-    logoutBt = CustomButtonBuilder.builder()
+    logoutBt =
+        CustomButtonBuilder.builder()
             .text("   Logout")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(0,0,0,0))
+            .backgroundColor(new Color(0, 0, 0, 0))
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(12)
             .alignment(SwingConstants.LEFT)
@@ -250,8 +256,10 @@ public class NavigationPanel extends JPanel {
     int width = getWidth();
     int height = getHeight();
 
-    GradientPaint gp = new GradientPaint(0, 0,new  Color(23, 159, 219), 0, height, new Color(11, 24, 63));//blue
-//    GradientPaint gp = new GradientPaint(0, 0,new  Color(75, 107, 220), 0, height, new Color(164, 115, 186));
+    GradientPaint gp =
+        new GradientPaint(0, 0, new Color(23, 159, 219), 0, height, new Color(11, 24, 63)); // blue
+    //    GradientPaint gp = new GradientPaint(0, 0,new  Color(75, 107, 220), 0, height, new
+    // Color(164, 115, 186));
     g2d.setPaint(gp);
     g2d.fillRect(0, 0, width, height);
   }

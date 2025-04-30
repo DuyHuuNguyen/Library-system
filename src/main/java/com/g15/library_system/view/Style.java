@@ -102,8 +102,7 @@ public class Style {
 
   public static final Color BLUE_MENU_HOVER_COLOR = new Color(138, 166, 192);
   public static final Color BLUE_MENU_BUTTON_COLOR = new Color(113, 197, 219);
-  public static final Color BLUE_MENU_BACKGROUND_COLOR = new  Color(23, 159, 219);
-
+  public static final Color BLUE_MENU_BACKGROUND_COLOR = new Color(23, 159, 219);
 
   // font
   public static final Font FONT_SANSERIF_PLAIN_16 = new Font("SansSerif", Font.PLAIN, 16);

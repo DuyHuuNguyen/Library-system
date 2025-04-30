@@ -7,7 +7,7 @@ public class CustomButton extends JButton {
   private Color backgroundColor = Color.WHITE;
   private Color borderColor;
   private Color startGradientColor = backgroundColor;
-  private Color endGradientColor= backgroundColor;
+  private Color endGradientColor = backgroundColor;
   private Color hoverColor;
   private Color textColor = Color.BLACK;
   private int thickness = 3;
