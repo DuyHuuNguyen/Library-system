@@ -1,6 +1,7 @@
 package com.g15.library_system.view.swingComponentGenerators;
 
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -37,20 +38,10 @@ public class LabelGenerator {
   }
 
   public static JLabel createRequireLabel(String text) {
-    JLabel label = new JLabel("<html>" + text + "<span style='color: red';> *</span></html>");
-    label.setForeground(Style.WORD_COLOR_BLACK);
-    label.setFont(Style.FONT_PLAIN_13);
-    label.setHorizontalAlignment(SwingConstants.LEFT);
-    return label;
-  }
-
-  public static JLabel createRequireLabel(String text, int horizontal, int vertical) {
-    JLabel label = new JLabel("<html>" + text + "<span style='color: red';> *</span></html>");
-    label.setForeground(Style.WORD_COLOR_BLACK);
-    label.setFont(Style.FONT_PLAIN_13);
-    label.setHorizontalAlignment(horizontal);
-    label.setVerticalAlignment(vertical);
-    return label;
+    return LabelBuilder.builder()
+        .text("<html>" + text + "<span style='color: red';> *</span></html>")
+        .font(Style.FONT_PLAIN_13)
+        .horizontal(SwingConstants.LEFT);
   }
 
   /**
