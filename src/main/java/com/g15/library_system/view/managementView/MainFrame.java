@@ -21,8 +21,7 @@ public class MainFrame extends JFrame {
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
-    setIconImage(
-        new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());
+    setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());
     try {
       UIManager.put("ComboBox.focus", UIManager.get("ComboBox.background"));
       UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -60,10 +59,10 @@ public class MainFrame extends JFrame {
         });
 
     navigationPanel.setOverdueBookButtonListener(
-              e -> {
-                  workspacePanel.showPanel(NavigationType.OVERDUE_BOOKS);
-                  setHover(NavigationType.OVERDUE_BOOKS);
-              });
+        e -> {
+          workspacePanel.showPanel(NavigationType.OVERDUE_BOOKS);
+          setHover(NavigationType.OVERDUE_BOOKS);
+        });
 
     navigationPanel.setReaderButtonListener(
         e -> {
@@ -123,10 +122,10 @@ public class MainFrame extends JFrame {
         });
 
     workspacePanel.setOverdueBooksCardButtonListener(
-              e -> {
-                  workspacePanel.showPanel(NavigationType.OVERDUE_BOOKS);
-                  setHover(NavigationType.OVERDUE_BOOKS);
-              });
+        e -> {
+          workspacePanel.showPanel(NavigationType.OVERDUE_BOOKS);
+          setHover(NavigationType.OVERDUE_BOOKS);
+        });
 
     workspacePanel.setTotalUsersCardButtonListener(
         e -> {
@@ -143,7 +142,7 @@ public class MainFrame extends JFrame {
       navigationPanel.manageBookBt,
       navigationPanel.lendedBookBt,
       navigationPanel.returnBookBt,
-            navigationPanel.overdueBookBt,
+      navigationPanel.overdueBookBt,
       navigationPanel.readerBt,
       navigationPanel.librarianBt,
       navigationPanel.settingBt,
@@ -155,7 +154,7 @@ public class MainFrame extends JFrame {
       NavigationType.MANAGE_BOOKS,
       NavigationType.LENDED_BOOKS,
       NavigationType.RETURN_BOOKS,
-            NavigationType.OVERDUE_BOOKS,
+      NavigationType.OVERDUE_BOOKS,
       NavigationType.READERS,
       NavigationType.LIBRARIANS,
       NavigationType.SETTINGS,
@@ -163,7 +162,9 @@ public class MainFrame extends JFrame {
     };
     for (int i = 0; i < buttons.length; i++) {
       buttons[i].setBackgroundColor(
-          navigationType.equals(constraints[i]) ? Style.BLUE_MENU_BUTTON_COLOR : new Color(0,0,0,0));
+          navigationType.equals(constraints[i])
+              ? Style.BLUE_MENU_BUTTON_COLOR
+              : new Color(0, 0, 0, 0));
     }
   }
 

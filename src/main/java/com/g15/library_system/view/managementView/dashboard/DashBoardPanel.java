@@ -1,12 +1,9 @@
 package com.g15.library_system.view.managementView.dashboard;
 
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.AnimatedGradientTextLabel;
 import com.g15.library_system.view.overrideComponent.CustomButton;
-import com.g15.library_system.view.overrideComponent.GradientTextLabel;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
-import com.g15.library_system.view.swingComponentGenerators.ButtonGenerator;
 import com.g15.library_system.view.swingComponentGenerators.TableGenerator;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -43,14 +40,19 @@ public class DashBoardPanel extends JPanel {
       gbc.gridy = 0;
       gbc.fill = GridBagConstraints.NONE;
 
-//      AnimatedGradientTextLabel text3 =
-//          new AnimatedGradientTextLabel(
-//              "Hello, " + userName + "!",
-//              Style.FONT_BOLD_30,
-//              new Dimension(300, 50),
-//              SwingConstants.LEFT);
-      JLabel greeting = LabelBuilder.builder().text("<html><span style='color:black;'>Welcome, </span>"+ userName+"!</html>")
-              .font(Style.FONT_BOLD_30).textColor( new  Color(11, 124, 172)).preferredSize(new Dimension(400,50)).horizontal(SwingConstants.LEFT);
+      //      AnimatedGradientTextLabel text3 =
+      //          new AnimatedGradientTextLabel(
+      //              "Hello, " + userName + "!",
+      //              Style.FONT_BOLD_30,
+      //              new Dimension(300, 50),
+      //              SwingConstants.LEFT);
+      JLabel greeting =
+          LabelBuilder.builder()
+              .text("<html><span style='color:black;'>Welcome, </span>" + userName + "!</html>")
+              .font(Style.FONT_BOLD_30)
+              .textColor(new Color(11, 124, 172))
+              .preferredSize(new Dimension(400, 50))
+              .horizontal(SwingConstants.LEFT);
       gbc.gridx = 0;
       gbc.weightx = 0;
       gbc.anchor = GridBagConstraints.WEST;
@@ -64,7 +66,8 @@ public class DashBoardPanel extends JPanel {
       glue.setOpaque(false);
       this.add(glue, gbc);
 
-      CustomButton operatingNotifyBt = CustomButtonBuilder.builder()
+      CustomButton operatingNotifyBt =
+          CustomButtonBuilder.builder()
               .text(" Operating Hours: Monday to Saturday: 9 AM to 7 PM, Sunday: Closed")
               .font(Style.FONT_BOLD_15)
               .textColor(new Color(207, 156, 63))

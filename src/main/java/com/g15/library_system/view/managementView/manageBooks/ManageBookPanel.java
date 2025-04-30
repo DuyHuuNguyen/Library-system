@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 public class ManageBookPanel extends JPanel {
   public ManageBookPanel() {
     setLayout(new BorderLayout());
-//    add(new ToolPanel(), BorderLayout.NORTH);
+    add(new ToolPanel(), BorderLayout.NORTH);
 
     String[] cols = {"stt", "name", "number"};
     JTable table = TableGenerator.createBasicTable(new DefaultTableModel(), cols);

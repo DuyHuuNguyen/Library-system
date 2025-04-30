@@ -81,7 +81,6 @@ public class Style {
   public static final Color CHART_BAR_COLOR_ORANGE = new Color(253, 126, 20);
   public static final Color CHART_BAR_COLOR_YELLOW = new Color(255, 235, 59);
 
-
   // Library system
 
   // Color
@@ -99,8 +98,7 @@ public class Style {
 
   public static final Color BLUE_MENU_HOVER_COLOR = new Color(138, 166, 192);
   public static final Color BLUE_MENU_BUTTON_COLOR = new Color(113, 197, 219);
-  public static final Color BLUE_MENU_BACKGROUND_COLOR = new  Color(23, 159, 219);
-
+  public static final Color BLUE_MENU_BACKGROUND_COLOR = new Color(23, 159, 219);
 
   // font
   public static final Font FONT_SANSERIF_PLAIN_16 = new Font("SansSerif", Font.PLAIN, 16);
