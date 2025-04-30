@@ -89,6 +89,11 @@ public class CustomButtonBuilder extends CustomButton {
     return this;
   }
 
+  public CustomButtonBuilder roundedSide(RoundedSide roundedSide) {
+    this.setRoundedSide(roundedSide);
+    return this;
+  }
+
   public CustomButtonBuilder icon(String path, int gap) {
     ImageIcon iconButton = new ImageIcon(getClass().getResource(path));
     Image image = iconButton.getImage();

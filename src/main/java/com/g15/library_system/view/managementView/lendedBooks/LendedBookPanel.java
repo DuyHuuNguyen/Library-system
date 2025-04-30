@@ -4,7 +4,6 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.managementView.lendedBooks.formBody.*;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
-
 import java.awt.*;
 import javax.swing.*;
 
@@ -72,19 +71,20 @@ public class LendedBookPanel extends JPanel {
               .borderColor(Color.BLACK)
               .thickness(1)
               .darkerWhenPress(true);
-      cancelButton.addActionListener(e -> {
-        int option = JOptionPane.showConfirmDialog(
-                null,
-                "Do you want to cancel?",
-                "Confirmation",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
+      cancelButton.addActionListener(
+          e -> {
+            int option =
+                JOptionPane.showConfirmDialog(
+                    null,
+                    "Do you want to cancel?",
+                    "Confirmation",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
 
-        if (option == JOptionPane.YES_OPTION) {
-          formPn.cancel();
-        }
-      });
+            if (option == JOptionPane.YES_OPTION) {
+              formPn.cancel();
+            }
+          });
 
       JButton lendButton =
           CustomButtonBuilder.builder()
