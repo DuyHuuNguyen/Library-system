@@ -239,6 +239,7 @@ public class NavigationPanel extends JPanel {
             .contentAreaFilled(false)
             .preferredSize(new Dimension(220, 40))
             .icon("/icons/exit_to_app.png", 20);
+
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int height = (int) screenSize.getHeight();
     int buttonHeight = 50 + 75 + 50 * 9 + 5 + 50;
