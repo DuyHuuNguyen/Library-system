@@ -9,7 +9,7 @@ public class CustomButton extends JButton {
   private Color backgroundColor = Color.WHITE;
   private Color borderColor;
   private Color startGradientColor = backgroundColor;
-  private Color endGradientColor = backgroundColor;
+  private Color endGradientColor= backgroundColor;
   private Color hoverColor;
   private Color textColor = Color.BLACK;
   private int thickness = 3;
@@ -55,16 +55,6 @@ public class CustomButton extends JButton {
 
   @Override
   protected void paintBorder(Graphics g) {
-//    if (drawBorder) {
-//      Graphics2D g2d = (Graphics2D) g.create();
-//      g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//      g2d.setStroke(new BasicStroke(thickness));
-//      GradientPaint gradient =
-//          new GradientPaint(0, 0, startGradientColor, getWidth(), getHeight(), endGradientColor);
-//      g2d.setPaint(gradient);
-//      g2d.draw(createRoundedShape());
-//      g2d.dispose();
-//    }
     if (drawBorder) {
       Graphics2D g2d = (Graphics2D) g;
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -165,4 +155,5 @@ public class CustomButton extends JButton {
 
     return path;
   }
+
 }

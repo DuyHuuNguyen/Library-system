@@ -17,7 +17,8 @@ public class ToolPanel extends JPanel {
   private Map<String, Runnable> actionMap = new HashMap<>();
 
   public ToolPanel() {
-    this.setLayout(new BorderLayout());
+    setLayout(new BorderLayout());
+
     JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
     TextFieldSearchOption txt = new TextFieldSearchOption();
     txt.setPreferredSize(new Dimension(350, 40));
@@ -72,7 +73,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.PURPLE_MAIN_THEME)
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
-            .radius(8)
+            .radius(6)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .preferredSize(new Dimension(120, 40))
@@ -86,7 +87,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.PURPLE_MAIN_THEME)
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
-            .radius(8)
+            .radius(6)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .roundedSide(CustomButton.RoundedSide.RIGHT)
@@ -160,7 +161,7 @@ public class ToolPanel extends JPanel {
             .icon("/icons/deleteIcon.png", 12);
     actionBtPn.add(removeBt);
 
-    this.add(leftPanel, BorderLayout.EAST);
-    this.add(actionBtPn, BorderLayout.WEST);
+    add(leftPanel, BorderLayout.EAST);
+    add(actionBtPn, BorderLayout.WEST);
   }
 }
