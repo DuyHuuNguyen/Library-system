@@ -10,14 +10,18 @@ public class LibraryData implements Data<Library> {
   private final BookData bookDate = BookData.getInstance();
   private final UserData userData = UserData.getInstance();
 
-  private final Library library =
-      new Library()
-          .builder()
-          .id(1L)
-          .name("Library NLU")
-          .books(bookDate.getBooks())
-          .users(userData.getUsers())
-          .build();
+  private final Library library;
+
+  {
+    new Library();
+    library =
+        Library.builder()
+            .id(1L)
+            .name("Library NLU")
+            .books(bookDate.getBooks())
+            .users(userData.getUsers())
+            .build();
+  }
 
   private LibraryData() {
     this.initializeData();

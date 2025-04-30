@@ -10,14 +10,14 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class DashboardCard extends RoundedPanel {
-  private String title;
-  private String amount;
+  private final String title;
+  private final String amount;
   private Font font;
-  private CustomButton viewButton;
-  private String iconPath;
-  private Color backgroundColor;
-  private Color borderColor;
-  private Color iconBackgroundColor = Color.white;
+  private final CustomButton viewButton;
+  private final String iconPath;
+  private final Color backgroundColor;
+  private final Color borderColor;
+  private final Color iconBackgroundColor = Color.white;
   private int radius;
 
   public DashboardCard(

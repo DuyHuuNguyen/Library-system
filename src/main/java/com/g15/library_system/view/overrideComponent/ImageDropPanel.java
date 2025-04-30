@@ -1,8 +1,10 @@
 package com.g15.library_system.view.overrideComponent;
 
+import com.g15.library_system.view.Style;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,24 +13,28 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-@Deprecated
 public class ImageDropPanel extends JPanel {
   private final JPanel imagesContainer;
   private final List<String> imageUrls = new ArrayList<>();
+  private int widthOfImage;
+  private int heightOfImage;
 
-  public ImageDropPanel() {
+  public ImageDropPanel(int widthOfImage, int heightOfImage) {
+    this.heightOfImage = heightOfImage;
+    this.widthOfImage = widthOfImage;
+
     setLayout(new BorderLayout());
     setPreferredSize(new Dimension(400, 300));
     setBorder(BorderFactory.createTitledBorder("Drop Images Here"));
 
     imagesContainer = new JPanel();
     imagesContainer.setLayout(new FlowLayout(FlowLayout.LEFT));
+    imagesContainer.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+
     JScrollPane scrollPane = new JScrollPane(imagesContainer);
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
     add(scrollPane, BorderLayout.CENTER);
 
-    // Thiết lập drag & drop
     new DropTarget(
         this,
         new DropTargetAdapter() {
@@ -48,7 +54,6 @@ public class ImageDropPanel extends JPanel {
 
               revalidate();
               repaint();
-
             } catch (Exception ex) {
               ex.printStackTrace();
             }
@@ -58,20 +63,48 @@ public class ImageDropPanel extends JPanel {
 
   private void displayAndSaveImage(File file) throws IOException {
     BufferedImage img = ImageIO.read(file);
-    Image scaled = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+    Image scaled = img.getScaledInstance(widthOfImage, heightOfImage, Image.SCALE_SMOOTH);
     JLabel imgLabel = new JLabel(new ImageIcon(scaled));
     imgLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+    // Sự kiện click vào ảnh để xóa
+    imgLabel.addMouseListener(
+        new MouseAdapter() {
+          @Override
+          public void mouseClicked(MouseEvent e) {
+            int option =
+                JOptionPane.showConfirmDialog(
+                    ImageDropPanel.this,
+                    "Bạn có chắc muốn xóa hình này?",
+                    "Xác nhận xóa",
+                    JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+              imagesContainer.remove(imgLabel);
+              imagesContainer.revalidate();
+              imagesContainer.repaint();
+
+              // Xóa ảnh khỏi ổ đĩa
+              File outputFile = new File("images", file.getName());
+              if (outputFile.exists()) {
+                outputFile.delete();
+                System.out.println("Đã xóa ảnh: " + outputFile.getAbsolutePath());
+              }
+
+              imageUrls.remove(new File("images", file.getName()).getAbsolutePath());
+            }
+          }
+        });
+
     imagesContainer.add(imgLabel);
 
-    // Lưu vào thư mục images
-    File folder = new File("images");
+    File folder = new File("src/main/resources/bookImages");
     if (!folder.exists()) folder.mkdir();
 
     File outputFile = new File(folder, file.getName());
     ImageIO.write(img, "png", outputFile);
 
     imageUrls.add(outputFile.getAbsolutePath());
-    System.out.println("Saved image: " + outputFile.getAbsolutePath());
+    System.out.println("Đã lưu ảnh: " + outputFile.getAbsolutePath());
   }
 
   private boolean isImageFile(File file) {
@@ -84,5 +117,54 @@ public class ImageDropPanel extends JPanel {
 
   public List<String> getImageUrls() {
     return imageUrls;
+  }
+
+  public void loadImagesFromUrls(List<String> urls) {
+    imagesContainer.removeAll();
+
+    for (String path : urls) {
+      File file = new File(path);
+      if (file.exists() && isImageFile(file)) {
+        try {
+          BufferedImage img = ImageIO.read(file);
+          Image scaled = img.getScaledInstance(widthOfImage, heightOfImage, Image.SCALE_SMOOTH);
+          JLabel imgLabel = new JLabel(new ImageIcon(scaled));
+          imgLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+          imgLabel.addMouseListener(
+              new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                  int option =
+                      JOptionPane.showConfirmDialog(
+                          ImageDropPanel.this,
+                          "Bạn có chắc muốn xóa hình này?",
+                          "Xác nhận xóa",
+                          JOptionPane.YES_NO_OPTION);
+                  if (option == JOptionPane.YES_OPTION) {
+                    imagesContainer.remove(imgLabel);
+                    imagesContainer.revalidate();
+                    imagesContainer.repaint();
+
+                    if (file.exists()) {
+                      file.delete();
+                      System.out.println("Đã xóa ảnh: " + file.getAbsolutePath());
+                    }
+
+                    imageUrls.remove(file.getAbsolutePath());
+                  }
+                }
+              });
+
+          imagesContainer.add(imgLabel);
+        } catch (IOException e) {
+          System.err.println("Không thể đọc ảnh từ: " + path);
+          e.printStackTrace();
+        }
+      }
+    }
+
+    revalidate();
+    repaint();
   }
 }
