@@ -81,10 +81,6 @@ public class Style {
   public static final Color CHART_BAR_COLOR_ORANGE = new Color(253, 126, 20);
   public static final Color CHART_BAR_COLOR_YELLOW = new Color(255, 235, 59);
 
-  public static final Color GREEN_MAIN_THEME = new Color(46, 139, 87);
-  //  public static final Color GREEN_MAIN_THEME =  new Color(34, 139, 34);// look good to me!
-  public static final Color GREEN_MAIN_THEME_DARKER = new Color(25, 117, 64);
-
   // Library system
 
   // Color

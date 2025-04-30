@@ -29,6 +29,7 @@ public class ManageBookPanel extends JPanel {
 
   public ManageBookPanel() {
     setLayout(new BorderLayout());
+    add(new ToolPanel(), BorderLayout.NORTH);
 
     tools = new JPanel();
     tools.setLayout(new FlowLayout(FlowLayout.LEFT));
