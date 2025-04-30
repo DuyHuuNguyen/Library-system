@@ -83,7 +83,7 @@ public class LabelGenerator {
    * @return
    */
   public static JLabel createImageLabel(String imagePath, int width, int height) {
-    ImageIcon icon = new ImageIcon(imagePath);
+    ImageIcon icon = new ImageIcon(LabelGenerator.class.getResource(imagePath));
 
     Image image = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
     ImageIcon resizedIcon = new ImageIcon(image);

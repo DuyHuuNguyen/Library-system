@@ -39,7 +39,13 @@ public class ReaderTypesChartPanel extends RoundedShadowPanel {
   ReaderTypesChartPanel() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     setLayout(new BorderLayout());
-    setPreferredSize(new Dimension(450, 450));
+    setPreferredSize(new Dimension(500, 450));
+
+    JPanel titlePn = new JPanel(new BorderLayout());
+    titlePn.setBackground(Color.WHITE);
+    JLabel chartTitle =
+            LabelGenerator.createLabel(
+                    "Reader Types", Style.FONT_BOLD_18, Color.BLACK, SwingConstants.LEFT);
 
     JPanel sortBarPn = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     sortBarPn.setBackground(Color.WHITE);
@@ -63,7 +69,9 @@ public class ReaderTypesChartPanel extends RoundedShadowPanel {
     sortBarPn.add(monthComboBox);
     sortBarPn.add(yearLabel);
     sortBarPn.add(yearComboBox);
-    add(sortBarPn, BorderLayout.NORTH);
+    titlePn.add(chartTitle, BorderLayout.WEST);
+    titlePn.add(sortBarPn, BorderLayout.EAST);
+    add(titlePn, BorderLayout.NORTH);
 
     ChartPanel chartPanel = new ChartPanel();
     add(chartPanel, BorderLayout.CENTER);
@@ -77,7 +85,7 @@ public class ReaderTypesChartPanel extends RoundedShadowPanel {
       readerStatsData.put("Employees", 25);
       readerStatsData.put("Teachers", 35);
       readerStatsData.put("Others", 8);
-      JPanel chart = JFreeChartGenerator.createPieChart("Reader Types", readerStatsData);
+      JPanel chart = JFreeChartGenerator.createPieChart("", readerStatsData);
 
       this.add(chart);
     }

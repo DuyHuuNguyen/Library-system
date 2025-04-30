@@ -6,6 +6,7 @@ import com.g15.library_system.view.managementView.lendedBooks.LendedBookPanel;
 import com.g15.library_system.view.managementView.librarians.LibrarianPanel;
 import com.g15.library_system.view.managementView.manageBooks.ManageBookPanel;
 import com.g15.library_system.view.managementView.myAccount.MyAccountPanel;
+import com.g15.library_system.view.managementView.overdueBooks.OverdueBookMainPanel;
 import com.g15.library_system.view.managementView.readers.ReaderPanel;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
 import com.g15.library_system.view.managementView.setting.SettingPanel;
@@ -19,6 +20,7 @@ public class WorkspacePanel extends JPanel {
   private ManageBookPanel manageBookPanel;
   private LendedBookPanel lendedBookPanel;
   private ReturnBookPanel returnBookPanel;
+  private OverdueBookMainPanel overdueBookPanel;
   private ReaderPanel readerPanel;
   private LibrarianPanel librarianPanel;
   private SettingPanel settingPanel;
@@ -29,6 +31,7 @@ public class WorkspacePanel extends JPanel {
     manageBookPanel = new ManageBookPanel();
     lendedBookPanel = new LendedBookPanel();
     returnBookPanel = new ReturnBookPanel();
+    overdueBookPanel = new OverdueBookMainPanel();
     readerPanel = new ReaderPanel();
     librarianPanel = new LibrarianPanel();
     settingPanel = new SettingPanel();
@@ -40,6 +43,7 @@ public class WorkspacePanel extends JPanel {
     add(manageBookPanel, NavigationType.MANAGE_BOOKS.getCardName());
     add(lendedBookPanel, NavigationType.LENDED_BOOKS.getCardName());
     add(returnBookPanel, NavigationType.RETURN_BOOKS.getCardName());
+    add(overdueBookPanel, NavigationType.OVERDUE_BOOKS.getCardName());
     add(readerPanel, NavigationType.READERS.getCardName());
     add(librarianPanel, NavigationType.LIBRARIANS.getCardName());
     add(settingPanel, NavigationType.SETTINGS.getCardName());

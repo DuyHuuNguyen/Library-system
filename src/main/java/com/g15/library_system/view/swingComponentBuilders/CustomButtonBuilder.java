@@ -79,12 +79,22 @@ public class CustomButtonBuilder extends CustomButton {
     return this;
   }
 
+  public CustomButtonBuilder opaque(boolean b) {
+    this.setOpaque(b);
+    return this;
+  }
+
+  public CustomButtonBuilder contentAreaFilled(boolean isFilled) {
+    this.setContentAreaFilled(isFilled);
+    return this;
+  }
+
   public CustomButtonBuilder icon(String path, int gap) {
-    ImageIcon iconButton = new ImageIcon(path);
+    ImageIcon iconButton = new ImageIcon(getClass().getResource(path));
     Image image = iconButton.getImage();
     Image resized =
         image.getScaledInstance(
-            this.getPreferredSize().width - gap,
+            this.getPreferredSize().height - gap,
             this.getPreferredSize().height - gap,
             Image.SCALE_SMOOTH);
     this.setIcon(new ImageIcon(resized));

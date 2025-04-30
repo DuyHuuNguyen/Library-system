@@ -34,7 +34,7 @@ public class LenderChartPanel extends RoundedShadowPanel {
 
   LenderChartPanel() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
-    setPreferredSize(new Dimension(750, 450));
+    setPreferredSize(new Dimension(700, 450));
     this.setLayout(new BorderLayout());
     this.setBackground(Color.WHITE);
     setLayout(new BorderLayout());
