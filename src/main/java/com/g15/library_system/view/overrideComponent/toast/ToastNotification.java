@@ -7,10 +7,11 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-/**
- * how to use: ToastNotification panel = new ToastNotification(this.loginFrame,
- * ToastNotification.Type.INFO, ToastNotification.Location.TOP_CENTER, "Message info notification
- * type"); panel.showNotification();
+
+ * how to use: ToastNotification panel = new
+ * ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.INFO,
+ * ToastNotification.Location.TOP_CENTER, "Message info notification type");
+ * panel.showNotification();
  */
 public class ToastNotification extends javax.swing.JComponent {
   private JDialog dialog;
@@ -255,11 +256,12 @@ public class ToastNotification extends javax.swing.JComponent {
         new javax.swing.ImageIcon(getClass().getResource("/icons/toastIcons/success.png")));
     panel.setOpaque(false);
 
-    lbMessage.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+    lbMessage.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
     lbMessage.setForeground(new Color(38, 38, 38));
     lbMessage.setText("Message");
 
     lbMessageText.setForeground(new Color(127, 127, 127));
+    lbMessageText.setFont(new Font("SansSerif", Font.PLAIN, 16));
     lbMessageText.setText("Message Text");
 
     javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
