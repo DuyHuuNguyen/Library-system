@@ -89,7 +89,7 @@ public class ToolPanel extends JPanel {
             .backgroundColor(Style.PURPLE_MAIN_THEME)
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(6)
-            .alignment(SwingConstants.LEFT)
+            .alignment(SwingConstants.CENTER)
             .drawBorder(false)
             .roundedSide(CustomButton.RoundedSide.RIGHT)
             .preferredSize(new Dimension(45, 40));

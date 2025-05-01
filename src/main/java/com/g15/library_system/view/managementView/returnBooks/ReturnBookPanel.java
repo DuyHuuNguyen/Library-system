@@ -10,6 +10,5 @@ public class ReturnBookPanel extends JPanel {
     add(new ToolPanel(), BorderLayout.NORTH);
     add(new ContentPanel(), BorderLayout.CENTER);
 
-    add(new JLabel("return book"));
   }
 }

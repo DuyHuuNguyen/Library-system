@@ -54,7 +54,7 @@ public class NavigationPanel extends JPanel {
     gbc.gridy++;
 
     JSeparator separatorTop = new JSeparator(SwingConstants.HORIZONTAL);
-    separatorTop.setPreferredSize(new Dimension(220, 1));
+    separatorTop.setPreferredSize(new Dimension(220, 2));
     separatorTop.setBackground(Color.WHITE);
     gbc.insets = new Insets(5, 10, 5, 10);
     add(separatorTop, gbc);
@@ -146,7 +146,7 @@ public class NavigationPanel extends JPanel {
     gbc.gridy++;
 
     JSeparator separatorMid = new JSeparator(SwingConstants.HORIZONTAL);
-    separatorMid.setPreferredSize(new Dimension(220, 1));
+    separatorMid.setPreferredSize(new Dimension(220, 2));
     separatorMid.setBackground(Color.WHITE);
     add(separatorMid, gbc);
     gbc.gridy++;
@@ -186,7 +186,7 @@ public class NavigationPanel extends JPanel {
     gbc.gridy++;
 
     JSeparator separatorBot = new JSeparator(SwingConstants.HORIZONTAL);
-    separatorBot.setPreferredSize(new Dimension(220, 1));
+    separatorBot.setPreferredSize(new Dimension(220, 2));
     separatorBot.setBackground(Color.WHITE);
     add(separatorBot, gbc);
     gbc.gridy++;
