@@ -19,4 +19,15 @@ public class Reader extends User {
     this.libraryCard = libraryCard;
     //    this.libraryCard.addOwner(this);
   }
+
+  public boolean nameContains(String name) {
+    return this.firstName.toLowerCase().contains(name.toLowerCase())
+        || this.lastName.toLowerCase().contains(name.toLowerCase());
+  }
+
+  public boolean findByName(String name) {
+    String[] strings = name.toLowerCase().split(" ");
+    return this.firstName.toLowerCase().contains(strings[0])
+            && this.lastName.toLowerCase().contains(strings[1]);
+  }
 }
