@@ -1,5 +1,8 @@
 package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
+import com.g15.library_system.controller.ReaderController;
+import com.g15.library_system.entity.Reader;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
@@ -11,8 +14,11 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
 public class UserPanel extends JPanel {
-  private JTextField nameTF, idTF, contactNumberTF;
-  private JLabel nameL, idL, contactNumberL;
+  private JTextField nameTF, idTF, emailTF;
+  private JLabel nameL, idL, emailL;
+
+  private ReaderController readerController =
+      ApplicationContextProvider.getBean(ReaderController.class);
 
   public UserPanel() {
     Border whiteLine = BorderFactory.createLineBorder(Color.WHITE);
@@ -40,8 +46,18 @@ public class UserPanel extends JPanel {
         TextFieldBuilder.builder()
             .font(Style.FONT_PLAIN_13)
             .preferredSize(new Dimension(300, 25))
+            .autoSuggest(
+                name -> {
+                  return readerController.searchNameContains(name);
+                },
+                selectedName -> {
+                  Reader reader = readerController.findByName(selectedName).orElse(null);
+                  if (reader != null) {
+                    idTF.setText(String.valueOf(reader.getId()));
+                    emailTF.setText(reader.getEmail());
+                  }
+                })
             .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
-
     idL = LabelGenerator.createRequireLabel("Membership ID");
     idTF =
         TextFieldBuilder.builder()
@@ -49,8 +65,8 @@ public class UserPanel extends JPanel {
             .preferredSize(new Dimension(300, 25))
             .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
 
-    contactNumberL = LabelGenerator.createRequireLabel("Contact Number");
-    contactNumberTF =
+    emailL = LabelGenerator.createRequireLabel("Email");
+    emailTF =
         TextFieldBuilder.builder()
             .placeholder("www.example.com")
             .font(Style.FONT_PLAIN_13)
@@ -79,9 +95,9 @@ public class UserPanel extends JPanel {
 
     gbc.gridx++;
     gbc.gridy = 1;
-    add(contactNumberL, gbc);
+    add(emailL, gbc);
     gbc.gridy = 2;
-    add(contactNumberTF, gbc);
+    add(emailTF, gbc);
   }
 
   @Override
@@ -108,6 +124,6 @@ public class UserPanel extends JPanel {
     for (JTextField TF : TFs) {
       TF.setText("");
     }
-    contactNumberTF.setText("www.example.com");
+    emailTF.setText("www.example.com");
   }
 }

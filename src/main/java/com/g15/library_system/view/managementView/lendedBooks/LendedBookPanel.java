@@ -1,7 +1,5 @@
 package com.g15.library_system.view.managementView.lendedBooks;
 
-import com.g15.library_system.controller.ReaderController;
-import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.managementView.lendedBooks.formBody.*;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
@@ -10,12 +8,10 @@ import java.awt.*;
 import javax.swing.*;
 
 public class LendedBookPanel extends JPanel {
-  private ReaderController readerController;
   private FormPanel formPn;
   private ButtonPanel buttonPn;
 
   public LendedBookPanel() {
-    readerController = ApplicationContextProvider.getBean(ReaderController.class);
     setLayout(new FlowLayout(FlowLayout.CENTER));
     ContainerPn containerPn = new ContainerPn();
     containerPn.setPreferredSize(new Dimension(1200, 750));
