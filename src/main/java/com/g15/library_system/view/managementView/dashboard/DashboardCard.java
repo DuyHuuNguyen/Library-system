@@ -4,7 +4,6 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
-import com.g15.library_system.view.swingComponentGenerators.ButtonGenerator;
 import com.g15.library_system.view.swingComponentGenerators.LabelGenerator;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -59,7 +58,8 @@ public class DashboardCard extends RoundedPanel {
     numberLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
     numberLabel.setAlignmentX(CENTER_ALIGNMENT);
 
-    viewButton = CustomButtonBuilder.builder()
+    viewButton =
+        CustomButtonBuilder.builder()
             .text("View Details")
             .font(Style.FONT_SANSERIF_BOLD_16)
             .textColor(Color.BLACK)
@@ -72,7 +72,7 @@ public class DashboardCard extends RoundedPanel {
             .contentAreaFilled(false)
             .preferredSize(new Dimension(150, 40));
 
-//    viewButton.setFocusPainted(false);
+    //    viewButton.setFocusPainted(false);
     viewButton.setAlignmentX(CENTER_ALIGNMENT);
     add(iconPanel);
     add(Box.createVerticalStrut(10));

@@ -28,6 +28,6 @@ public class Reader extends User {
   public boolean findByName(String name) {
     String[] strings = name.toLowerCase().split(" ");
     return this.firstName.toLowerCase().contains(strings[0])
-            && this.lastName.toLowerCase().contains(strings[1]);
+        && this.lastName.toLowerCase().contains(strings[1]);
   }
 }

@@ -258,8 +258,9 @@ public class NavigationPanel extends JPanel {
     int height = getHeight();
 
     GradientPaint gp =
-        new GradientPaint(0, 0, new Color(23, 159, 219), 0, height, new Color(11, 24, 63)); // blue
-    //    GradientPaint gp = new GradientPaint(0, 0,new  Color(75, 107, 220), 0, height, new
+        new GradientPaint(
+            0, 0, Style.BLUE_MENU_BACKGROUND_COLOR, 0, height, new Color(11, 24, 63)); // blue
+    //        GradientPaint gp = new GradientPaint(0, 0,new  Color(75, 107, 220), 0, height, new
     // Color(164, 115, 186));
     g2d.setPaint(gp);
     g2d.fillRect(0, 0, width, height);

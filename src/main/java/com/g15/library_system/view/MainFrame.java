@@ -1,9 +1,9 @@
-package com.g15.library_system.view.managementView;
+package com.g15.library_system.view;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.g15.library_system.enums.NavigationType;
-import com.g15.library_system.view.LoginFrame;
-import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.NavigationPanel;
+import com.g15.library_system.view.managementView.WorkspacePanel;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import java.awt.*;
 import javax.swing.*;
@@ -23,21 +23,14 @@ public class MainFrame extends JFrame {
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
     setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());
-//    try {
-//      UIManager.put("ComboBox.focus", UIManager.get("ComboBox.background"));
-//      UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//      SwingUtilities.updateComponentTreeUI(this);
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-      try {
-          UIManager.setLookAndFeel(new FlatLightLaf());
-          SwingUtilities.updateComponentTreeUI(this);
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
+    try {
+      UIManager.setLookAndFeel(new FlatLightLaf());
+      SwingUtilities.updateComponentTreeUI(this);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
-      navigationPanel = new NavigationPanel();
+    navigationPanel = new NavigationPanel();
     workspacePanel = new WorkspacePanel();
     add(navigationPanel, BorderLayout.WEST);
     add(workspacePanel, BorderLayout.CENTER);

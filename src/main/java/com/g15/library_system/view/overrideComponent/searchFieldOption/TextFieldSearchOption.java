@@ -1,9 +1,6 @@
 package com.g15.library_system.view.overrideComponent.searchFieldOption;
 
 import com.g15.library_system.view.Style;
-import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.TimingTargetAdapter;
-
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -14,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
+import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.TimingTargetAdapter;
 
 /**
  * how to use: TextFieldSearchOption txt = new TextFieldSearchOption(); txt.setPreferredSize(new

@@ -1,187 +1,262 @@
 package com.g15.library_system.view.overrideComponent.tables;
 
-import javax.swing.*;
-import javax.swing.table.*;
+import com.g15.library_system.view.Style;
+import com.g15.library_system.view.overrideComponent.CustomButton;
+import com.g15.library_system.view.overrideComponent.tables.tableRenderers.*;
+import com.g15.library_system.view.swingComponentGenerators.TableGenerator;
 import java.awt.*;
 import java.awt.event.*;
-import com.formdev.flatlaf.FlatLightLaf;
-import com.g15.library_system.view.Style;
-import com.g15.library_system.view.swingComponentGenerators.TableGenerator;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.*;
 
 public class CheckboxTablePanel extends JPanel {
-    private String[] columnNames = {"", "Return ID", "Borrowing ID", "Reader Name","Return Date","Returned Books","Status","Fine","Processed By","Notes"};
+  private String[] columnNames;
+  private String[] statuses = {"Returned", "Lost", "Damaged", "Overdue"};
+  private Object[][] tableData;
+  private JTable table;
+  private CustomTableModel tableModel;
+  private TableColumnModel columnModel;
+  private boolean isSelectAll = false;
+  private boolean isEditMode = false;
+  private boolean isStatusEditable = false;
+  private Set<Integer> editableColumns = new HashSet<>();
+  private TableColumn checkboxCol;
+
+  public CheckboxTablePanel(String[] columnNames, Object[][] tableData) {
+    this.columnNames = columnNames;
+    this.tableData = tableData;
+    setLayout(new BorderLayout());
+    tableModel = new CustomTableModel(tableData, columnNames);
+    table = new JTable(tableModel);
+    tableModel.setTable(table);
+
+    table.setRowHeight(30);
+    table.setFillsViewportHeight(true);
+    table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+    TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
+    table.setRowSorter(sorter);
+    columnModel = table.getColumnModel();
+    columnModel.getColumn(1).setPreferredWidth(50);
+    columnModel.getColumn(3).setPreferredWidth(80);
+
+    table.setDefaultRenderer(
+        Object.class,
+        new DefaultTableCellRenderer() {
+          public Component getTableCellRendererComponent(
+              JTable table,
+              Object value,
+              boolean isSelected,
+              boolean hasFocus,
+              int row,
+              int column) {
+            Component c =
+                super.getTableCellRendererComponent(
+                    table, value, isSelected, hasFocus, row, column);
+            if (!isSelected) {
+              c.setBackground(row % 2 == 0 ? Color.WHITE : Style.LIGHT_BLUE_TABLE_ROW_COLOR);
+            } else {
+              c.setBackground(table.getSelectionBackground());
+            }
+            return c;
+          }
+        });
+
+    setupCheckBoxColumn();
+    setupTableHeader();
+    setupStatusColumn();
+    setupBooksNameColumnRenderer();
+    setupBookCoverImageRenderer();
+    resizeNotesColumn(300);
+
+    this.add(createScrollPane(table), BorderLayout.CENTER);
+  }
+
+  private class CustomTableModel extends DefaultTableModel {
     private JTable table;
-    private DefaultTableModel tableModel;
-    private boolean isSelectAll = false;
 
-    public CheckboxTablePanel() {
-        setLayout(new BorderLayout());
+    public CustomTableModel(Object[][] data, Object[] columnNames) {
+      super(data, columnNames);
+    }
 
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void setTable(JTable table) {
+      this.table = table;
+    }
 
-        tableModel = new DefaultTableModel(null, columnNames) {
-            public Class<?> getColumnClass(int column) {
-                return column == 0 ? Boolean.class : String.class;
+    public boolean isCellEditable(int row, int column) {
+      if (column == 0) return true;
+      if (column == Arrays.asList(columnNames).indexOf("Status") && isStatusEditable) {
+        return true;
+      }
+      if (!isEditMode) return false;
+
+      boolean isChecked = Boolean.TRUE.equals(getValueAt(row, 0));
+      int modelRow = row;
+      int[] selectedViewRows = table.getSelectedRows();
+      boolean isSelected =
+          Arrays.stream(selectedViewRows)
+              .map(table::convertRowIndexToModel)
+              .anyMatch(r -> r == modelRow);
+      return (isChecked || isSelected) && editableColumns.contains(column);
+    }
+
+    public Class<?> getColumnClass(int column) {
+      return column == 0 ? Boolean.class : String.class;
+    }
+  }
+
+  private class HeaderCheckboxRenderer implements TableCellRenderer {
+    private JCheckBox checkBox = new JCheckBox();
+
+    public HeaderCheckboxRenderer() {
+      checkBox.setHorizontalAlignment(SwingConstants.CENTER);
+      checkBox.setOpaque(false);
+    }
+
+    public Component getTableCellRendererComponent(
+        JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+      checkBox.setSelected(isSelectAll);
+      return checkBox;
+    }
+  }
+
+  private void setupBookCoverImageRenderer() {
+    int imageColumnIndex = Arrays.asList(columnNames).indexOf("Cover Image");
+    if (imageColumnIndex >= 0) {
+      columnModel.getColumn(imageColumnIndex).setPreferredWidth(50);
+      table.setRowHeight(120);
+      columnModel.getColumn(imageColumnIndex).setCellRenderer(new ImageRenderer(70, 120));
+    }
+  }
+
+  private void setupBooksNameColumnRenderer() {
+    int imageColumnIndex = Arrays.asList(columnNames).indexOf("Returned Books");
+    if (imageColumnIndex >= 0) {
+      table.setRowHeight(50);
+      columnModel.getColumn(imageColumnIndex).setCellRenderer(new MultiLineCellRenderer());
+      columnModel.getColumn(imageColumnIndex).setPreferredWidth(200);
+    }
+  }
+
+  private void setupTableHeader() {
+    JTableHeader header = table.getTableHeader();
+    header.setReorderingAllowed(false);
+    header.addMouseListener(
+        new MouseAdapter() {
+          public void mouseClicked(MouseEvent e) {
+            int col = table.columnAtPoint(e.getPoint());
+            if (col == 0) {
+              isSelectAll = !isSelectAll;
+              for (int i = 0; i < tableModel.getRowCount(); i++) {
+                tableModel.setValueAt(isSelectAll, i, 0);
+              }
+              header.repaint();
             }
-
-            public boolean isCellEditable(int row, int column) {
-                return column == 0;
-            }
-        };
-
-        // Sample data
-        Object[][] data = {
-                {false, "ubuntu", "latest", "a1b2c3d4", "5 days ago", "72 MB"},
-                {false, "nginx", "1.21", "d4e5f6g7", "2 weeks ago", "133 MB"},
-                {false, "ubuntu", "latest", "a1b2c3d4", "5 days ago", "72 MB"},
-                {false, "nginx", "1.21", "d4e5f6g7", "2 weeks ago", "133 MB"},
-                {false, "ubuntu", "latest", "a1b2c3d4", "5 days ago", "72 MB"},
-                {false, "nginx", "1.21", "d4e5f6g7", "2 weeks ago", "133 MB"},
-            {false, "ubuntu", "latest", "a1b2c3d4", "5 days ago", "72 MB"},
-            {false, "nginx", "1.21", "d4e5f6g7", "2 weeks ago", "133 MB"},
-            {false, "mysql", "8.0", "z9x8y7w6", "1 month ago", "456 MB"}
-        };
-        for (Object[] row : data) {
-            tableModel.addRow(row);
-        }
-
-        table = new JTable(tableModel);
-        table.setRowHeight(30);
-        table.setFillsViewportHeight(true);
-
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-
-        table.setDefaultRenderer(
-                Object.class,
-                new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(
-                            JTable table,
-                            Object value,
-                            boolean isSelected,
-                            boolean hasFocus,
-                            int row,
-                            int column) {
-                        Component c =
-                                super.getTableCellRendererComponent(
-                                        table, value, isSelected, hasFocus, row, column);
-
-                        if (!isSelected) {
-                            c.setBackground(row % 2 == 1 ? new Color(230, 247, 255) : Color.WHITE);
-                        } else {
-                            c.setBackground(new Color(184, 207, 229));
-                        }
-
-                        return c;
-                    }
-                });
-
-        // Custom cell renderer & editor for checkbox
-        TableColumn checkboxCol = table.getColumnModel().getColumn(0);
-        checkboxCol.setCellRenderer(new CustomCheckBoxRenderer());
-        checkboxCol.setCellEditor(new CustomCheckBoxEditor());
-
-        // Cố định kích thước checkbox column
-        int checkboxWidth = 40;
-        checkboxCol.setPreferredWidth(checkboxWidth);
-        checkboxCol.setMaxWidth(checkboxWidth);
-        checkboxCol.setMinWidth(checkboxWidth);
-        checkboxCol.setResizable(false);
-
-        // Header checkbox
-        checkboxCol.setHeaderRenderer(new HeaderCheckboxRenderer());
-
-        // Header click listener
-        JTableHeader header = table.getTableHeader();
-        header.setReorderingAllowed(false);
-        header.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int col = table.columnAtPoint(e.getPoint());
-                if (col == 0) {
-                    isSelectAll = !isSelectAll;
-                    for (int i = 0; i < tableModel.getRowCount(); i++) {
-                        tableModel.setValueAt(isSelectAll, i, 0);
-                    }
-                    header.repaint();
-                }
-            }
+          }
         });
+    header.setPreferredSize(new Dimension(header.getWidth(), 45));
+    header.setBackground(new Color(237, 237, 237));
+  }
 
+  private void setupStatusColumn() {
+    JComboBox<String> statusComboBox = new JComboBox<>(statuses);
+    statusComboBox.setEditable(false);
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        TableGenerator.setColorScrollPane(
-                scrollPane, Style.BLUE_MENU_BACKGROUND_COLOR, Style.CHART_BACKGROUND_COLOR);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        this.add(scrollPane, BorderLayout.CENTER);
+    int statusColumnIndex = Arrays.asList(columnNames).indexOf("Status");
+    if (statusColumnIndex >= 0) {
+      columnModel.getColumn(statusColumnIndex).setCellEditor(new DefaultCellEditor(statusComboBox));
+      columnModel.getColumn(statusColumnIndex).setCellRenderer(new StatusCellRenderer());
+      columnModel.getColumn(statusColumnIndex).setPreferredWidth(60);
     }
+  }
 
-    public DefaultTableModel getModel(){
-        return tableModel;
+  private void setupCheckBoxColumn() {
+    checkboxCol = columnModel.getColumn(0);
+    checkboxCol.setCellRenderer(new CustomCheckBoxRenderer());
+    checkboxCol.setCellEditor(new CustomCheckBoxEditor());
+    checkboxCol.setPreferredWidth(40);
+    checkboxCol.setMaxWidth(40);
+    checkboxCol.setMinWidth(40);
+    checkboxCol.setHeaderRenderer(new HeaderCheckboxRenderer());
+  }
+
+  private JScrollPane createScrollPane(JTable table) {
+    JScrollPane scrollPane = new JScrollPane(table);
+    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    TableGenerator.setColorScrollPane(
+        scrollPane, Style.BLUE_MENU_BACKGROUND_COLOR, Style.CHART_BACKGROUND_COLOR);
+    scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+    scrollPane.setBorder(BorderFactory.createEmptyBorder());
+    return scrollPane;
+  }
+
+  public Runnable getActionForEditingTable(CustomButton editButton) {
+    Runnable runnable =
+        () -> {
+          if (!isEditMode) {
+            boolean hasCheckboxSelected = false;
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+              if (Boolean.TRUE.equals(tableModel.getValueAt(i, 0))) {
+                hasCheckboxSelected = true;
+                break;
+              }
+            }
+            boolean hasMouseSelection = table.getSelectedRowCount() > 0;
+
+            if (!hasCheckboxSelected && !hasMouseSelection) {
+              JOptionPane.showMessageDialog(this, "Please select at least one row to edit!");
+              return;
+            }
+
+            isEditMode = true;
+            editButton.setText("Save");
+            editButton.setIcon("/icons/save.png", 15);
+
+            for (int viewRow = 0; viewRow < table.getRowCount(); viewRow++) {
+              int modelRow = table.convertRowIndexToModel(viewRow);
+              if (table.isRowSelected(viewRow)
+                  || Boolean.TRUE.equals(tableModel.getValueAt(modelRow, 0))) {
+                tableModel.setValueAt(true, modelRow, 0);
+              }
+            }
+          } else {
+            isEditMode = false;
+            editButton.setText("Edit");
+            editButton.setIcon("/icons/edit.png", 15);
+
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+              if (Boolean.TRUE.equals(tableModel.getValueAt(i, 0))) {
+                tableModel.setValueAt(false, i, 0);
+              }
+            }
+
+            table.clearSelection();
+          }
+
+          table.repaint();
+        };
+    return runnable;
+  }
+
+  public void setEditableColumns(Set<Integer> columns) {
+    editableColumns.clear();
+    editableColumns.addAll(columns);
+  }
+
+  public void setStatusEditable(boolean statusEditable) {
+    isStatusEditable = statusEditable;
+  }
+
+  public void resizeNotesColumn(int width) {
+    int notesColumnIndex = Arrays.asList(columnNames).indexOf("Notes");
+    if (notesColumnIndex > 0) {
+      columnModel.getColumn(notesColumnIndex).setPreferredWidth(width);
     }
+  }
 
-    // Renderer cho checkbox nhỏ gọn
-    private class CustomCheckBoxRenderer extends JCheckBox implements TableCellRenderer {
-        public CustomCheckBoxRenderer() {
-            setHorizontalAlignment(CENTER);
-            setOpaque(true);
-            setBackground(Color.WHITE);
-        }
-
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            setSelected(value != null && (Boolean) value);
-            return this;
-        }
-    }
-
-    // Editor cho checkbox
-    private class CustomCheckBoxEditor extends DefaultCellEditor {
-        private JCheckBox checkBox;
-
-        public CustomCheckBoxEditor() {
-            super(new JCheckBox());
-            checkBox = (JCheckBox) getComponent();
-            checkBox.setHorizontalAlignment(SwingConstants.CENTER);
-            checkBox.setBackground(Color.WHITE);
-        }
-    }
-
-    // Header renderer với checkbox nhỏ
-    private class HeaderCheckboxRenderer implements TableCellRenderer {
-        private JCheckBox checkBox = new JCheckBox();
-
-        public HeaderCheckboxRenderer() {
-            checkBox.setHorizontalAlignment(SwingConstants.CENTER);
-            checkBox.setOpaque(false);
-        }
-
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            checkBox.setSelected(isSelectAll);
-            return checkBox;
-        }
-    }
-
-    public static CheckboxTablePanel createCheckboxTablePanel() {
-        return new CheckboxTablePanel();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // Example of how to add to a JFrame
-            JFrame frame = new JFrame("Checkbox Table Panel");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(850, 400);
-            frame.setLocationRelativeTo(null);
-            frame.add(createCheckboxTablePanel());
-            frame.setVisible(true);
-        });
-    }
+  public void setColumnSize(int columnIndex, int width) {
+    columnModel.getColumn(columnIndex).setPreferredWidth(width);
+  }
 }

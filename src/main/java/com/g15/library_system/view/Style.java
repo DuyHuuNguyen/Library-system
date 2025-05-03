@@ -100,6 +100,20 @@ public class Style {
   public static final Color BLUE_MENU_BUTTON_COLOR = new Color(113, 197, 219);
   public static final Color BLUE_MENU_BACKGROUND_COLOR = new Color(23, 159, 219);
 
+  // status color
+  public static final Color GREEN_STATUS_BACKGROUND_COLOR = new Color(200, 255, 220, 120);
+  public static final Color GREEN_STATUS_FOREGROUND_COLOR = new Color(0, 150, 90);
+  public static final Color YELLOW_STATUS_BACKGROUND_COLOR = new Color(255, 234, 190, 120);
+  public static final Color YELLOW_STATUS_FOREGROUND_COLOR = new Color(204, 120, 0);
+  public static final Color RED_STATUS_BACKGROUND_COLOR = new Color(255, 180, 180, 120);
+  public static final Color RED_STATUS_FOREGROUND_COLOR = new Color(200, 0, 0);
+  public static final Color PURPLE_STATUS_BACKGROUND_COLOR = new Color(245, 238, 255);
+  public static final Color PURPLE_STATUS_FOREGROUND_COLOR = new Color(138, 43, 226);
+
+  // table row color
+  public static final Color LIGHT_BLUE_TABLE_ROW_COLOR = new Color(230, 247, 255);
+  //  public static final Color BLUE_SELECTED_ROW_COLOR = new Color(144, 163, 190);
+
   // font
   public static final Font FONT_SANSERIF_PLAIN_16 = new Font("SansSerif", Font.PLAIN, 16);
   public static final Font FONT_SANSERIF_BOLD_16 = new Font("SansSerif", Font.BOLD, 16);

@@ -1,5 +1,6 @@
 package com.g15.library_system.view.overrideComponent;
 
+
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
@@ -9,7 +10,7 @@ public class CustomButton extends JButton {
   private Color backgroundColor = Color.WHITE;
   private Color borderColor;
   private Color startGradientColor = backgroundColor;
-  private Color endGradientColor= backgroundColor;
+  private Color endGradientColor = backgroundColor;
   private Color hoverColor;
   private Color textColor = Color.BLACK;
   private int thickness = 3;
@@ -61,8 +62,8 @@ public class CustomButton extends JButton {
       g2d.setStroke(new BasicStroke(thickness));
 
       GradientPaint gradient =
-              new GradientPaint(
-                      0, 0, startGradientColor, getWidth(), getHeight(), endGradientColor, true);
+          new GradientPaint(
+              0, 0, startGradientColor, getWidth(), getHeight(), endGradientColor, true);
       g2d.setPaint(gradient);
       g2d.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, borderRadius, borderRadius);
     }
@@ -121,6 +122,17 @@ public class CustomButton extends JButton {
     repaint();
   }
 
+  public void setIcon(String path, int gap) {
+    ImageIcon iconButton = new ImageIcon(getClass().getResource(path));
+    Image image = iconButton.getImage();
+    Image resized =
+        image.getScaledInstance(
+            this.getPreferredSize().height - gap,
+            this.getPreferredSize().height - gap,
+            Image.SCALE_SMOOTH);
+    this.setIcon(new ImageIcon(resized));
+  }
+
   private Shape createRoundedShape() {
     int w = getWidth();
     int h = getHeight();
@@ -155,5 +167,4 @@ public class CustomButton extends JButton {
 
     return path;
   }
-
 }
