@@ -95,26 +95,26 @@ public class TextFieldBuilder extends JTextField {
     return this;
   }
 
-    /**
-     * Enables auto-suggestion on this text field using a dynamic popup menu.
-     *
-     * <p>This method attaches a {@link DocumentListener} with a debounced delay (300ms)
-     * that listens to text changes. When typing stops, it calls the provided
-     * {@code suggestionProvider} function to retrieve a list of matching suggestions.
-     * These suggestions are displayed in a {@link JPopupMenu} beneath the text field.
-     *
-     * <p>When a user selects an item from the popup, the text field is updated to reflect
-     * the selected value, and the optional {@code onSelect} consumer is triggered.
-     *
-     * <p>This method is safe to use even if {@code onSelect} is {@code null}.
-     *
-     * @param suggestionProvider A function that takes the current text input and returns
-     *        a list of suggestion strings. Should handle partial matches.
-     * @param onSelect (Optional) A consumer function that receives the selected string
-     *        when the user chooses a suggestion from the list. Can be {@code null}.
-     * @return This {@code TextFieldBuilder} instance for method chaining.
-     */
-    public TextFieldBuilder autoSuggest(
+  /**
+   * Enables auto-suggestion on this text field using a dynamic popup menu.
+   *
+   * <p>This method attaches a {@link DocumentListener} with a debounced delay (300ms) that listens
+   * to text changes. When typing stops, it calls the provided {@code suggestionProvider} function
+   * to retrieve a list of matching suggestions. These suggestions are displayed in a {@link
+   * JPopupMenu} beneath the text field.
+   *
+   * <p>When a user selects an item from the popup, the text field is updated to reflect the
+   * selected value, and the optional {@code onSelect} consumer is triggered.
+   *
+   * <p>This method is safe to use even if {@code onSelect} is {@code null}.
+   *
+   * @param suggestionProvider A function that takes the current text input and returns a list of
+   *     suggestion strings. Should handle partial matches.
+   * @param onSelect (Optional) A consumer function that receives the selected string when the user
+   *     chooses a suggestion from the list. Can be {@code null}.
+   * @return This {@code TextFieldBuilder} instance for method chaining.
+   */
+  public TextFieldBuilder autoSuggest(
       Function<String, List<String>> suggestionProvider, Consumer<String> onSelect) {
     JPopupMenu suggestionsPopup = new JPopupMenu();
     suggestionsPopup.setFocusable(false);

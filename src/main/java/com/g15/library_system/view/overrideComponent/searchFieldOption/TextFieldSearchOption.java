@@ -222,25 +222,25 @@ public class TextFieldSearchOption extends JTextField {
   @Override
   protected void paintComponent(Graphics g) {
 
-    Graphics2D g2 = (Graphics2D) g.create();
-    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    Graphics2D g2d = (Graphics2D) g.create();
+    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-    g2.setColor(getBackground());
-    g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+    g2d.setColor(getBackground());
+    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
 
     super.paintComponent(g);
 
-    g2.setFont(font);
-    g2.setColor(Color.GRAY);
-    FontMetrics fm = g2.getFontMetrics();
+    g2d.setFont(font);
+    g2d.setColor(Color.GRAY);
+    FontMetrics fm = g2d.getFontMetrics();
     int iconY = (getHeight() + fm.getAscent()) / 2 - 2;
-    g2.drawString("🔎", 10, iconY);
+    g2d.drawString("🔎", 10, iconY);
 
-    g2.setStroke(new BasicStroke(3f));
-    g2.setColor(borderColor);
-    g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arc, arc);
+    g2d.setStroke(new BasicStroke(3f));
+    g2d.setPaint(borderColor);
+    g2d.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, arc, arc);
 
-    g2.dispose();
+    g2d.dispose();
   }
 
   @Override
@@ -257,7 +257,7 @@ public class TextFieldSearchOption extends JTextField {
     double x = getWidth() - 35;
     double y = 2;
     x -= (x - 2) * animate;
-    double height = getHeight() - 1;
+    double height = getHeight();
     double round = height - height * animate;
     Area area = new Area(new RoundRectangle2D.Double(x - 1, y - 2, height, height, round, round));
     Path2D p = new Path2D.Double();
