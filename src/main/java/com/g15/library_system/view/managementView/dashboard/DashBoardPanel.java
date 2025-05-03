@@ -50,7 +50,7 @@ public class DashBoardPanel extends JPanel {
           LabelBuilder.builder()
               .text("<html><span style='color:black;'>Welcome, </span>" + userName + "!</html>")
               .font(Style.FONT_BOLD_30)
-              .textColor(new Color(11, 124, 172))
+              .textColor(Style.BLUE_TEXT_COLOR)
               .preferredSize(new Dimension(400, 50))
               .horizontal(SwingConstants.LEFT);
       gbc.gridx = 0;

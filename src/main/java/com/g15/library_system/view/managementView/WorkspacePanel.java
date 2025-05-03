@@ -29,7 +29,7 @@ public class WorkspacePanel extends JPanel {
   public WorkspacePanel() {
     dashBoardPanel = new DashBoardPanel();
     manageBookPanel = new ManageBookPanel();
-    //        lendedBookPanel = new LendedBookPanel();
+    lendedBookPanel = new LendedBookPanel();
     returnBookPanel = new ReturnBookPanel();
     overdueBookPanel = new OverdueBookMainPanel();
     readerPanel = new ReaderPanel();
@@ -41,7 +41,7 @@ public class WorkspacePanel extends JPanel {
 
     add(dashBoardPanel, NavigationType.DASHBOARD.getCardName());
     add(manageBookPanel, NavigationType.MANAGE_BOOKS.getCardName());
-    //        add(lendedBookPanel, NavigationType.LENDED_BOOKS.getCardName());
+    add(lendedBookPanel, NavigationType.LENDED_BOOKS.getCardName());
     add(returnBookPanel, NavigationType.RETURN_BOOKS.getCardName());
     add(overdueBookPanel, NavigationType.OVERDUE_BOOKS.getCardName());
     add(readerPanel, NavigationType.READERS.getCardName());

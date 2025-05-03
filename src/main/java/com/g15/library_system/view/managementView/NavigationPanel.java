@@ -37,10 +37,10 @@ public class NavigationPanel extends JPanel {
 
     appLogo =
         CustomButtonBuilder.builder()
-            .text("  FIT NLU")
+            .text("FIT Library")
             .font(Style.FONT_BOLD_25)
-            .textColor(Color.WHITE)
-            .backgroundColor(new Color(0, 0, 0, 0))
+            .textColor(Style.BLUE_TEXT_COLOR)
+            .backgroundColor(Color.WHITE)
             .hoverColor(null)
             .radius(10)
             .alignment(SwingConstants.CENTER)
@@ -48,8 +48,8 @@ public class NavigationPanel extends JPanel {
             .opaque(false)
             .darkerWhenPress(false)
             .contentAreaFilled(false)
-            .preferredSize(new Dimension(220, 60));
-    //            .icon("src/main/java/com/g15/library_system/view/icons/library1.png", 20);
+            .preferredSize(new Dimension(220, 65))
+            .icon("/images/fit_nlu_logo.jpg", 15);
     add(appLogo, gbc);
     gbc.gridy++;
 

@@ -38,7 +38,6 @@ public class PasswordFieldWithEye extends JPasswordField {
           }
         });
 
-    // Repaint border when focus changes
     addFocusListener(
         new java.awt.event.FocusAdapter() {
           public void focusGained(java.awt.event.FocusEvent evt) {

@@ -85,8 +85,5 @@ public class ContentPanel extends JPanel implements ContentAction {
   public void exportExcel() {}
 
   @Override
-  public void importExcel() {}
-
-  @Override
   public void refreshTable() {}
 }
