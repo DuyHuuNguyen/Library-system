@@ -1,7 +1,7 @@
 package com.g15.library_system.view.overrideComponent;
 
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.swingComponentGenerators.ButtonGenerator;
+import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,15 +32,18 @@ public class ToolbarPanel extends JPanel {
     buttonPanel.setBackground(Color.WHITE);
     Color purple = new Color(103, 80, 164);
     JButton addButton =
-        ButtonGenerator.createCustomButton(
-            "+ Add",
-            Style.FONT_PLAIN_13,
-            purple,
-            purple,
-            Color.cyan,
-            10,
-            0,
-            new Dimension(100, 100));
+        CustomButtonBuilder.builder()
+            .text("+ Add")
+            .font(Style.FONT_PLAIN_13)
+            .textColor(purple)
+            .backgroundColor(purple)
+            .hoverColor(Color.cyan)
+            .radius(10)
+            .alignment(SwingConstants.CENTER)
+            .preferredSize(new Dimension(100, 100))
+            .drawBorder(false)
+            .opaque(true)
+            .contentAreaFilled(true);
 
     JButton actionButton = new JButton("Actions ⌄");
 

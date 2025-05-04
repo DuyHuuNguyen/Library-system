@@ -59,8 +59,8 @@ public class ReturnBookPanel extends JPanel {
             new ToastNotification(
                     JOptionPane.getFrameForComponent(this),
                     ToastNotification.Type.SUCCESS,
-                    ToastNotification.Location.BOTTOM_RIGHT,
-                    "New book added successfully!")
+                    ToastNotification.Location.TOP_CENTER,
+                    "New book returned successfully!")
                 .showNotification();
           }
         });
