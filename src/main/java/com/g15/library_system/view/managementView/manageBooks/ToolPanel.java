@@ -16,7 +16,7 @@ public class ToolPanel extends JPanel {
   private CustomButton addBt, removeBt, mainButton, dropdownButton;
   private Map<String, Runnable> actionMap = new HashMap<>();
 
-  ToolPanel() {
+  public ToolPanel() {
     setLayout(new BorderLayout());
 
     JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
@@ -40,7 +40,6 @@ public class ToolPanel extends JPanel {
             new ImageIcon(getClass().getResource("/icons/searchOptionIcons/address.png"))));
 
     leftPanel.add(txt);
-    //        add(leftPanel, BorderLayout.WEST);
 
     JPanel actionBtPn = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
     addBt =
@@ -89,7 +88,7 @@ public class ToolPanel extends JPanel {
             .backgroundColor(Style.PURPLE_MAIN_THEME)
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(6)
-            .alignment(SwingConstants.LEFT)
+            .alignment(SwingConstants.CENTER)
             .drawBorder(false)
             .roundedSide(CustomButton.RoundedSide.RIGHT)
             .preferredSize(new Dimension(45, 40));

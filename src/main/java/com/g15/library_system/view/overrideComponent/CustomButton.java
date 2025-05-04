@@ -56,14 +56,15 @@ public class CustomButton extends JButton {
   @Override
   protected void paintBorder(Graphics g) {
     if (drawBorder) {
-      Graphics2D g2d = (Graphics2D) g.create();
+      Graphics2D g2d = (Graphics2D) g;
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
       g2d.setStroke(new BasicStroke(thickness));
+
       GradientPaint gradient =
-          new GradientPaint(0, 0, startGradientColor, getWidth(), getHeight(), endGradientColor);
+          new GradientPaint(
+              0, 0, startGradientColor, getWidth(), getHeight(), endGradientColor, true);
       g2d.setPaint(gradient);
-      g2d.draw(createRoundedShape());
-      g2d.dispose();
+      g2d.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, borderRadius, borderRadius);
     }
   }
 
@@ -118,6 +119,17 @@ public class CustomButton extends JButton {
   public void setRoundedSide(RoundedSide side) {
     this.roundedSide = side;
     repaint();
+  }
+
+  public void setIcon(String path, int gap) {
+    ImageIcon iconButton = new ImageIcon(getClass().getResource(path));
+    Image image = iconButton.getImage();
+    Image resized =
+        image.getScaledInstance(
+            this.getPreferredSize().height - gap,
+            this.getPreferredSize().height - gap,
+            Image.SCALE_SMOOTH);
+    this.setIcon(new ImageIcon(resized));
   }
 
   private Shape createRoundedShape() {
