@@ -88,6 +88,7 @@ public class Style {
 
   public static final Color BLUE_MENU_HOVER_COLOR = new Color(138, 166, 192);
   public static final Color BLUE_MENU_BUTTON_COLOR = new Color(113, 197, 219);
+  public static final Color GREEN_CONFIRM_BUTTON_COLOR = new Color(76, 175, 80);
   public static final Color BLUE_MENU_BACKGROUND_COLOR = new Color(23, 159, 219);
   public static final Color BLUE_TEXT_COLOR = new Color(10, 114, 160);
 
