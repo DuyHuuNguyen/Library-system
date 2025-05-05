@@ -3,7 +3,6 @@ package com.g15.library_system.view;
 import java.awt.*;
 
 public class Style {
-
   // 13
   public static final Font FONT_BOLD_13 = new Font("Arial", Font.BOLD, 13);
   public static final Font FONT_PLAIN_13 = new Font("utf8", Font.PLAIN, 13);

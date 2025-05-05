@@ -8,7 +8,7 @@ import javax.swing.table.TableCellRenderer;
 public class MultiLineCellRenderer extends JTextArea implements TableCellRenderer {
 
   public MultiLineCellRenderer() {
-    setLineWrap(false); // Không tự wrap từ
+    setLineWrap(false);
     setWrapStyleWord(false);
     setOpaque(true);
     setBorder(null);
@@ -17,7 +17,7 @@ public class MultiLineCellRenderer extends JTextArea implements TableCellRendere
   @Override
   public Component getTableCellRendererComponent(
       JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-    int defaultRowHeight = table.getRowHeight(); // Lưu chiều cao mặc định
+    int defaultRowHeight = table.getRowHeight();
 
     if (value != null) {
       String text = value.toString().replaceAll(",\\s*", ",\n");
@@ -34,15 +34,13 @@ public class MultiLineCellRenderer extends JTextArea implements TableCellRendere
       setForeground(table.getForeground());
     }
 
-    // Đặt kích thước để tính toán preferredHeight
     setSize(table.getColumnModel().getColumn(column).getWidth(), Short.MAX_VALUE);
     int preferredHeight = getPreferredSize().height;
 
-    // Chỉ điều chỉnh nếu cao hơn chiều cao mặc định (tức là có nhiều dòng)
     if (preferredHeight > defaultRowHeight) {
-      table.setRowHeight(row, preferredHeight);
+      table.setRowHeight(row, preferredHeight + 10);
     } else {
-      table.setRowHeight(row, defaultRowHeight); // Reset lại nếu trước đó đã tăng
+      table.setRowHeight(row, defaultRowHeight);
     }
 
     return this;

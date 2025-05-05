@@ -53,7 +53,7 @@ public class AddReturnBookPanel extends JPanel {
     tablePanel.setStatusEditable(true);
     rightPanel.add(tablePanel, BorderLayout.CENTER);
 
-    add(readerInfoPanel, BorderLayout.WEST);
+    this.add(readerInfoPanel, BorderLayout.WEST);
     this.add(rightPanel, BorderLayout.CENTER);
   }
 
