@@ -37,8 +37,7 @@ public class ToastNotification {
     messagePanel.add(messageLabel, BorderLayout.CENTER);
 
     // Close Button Panel
-    JButton closeButton =
-        ButtonGenerator.createJButton("x", Style.FONT_BOLD_20, Color.GRAY, Color.WHITE);
+    JButton closeButton = new JButton("x");
     closeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     closeButton.setFocusPainted(false);
     closeButton.setContentAreaFilled(false);

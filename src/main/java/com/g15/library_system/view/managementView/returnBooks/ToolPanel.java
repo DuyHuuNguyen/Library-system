@@ -39,7 +39,7 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(170, 40))
-            .icon("/icons/addIcon.png", 15);
+            .icon("/icons/addIcon.png", 5);
     actionBtPn.add(addBt);
 
     mainButton =

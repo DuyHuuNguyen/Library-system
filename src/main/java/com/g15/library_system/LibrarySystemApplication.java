@@ -1,6 +1,7 @@
 package com.g15.library_system;
 
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.g15.library_system.entity.*;
 import com.g15.library_system.enums.*;
@@ -20,11 +21,12 @@ import javax.swing.*;
 public class LibrarySystemApplication {
   public static void main(String[] args) {
     //improve Swing UI
-//    FlatRobotoFont.install();
+    FlatRobotoFont.install();
     FlatLaf.registerCustomDefaultsSource("raven.themes");
-//    UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));//set default font
+    UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));//set default font
     UIManager.put("Separator.foreground", Color.WHITE);
     FlatMacLightLaf.setup();//light mode
+    //    FlatMacDarkLaf.setup();//dark mode (dang bug)
 
     SpringApplication app = new SpringApplication(LibrarySystemApplication.class);
     app.setHeadless(false);
@@ -111,7 +113,7 @@ public class LibrarySystemApplication {
             .transactionType(TransactionType.BORROW)
             .build();
 
-    // Tạo thêm 15 transaction nữa...
+    // Tạo thêm 15 transaction nữa... ＞﹏＜
     var c6 =
         Transaction.builder()
             .id(6L)
