@@ -1,7 +1,6 @@
 package com.g15.library_system.view.managementView;
 
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.CircularImage;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
@@ -10,7 +9,7 @@ import javax.swing.*;
 
 public class NavigationPanel extends JPanel {
   private JLabel role, name, credit;
-  private CircularImage avatar;
+
   public CustomButton dashBoardBt,
       manageBookBt,
       lendedBookBt,

@@ -83,17 +83,6 @@
 			<version>1.5.3</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>com.formdev</groupId>-->
-<!--			<artifactId>flatlaf</artifactId>-->
-<!--			<version>3.4.1</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>com.formdev</groupId>-->
-<!--			<artifactId>flatlaf-extras</artifactId>-->
-<!--			<version>3.4.1</version>-->
-<!--		</dependency>-->
-
 		<dependency>
 			<groupId>com.formdev</groupId>
 			<artifactId>flatlaf</artifactId>
