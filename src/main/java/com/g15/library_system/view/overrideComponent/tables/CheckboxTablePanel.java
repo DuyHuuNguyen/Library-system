@@ -7,6 +7,7 @@ import com.g15.library_system.view.swingComponentGenerators.TableGenerator;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -23,7 +24,7 @@ public class CheckboxTablePanel extends JPanel {
   private Set<Integer> editableColumns = new HashSet<>();
   private TableColumn checkboxCol;
 
-  public CheckboxTablePanel(String[] columnNames, Object[][] tableData) {
+  public CheckboxTablePanel(String[] columnNames, Object[][] tableData, int heightImage) {
     this.columnNames = columnNames;
     this.tableData = tableData;
     setLayout(new BorderLayout());
@@ -67,7 +68,7 @@ public class CheckboxTablePanel extends JPanel {
     setupTableHeader();
     setupStatusColumn();
     setupBooksNameColumnRenderer();
-    setupBookCoverImageRenderer();
+    setupBookCoverImageRenderer(heightImage);
     resizeNotesColumn(300);
 
     this.add(createScrollPane(table), BorderLayout.CENTER);
@@ -121,12 +122,12 @@ public class CheckboxTablePanel extends JPanel {
     }
   }
 
-  private void setupBookCoverImageRenderer() {
+  private void setupBookCoverImageRenderer(int height) {
     int imageColumnIndex = Arrays.asList(columnNames).indexOf("Cover Image");
     if (imageColumnIndex >= 0) {
       columnModel.getColumn(imageColumnIndex).setPreferredWidth(50);
-      table.setRowHeight(120);
-      columnModel.getColumn(imageColumnIndex).setCellRenderer(new ImageRenderer(70, 120));
+      table.setRowHeight(height);
+      columnModel.getColumn(imageColumnIndex).setCellRenderer(new ImageRenderer(70, height));
     }
   }
 
@@ -258,5 +259,28 @@ public class CheckboxTablePanel extends JPanel {
 
   public void setColumnSize(int columnIndex, int width) {
     columnModel.getColumn(columnIndex).setPreferredWidth(width);
+  }
+
+  public void setRowSelectionHandler(Consumer<Integer> rowHandler) {
+    table
+        .getSelectionModel()
+        .addListSelectionListener(
+            event -> {
+              if (!event.getValueIsAdjusting()) {
+                int viewRow = table.getSelectedRow();
+                if (viewRow != -1) {
+                  int modelRow = table.convertRowIndexToModel(viewRow);
+                  rowHandler.accept(modelRow);
+                }
+              }
+            });
+  }
+
+  public TableColumn getCheckboxCol() {
+    return checkboxCol;
+  }
+
+  public JTable getTable() {
+    return table;
   }
 }

@@ -48,7 +48,7 @@ public class AddReturnBookPanel extends JPanel {
           {false, "B02", null, "Data Structures", "2025-04-15", "2025-04-25", "lost"}
         };
 
-    tablePanel = new CheckboxTablePanel(columnNames, borrowData);
+    tablePanel = new CheckboxTablePanel(columnNames, borrowData, 120);
     tablePanel.setEditableColumns(Set.of(5));
     tablePanel.setStatusEditable(true);
     rightPanel.add(tablePanel, BorderLayout.CENTER);

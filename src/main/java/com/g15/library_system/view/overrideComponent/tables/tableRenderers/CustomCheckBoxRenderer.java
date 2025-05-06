@@ -16,4 +16,5 @@ public class CustomCheckBoxRenderer extends JCheckBox implements TableCellRender
     setSelected(value != null && (Boolean) value);
     return this;
   }
+
 }
