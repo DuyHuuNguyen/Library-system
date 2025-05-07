@@ -5,7 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class MonthComboBoxGenerator {
-  private static String[] months = {
+  private static final String[] months = {
     "All",
     "January",
     "February",

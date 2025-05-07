@@ -15,16 +15,16 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class WorkspacePanel extends JPanel {
-  private CardLayout cardLayout = new CardLayout();
-  private DashBoardPanel dashBoardPanel;
-  private ManageBookPanel manageBookPanel;
-  private LendedBookPanel lendedBookPanel;
-  private ReturnBookPanel returnBookPanel;
-  private OverdueBookMainPanel overdueBookPanel;
-  private ReaderPanel readerPanel;
-  private LibrarianPanel librarianPanel;
-  private SettingPanel settingPanel;
-  private MyAccountPanel myAccountPanel;
+  private final CardLayout cardLayout = new CardLayout();
+  private final DashBoardPanel dashBoardPanel;
+  private final ManageBookPanel manageBookPanel;
+  private final LendedBookPanel lendedBookPanel;
+  private final ReturnBookPanel returnBookPanel;
+  private final OverdueBookMainPanel overdueBookPanel;
+  private final ReaderPanel readerPanel;
+  private final LibrarianPanel librarianPanel;
+  private final SettingPanel settingPanel;
+  private final MyAccountPanel myAccountPanel;
 
   public WorkspacePanel() {
     dashBoardPanel = new DashBoardPanel();

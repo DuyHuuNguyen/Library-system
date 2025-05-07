@@ -1,5 +1,6 @@
 package com.g15.library_system.view.overrideComponent;
 
+import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
 
@@ -33,7 +34,7 @@ public class ToolbarTablePanel extends JPanel {
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
     buttonPanel.setBackground(Color.WHITE);
 
-    addBt = new JButton("+ Add Books");
+    addBt = CustomButtonBuilder.builder().text("+ Add Books");
 
     // Style button (purple)
     Color purple = new Color(103, 80, 164);
