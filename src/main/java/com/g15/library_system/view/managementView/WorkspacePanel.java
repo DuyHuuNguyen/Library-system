@@ -26,7 +26,7 @@ public class WorkspacePanel extends JPanel {
   private final SettingPanel settingPanel;
   private final MyAccountPanel myAccountPanel;
 
-  WorkspacePanel() {
+  public WorkspacePanel() {
     dashBoardPanel = new DashBoardPanel();
     manageBookPanel = new ManageBookPanel();
     lendedBookPanel = new LendedBookPanel();

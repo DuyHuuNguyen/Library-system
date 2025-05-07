@@ -4,7 +4,6 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.NotifyNewBookPanel;
 import com.g15.library_system.view.overrideComponent.TablePanel;
 import com.g15.library_system.view.overrideComponent.UpsertBookPanel;
-
 import java.awt.*;
 import javax.swing.*;
 
@@ -49,7 +48,7 @@ public class ManageBookPanel extends JPanel {
 
     this.panelContent.add(bookFormAndDropImagesPanel, CONSTRAINT_ADD_NEW_BOOK);
 
-    this.panelContent.add(new UpsertBookPanel(1000,500), CONSTRAINT_MODIFY_BOOK);// add book
+    this.panelContent.add(new UpsertBookPanel(1000, 500), CONSTRAINT_MODIFY_BOOK); // add book
     this.panelContent.add(new NotifyNewBookPanel(), CONSTRAINT_NOTIFY);
 
     add(panelContent, BorderLayout.CENTER);

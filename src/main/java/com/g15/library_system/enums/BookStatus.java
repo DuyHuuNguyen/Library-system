@@ -8,7 +8,11 @@ import lombok.RequiredArgsConstructor;
 public enum BookStatus {
   AVAILABLE("ccc"),
   BORROWED("cc"),
-  DEMO("cc");
+  DEMO("cc"),
+  RETURNED("returned"),
+  LOST("lost"),
+  DAMAGED("damaged"),
+  OVERDUE("overdue");
   private final String status;
 
   public boolean isDemo() {

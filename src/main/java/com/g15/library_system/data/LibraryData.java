@@ -7,21 +7,17 @@ import lombok.Getter;
 @Getter
 public class LibraryData implements Data<Library> {
   private static final LibraryData INSTANCE = new LibraryData();
-  private final BookData bookDate = BookData.getInstance();
+  private final BookData bookData = BookData.getInstance();
   private final UserData userData = UserData.getInstance();
 
-  private final Library library;
-
-  {
-    new Library();
-    library =
-        Library.builder()
-            .id(1L)
-            .name("Library NLU")
-            .books(bookDate.getBooks())
-            .users(userData.getUsers())
-            .build();
-  }
+  private final Library library =
+      new Library()
+          .builder()
+          .id(1L)
+          .name("Library NLU")
+          .books(bookData.getBooks())
+          .users(userData.getUsers())
+          .build();
 
   private LibraryData() {
     this.initializeData();

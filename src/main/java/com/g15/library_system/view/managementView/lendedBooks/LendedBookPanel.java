@@ -15,7 +15,6 @@ public class LendedBookPanel extends JPanel {
     setLayout(new FlowLayout(FlowLayout.CENTER));
     ContainerPn containerPn = new ContainerPn();
     containerPn.setPreferredSize(new Dimension(1200, 750));
-
     add(containerPn);
   }
 
@@ -94,6 +93,7 @@ public class LendedBookPanel extends JPanel {
               .borderColor(Color.BLACK)
               .thickness(1)
               .darkerWhenPress(true);
+      lendButton.addActionListener(e -> {});
       add(cancelButton);
       add(lendButton);
     }

@@ -4,26 +4,19 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
-import org.springframework.stereotype.Component;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 
-//@Component
 public class ToolPanel extends JPanel {
   private CustomButton addBt, removeBt, mainButton, dropdownButton;
   private Map<String, Runnable> actionMap = new HashMap<>();
 
-  private CardLayout cardLayout;
-  private JPanel panelContent;
-
-  public ToolPanel(CardLayout cardLayout, JPanel panelContent) {
-    this.cardLayout = cardLayout;
-    this.panelContent = panelContent;
+  ToolPanel() {
     setLayout(new BorderLayout());
 
     JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
@@ -47,6 +40,7 @@ public class ToolPanel extends JPanel {
             new ImageIcon(getClass().getResource("/icons/searchOptionIcons/address.png"))));
 
     leftPanel.add(txt);
+    //        add(leftPanel, BorderLayout.WEST);
 
     JPanel actionBtPn = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
     addBt =
@@ -64,7 +58,13 @@ public class ToolPanel extends JPanel {
             .preferredSize(new Dimension(150, 40))
             .icon("/icons/addIcon.png", 10);
     addBt.addActionListener(
-        e -> cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_ADD_NEW_BOOK));
+        e ->
+            new ToastNotification(
+                    JOptionPane.getFrameForComponent(this),
+                    ToastNotification.Type.SUCCESS,
+                    ToastNotification.Location.TOP_CENTER,
+                    "New book added successfully!")
+                .showNotification());
     actionBtPn.add(addBt);
 
     //    btn1.addActionListener(e -> cardLayout.show(panelContent, CONSTRAINT_TABLE_BOOK));
@@ -94,7 +94,7 @@ public class ToolPanel extends JPanel {
             .backgroundColor(Style.PURPLE_MAIN_THEME)
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
             .radius(6)
-            .alignment(SwingConstants.LEFT)
+            .alignment(SwingConstants.CENTER)
             .drawBorder(false)
             .roundedSide(CustomButton.RoundedSide.RIGHT)
             .preferredSize(new Dimension(45, 40));
@@ -105,18 +105,24 @@ public class ToolPanel extends JPanel {
 
     JPopupMenu menu = new JPopupMenu();
 
-    String[] items = {"Edit", "Export", "Import", "Notify","Refresh"};
+    String[] items = {"Edit", "Export", "Import", "Refresh"};
     Font menuFont = new Font("Segoe UI", Font.PLAIN, 14);
     int popupWidth =
         mainButton.getPreferredSize().width + dropdownButton.getPreferredSize().width - 2;
     int popupHeight = 35;
 
-    actionMap.put("Edit", () -> cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_MODIFY_BOOK));
-
+    actionMap.put(
+        "Edit",
+        () ->
+            new ToastNotification(
+                    JOptionPane.getFrameForComponent(this),
+                    ToastNotification.Type.INFO,
+                    ToastNotification.Location.TOP_CENTER,
+                    "editing")
+                .showNotification());
     actionMap.put("Export", () -> JOptionPane.showMessageDialog(this, "Exporting..."));
     actionMap.put("Import", () -> JOptionPane.showMessageDialog(this, "Importing..."));
-    actionMap.put("Refresh", () -> cardLayout.show(panelContent,ManageBookPanel.CONSTRAINT_TABLE_BOOK));
-    actionMap.put("Notify", () -> cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_NOTIFY));
+    actionMap.put("Refresh", () -> JOptionPane.showMessageDialog(this, "Refreshing..."));
 
     for (String itemText : items) {
       JMenuItem item = new JMenuItem(itemText);
