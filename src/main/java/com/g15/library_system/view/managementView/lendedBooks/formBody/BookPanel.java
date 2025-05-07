@@ -1,5 +1,9 @@
 package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
+import com.g15.library_system.controller.BookController;
+import com.g15.library_system.entity.Book;
+import com.g15.library_system.enums.GenreType;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import com.g15.library_system.view.swingComponentGenerators.*;
@@ -8,9 +12,11 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 public class BookPanel extends JPanel {
-  private JLabel titleL, isbnL, genreL, authorL;
-  private JComboBox<String> titleCB, genreCB, authorCB;
-  private JTextField isbnTF;
+  private JTextField titleTF, authorTF;
+  private JComboBox<GenreType> genreCB;
+  private JLabel titleL, genreL, authorL;
+
+  private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
 
   public BookPanel() {
     Border whiteLine = BorderFactory.createLineBorder(Color.WHITE);
@@ -29,21 +35,35 @@ public class BookPanel extends JPanel {
     gbc.insets = new Insets(5, 5, 5, 5);
     gbc.gridx = 0;
 
-    titleL = LabelGenerator.createRequireLabel("Book Title");
-    titleCB = new JComboBox<>();
+    genreL = LabelGenerator.createRequireLabel("Genre/Category");
+    genreCB = new JComboBox<>(GenreType.values());
 
-    isbnL = LabelGenerator.createRequireLabel("ISBN/ISSN");
-    isbnTF =
+    authorL = LabelGenerator.createRequireLabel("Author(s)");
+    authorTF =
         TextFieldBuilder.builder()
             .font(Style.FONT_PLAIN_13)
             .preferredSize(new Dimension(300, 25))
             .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
 
-    genreL = LabelGenerator.createRequireLabel("Genre/Category");
-    genreCB = new JComboBox<>();
-
-    authorL = LabelGenerator.createRequireLabel("Author(s)");
-    authorCB = new JComboBox<>();
+    titleL = LabelGenerator.createRequireLabel("Book Title");
+    titleTF =
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .popupMenu(
+                text -> {
+                  return bookController.searchTitleContains(text);
+                },
+                selectedTitle -> {
+                  Book book = bookController.findByTitle(selectedTitle).orElse(null);
+                  if (book != null) {
+                    genreCB.setSelectedItem(book.getGenreType());
+                    authorTF.setText(book.getAuthor());
+                    KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                        .focusNextComponent(authorTF);
+                  }
+                })
+            .preferredSize(new Dimension(300, 25))
+            .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
 
     gbc.gridy = 0;
     gbc.gridwidth = 3;
@@ -57,13 +77,7 @@ public class BookPanel extends JPanel {
     gbc.gridy = 1;
     add(titleL, gbc);
     gbc.gridy = 2;
-    add(titleCB, gbc);
-
-    gbc.gridx++;
-    gbc.gridy = 1;
-    add(isbnL, gbc);
-    gbc.gridy = 2;
-    add(isbnTF, gbc);
+    add(titleTF, gbc);
 
     gbc.gridx++;
     gbc.gridy = 1;
@@ -71,17 +85,18 @@ public class BookPanel extends JPanel {
     gbc.gridy = 2;
     add(genreCB, gbc);
 
-    gbc.gridx = 0;
-    gbc.gridy = 3;
+    gbc.gridx++;
+    gbc.gridy = 1;
     add(authorL, gbc);
-    gbc.gridy = 4;
-    add(authorCB, gbc);
+    gbc.gridy = 2;
+    add(authorTF, gbc);
   }
 
   public void cancel() {
-    JComboBox[] CBs = {titleCB, genreCB, authorCB};
-    for (JComboBox CB : CBs) {
-      if (CB.getItemCount() > 0) CB.setSelectedIndex(0);
+    genreCB.setSelectedIndex(-1);
+    JTextField[] TFs = {titleTF, authorTF};
+    for (JTextField TF : TFs) {
+      TF.setText("");
     }
   }
 }

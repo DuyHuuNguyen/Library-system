@@ -31,4 +31,9 @@ public class BookRepositoryImpl implements BookRepository {
       }
     }
   }
+
+  @Override
+  public Optional<Book> findByTitle(String title) {
+    return bookData.getBooks().stream().filter(book -> book.hasSameTitle(title)).findFirst();
+  }
 }

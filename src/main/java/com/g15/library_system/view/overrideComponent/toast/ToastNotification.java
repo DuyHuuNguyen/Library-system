@@ -7,7 +7,6 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-
 /* 
   how to use: ToastNotification panel = new
   ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.INFO,

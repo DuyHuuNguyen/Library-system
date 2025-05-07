@@ -14,12 +14,12 @@ public class ReaderServiceImpl implements ReaderService {
   private final ReaderRepository readerRepository;
 
   @Override
-  public List<String> searchNameContains(String name) {
-    return readerRepository.searchNameContains(name);
+  public Optional<Reader> findByName(String name) {
+    return readerRepository.findByName(name);
   }
 
   @Override
-  public Optional<Reader> findByName(String name) {
-    return readerRepository.findByName(name);
+  public List<Reader> findAll() {
+    return readerRepository.findAll();
   }
 }
