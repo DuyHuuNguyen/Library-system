@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReaderService {
-  List<String> searchNameContains(String name);
 
   Optional<Reader> findByName(String name);
+
+  List<Reader> findAll();
 }

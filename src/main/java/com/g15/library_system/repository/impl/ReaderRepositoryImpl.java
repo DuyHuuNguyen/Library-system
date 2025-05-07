@@ -12,15 +12,12 @@ public class ReaderRepositoryImpl implements ReaderRepository {
   private ReaderData readerData = ReaderData.getInstance();
 
   @Override
-  public List<String> searchNameContains(String name) {
-    return readerData.getReaders().stream()
-        .filter(reader -> reader.nameContains(name))
-        .map(reader -> reader.getFirstName() + " " + reader.getLastName())
-        .toList();
+  public Optional<Reader> findByName(String name) {
+    return readerData.getReaders().stream().filter(reader -> reader.findByName(name)).findFirst();
   }
 
   @Override
-  public Optional<Reader> findByName(String name) {
-    return readerData.getReaders().stream().filter(reader -> reader.findByName(name)).findFirst();
+  public List<Reader> findAll() {
+    return readerData.getReaders();
   }
 }

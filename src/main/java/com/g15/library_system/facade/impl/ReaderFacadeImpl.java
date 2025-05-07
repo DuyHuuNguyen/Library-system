@@ -15,7 +15,10 @@ public class ReaderFacadeImpl implements ReaderFacade {
 
   @Override
   public List<String> searchNameContains(String name) {
-    return readerService.searchNameContains(name);
+    return readerService.findAll().stream()
+        .filter(reader -> reader.nameContains(name))
+        .map(reader -> reader.getFirstName() + " " + reader.getLastName())
+        .toList();
   }
 
   @Override
