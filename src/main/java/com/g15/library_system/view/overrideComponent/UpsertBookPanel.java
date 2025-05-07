@@ -59,42 +59,42 @@ public class UpsertBookPanel extends JPanel {
             "",
             Style.FONT_PLAIN_13,
             Style.WORD_COLOR_BLACK,
-            Style.PURPLE_MAIN_THEME,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
             new Dimension(200, 25));
     txtQuantity =
         TextFieldGenerator.createTextField(
             "",
             Style.FONT_PLAIN_13,
             Style.WORD_COLOR_BLACK,
-            Style.PURPLE_MAIN_THEME,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
             new Dimension(200, 25));
     txtAuthor =
         TextFieldGenerator.createTextField(
             "",
             Style.FONT_PLAIN_13,
             Style.WORD_COLOR_BLACK,
-            Style.PURPLE_MAIN_THEME,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
             new Dimension(200, 25));
     txtPublisher =
         TextFieldGenerator.createTextField(
             "",
             Style.FONT_PLAIN_13,
             Style.WORD_COLOR_BLACK,
-            Style.PURPLE_MAIN_THEME,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
             new Dimension(200, 25));
     txtPublisherYear =
         TextFieldGenerator.createTextField(
             "",
             Style.FONT_PLAIN_13,
             Style.WORD_COLOR_BLACK,
-            Style.PURPLE_MAIN_THEME,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
             new Dimension(200, 25));
     txtGenre =
         TextFieldGenerator.createTextField(
             "",
             Style.FONT_PLAIN_13,
             Style.WORD_COLOR_BLACK,
-            Style.PURPLE_MAIN_THEME,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
             new Dimension(200, 25));
 
     var panelTitle = createFieldPanel("Book Title *", txtBookTitle);

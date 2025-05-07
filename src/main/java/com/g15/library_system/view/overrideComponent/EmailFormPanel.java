@@ -1,30 +1,42 @@
 package com.g15.library_system.view.overrideComponent;
 
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
 
 public class EmailFormPanel extends JPanel {
+  private JTextField toField;
+  private JTextField subjectField;
+  private JTextArea bodyArea;
+  private JScrollPane bodyScroll;
+  private JButton sendButton;
+
+  private JPanel formPanel;
 
   public EmailFormPanel() {
     setLayout(new BorderLayout(10, 10));
 
-    JPanel formPanel = new JPanel(new GridBagLayout());
+    this.formPanel = new JPanel(new GridBagLayout());
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.insets = new Insets(10, 10, 10, 10);
     gbc.anchor = GridBagConstraints.WEST;
 
     JLabel toLabel = new JLabel("To (email):");
-    JTextField toField = new JTextField(25);
+    this.toField = new JTextField(25);
 
     JLabel subjectLabel = new JLabel("Subject:");
-    JTextField subjectField = new JTextField(25);
+    this.subjectField = new JTextField(25);
 
     JLabel bodyLabel = new JLabel("Message:");
-    JTextArea bodyArea = new JTextArea(30, 50);
-    JScrollPane bodyScroll = new JScrollPane(bodyArea);
+    this.bodyArea = new JTextArea(30, 50);
+    this.bodyScroll = new JScrollPane(bodyArea);
 
-    JButton sendButton = new JButton("Send");
+    this.sendButton =
+        CustomButtonBuilder.builder()
+            .text("Send")
+            .backgroundColor(Style.BLUE_HEADER_TABLE_AND_BUTTON)
+            .preferredSize(new Dimension(120, 35));
 
     gbc.gridx = 0;
     gbc.gridy = 0;
@@ -49,7 +61,8 @@ public class EmailFormPanel extends JPanel {
     gbc.anchor = GridBagConstraints.EAST;
     formPanel.add(sendButton, gbc);
 
-    formPanel.setBackground(Style.DELETE_BUTTON_COLOR_RED);
+    formPanel.setBackground(Color.WHITE);
+    formPanel.setBorder(BorderFactory.createLineBorder(Style.BLUE_HEADER_TABLE_AND_BUTTON));
     add(formPanel, BorderLayout.CENTER);
   }
 

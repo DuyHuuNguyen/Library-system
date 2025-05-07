@@ -24,6 +24,7 @@ public class CheckboxTablePanel extends JPanel {
   private TableColumn checkboxCol;
 
   public CheckboxTablePanel(String[] columnNames, Object[][] tableData) {
+    this.setBorder(BorderFactory.createLineBorder(Style.BLUE_HEADER_TABLE_AND_BUTTON));
     this.columnNames = columnNames;
     this.tableData = tableData;
     setLayout(new BorderLayout());
@@ -38,8 +39,11 @@ public class CheckboxTablePanel extends JPanel {
     TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
     table.setRowSorter(sorter);
     columnModel = table.getColumnModel();
+
     columnModel.getColumn(1).setPreferredWidth(50);
-    columnModel.getColumn(3).setPreferredWidth(80);
+
+    var isHaveThirdColumn = this.columnNames.length > 3;
+    if (isHaveThirdColumn) columnModel.getColumn(3).setPreferredWidth(80);
 
     table.setDefaultRenderer(
         Object.class,
@@ -156,7 +160,7 @@ public class CheckboxTablePanel extends JPanel {
           }
         });
     header.setPreferredSize(new Dimension(header.getWidth(), 45));
-    header.setBackground(new Color(237, 237, 237));
+    header.setBackground(Style.BLUE_HEADER_TABLE_AND_BUTTON);
   }
 
   private void setupStatusColumn() {

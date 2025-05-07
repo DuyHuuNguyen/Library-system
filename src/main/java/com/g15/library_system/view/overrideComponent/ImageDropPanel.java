@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ImageDropPanel extends JPanel {
+  private static final Logger log = LoggerFactory.getLogger(ImageDropPanel.class);
   private final JPanel imagesContainer;
   private final List<String> imageUrls = new ArrayList<>();
   private int widthOfImage;
@@ -121,6 +124,11 @@ public class ImageDropPanel extends JPanel {
 
   public void loadImagesFromUrls(List<String> urls) {
     imagesContainer.removeAll();
+
+    if (urls == null || urls.isEmpty()) {
+      log.info("Image not found");
+      return;
+    }
 
     for (String path : urls) {
       File file = new File(path);
