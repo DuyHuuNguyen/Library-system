@@ -17,6 +17,6 @@ public class ManageBookPanel extends JPanel {
       model.addRow(new String[] {"1", "hello", "123"});
     }
 
-    add(new JScrollPane(table));
+    //    add(new JScrollPane(table));
   }
 }

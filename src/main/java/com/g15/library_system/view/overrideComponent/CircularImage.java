@@ -1,16 +1,13 @@
 package com.g15.library_system.view.overrideComponent;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import lombok.Getter;
 
-// create a logo, avatar in circle
-@Getter
 public class CircularImage extends JLabel {
   private BufferedImage circularImage;
   private int width, height;
@@ -39,8 +36,7 @@ public class CircularImage extends JLabel {
     }
   }
 
-  private BufferedImage createCircularImage(
-      BufferedImage image, BufferedImage tickImage, int width, int height) {
+  private BufferedImage createCircularImage(BufferedImage image, int width, int height) {
     int diameter = Math.min(width, height);
 
     int highResDiameter = diameter * 2;
@@ -67,14 +63,7 @@ public class CircularImage extends JLabel {
     g2d.setColor(borderColor);
     g2d.draw(new Ellipse2D.Double(1.5, 1.5, diameter - 3, diameter - 3));
 
-    if (isAvatar) {
-      int tickSize = diameter / 3;
-      int x = diameter - 18 - tickSize / 2;
-      int y = diameter - 18 - tickSize / 2;
-      g2d.drawImage(tickImage, x, y, tickSize, tickSize, null);
-      g2d.dispose();
-      return circularImage;
-    }
+    g2d.dispose();
     return circularImage;
   }
 
@@ -82,9 +71,7 @@ public class CircularImage extends JLabel {
     try {
       this.imagePath = imagePath;
       BufferedImage originalImage = ImageIO.read(new File(imagePath));
-      BufferedImage tickImage =
-          ImageIO.read(new File("src/main/java/Icon/tick_Icon.png")); // Tải ảnh dấu tích xanh
-      circularImage = createCircularImage(originalImage, tickImage, width, height);
+      circularImage = createCircularImage(originalImage, width, height);
       setIcon(new ImageIcon(circularImage));
     } catch (IOException e) {
       e.printStackTrace();
