@@ -5,7 +5,6 @@ import com.g15.library_system.facade.ReaderFacade;
 import com.g15.library_system.service.ReaderService;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,10 @@ public class ReaderFacadeImpl implements ReaderFacade {
 
   @Override
   public List<String> searchNameContains(String name) {
-    return readerService.searchNameContains(name);
+    return readerService.findAll().stream()
+        .filter(reader -> reader.nameContains(name))
+        .map(reader -> reader.getFirstName() + " " + reader.getLastName())
+        .toList();
   }
 
   @Override
