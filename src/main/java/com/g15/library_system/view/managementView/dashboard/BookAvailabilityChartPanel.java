@@ -14,9 +14,9 @@ import java.util.Map;
 import javax.swing.*;
 
 public class BookAvailabilityChartPanel extends RoundedShadowPanel {
-  private JComboBox<Integer> yearComboBox;
-  private JComboBox<String> monthComboBox;
-  private String[] months = {
+  private final JComboBox<Integer> yearComboBox;
+  private final JComboBox<String> monthComboBox;
+  private final String[] months = {
     "All",
     "January",
     "February",
@@ -31,7 +31,7 @@ public class BookAvailabilityChartPanel extends RoundedShadowPanel {
     "November",
     "December"
   };
-  private List<Integer> years = new ArrayList<Integer>();
+  private final List<Integer> years = new ArrayList<Integer>();
   private Map<String, Integer> lendingData;
 
   private Map<String, Integer> bookAvailabilityData;

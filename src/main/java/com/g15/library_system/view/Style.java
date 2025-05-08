@@ -103,4 +103,6 @@ public class Style {
 
   // table row color
   public static final Color LIGHT_BLUE_TABLE_ROW_COLOR = new Color(230, 247, 255);
+
+  public static final Color BLUE_HEADER_TABLE_AND_BUTTON = new Color(0, 161, 228);
 }

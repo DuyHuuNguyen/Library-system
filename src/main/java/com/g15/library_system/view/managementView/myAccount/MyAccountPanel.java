@@ -9,7 +9,7 @@ public class MyAccountPanel extends JPanel {
   private Map<String, String> personalData = new HashMap<>();
   private Map<String, String> addressData = new HashMap<>();
 
-  private String avatarPath = "src/main/resources/images/fit_nlu_logo.jpg";//temp
+  private String avatarPath = "src/main/resources/images/fit_nlu_logo.jpg"; // temp
 
   public MyAccountPanel() {
 
@@ -21,7 +21,7 @@ public class MyAccountPanel extends JPanel {
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
     mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    //data
+    // data
     this.personalData.put("First Name", "Jack 5 xu");
     this.personalData.put("Last Name", "Adams");
     this.personalData.put("Email address", "jackadams@gmail.com");
@@ -45,6 +45,4 @@ public class MyAccountPanel extends JPanel {
     scrollPane.setBorder(null);
     this.add(scrollPane);
   }
-
-
 }

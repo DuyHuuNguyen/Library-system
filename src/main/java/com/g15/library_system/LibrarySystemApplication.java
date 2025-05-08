@@ -6,26 +6,25 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.g15.library_system.entity.*;
 import com.g15.library_system.enums.*;
 import com.g15.library_system.view.LoginFrame;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import javax.swing.*;
 
 @Slf4j
 @SpringBootApplication
 public class LibrarySystemApplication {
   public static void main(String[] args) {
-    //improve Swing UI
+    // improve Swing UI
     FlatRobotoFont.install();
     FlatLaf.registerCustomDefaultsSource("raven.themes");
-    UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));//set default font
+    UIManager.put(
+        "defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13)); // set default font
     UIManager.put("Separator.foreground", Color.WHITE);
-    FlatMacLightLaf.setup();//light mode
+    FlatMacLightLaf.setup(); // light mode
     //    FlatMacDarkLaf.setup();//dark mode (dang bug)
 
     SpringApplication app = new SpringApplication(LibrarySystemApplication.class);
@@ -268,7 +267,7 @@ public class LibrarySystemApplication {
                     .lastName("Pham")
                     .email("charlie.pham@example.com")
                     .build())
-            .expireAt(System.currentTimeMillis() + 1 * 365L * 24 * 60 * 60 * 1000) // 1 năm sau
+            .expireAt(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000) // 1 năm sau
             .transactions(
                 List.of(
                     Transaction.builder().id(105L).transactionType(TransactionType.BORROW).build()))
@@ -360,7 +359,7 @@ public class LibrarySystemApplication {
                     .lastName("Dang")
                     .email("isabella.dang@example.com")
                     .build())
-            .expireAt(System.currentTimeMillis() + 1 * 365L * 24 * 60 * 60 * 1000) // 1 năm sau
+            .expireAt(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000) // 1 năm sau
             .libraryCardStatus(LibraryCardStatus.EXPIRED)
             .build();
 
