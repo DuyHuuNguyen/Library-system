@@ -10,7 +10,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class StatusCellRenderer extends DefaultTableCellRenderer {
-  private static final Logger log = LoggerFactory.getLogger(StatusCellRenderer.class);
 
   @Override
   public Component getTableCellRendererComponent(
@@ -19,8 +18,7 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     JLabel label = (JLabel) c;
 
-    Status status = (Status) value;
-    log.info("=>>> {}",status);
+    Status status = Status.get(value.toString());
 
     Color fgColor = Color.BLACK;
     Color bgColor = Color.WHITE;
@@ -42,10 +40,10 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
         fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
         bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
         break;
-//      case Status.RETURNED:
-//        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
-//        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
-//        break;
+      case Status.NULL:
+        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
+        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
+        break;
     }
 
     if (isSelected) {

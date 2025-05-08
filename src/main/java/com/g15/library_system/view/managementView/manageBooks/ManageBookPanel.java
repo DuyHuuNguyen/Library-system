@@ -28,7 +28,7 @@ public class ManageBookPanel extends JPanel {
     "genre",
     "current quantity",
     "total quantity",
-    "status"
+    "Status"
   };
   private Object[][] data;
 

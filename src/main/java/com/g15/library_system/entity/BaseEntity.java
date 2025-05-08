@@ -1,6 +1,5 @@
 package com.g15.library_system.entity;
 
-import com.g15.library_system.enums.BookActiveType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

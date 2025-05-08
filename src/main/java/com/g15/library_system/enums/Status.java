@@ -5,5 +5,15 @@ public enum Status {
   LOST,
   DAMAGED,
   OVERDUE,
-  AVAILABLE
+  AVAILABLE,
+  NULL;
+
+  public static Status get(String status) {
+    for (Status s : Status.values()) {
+      if (s.name().equalsIgnoreCase(status)) {
+        return s;
+      }
+    }
+    return NULL;
+  }
 }

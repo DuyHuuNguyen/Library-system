@@ -43,7 +43,7 @@ public class BookMapperImpl implements BookMapper {
             book.getGenreType().toString(),
             book.getCurrentQuantity().toString(),
             book.getTotalQuantity().toString(),
-            Status.AVAILABLE.toString()
+            Status.AVAILABLE.toString().toLowerCase()
           };
     }
     return data;
