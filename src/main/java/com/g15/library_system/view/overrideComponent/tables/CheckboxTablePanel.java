@@ -77,6 +77,15 @@ public class CheckboxTablePanel extends JPanel {
     this.add(createScrollPane(table), BorderLayout.CENTER);
   }
 
+  public void removeAllDataTable() {
+    this.tableModel.setRowCount(0);
+  }
+
+  public void addDataToTable(Object[][] data) {
+    this.tableData = data;
+    this.tableModel.addRow(this.tableData);
+  }
+
   private class CustomTableModel extends DefaultTableModel {
     private JTable table;
 
