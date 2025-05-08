@@ -1,0 +1,51 @@
+package com.g15.library_system.mapper.impl;
+
+import com.g15.library_system.dto.response.BookResponse;
+import com.g15.library_system.entity.Book;
+import com.g15.library_system.enums.Status;
+import com.g15.library_system.mapper.BookMapper;
+import java.util.List;
+import org.springframework.stereotype.Service;
+
+@Service
+public class BookMapperImpl implements BookMapper {
+
+  @Override
+  public BookResponse toBookResponse(Book book) {
+    if (book == null) return null;
+
+    return BookResponse.builder()
+        .id(book.getId())
+        .title(book.getTitle())
+        .author(book.getAuthor())
+        .publisher(book.getPublisher())
+        .publishYear(book.getPublishYear())
+        .genreType(book.getGenreType())
+        .currentQuantity(book.getCurrentQuantity())
+        .totalQuantity(book.getTotalQuantity())
+        .images(book.getImages())
+        .bookStatus(book.getBookStatus())
+        .build();
+  }
+
+  @Override
+  public Object[][] toBookData(List<BookResponse> bookResponses) {
+    Object[][] data = new Object[bookResponses.size()][];
+    for (int i = 0; i < data.length; i++) {
+      var book = bookResponses.get(i);
+      data[i] =
+          new Object[] {
+            false,
+            book.getTitle(),
+            book.getAuthor(),
+            book.getPublisher(),
+            book.getPublishYear().toString(),
+            book.getGenreType().toString(),
+            book.getCurrentQuantity().toString(),
+            book.getTotalQuantity().toString(),
+            Status.AVAILABLE.toString()
+          };
+    }
+    return data;
+  }
+}

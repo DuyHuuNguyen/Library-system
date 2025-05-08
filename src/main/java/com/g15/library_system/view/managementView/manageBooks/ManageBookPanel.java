@@ -1,8 +1,12 @@
 package com.g15.library_system.view.managementView.manageBooks;
 
+import com.g15.library_system.controller.BookController;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
+import com.g15.library_system.mapper.BookMapper;
+import com.g15.library_system.mapper.impl.BookMapperImpl;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.NotifyNewBookPanel;
 import com.g15.library_system.view.overrideComponent.UpsertBookPanel;
@@ -15,11 +19,24 @@ public class ManageBookPanel extends JPanel {
   private JPanel panelContent;
 
   private CheckboxTablePanel checkboxTablePanel;
-  private String[] columns;
+  private final String[] columns = {
+    "",
+    "title",
+    "author",
+    "publisher",
+    "publish year",
+    "genre",
+    "current quantity",
+    "total quantity",
+    "status"
+  };
   private Object[][] data;
 
   private JPanel bookFormAndDropImagesPanel;
   private UpsertBookPanel bookFormPanel;
+
+  private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
+  private BookMapper bookMapper = ApplicationContextProvider.getBean(BookMapperImpl.class);
 
   private CardLayout cardLayout;
 
@@ -37,12 +54,12 @@ public class ManageBookPanel extends JPanel {
 
     this.panelContent.setBackground(Color.GREEN);
 
-    this.initHeaderTable();
-
     this.initData();
 
     this.checkboxTablePanel = new CheckboxTablePanel(columns, data);
     this.panelContent.add(checkboxTablePanel, CONSTRAINT_TABLE_BOOK);
+
+    //    this.loadDataTable();
 
     this.bookFormAndDropImagesPanel = new JPanel(new BorderLayout());
     this.bookFormAndDropImagesPanel.setBackground(Color.PINK);
@@ -79,64 +96,21 @@ public class ManageBookPanel extends JPanel {
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
   }
 
-  private void initHeaderTable() {
-    this.columns =
-        new String[] {
-          "",
-          "Book ID",
-          "Book Title",
-          "Author(s)",
-          "Genre/Category",
-          "Language",
-          "Total Copies",
-          "Status"
-        };
+  private void removeAllDataTable() {
+    this.checkboxTablePanel.removeAllDataTable();
+  }
+
+  private void loadDataTable() {
+    this.removeAllDataTable();
+    var br = bookController.findALl();
+    for (var i : br) {
+      System.out.println(i);
+    }
+    this.checkboxTablePanel.addDataToTable(this.bookMapper.toBookData(br));
   }
 
   private void initData() {
-    this.data =
-        new Object[][] {
-          {
-            false,
-            "B001",
-            "The Great Gatsby",
-            "F. Scott Fitzgerald",
-            "Classic",
-            "English",
-            5,
-            "lost"
-          },
-          {false, "B002", "1984", "George Orwell", "Dystopian", "English", 3, "Checked Out"},
-          {
-            false,
-            "B003",
-            "To Kill a Mockingbird",
-            "Harper Lee",
-            "Classic",
-            "English",
-            4,
-            "Available"
-          },
-          {
-            false,
-            "B004",
-            "Chí Phèo",
-            "Nam Cao",
-            "Vietnamese Literature",
-            "Vietnamese",
-            2,
-            "Checked Out"
-          },
-          {
-            false,
-            "B005",
-            "Kafka on the Shore",
-            "Haruki Murakami",
-            "Fiction",
-            "Japanese",
-            6,
-            "Available"
-          }
-        };
+    var br = bookController.findALl();
+    this.data = this.bookMapper.toBookData(br);
   }
 }

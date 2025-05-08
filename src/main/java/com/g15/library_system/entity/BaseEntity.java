@@ -1,5 +1,6 @@
 package com.g15.library_system.entity;
 
+import com.g15.library_system.enums.BookActiveType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -12,7 +13,7 @@ public class BaseEntity {
 
   private Long id;
 
-  @Builder.Default boolean isActive = true;
+  @Builder.Default private boolean isActive = true;
 
   private Long createdAt;
 
@@ -38,5 +39,9 @@ public class BaseEntity {
 
   public boolean hasSameId(Long id) {
     return this.id == id;
+  }
+
+  public boolean isActive(BookActiveType type) {
+    return this.isActive == type.getActive();
   }
 }
