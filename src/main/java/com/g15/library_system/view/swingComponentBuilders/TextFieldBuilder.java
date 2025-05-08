@@ -3,6 +3,7 @@ package com.g15.library_system.view.swingComponentBuilders;
 import com.g15.library_system.view.Style;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -14,6 +15,7 @@ import javax.swing.event.DocumentListener;
 public class TextFieldBuilder extends JTextField {
   private Color borderColor;
   private static final int LIMIT_POPUPMENU = 5;
+  private boolean popupEnabled = true;
 
   public static TextFieldBuilder builder() {
     return new TextFieldBuilder();
@@ -99,8 +101,8 @@ public class TextFieldBuilder extends JTextField {
    * Enables auto-suggestion on this text field using a dynamic popup menu.
    *
    * <p>This method attaches a {@link DocumentListener} with a debounced delay (300ms) that listens
-   * to text changes. When typing stops, it calls the provided {@code suggestionProvider} function
-   * to retrieve a list of matching suggestions. These suggestions are displayed in a {@link
+   * to text changes. When typing stops, it calls the provided {@code contextProvider} function to
+   * retrieve a list of matching suggestions. These suggestions are displayed in a {@link
    * JPopupMenu} beneath the text field.
    *
    * <p>When a user selects an item from the popup, the text field is updated to reflect the
@@ -108,29 +110,61 @@ public class TextFieldBuilder extends JTextField {
    *
    * <p>This method is safe to use even if {@code onSelect} is {@code null}.
    *
-   * @param suggestionProvider A function that takes the current text input and returns a list of
+   * @param contextProvider A function that takes the current text input and returns a list of
    *     suggestion strings. Should handle partial matches.
    * @param onSelect (Optional) A consumer function that receives the selected string when the user
    *     chooses a suggestion from the list. Can be {@code null}.
    * @return This {@code TextFieldBuilder} instance for method chaining.
    */
-  public TextFieldBuilder autoSuggest(
-      Function<String, List<String>> suggestionProvider, Consumer<String> onSelect) {
-    JPopupMenu suggestionsPopup = new JPopupMenu();
-    suggestionsPopup.setFocusable(false);
+  public TextFieldBuilder popupMenu(
+      Function<String, List<String>> contextProvider, Consumer<String> onSelect) {
+    JPopupMenu popupMenu = new JPopupMenu();
+    popupMenu.setFocusable(false);
 
-    Timer debounceTimer = getTimer(suggestionProvider, onSelect, suggestionsPopup);
+    List<JMenuItem> menuItems = new ArrayList<>();
+
+    Timer debounceTimer =
+        new Timer(
+            300,
+            e -> {
+              if (!popupEnabled) return;
+              String input = getText().trim();
+              popupMenu.setVisible(false);
+              popupMenu.removeAll();
+              menuItems.clear();
+
+              if (input.isEmpty()) return;
+
+              List<String> suggestions = contextProvider.apply(input);
+              if (suggestions == null || suggestions.isEmpty()) return;
+
+              for (int i = 0; i < suggestions.size() && i < LIMIT_POPUPMENU; i++) {
+                String suggestion = suggestions.get(i);
+                JMenuItem item = buildMenuItem(suggestion, onSelect, popupMenu);
+                popupMenu.add(item);
+                menuItems.add(item);
+              }
+
+              popupMenu.setPopupSize(
+                  getWidth(), Math.min(suggestions.size(), LIMIT_POPUPMENU) * 25);
+              popupMenu.show(TextFieldBuilder.this, 0, getHeight());
+
+              requestFocusInWindow();
+              setupKeyNavigation(menuItems, popupMenu);
+            });
+    debounceTimer.setRepeats(false);
 
     this.getDocument()
         .addDocumentListener(
             new DocumentListener() {
               public void insertUpdate(DocumentEvent e) {
+                popupEnabled = true;
                 debounceTimer.restart();
               }
 
               public void removeUpdate(DocumentEvent e) {
+                popupEnabled = true;
                 debounceTimer.restart();
-                ;
               }
 
               public void changedUpdate(DocumentEvent e) {}
@@ -139,50 +173,19 @@ public class TextFieldBuilder extends JTextField {
     this.addFocusListener(
         new FocusAdapter() {
           public void focusLost(FocusEvent e) {
-            suggestionsPopup.setVisible(false);
+            popupMenu.setVisible(false);
           }
         });
 
     return this;
   }
 
-  private Timer getTimer(
-      Function<String, List<String>> suggestionProvider,
-      Consumer<String> onSelect,
-      JPopupMenu suggestionsPopup) {
-    Timer debounceTimer =
-        new Timer(
-            300,
-            e -> {
-              String input = getText().trim();
-              suggestionsPopup.setVisible(false);
-              suggestionsPopup.removeAll();
-
-              if (input.isEmpty()) return;
-
-              List<String> suggestions = suggestionProvider.apply(input);
-              if (suggestions == null || suggestions.isEmpty()) return;
-              for (int i = 0; i < suggestions.size() && i < LIMIT_POPUPMENU; i++) {
-                JMenuItem item = getMenuItem(onSelect, suggestions.get(i), suggestionsPopup);
-                suggestionsPopup.add(item);
-              }
-
-              suggestionsPopup.setPopupSize(
-                  getWidth(), Math.min(suggestions.size(), LIMIT_POPUPMENU) * 25);
-              suggestionsPopup.show(TextFieldBuilder.this, 0, getHeight());
-            });
-
-    debounceTimer.setRepeats(false);
-    return debounceTimer;
-  }
-
-  private JMenuItem getMenuItem(
-      Consumer<String> onSelect, String suggestion, JPopupMenu suggestionsPopup) {
+  private JMenuItem buildMenuItem(
+      String suggestion, Consumer<String> onSelect, JPopupMenu popupMenu) {
     JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
     panel.setOpaque(false);
 
-    JLabel label = new JLabel(suggestion);
-    label.setFont(Style.FONT_PLAIN_13);
+    JLabel label = LabelBuilder.builder().text(suggestion).font(Style.FONT_PLAIN_13);
     panel.add(label);
     JMenuItem item = new JMenuItem();
     item.setLayout(new BorderLayout());
@@ -191,9 +194,44 @@ public class TextFieldBuilder extends JTextField {
     item.addActionListener(
         event -> {
           setText(suggestion);
-          suggestionsPopup.setVisible(false);
+          popupMenu.setVisible(false);
           if (onSelect != null) onSelect.accept(suggestion);
+          popupEnabled = false;
         });
     return item;
+  }
+
+  private void setupKeyNavigation(List<JMenuItem> menuItems, JPopupMenu popupMenu) {
+    KeyAdapter keyAdapter =
+        new KeyAdapter() {
+          int selectedIndex = -1;
+
+          @Override
+          public void keyPressed(KeyEvent e) {
+            if (!popupMenu.isVisible()) return;
+
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_DOWN) {
+              selectedIndex = (selectedIndex + 1) % menuItems.size();
+              highlight(selectedIndex);
+            } else if (key == KeyEvent.VK_UP) {
+              selectedIndex = (selectedIndex - 1 + menuItems.size()) % menuItems.size();
+              highlight(selectedIndex);
+            } else if (key == KeyEvent.VK_ENTER && selectedIndex >= 0) {
+              menuItems.get(selectedIndex).doClick();
+            }
+          }
+
+          private void highlight(int index) {
+            for (int i = 0; i < menuItems.size(); i++) {
+              menuItems.get(i).setArmed(i == index);
+            }
+          }
+        };
+
+    for (KeyListener l : this.getKeyListeners()) {
+      if (l instanceof KeyAdapter) removeKeyListener(l);
+    }
+    this.addKeyListener(keyAdapter);
   }
 }

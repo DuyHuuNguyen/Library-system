@@ -32,4 +32,12 @@ public class Book extends BaseEntity {
   private List<String> images;
 
   private BookStatus bookStatus;
+
+  public boolean titleContains(String title) {
+    return this.title.toLowerCase().contains(title.toLowerCase());
+  }
+
+  public boolean hasSameTitle(String title) {
+    return this.title.equalsIgnoreCase(title);
+  }
 }

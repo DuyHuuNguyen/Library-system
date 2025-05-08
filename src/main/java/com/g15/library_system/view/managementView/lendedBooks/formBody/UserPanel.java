@@ -46,7 +46,7 @@ public class UserPanel extends JPanel {
         TextFieldBuilder.builder()
             .font(Style.FONT_PLAIN_13)
             .preferredSize(new Dimension(300, 25))
-            .autoSuggest(
+            .popupMenu(
                 name -> {
                   return readerController.searchNameContains(name);
                 },
@@ -55,6 +55,8 @@ public class UserPanel extends JPanel {
                   if (reader != null) {
                     idTF.setText(String.valueOf(reader.getId()));
                     emailTF.setText(reader.getEmail());
+                    KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                        .focusNextComponent(emailTF);
                   }
                 })
             .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
