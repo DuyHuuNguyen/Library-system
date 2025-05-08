@@ -99,10 +99,10 @@ public class PersonalInfoPanel extends RoundedPanel {
         addRowEdit("Job", null);
 
 
-        JButton saveBtn = new JButton("✔ Save");
+        JButton saveBtn = new JButton("Save");
         saveBtn.setBackground(Style.GREEN_CONFIRM_BUTTON_COLOR);
         saveBtn.setForeground(Color.WHITE);
-        JButton cancelBtn = new JButton("✖ Cancel");
+        JButton cancelBtn = new JButton("Cancel");
 
         saveBtn.addActionListener(e -> saveChanges());
         cancelBtn.addActionListener(e -> cancelEdit());

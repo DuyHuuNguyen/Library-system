@@ -38,7 +38,7 @@ public class LoginPanel extends JPanel {
           new MainFrame();
         });
 
-    RoundedPanel panel = new RoundedPanel(20, Color.WHITE, null);
+    RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237,180), null);
     panel.setLayout(new MigLayout("wrap,fill,insets 35 45 30 45", "fill,250:280"));
     panel.putClientProperty(
         FlatClientProperties.STYLE,
@@ -59,12 +59,13 @@ public class LoginPanel extends JPanel {
     JLabel lbTitle = new JLabel("Welcome back!");
     lbTitle.setForeground(Style.BLUE_MENU_BACKGROUND_COLOR);
     JLabel description = new JLabel("Please sign in to access your account");
+    description.setForeground(Color.BLACK);
     lbTitle.putClientProperty(FlatClientProperties.STYLE, "" + "font:bold +10");
-    description.putClientProperty(
-        FlatClientProperties.STYLE,
-        ""
-            + "[light]foreground:lighten(@foreground,30%);"
-            + "[dark]foreground:darken(@foreground,30%)");
+//    description.putClientProperty(
+//        FlatClientProperties.STYLE,
+//        ""
+//            + "[light]foreground:lighten(@foreground,30%);"
+//            + "[dark]foreground:darken(@foreground,100%)");
 
     panel.add(lbTitle);
     panel.add(description);
@@ -79,11 +80,11 @@ public class LoginPanel extends JPanel {
 
   private Component createForgotPasswdLabel() {
     JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-    panel.putClientProperty(FlatClientProperties.STYLE, "background: #FFFFFF;");
-
+    panel.setOpaque(false);
     JButton cmdForgotPassword = new JButton("<html><a href=\"#\">Forgot your password?</a></html>");
     cmdForgotPassword.putClientProperty(FlatClientProperties.STYLE, "border:3,3,3,3");
     cmdForgotPassword.setContentAreaFilled(false);
+    cmdForgotPassword.setOpaque(false);
     cmdForgotPassword.setCursor(new Cursor(Cursor.HAND_CURSOR));
     cmdForgotPassword.addActionListener(
         e -> {

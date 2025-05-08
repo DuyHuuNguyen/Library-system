@@ -8,7 +8,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class LoginFrame extends JFrame {
-  private String backgroundImagePath = "/images/NLULibrary.jpg";
+  private String backgroundImagePath = "/images/hogwarts.png";
 
   public LoginFrame() {
     this.setTitle("Library Management");

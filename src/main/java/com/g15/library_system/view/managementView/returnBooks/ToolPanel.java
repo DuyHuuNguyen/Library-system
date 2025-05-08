@@ -15,6 +15,7 @@ public class ToolPanel extends JPanel {
   private CustomButton addBt, mainButton, dropdownButton;
   private Map<String, Runnable> actionMap = new HashMap<>();
   private ContentAction contentPnAction;
+  private final String[] items = {"Edit", "Export", "Refresh"};
 
   public ToolPanel(ContentAction contentPnAction) {
     this.contentPnAction = contentPnAction;
@@ -74,7 +75,6 @@ public class ToolPanel extends JPanel {
 
     JPopupMenu menu = new JPopupMenu();
 
-    String[] items = {"Edit", "Export", "Refresh"};
     Font menuFont = new Font("Segoe UI", Font.PLAIN, 14);
     int popupWidth =
         mainButton.getPreferredSize().width + dropdownButton.getPreferredSize().width - 2;
@@ -91,6 +91,8 @@ public class ToolPanel extends JPanel {
           e -> {
             mainButton.setText(itemText);
             mainButton.setIcon("/icons/" + itemText.toLowerCase() + ".png", 17);
+            actionMap.get(itemText).run();
+
             for (ActionListener al : mainButton.getActionListeners()) {
               mainButton.removeActionListener(al);
             }

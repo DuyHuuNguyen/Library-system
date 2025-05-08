@@ -142,6 +142,7 @@ public class CheckboxTablePanel extends JPanel {
   private void setupTableHeader() {
     JTableHeader header = table.getTableHeader();
     header.setReorderingAllowed(false);
+
     header.addMouseListener(
         new MouseAdapter() {
           public void mouseClicked(MouseEvent e) {

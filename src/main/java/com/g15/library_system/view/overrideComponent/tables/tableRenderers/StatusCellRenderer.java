@@ -34,6 +34,7 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
         fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
         bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
         break;
+
     }
 
     if (isSelected) {
