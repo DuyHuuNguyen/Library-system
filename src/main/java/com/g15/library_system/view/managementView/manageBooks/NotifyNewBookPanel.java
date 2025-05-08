@@ -1,4 +1,4 @@
-package com.g15.library_system.view.overrideComponent;
+package com.g15.library_system.view.managementView.manageBooks;
 
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
@@ -7,7 +7,6 @@ import javax.swing.*;
 
 public class NotifyNewBookPanel extends JPanel {
   private JPanel centerPanel;
-  private TablePanel tablePanel;
   private CheckboxTablePanel checkboxTablePanel;
   private EmailFormPanel emailFormPanel;
 
@@ -27,7 +26,7 @@ public class NotifyNewBookPanel extends JPanel {
       {false, "b1", "n2", "df"},
       {false, "b1", "n2", "df"}
     };
-    TablePanel leftPanel = new TablePanel(columns, data, 10, 10);
+    CheckboxTablePanel leftPanel = new CheckboxTablePanel(columns, data);
     leftPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
     leftPanel.setPreferredSize(new Dimension(400, 0));
 

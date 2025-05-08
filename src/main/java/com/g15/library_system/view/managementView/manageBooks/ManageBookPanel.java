@@ -4,8 +4,6 @@ import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.NotifyNewBookPanel;
-import com.g15.library_system.view.overrideComponent.UpsertBookPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
 import javax.swing.*;

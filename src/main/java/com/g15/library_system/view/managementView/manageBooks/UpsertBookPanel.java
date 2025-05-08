@@ -1,4 +1,4 @@
-package com.g15.library_system.view.overrideComponent;
+package com.g15.library_system.view.managementView.manageBooks;
 
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.BookStatus;
@@ -10,7 +10,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
-@Deprecated
 public class UpsertBookPanel extends JPanel {
   private JTextField txtBookTitle;
   private JTextField txtQuantity;
