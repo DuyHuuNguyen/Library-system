@@ -1,14 +1,14 @@
 package com.g15.library_system.view.managementView.myAccount;
 
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.CircularImage;
-import com.g15.library_system.view.overrideComponent.RoundedPanel;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
+import com.g15.library_system.view.overrideComponent.labels.CircularImageLabel;
 import java.awt.*;
 import java.util.Map;
 import javax.swing.*;
 
-public class UserProfilePanel extends RoundedPanel {
-  private CircularImage avatarLabel;
+public class UserProfilePanel extends RoundedShadowPanel {
+  private CircularImageLabel avatarLabel;
   private JLabel nameLabel, jobLabel, addressLabel;
   private JButton editButton, saveButton, uploadImageButton;
   private JPanel infoPanel, buttonPanel;
@@ -19,7 +19,6 @@ public class UserProfilePanel extends RoundedPanel {
 
   public UserProfilePanel(
       String avatarPath, Map<String, String> personalData, Map<String, String> addressData) {
-    super(20, Color.WHITE, null);
     this.avatarPath = avatarPath;
     this.addressData = addressData;
     this.personalData = personalData;
@@ -27,7 +26,7 @@ public class UserProfilePanel extends RoundedPanel {
     this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
     this.setBackground(Color.WHITE);
 
-    avatarLabel = new CircularImage(avatarPath, 100, 100, false);
+    avatarLabel = new CircularImageLabel(avatarPath, 100, 100, false);
     this.add(avatarLabel, BorderLayout.WEST);
 
     infoPanel = new JPanel(new GridBagLayout());
@@ -99,7 +98,7 @@ public class UserProfilePanel extends RoundedPanel {
     uploadImageButton = new JButton("Upload Avatar");
     uploadImageButton.addActionListener(e -> uploadAvatar());
 
-    saveButton = new JButton("✔ Save");
+    saveButton = new JButton("Save");
     saveButton.setBackground(Style.GREEN_CONFIRM_BUTTON_COLOR);
     saveButton.setForeground(Color.WHITE);
     saveButton.addActionListener(e -> saveChanges());

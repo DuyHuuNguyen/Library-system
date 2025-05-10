@@ -35,7 +35,6 @@ public class AddReturnBookPanel extends JPanel {
     borrowData =
         new Object[][] {
           {
-            false,
             "B01",
             new ImageIcon(
                 getClass()
@@ -45,7 +44,7 @@ public class AddReturnBookPanel extends JPanel {
             "2025-04-30",
             "lost"
           },
-          {false, "B02", null, "Data Structures", "2025-04-15", "2025-04-25", "lost"}
+          {"B02", null, "Data Structures", "2025-04-15", "2025-04-25", "lost"}
         };
 
     tablePanel = new CheckboxTablePanel(columnNames, borrowData);

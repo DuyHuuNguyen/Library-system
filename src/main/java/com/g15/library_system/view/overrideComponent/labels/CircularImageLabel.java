@@ -1,4 +1,4 @@
-package com.g15.library_system.view.overrideComponent;
+package com.g15.library_system.view.overrideComponent.labels;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class CircularImage extends JLabel {
+public class CircularImageLabel extends JLabel {
   private BufferedImage circularImage;
   private int width, height;
   private boolean isAvatar;
@@ -16,7 +16,7 @@ public class CircularImage extends JLabel {
   private Color borderColor = Color.WHITE;
   private int borderStroke = 3;
 
-  public CircularImage(String imagePath, int width, int height, boolean isAvatar) {
+  public CircularImageLabel(String imagePath, int width, int height, boolean isAvatar) {
     this.width = width;
     this.height = height;
     this.isAvatar = isAvatar;
@@ -28,7 +28,7 @@ public class CircularImage extends JLabel {
   public boolean equals(Object obj) {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     else {
-      CircularImage that = (CircularImage) obj;
+      CircularImageLabel that = (CircularImageLabel) obj;
       return this.imagePath.equals(that.imagePath)
           && this.width == that.width
           && this.height == that.height

@@ -1,4 +1,4 @@
-package com.g15.library_system.view.overrideComponent;
+package com.g15.library_system.view.overrideComponent.labels;
 
 import java.awt.*;
 import java.awt.font.GlyphVector;

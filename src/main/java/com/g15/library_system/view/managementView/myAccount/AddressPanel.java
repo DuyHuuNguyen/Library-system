@@ -1,14 +1,14 @@
 package com.g15.library_system.view.managementView.myAccount;
 
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.RoundedPanel;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 
-public class AddressPanel extends RoundedPanel {
+public class AddressPanel extends RoundedShadowPanel {
 
   private Map<String, String> addressData = new HashMap<>();
   private Map<String, JLabel> labels = new HashMap<>();
@@ -19,7 +19,7 @@ public class AddressPanel extends RoundedPanel {
   private boolean isEditing = false;
 
   public AddressPanel(Map<String, String> addressData) {
-    super(20, Color.WHITE, null);
+    //    super(20, Color.WHITE, null);
     this.addressData = addressData;
     this.setLayout(new BorderLayout());
     this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -91,10 +91,10 @@ public class AddressPanel extends RoundedPanel {
     addRowEdit("Country", "Zip Code");
     addRowEdit("City", "Address");
 
-        JButton saveBtn = new JButton("Save");
-        saveBtn.setBackground(Style.GREEN_CONFIRM_BUTTON_COLOR);
-        saveBtn.setForeground(Color.WHITE);
-        JButton cancelBtn = new JButton("Cancel");
+    JButton saveBtn = new JButton("Save");
+    saveBtn.setBackground(Style.GREEN_CONFIRM_BUTTON_COLOR);
+    saveBtn.setForeground(Color.WHITE);
+    JButton cancelBtn = new JButton("Cancel");
 
     saveBtn.addActionListener(e -> saveChanges());
     cancelBtn.addActionListener(e -> cancelEdit());

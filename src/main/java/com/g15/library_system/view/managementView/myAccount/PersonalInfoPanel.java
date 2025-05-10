@@ -1,7 +1,7 @@
 package com.g15.library_system.view.managementView.myAccount;
 
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.RoundedPanel;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.LinkedHashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 
-public class PersonalInfoPanel extends RoundedPanel {
+public class PersonalInfoPanel extends RoundedShadowPanel {
 
   private final JPanel infoPanel;
   private final JButton editButton;
@@ -19,7 +19,7 @@ public class PersonalInfoPanel extends RoundedPanel {
   private final Map<String, JTextField> textFields = new LinkedHashMap<>();
 
   public PersonalInfoPanel(Map<String, String> personalData) {
-    super(20, Color.WHITE, null);
+
     this.personalData = personalData;
     this.setLayout(new BorderLayout());
     this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -94,11 +94,10 @@ public class PersonalInfoPanel extends RoundedPanel {
 
     addRowEdit("Job", null);
 
-
-        JButton saveBtn = new JButton("Save");
-        saveBtn.setBackground(Style.GREEN_CONFIRM_BUTTON_COLOR);
-        saveBtn.setForeground(Color.WHITE);
-        JButton cancelBtn = new JButton("Cancel");
+    JButton saveBtn = new JButton("Save");
+    saveBtn.setBackground(Style.GREEN_CONFIRM_BUTTON_COLOR);
+    saveBtn.setForeground(Color.WHITE);
+    JButton cancelBtn = new JButton("Cancel");
 
     saveBtn.addActionListener(e -> saveChanges());
     cancelBtn.addActionListener(e -> cancelEdit());

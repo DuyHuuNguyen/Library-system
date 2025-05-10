@@ -28,7 +28,6 @@ public class ContentPanel extends JPanel implements ContentAction {
     // data demo
     Object[][] tableData = {
       {
-        false,
         "R001",
         "Alice",
         "0123JQK",
@@ -40,7 +39,6 @@ public class ContentPanel extends JPanel implements ContentAction {
         ""
       },
       {
-        false,
         "R002",
         "Bob",
         "0123JQK",
@@ -52,7 +50,6 @@ public class ContentPanel extends JPanel implements ContentAction {
         ""
       },
       {
-        false,
         "R002",
         "Bob",
         "0123JQK",
@@ -63,13 +60,13 @@ public class ContentPanel extends JPanel implements ContentAction {
         "Staff",
         ""
       },
-      {false, "R002", "Bob", "0123JQK", "2024-10-02", " ", "Overdue", "5000", "Staff", ""},
-      {false, "R002", "Bob", "0123JQK", "2024-10-02", " ", "Overdue", "5000", "Staff", ""},
-      {false, "R002", "Bob", "0123JQK", "2024-10-02", " ", "Returned", "5000", "Staff", ""},
-      {false, "R002", "Bob", "0123JQK", "2024-10-02", " ", "Returned", "5000", "Staff", ""},
-      {false, "R002", "Bob", "0123JQK", "2024-10-02", " ", "Returned", "5000", "Staff", ""},
-      {false, "R002", "Bob", "0123JQK", "2024-10-02", " ", "Damaged", "5000", "Staff", ""},
-      {false, "R003", "Carol", "0123JQK", "2024-10-03", " ", "Returned", "0", "Admin", ""}
+      {"R002", "Bob", "0123JQK", "2024-10-02", " ", "Overdue", "5000", "Staff", ""},
+      {"R002", "Bob", "0123JQK", "2024-10-02", " ", "Overdue", "5000", "Staff", ""},
+      {"R002", "Bob", "0123JQK", "2024-10-02", " ", "Returned", "5000", "Staff", ""},
+      {"R002", "Bob", "0123JQK", "2024-10-02", " ", "Returned", "5000", "Staff", ""},
+      {"R002", "Bob", "0123JQK", "2024-10-02", " ", "Returned", "5000", "Staff", ""},
+      {"R002", "Bob", "0123JQK", "2024-10-02", " ", "Damaged", "5000", "Staff", ""},
+      {"R003", "Carol", "0123JQK", "2024-10-03", " ", "Returned", "0", "Admin", ""}
     };
     tablePanel = new CheckboxTablePanel(columnNames, tableData);
     tablePanel.setEditableColumns(Set.of(4, 6, 7, 8, 9));

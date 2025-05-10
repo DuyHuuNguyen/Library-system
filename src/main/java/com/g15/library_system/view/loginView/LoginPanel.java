@@ -38,7 +38,8 @@ public class LoginPanel extends JPanel {
           new MainFrame();
         });
 
-    RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237,180), null);
+    RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237, 180), null);
+    //    RoundedPanel panel = new RoundedPanel(20, new Color(113, 117, 115,150), null);
     panel.setLayout(new MigLayout("wrap,fill,insets 35 45 30 45", "fill,250:280"));
     panel.putClientProperty(
         FlatClientProperties.STYLE,
@@ -61,11 +62,11 @@ public class LoginPanel extends JPanel {
     JLabel description = new JLabel("Please sign in to access your account");
     description.setForeground(Color.BLACK);
     lbTitle.putClientProperty(FlatClientProperties.STYLE, "" + "font:bold +10");
-//    description.putClientProperty(
-//        FlatClientProperties.STYLE,
-//        ""
-//            + "[light]foreground:lighten(@foreground,30%);"
-//            + "[dark]foreground:darken(@foreground,100%)");
+    //    description.putClientProperty(
+    //        FlatClientProperties.STYLE,
+    //        ""
+    //            + "[light]foreground:lighten(@foreground,30%);"
+    //            + "[dark]foreground:darken(@foreground,100%)");
 
     panel.add(lbTitle);
     panel.add(description);

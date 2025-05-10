@@ -21,8 +21,7 @@ public class ToolPanel extends JPanel {
   public ToolPanel(CardLayout cardLayout, JPanel panelContent) {
     this.cardLayout = cardLayout;
     this.panelContent = panelContent;
-
-    setLayout(new BorderLayout());
+    this.setLayout(new BorderLayout());
 
     JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
     TextFieldSearchOption txt = new TextFieldSearchOption();
