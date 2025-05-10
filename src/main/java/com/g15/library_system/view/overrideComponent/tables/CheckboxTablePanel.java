@@ -4,7 +4,6 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.tableModel.CustomTableModel;
 import com.g15.library_system.view.overrideComponent.tables.tableRenderers.*;
-import com.g15.library_system.view.swingComponentGenerators.TableGenerator;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -85,39 +84,6 @@ public class CheckboxTablePanel extends JPanel {
   public void addDataToTable(Object[][] data) {
     this.tableData = data;
     this.tableModel.addRow(this.tableData);
-  }
-
-  private class CustomTableModel extends DefaultTableModel {
-    private JTable table;
-
-    public CustomTableModel(Object[][] data, Object[] columnNames) {
-      super(data, columnNames);
-    }
-
-    public void setTable(JTable table) {
-      this.table = table;
-    }
-
-    public boolean isCellEditable(int row, int column) {
-      if (column == 0) return true;
-      if (column == Arrays.asList(columnNames).indexOf("Status") && isStatusEditable) {
-        return true;
-      }
-      if (!isEditMode) return false;
-
-      boolean isChecked = Boolean.TRUE.equals(getValueAt(row, 0));
-      int modelRow = row;
-      int[] selectedViewRows = table.getSelectedRows();
-      boolean isSelected =
-          Arrays.stream(selectedViewRows)
-              .map(table::convertRowIndexToModel)
-              .anyMatch(r -> r == modelRow);
-      return (isChecked || isSelected) && editableColumns.contains(column);
-    }
-
-    public Class<?> getColumnClass(int column) {
-      return column == 0 ? Boolean.class : String.class;
-    }
   }
 
   private class HeaderCheckboxRenderer implements TableCellRenderer {

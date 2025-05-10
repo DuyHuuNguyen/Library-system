@@ -11,15 +11,13 @@ import javax.swing.*;
 public class CircularImageLabel extends JLabel {
   private BufferedImage circularImage;
   private int width, height;
-  private boolean isAvatar;
   private String imagePath;
   private Color borderColor = Color.WHITE;
   private int borderStroke = 3;
 
-  public CircularImageLabel(String imagePath, int width, int height, boolean isAvatar) {
+  public CircularImageLabel(String imagePath, int width, int height) {
     this.width = width;
     this.height = height;
-    this.isAvatar = isAvatar;
     setImage(imagePath);
     this.imagePath = imagePath;
   }
@@ -31,8 +29,7 @@ public class CircularImageLabel extends JLabel {
       CircularImageLabel that = (CircularImageLabel) obj;
       return this.imagePath.equals(that.imagePath)
           && this.width == that.width
-          && this.height == that.height
-          && this.isAvatar == that.isAvatar;
+          && this.height == that.height;
     }
   }
 

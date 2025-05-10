@@ -19,14 +19,12 @@ public class AddressPanel extends RoundedShadowPanel {
   private boolean isEditing = false;
 
   public AddressPanel(Map<String, String> addressData) {
-    //    super(20, Color.WHITE, null);
     this.addressData = addressData;
     this.setLayout(new BorderLayout());
-    this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     this.setBackground(UIManager.getColor("Panel.background"));
 
     JPanel headerPanel = new JPanel(new BorderLayout());
-    headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 5, 20));
+    headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 28, 5, 25));
     headerPanel.setOpaque(false);
 
     JLabel title = new JLabel("Address");
@@ -39,7 +37,8 @@ public class AddressPanel extends RoundedShadowPanel {
     headerPanel.add(title, BorderLayout.WEST);
     headerPanel.add(editButton, BorderLayout.EAST);
 
-    infoPanel = new JPanel(new MigLayout("wrap 2, insets 20 30 30 10", "[grow,fill][grow,fill]"));
+    infoPanel = new JPanel(new MigLayout("wrap 2, insets 20 30 30 10, gapy 5", "[grow,fill][grow,fill]"));
+    infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
     infoPanel.setOpaque(false);
     buildViewMode();
 
@@ -51,11 +50,8 @@ public class AddressPanel extends RoundedShadowPanel {
   private void buildViewMode() {
     infoPanel.removeAll();
     labels.clear();
-
     addRowView("Country", "Zip Code");
-
     addRowView("City", "Address");
-
     infoPanel.revalidate();
     infoPanel.repaint();
   }
@@ -67,7 +63,7 @@ public class AddressPanel extends RoundedShadowPanel {
 
     if (key1 != null) {
       JLabel val1 = new JLabel(addressData.get(key1));
-      val1.setPreferredSize(new Dimension(160, 30));
+      val1.setPreferredSize(new Dimension(150, 25));
       val1.setFont(new Font("Arial", Font.BOLD, 13));
       val1.setForeground(new Color(50, 50, 100));
       labels.put(key1, val1);
@@ -78,7 +74,7 @@ public class AddressPanel extends RoundedShadowPanel {
       val2.setFont(new Font("Arial", Font.BOLD, 13));
       val2.setForeground(new Color(50, 50, 100));
       labels.put(key2, val2);
-      infoPanel.add(val2, "wrap");
+      infoPanel.add(val2, "wrap, gapbottom 15");
     } else {
       infoPanel.add(Box.createHorizontalStrut(1), "wrap");
     }
@@ -116,13 +112,14 @@ public class AddressPanel extends RoundedShadowPanel {
 
     if (key1 != null) {
       JTextField field1 = new JTextField(addressData.get(key1));
+      field1.setPreferredSize(new Dimension(150,25));
       textFields.put(key1, field1);
       infoPanel.add(field1);
     }
     if (key2 != null) {
       JTextField field2 = new JTextField(addressData.get(key2));
       textFields.put(key2, field2);
-      infoPanel.add(field2, "wrap");
+      infoPanel.add(field2, "wrap, gapbottom 15");
     } else {
       infoPanel.add(Box.createHorizontalStrut(1), "wrap");
     }

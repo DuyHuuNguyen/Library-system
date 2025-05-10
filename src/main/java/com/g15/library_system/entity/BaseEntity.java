@@ -40,7 +40,7 @@ public class BaseEntity {
     return this.id == id;
   }
 
-  public boolean isActive(BookActiveType type) {
-    return this.isActive == type.getActive();
-  }
+  //  public boolean isActive(BookActiveType type) {
+  //    return this.isActive == type.getActive();
+  //  }
 }

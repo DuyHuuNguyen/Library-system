@@ -23,10 +23,10 @@ public class UserProfilePanel extends RoundedShadowPanel {
     this.addressData = addressData;
     this.personalData = personalData;
     this.setLayout(new BorderLayout(20, 20));
-    this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
+    this.setBorder(BorderFactory.createEmptyBorder(20, 40, 30, 20));
     this.setBackground(Color.WHITE);
 
-    avatarLabel = new CircularImageLabel(avatarPath, 100, 100, false);
+    avatarLabel = new CircularImageLabel(avatarPath, 100, 100);
     this.add(avatarLabel, BorderLayout.WEST);
 
     infoPanel = new JPanel(new GridBagLayout());

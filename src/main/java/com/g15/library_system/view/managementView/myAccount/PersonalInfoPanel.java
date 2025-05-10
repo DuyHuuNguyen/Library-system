@@ -14,7 +14,7 @@ public class PersonalInfoPanel extends RoundedShadowPanel {
   private final JPanel infoPanel;
   private final JButton editButton;
   private boolean isEditMode = false;
-  private Map<String, String> personalData = new LinkedHashMap<>();
+  private Map<String, String> personalData;
   private final Map<String, JLabel> labels = new LinkedHashMap<>();
   private final Map<String, JTextField> textFields = new LinkedHashMap<>();
 
@@ -50,13 +50,9 @@ public class PersonalInfoPanel extends RoundedShadowPanel {
   private void buildViewMode() {
     infoPanel.removeAll();
     labels.clear();
-
     addRowView("First Name", "Last Name");
-
     addRowView("Email address", "Phone");
-
     addRowView("Job", null);
-
     infoPanel.revalidate();
     infoPanel.repaint();
   }
@@ -78,7 +74,7 @@ public class PersonalInfoPanel extends RoundedShadowPanel {
       val2.setFont(new Font("Arial", Font.BOLD, 13));
       val2.setForeground(new Color(50, 50, 100));
       labels.put(key2, val2);
-      infoPanel.add(val2, "wrap");
+      infoPanel.add(val2, "wrap, gapbottom 15");
     } else {
       infoPanel.add(Box.createHorizontalStrut(1), "wrap");
     }
@@ -126,7 +122,7 @@ public class PersonalInfoPanel extends RoundedShadowPanel {
     if (key2 != null) {
       JTextField field2 = new JTextField(personalData.get(key2));
       textFields.put(key2, field2);
-      infoPanel.add(field2, "wrap");
+      infoPanel.add(field2, "wrap, gapbottom 15");
     } else {
       infoPanel.add(Box.createHorizontalStrut(1), "wrap");
     }

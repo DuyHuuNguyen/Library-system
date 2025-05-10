@@ -1,6 +1,5 @@
 package com.g15.library_system.view.overrideComponent;
 
-
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -46,25 +45,5 @@ public class RoundedShadowPanel extends JPanel {
 
     g2.dispose();
     super.paintComponent(g);
-  }
-
-  public static void main(String[] args) {
-    JFrame frame = new JFrame("Shadow Panel Demo");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(400, 300);
-    frame.setLayout(null); // Dùng layout null để dễ thấy bóng
-
-    RoundedShadowPanel panel = new RoundedShadowPanel();
-    panel.setBackground(new Color(70, 130, 180)); // SteelBlue
-    panel.setBounds(50, 50, 300, 150); // Vị trí cố định để bóng hiển thị rõ
-
-    JLabel label = new JLabel("Panel có đổ bóng", SwingConstants.CENTER);
-    label.setForeground(Color.WHITE);
-    label.setFont(new Font("Arial", Font.BOLD, 18));
-    panel.setLayout(new BorderLayout());
-    panel.add(label, BorderLayout.CENTER);
-
-    frame.add(panel);
-    frame.setVisible(true);
   }
 }
