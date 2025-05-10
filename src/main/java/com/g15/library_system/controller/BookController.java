@@ -1,5 +1,6 @@
 package com.g15.library_system.controller;
 
+import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
 import java.util.List;
@@ -18,5 +19,9 @@ public class BookController {
 
   public Optional<Book> findByTitle(String title) {
     return bookFacade.findByTitle(title);
+  }
+
+  public List<BookResponse> findALl() {
+    return this.bookFacade.findAll();
   }
 }

@@ -1,11 +1,16 @@
 package com.g15.library_system.view.overrideComponent.tables.tableRenderers;
 
+import com.g15.library_system.enums.Status;
 import com.g15.library_system.view.Style;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class StatusCellRenderer extends DefaultTableCellRenderer {
+
   @Override
   public Component getTableCellRendererComponent(
       JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -13,24 +18,29 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     JLabel label = (JLabel) c;
 
-    String status = value != null ? value.toString().toLowerCase() : "";
+    Status status = Status.get(value.toString());
+
     Color fgColor = Color.BLACK;
     Color bgColor = Color.WHITE;
     label.setHorizontalAlignment(SwingConstants.CENTER);
     switch (status) {
-      case "returned":
+      case Status.LOST:
         fgColor = Style.GREEN_STATUS_FOREGROUND_COLOR;
         bgColor = Style.GREEN_STATUS_BACKGROUND_COLOR;
         break;
-      case "lost":
+      case Status.DAMAGED:
         fgColor = Style.RED_STATUS_FOREGROUND_COLOR;
         bgColor = Style.RED_STATUS_BACKGROUND_COLOR;
         break;
-      case "damaged":
+      case Status.OVERDUE:
         fgColor = Style.YELLOW_STATUS_FOREGROUND_COLOR;
         bgColor = Style.YELLOW_STATUS_BACKGROUND_COLOR;
         break;
-      case "overdue":
+      case Status.AVAILABLE , Status.RETURNED:
+        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
+        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
+        break;
+      case Status.NULL:
         fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
         bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
         break;
