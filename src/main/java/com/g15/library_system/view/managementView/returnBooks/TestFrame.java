@@ -5,6 +5,7 @@ import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -65,7 +66,8 @@ public class TestFrame extends JFrame {
       }
     };
 
-    this.add(new CheckboxTablePanel(columnNames, tableData), BorderLayout.CENTER);
+//        this.add(new CheckboxTablePanel(columnNames, tableData), BorderLayout.CENTER);
+    this.add(new ReturnBookPanel());
     this.setVisible(true);
   }
 

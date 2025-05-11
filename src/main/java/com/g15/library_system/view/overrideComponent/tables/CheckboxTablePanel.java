@@ -4,6 +4,8 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.tableModel.CustomTableModel;
 import com.g15.library_system.view.overrideComponent.tables.tableRenderers.*;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -11,40 +13,36 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 public class CheckboxTablePanel extends JPanel {
-  private String[] columnNames;
-  private String[] statuses = {"Returned", "Lost", "Damaged", "Overdue"};
-  private Object[][] tableData;
+  // table comp
   private JTable table;
   private CustomTableModel tableModel;
-  private TableColumnModel columnModel;
-  private boolean isSelectAll = false;
-  private boolean isEditMode = false;
-  private boolean isStatusEditable = false;
-  private Set<Integer> editableColumns = new HashSet<>();
   private TableColumn checkboxCol;
+  private TableColumnModel columnModel;
+  private Object[][] tableData; // data
+
+  // customization
+  private String[] columnNames;
+  private String[] statuses = {"Returned", "Lost", "Damaged", "Overdue"};
+  private boolean isSelectAll = false;
+  private boolean isEditMode = false; // edit mode (button turn it on)
+  private Set<Integer> alwaysEditableColumns =
+      new HashSet<>(); // always allow columns with indexes in set to be edited
+  private Set<Integer> editableColumns =
+      new HashSet<>(); // columns that are editable when edit mode is enabled
 
   public CheckboxTablePanel(String[] columnNames, Object[][] tableData) {
     this.setBorder(BorderFactory.createLineBorder(Style.BLUE_HEADER_TABLE_AND_BUTTON));
     this.columnNames = columnNames;
     this.tableData = tableData;
     setLayout(new BorderLayout());
+    // table
     tableModel = new CustomTableModel(tableData, columnNames);
     table = new JTable(tableModel);
-    tableModel.setTable(table);
-
     table.setRowHeight(30);
     table.setFillsViewportHeight(true);
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
     TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
     table.setRowSorter(sorter);
-    columnModel = table.getColumnModel();
-
-    columnModel.getColumn(1).setPreferredWidth(50);
-
-    var isHaveThirdColumn = this.columnNames.length > 3;
-    if (isHaveThirdColumn) columnModel.getColumn(3).setPreferredWidth(80);
-
     table.setDefaultRenderer(
         Object.class,
         new DefaultTableCellRenderer() {
@@ -66,6 +64,17 @@ public class CheckboxTablePanel extends JPanel {
             return c;
           }
         });
+
+    // table model
+    tableModel.setEditableColumns(editableColumns);
+    tableModel.setAlwaysEditableColumns(alwaysEditableColumns);
+
+    // column model
+    columnModel = table.getColumnModel();
+    columnModel.getColumn(1).setPreferredWidth(50);
+
+    var isHaveThirdColumn = this.columnNames.length > 3;
+    if (isHaveThirdColumn) columnModel.getColumn(3).setPreferredWidth(80);
 
     setupCheckBoxColumn();
     setupTableHeader();
@@ -183,6 +192,13 @@ public class CheckboxTablePanel extends JPanel {
     return scrollPane;
   }
 
+  public void resizeNotesColumn(int width) {
+    int notesColumnIndex = Arrays.asList(columnNames).indexOf("Notes");
+    if (notesColumnIndex > 0) {
+      columnModel.getColumn(notesColumnIndex).setPreferredWidth(width);
+    }
+  }
+
   public Runnable getActionForEditingTable(CustomButton editButton) {
     return () -> {
       if (!isEditMode) {
@@ -218,6 +234,9 @@ public class CheckboxTablePanel extends JPanel {
         editButton.setText("Edit");
         editButton.setIcon("/icons/edit.png", 15);
 
+        new ToastNotification(JOptionPane.getFrameForComponent(this),  ToastNotification.Type.INFO,
+                ToastNotification.Location.TOP_CENTER, "Your changes have been saved.").showNotification();
+
         for (int i = 0; i < tableModel.getRowCount(); i++) {
           if (tableModel.getColumnName(0).equals("")) {
             tableModel.setValueAt(false, i, 0);
@@ -237,18 +256,20 @@ public class CheckboxTablePanel extends JPanel {
     editableColumns.addAll(columns);
   }
 
-  public void setStatusEditable(boolean statusEditable) {
-    isStatusEditable = statusEditable;
+  public void setAlwaysEditableColumns(Set<Integer> columns) {
+    alwaysEditableColumns.clear();
+    alwaysEditableColumns.addAll(columns);
   }
 
-  public void resizeNotesColumn(int width) {
-    int notesColumnIndex = Arrays.asList(columnNames).indexOf("Notes");
-    if (notesColumnIndex > 0) {
-      columnModel.getColumn(notesColumnIndex).setPreferredWidth(width);
-    }
+  public void setStatuses(String[] statuses) {
+    this.statuses = statuses;
   }
 
   public void setColumnSize(int columnIndex, int width) {
     columnModel.getColumn(columnIndex).setPreferredWidth(width);
+  }
+
+  public void setRowHeight(int height) {
+    table.setRowHeight(height);
   }
 }

@@ -37,7 +37,8 @@ public class AddressPanel extends RoundedShadowPanel {
     headerPanel.add(title, BorderLayout.WEST);
     headerPanel.add(editButton, BorderLayout.EAST);
 
-    infoPanel = new JPanel(new MigLayout("wrap 2, insets 20 30 30 10, gapy 5", "[grow,fill][grow,fill]"));
+    infoPanel =
+        new JPanel(new MigLayout("wrap 2, insets 20 30 30 10, gapy 5", "[grow,fill][grow,fill]"));
     infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
     infoPanel.setOpaque(false);
     buildViewMode();
@@ -112,7 +113,7 @@ public class AddressPanel extends RoundedShadowPanel {
 
     if (key1 != null) {
       JTextField field1 = new JTextField(addressData.get(key1));
-      field1.setPreferredSize(new Dimension(150,25));
+      field1.setPreferredSize(new Dimension(150, 25));
       textFields.put(key1, field1);
       infoPanel.add(field1);
     }

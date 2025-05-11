@@ -2,17 +2,16 @@ package com.g15.library_system.view.overrideComponent.tables.tableModel;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class CustomTableModel extends DefaultTableModel {
-
   private Set<Integer> editableRows = new HashSet<>();
+  private Set<Integer> editableColumns = new HashSet<>();
+  private Set<Integer> alwaysEditableColumns = new HashSet<>();
   private boolean hasCheckbox;
-  private JTable table;
 
-  public CustomTableModel(Object[][] tableData, String[] columnNames) {
-    super(processData(tableData, columnNames), processColumnNames(columnNames));
+  public CustomTableModel(Object[][] data, String[] columnNames) {
+    super(processData(data, columnNames), processColumnNames(columnNames));
     hasCheckbox = columnNames.length > 0 && columnNames[0].equals("");
   }
 
@@ -47,11 +46,11 @@ public class CustomTableModel extends DefaultTableModel {
       return true;
     }
 
-    return editableRows.contains(row);
-  }
+    if (alwaysEditableColumns.contains(column)) {
+      return true;
+    }
 
-  public void setTable(JTable table) {
-    this.table = table;
+    return editableRows.contains(row) && editableColumns.contains(column);
   }
 
   public void setEditableRows(Set<Integer> rows) {
@@ -60,5 +59,25 @@ public class CustomTableModel extends DefaultTableModel {
 
   public void clearEditableRows() {
     editableRows.clear();
+  }
+
+  public void setEditableColumns(Set<Integer> columns) {
+    editableColumns = columns;
+  }
+
+  public void clearEditableColumns() {
+    editableColumns.clear();
+  }
+
+  public void setAlwaysEditableColumns(Set<Integer> columns) {
+    alwaysEditableColumns = columns;
+  }
+
+  public void addAlwaysEditableColumn(int column) {
+    alwaysEditableColumns.add(column);
+  }
+
+  public void clearAlwaysEditableColumns() {
+    alwaysEditableColumns.clear();
   }
 }

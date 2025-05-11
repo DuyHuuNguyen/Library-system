@@ -12,7 +12,7 @@ import java.util.Map;
 import javax.swing.*;
 
 public class ToolPanel extends JPanel {
-  private CustomButton addBt, mainButton, dropdownButton;
+  private CustomButton addBt, mainBt, dropdownBt;
   private Map<String, Runnable> actionMap = new HashMap<>();
   private ContentAction contentPnAction;
   private final String[] items = {"Edit", "Export", "Refresh"};
@@ -43,7 +43,7 @@ public class ToolPanel extends JPanel {
             .icon("/icons/addIcon.png", 5);
     actionBtPn.add(addBt);
 
-    mainButton =
+    mainBt =
         CustomButtonBuilder.builder()
             .text("Actions")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
@@ -56,7 +56,7 @@ public class ToolPanel extends JPanel {
             .preferredSize(new Dimension(120, 40))
             .roundedSide(CustomButton.RoundedSide.LEFT);
 
-    dropdownButton =
+    dropdownBt =
         CustomButtonBuilder.builder()
             .text("▼")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
@@ -69,15 +69,13 @@ public class ToolPanel extends JPanel {
             .roundedSide(CustomButton.RoundedSide.RIGHT)
             .preferredSize(new Dimension(45, 40));
 
-    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-    panel.add(mainButton);
-    panel.add(dropdownButton);
+    JPanel dropdownBtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+    dropdownBtPanel.add(mainBt);
+    dropdownBtPanel.add(dropdownBt);
 
     JPopupMenu menu = new JPopupMenu();
-
     Font menuFont = new Font("Segoe UI", Font.PLAIN, 14);
-    int popupWidth =
-        mainButton.getPreferredSize().width + dropdownButton.getPreferredSize().width - 2;
+    int popupWidth = mainBt.getPreferredSize().width + dropdownBt.getPreferredSize().width - 2;
     int popupHeight = 35;
 
     setActionForActionMap();
@@ -89,14 +87,14 @@ public class ToolPanel extends JPanel {
 
       item.addActionListener(
           e -> {
-            mainButton.setText(itemText);
-            mainButton.setIcon("/icons/" + itemText.toLowerCase() + ".png", 17);
+            mainBt.setText(itemText);
+            mainBt.setIcon("/icons/" + itemText.toLowerCase() + ".png", 17);
             actionMap.get(itemText).run();
 
-            for (ActionListener al : mainButton.getActionListeners()) {
-              mainButton.removeActionListener(al);
+            for (ActionListener al : mainBt.getActionListeners()) {
+              mainBt.removeActionListener(al);
             }
-            mainButton.addActionListener(
+            mainBt.addActionListener(
                 ev -> {
                   Runnable action = actionMap.get(itemText);
                   if (action != null) action.run();
@@ -106,11 +104,11 @@ public class ToolPanel extends JPanel {
       menu.add(item);
     }
 
-    dropdownButton.addActionListener(
+    dropdownBt.addActionListener(
         e -> {
-          menu.show(panel, 0, panel.getHeight());
+          menu.show(dropdownBtPanel, 0, dropdownBtPanel.getHeight());
         });
-    actionBtPn.add(panel);
+    actionBtPn.add(dropdownBtPanel);
 
     return actionBtPn;
   }
@@ -139,7 +137,7 @@ public class ToolPanel extends JPanel {
   }
 
   private void setActionForActionMap() {
-    actionMap.put("Edit", contentPnAction.editTable(mainButton));
+    actionMap.put("Edit", contentPnAction.editTable(mainBt));
     actionMap.put(
         "Export",
         () -> {

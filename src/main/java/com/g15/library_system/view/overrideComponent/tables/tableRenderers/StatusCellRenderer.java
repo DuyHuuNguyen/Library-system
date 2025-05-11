@@ -24,11 +24,11 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
     Color bgColor = Color.WHITE;
     label.setHorizontalAlignment(SwingConstants.CENTER);
     switch (status) {
-      case Status.LOST:
+      case Status.AVAILABLE , Status.RETURNED:
         fgColor = Style.GREEN_STATUS_FOREGROUND_COLOR;
         bgColor = Style.GREEN_STATUS_BACKGROUND_COLOR;
         break;
-      case Status.DAMAGED:
+      case Status.DAMAGED , Status.LOST:
         fgColor = Style.RED_STATUS_FOREGROUND_COLOR;
         bgColor = Style.RED_STATUS_BACKGROUND_COLOR;
         break;
@@ -36,13 +36,13 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
         fgColor = Style.YELLOW_STATUS_FOREGROUND_COLOR;
         bgColor = Style.YELLOW_STATUS_BACKGROUND_COLOR;
         break;
-      case Status.AVAILABLE , Status.RETURNED:
-        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
-        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
-        break;
+//      case Status.:
+//        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR; //waiting new status
+//        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
+//        break;
       case Status.NULL:
-        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
-        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
+//        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
+//        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
         break;
     }
 

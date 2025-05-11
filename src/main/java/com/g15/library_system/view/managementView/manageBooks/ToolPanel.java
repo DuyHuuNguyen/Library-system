@@ -155,8 +155,8 @@ public class ToolPanel extends JPanel {
             .drawBorder(false)
             .opaque(false)
             .contentAreaFilled(false)
-            .preferredSize(new Dimension(135, 40))
-            .icon("/icons/infoYellowIcon.png", 12);
+            .preferredSize(new Dimension(155, 40))
+            .icon("/icons/infoYellowIcon.png", 15);
     notificationBt.addActionListener(
         e -> this.cardLayout.show(this.panelContent, ManageBookPanel.CONSTRAINT_NOTIFY));
     actionBtPn.add(notificationBt);
