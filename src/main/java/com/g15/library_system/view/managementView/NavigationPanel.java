@@ -9,7 +9,6 @@ import javax.swing.*;
 
 public class NavigationPanel extends JPanel {
   private JLabel role, name, credit;
-
   public CustomButton dashBoardBt,
       manageBookBt,
       lendedBookBt,
