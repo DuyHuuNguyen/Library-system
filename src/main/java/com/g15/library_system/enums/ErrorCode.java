@@ -25,7 +25,8 @@ public enum ErrorCode {
   STUDENT_READER_TYPE_NOT_FOUND("119", "StudentReaderType not found"),
   SUBJECT_NOT_FOUND("120", "Subject not found"),
   TRANSACTION_NOT_FOUND("121", "Transaction not found"),
-  USER_ROLE_NOT_FOUND("122", "UserRole not found");
+  USER_ROLE_NOT_FOUND("122", "UserRole not found"),
+  IMAGE_NOT_FOUND("111", "Image not found");
 
   private final String code;
   private final String message;

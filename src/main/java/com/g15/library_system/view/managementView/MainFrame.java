@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class MainFrame extends JFrame {
   private NavigationPanel navigationPanel;
-  private WorkspacePanel workspacePanel;
+  private final WorkspacePanel workspacePanel;
 
   public MainFrame() {
     setTitle("Library Management");

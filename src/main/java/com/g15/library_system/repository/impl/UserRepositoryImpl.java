@@ -20,6 +20,6 @@ public class UserRepositoryImpl implements UserRepository {
 
   @PostConstruct
   void run() {
-    log.info(this.findById(7l).toString());
+    log.info(this.findById(7L).toString());
   }
 }

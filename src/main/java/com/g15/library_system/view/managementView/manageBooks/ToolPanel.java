@@ -4,7 +4,6 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
-import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -13,10 +12,16 @@ import java.util.Map;
 import javax.swing.*;
 
 public class ToolPanel extends JPanel {
-  private CustomButton addBt, removeBt, mainButton, dropdownButton;
+  private CustomButton addBt, notificationBt, mainButton, dropdownButton;
   private Map<String, Runnable> actionMap = new HashMap<>();
 
-  public ToolPanel() {
+  private CardLayout cardLayout;
+  private JPanel panelContent;
+
+  public ToolPanel(CardLayout cardLayout, JPanel panelContent) {
+    this.cardLayout = cardLayout;
+    this.panelContent = panelContent;
+
     setLayout(new BorderLayout());
 
     JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
@@ -40,6 +45,7 @@ public class ToolPanel extends JPanel {
             new ImageIcon(getClass().getResource("/icons/searchOptionIcons/address.png"))));
 
     leftPanel.add(txt);
+    //        add(leftPanel, BorderLayout.WEST);
 
     JPanel actionBtPn = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
     addBt =
@@ -47,8 +53,8 @@ public class ToolPanel extends JPanel {
             .text("Add Book")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(Style.PURPLE_MAIN_THEME)
-            .hoverColor(Style.PURPLE_MAIN_THEME.darker())
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
             .radius(12)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
@@ -57,13 +63,7 @@ public class ToolPanel extends JPanel {
             .preferredSize(new Dimension(150, 40))
             .icon("/icons/addIcon.png", 10);
     addBt.addActionListener(
-        e ->
-            new ToastNotification(
-                    JOptionPane.getFrameForComponent(this),
-                    ToastNotification.Type.SUCCESS,
-                    ToastNotification.Location.TOP_CENTER,
-                    "New book added successfully!")
-                .showNotification());
+        e -> this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_ADD_NEW_BOOK));
     actionBtPn.add(addBt);
 
     mainButton =
@@ -71,8 +71,8 @@ public class ToolPanel extends JPanel {
             .text("Actions")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(Style.PURPLE_MAIN_THEME)
-            .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
             .radius(6)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
@@ -85,8 +85,8 @@ public class ToolPanel extends JPanel {
             .text("▼")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(Style.PURPLE_MAIN_THEME)
-            .hoverColor(Style.BLUE_MENU_HOVER_COLOR)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
             .radius(6)
             .alignment(SwingConstants.CENTER)
             .drawBorder(false)
@@ -99,24 +99,22 @@ public class ToolPanel extends JPanel {
 
     JPopupMenu menu = new JPopupMenu();
 
-    String[] items = {"Edit", "Export", "Import", "Refresh"};
+    String[] items = {"Edit", "Export", "Import", "Refresh", "Hidden"};
     Font menuFont = new Font("Segoe UI", Font.PLAIN, 14);
     int popupWidth =
         mainButton.getPreferredSize().width + dropdownButton.getPreferredSize().width - 2;
     int popupHeight = 35;
 
     actionMap.put(
-        "Edit",
-        () ->
-            new ToastNotification(
-                    JOptionPane.getFrameForComponent(this),
-                    ToastNotification.Type.INFO,
-                    ToastNotification.Location.TOP_CENTER,
-                    "editing")
-                .showNotification());
+        "Edit", () -> this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_MODIFY_BOOK));
     actionMap.put("Export", () -> JOptionPane.showMessageDialog(this, "Exporting..."));
     actionMap.put("Import", () -> JOptionPane.showMessageDialog(this, "Importing..."));
-    actionMap.put("Refresh", () -> JOptionPane.showMessageDialog(this, "Refreshing..."));
+    actionMap.put(
+        "Refresh",
+        () -> this.cardLayout.show(this.panelContent, ManageBookPanel.CONSTRAINT_TABLE_BOOK));
+    actionMap.put(
+        "Hidden",
+        () -> this.cardLayout.show(this.panelContent, ManageBookPanel.CONSTRAINT_TABLE_BOOK));
 
     for (String itemText : items) {
       JMenuItem item = new JMenuItem(itemText);
@@ -126,6 +124,7 @@ public class ToolPanel extends JPanel {
       item.addActionListener(
           e -> {
             mainButton.setText(itemText);
+            actionMap.get(itemText).run();
             for (ActionListener al : mainButton.getActionListeners()) {
               mainButton.removeActionListener(al);
             }
@@ -145,21 +144,23 @@ public class ToolPanel extends JPanel {
         });
     actionBtPn.add(panel);
 
-    removeBt =
+    notificationBt =
         CustomButtonBuilder.builder()
-            .text("Remove")
+            .text("Notification")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
-            .backgroundColor(new Color(220, 68, 84))
-            .hoverColor(new Color(220, 68, 84).darker())
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
             .radius(12)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(135, 40))
-            .icon("/icons/deleteIcon.png", 12);
-    actionBtPn.add(removeBt);
+            .icon("/icons/infoYellowIcon.png", 12);
+    notificationBt.addActionListener(
+        e -> this.cardLayout.show(this.panelContent, ManageBookPanel.CONSTRAINT_NOTIFY));
+    actionBtPn.add(notificationBt);
 
     add(leftPanel, BorderLayout.EAST);
     add(actionBtPn, BorderLayout.WEST);

@@ -267,7 +267,7 @@ public class LibrarySystemApplication {
                     .lastName("Pham")
                     .email("charlie.pham@example.com")
                     .build())
-            .expireAt(System.currentTimeMillis() + 1 * 365L * 24 * 60 * 60 * 1000) // 1 năm sau
+            .expireAt(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000) // 1 năm sau
             .transactions(
                 List.of(
                     Transaction.builder().id(105L).transactionType(TransactionType.BORROW).build()))
@@ -359,7 +359,7 @@ public class LibrarySystemApplication {
                     .lastName("Dang")
                     .email("isabella.dang@example.com")
                     .build())
-            .expireAt(System.currentTimeMillis() + 1 * 365L * 24 * 60 * 60 * 1000) // 1 năm sau
+            .expireAt(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000) // 1 năm sau
             .libraryCardStatus(LibraryCardStatus.EXPIRED)
             .build();
 
