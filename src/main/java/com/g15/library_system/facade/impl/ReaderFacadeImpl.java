@@ -3,6 +3,7 @@ package com.g15.library_system.facade.impl;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.facade.ReaderFacade;
 import com.g15.library_system.service.ReaderService;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,24 @@ public class ReaderFacadeImpl implements ReaderFacade {
   }
 
   @Override
+  public List<String> searchIdContains(String readerId) {
+    try {
+      return readerService.findAll().stream()
+          .filter(reader -> reader.idContains(Long.parseLong(readerId)))
+          .map(reader -> reader.getId().toString())
+          .toList();
+    } catch (NumberFormatException e) {
+      return Collections.EMPTY_LIST;
+    }
+  }
+
+  @Override
   public Optional<Reader> findByName(String name) {
     return readerService.findByName(name);
+  }
+
+  @Override
+  public Optional<Reader> findById(String id) {
+    return readerService.findById(id);
   }
 }

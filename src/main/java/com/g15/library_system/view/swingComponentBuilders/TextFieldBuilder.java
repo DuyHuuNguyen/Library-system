@@ -14,7 +14,7 @@ import javax.swing.event.DocumentListener;
 
 public class TextFieldBuilder extends JTextField {
   private Color borderColor;
-  public static final int LIMIT_POPUPMENU = 5;
+  private static final int LIMIT_POPUPMENU = 8;
   private boolean popupEnabled = true;
 
   public static TextFieldBuilder builder() {

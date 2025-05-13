@@ -16,7 +16,15 @@ public class ReaderController {
     return readerFacade.searchNameContains(name);
   }
 
+  public List<String> searchIdContains(String id) {
+    return readerFacade.searchIdContains(id);
+  }
+
   public Optional<Reader> findByName(String name) {
     return readerFacade.findByName(name);
+  }
+
+  public Optional<Reader> findById(String id) {
+    return readerFacade.findById(id);
   }
 }

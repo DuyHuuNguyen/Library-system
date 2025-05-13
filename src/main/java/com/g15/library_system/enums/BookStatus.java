@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BookStatus {
-  AVAILABLE("ccc"),
-  BORROWED("cc"),
-  DEMO("cc"),
+  AVAILABLE("available"),
+  BORROWED("borrowed"),
+  DEMO("demo"),
   RETURNED("returned"),
   LOST("lost"),
   DAMAGED("damaged"),

@@ -89,7 +89,7 @@ public class DashBoardPanel extends JPanel {
   }
 
   public class ContentPanel extends JPanel {
-    private LenderChartPanel lenderChartPanel;
+    private ReaderSignupTrendsChart lenderChartPanel;
     private ReaderTypesChartPanel readerTypesChartPanel;
     private BookAvailabilityChartPanel bookAvailabilityChartPanel;
     private LendingTrendsChartPanel lendingTrendsChartPanel;
@@ -133,7 +133,7 @@ public class DashBoardPanel extends JPanel {
       gbc.gridx = 1;
       gbc.gridy = 2;
       gbc.gridwidth = 2;
-      lenderChartPanel = new LenderChartPanel();
+      lenderChartPanel = new ReaderSignupTrendsChart();
       add(lenderChartPanel, gbc);
       // ========== ROW 4 ===========
       // Visitors Chart

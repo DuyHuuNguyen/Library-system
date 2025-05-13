@@ -1,82 +1,77 @@
 package com.g15.library_system.view.managementView.dashboard;
 
-import com.g15.library_system.observers.TransactionObserver;
 import com.g15.library_system.view.managementView.dashboard.statistics.TransactionStatistics;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.swingComponentGenerators.JFreeChartGenerator;
-import java.awt.*;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.*;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-public class LendingTrendsChartPanel extends RoundedShadowPanel implements TransactionObserver {
+import java.awt.*;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Map;
+import javax.swing.*;
+
+public class ReaderSignupTrendsChart extends RoundedShadowPanel {
   private ChartPanel chartPanel;
-  private JFreeChart barChart;
+  private JFreeChart lineChart;
 
   private JComboBox<Integer> yearComboBox;
   private JComboBox<String> monthComboBox;
+
   private ArrayList<Integer> years = new ArrayList<>();
-  private String selectedMonth;
-  private Integer selectedYear;
-  private Map<String, Long> lendingData = new HashMap<>();
+  private Map<String, Long> readerSignUpTrendsData;
   private DefaultCategoryDataset chartDataset;
 
-  LendingTrendsChartPanel() {
+
+  ReaderSignupTrendsChart() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
-    this.setPreferredSize(new Dimension(730, 450));
+    setPreferredSize(new Dimension(700, 450));
     this.setLayout(new BorderLayout());
+    this.setBackground(Color.WHITE);
+    setLayout(new BorderLayout());
 
-    //title panel
-    TitlePanel titlePn = new TitlePanel("Lending Trends");
-    yearComboBox = titlePn.getYearComboBox();
-    monthComboBox = titlePn.getMonthComboBox();
+    TitlePanel titlePn = new TitlePanel("Reader Signup Trends");
+    this.yearComboBox= titlePn.getYearComboBox();
+    this.monthComboBox= titlePn.getMonthComboBox();
 
-    //chart panel
+
     chartDataset = new DefaultCategoryDataset();
 
-    lendingData = TransactionStatistics.aggregateLendingTrendData((int) yearComboBox.getSelectedItem());
-    if (lendingData != null && !lendingData.isEmpty()) {
-      for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
+    readerSignUpTrendsData = TransactionStatistics.aggregateLendingTrendData((int) yearComboBox.getSelectedItem());
+    if (readerSignUpTrendsData != null && !readerSignUpTrendsData.isEmpty()) {
+      for (Map.Entry<String, Long> entry : readerSignUpTrendsData.entrySet()) {
         chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
       }
     }
 
-    barChart =
-        JFreeChartGenerator.createBarChart(
+
+    lineChart = JFreeChartGenerator.createLineChart(
             "", "Number of Months", "Number of Books borrowed", chartDataset);
 
-    CategoryPlot plot = (CategoryPlot) barChart.getPlot();
+    CategoryPlot plot = (CategoryPlot) lineChart.getPlot();
     NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
 
     rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-    BarRenderer renderer = (BarRenderer) plot.getRenderer();
+    LineAndShapeRenderer renderer = new LineAndShapeRenderer();
+    plot.setRenderer(renderer);
 
     NumberFormat integerFormat = NumberFormat.getIntegerInstance();
 
     renderer.setDefaultItemLabelGenerator(
-        new StandardCategoryItemLabelGenerator("{2}", integerFormat));
+            new StandardCategoryItemLabelGenerator("{2}", integerFormat));
     renderer.setDefaultItemLabelsVisible(true);
 
-    chartPanel = new ChartPanel(barChart);
-    this.setLayout(new BorderLayout());
+
+     chartPanel = new ChartPanel(lineChart);
     this.add(chartPanel, BorderLayout.CENTER);
     this.add(titlePn, BorderLayout.NORTH);
-
   }
 
-  public void clearChartData() {
-    chartDataset.clear();
-  }
-
-  @Override
-  public void update() {}
 }

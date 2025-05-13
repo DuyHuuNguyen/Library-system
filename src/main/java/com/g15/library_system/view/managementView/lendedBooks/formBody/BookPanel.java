@@ -352,7 +352,7 @@ public class BookPanel extends JPanel {
 
       String[] columnNames = {"", "test", "test", "test"};
 
-      Object[][] tableData = {};
+      Object[][] tableData = {{"", "", "", ""}};
 
       bookTable = new CheckboxTablePanel(columnNames, tableData);
       add(bookTable, BorderLayout.CENTER);

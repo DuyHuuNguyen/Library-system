@@ -19,6 +19,11 @@ public class ReaderServiceImpl implements ReaderService {
   }
 
   @Override
+  public Optional<Reader> findById(String id) {
+    return readerRepository.findById(id);
+  }
+
+  @Override
   public List<Reader> findAll() {
     return readerRepository.findAll();
   }
