@@ -149,7 +149,6 @@ public class TextFieldBuilder extends JTextField {
                   getWidth(), Math.min(suggestions.size(), LIMIT_POPUPMENU) * 30);
               popupMenu.show(TextFieldBuilder.this, 0, getHeight());
 
-              requestFocusInWindow();
               setupKeyNavigation(menuItems, popupMenu);
             });
     debounceTimer.setRepeats(false);
