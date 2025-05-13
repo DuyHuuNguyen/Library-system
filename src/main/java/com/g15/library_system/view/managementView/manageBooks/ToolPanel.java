@@ -10,17 +10,23 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ToolPanel extends JPanel {
   private CustomButton addBt, notificationBt, mainButton, dropdownButton;
   private Map<String, Runnable> actionMap = new HashMap<>();
 
   private CardLayout cardLayout;
   private JPanel panelContent;
+  private Runnable runnableCallApiFindBookSelected;
 
-  public ToolPanel(CardLayout cardLayout, JPanel panelContent) {
+  public ToolPanel(
+      CardLayout cardLayout, JPanel panelContent, Runnable runnableCallApiFindBookSelected) {
     this.cardLayout = cardLayout;
     this.panelContent = panelContent;
+
+    this.runnableCallApiFindBookSelected = runnableCallApiFindBookSelected;
 
     setLayout(new BorderLayout());
 
@@ -159,7 +165,12 @@ public class ToolPanel extends JPanel {
             .preferredSize(new Dimension(135, 40))
             .icon("/icons/infoYellowIcon.png", 12);
     notificationBt.addActionListener(
-        e -> this.cardLayout.show(this.panelContent, ManageBookPanel.CONSTRAINT_NOTIFY));
+        e -> {
+          this.runnableCallApiFindBookSelected.run();
+          log.info(" run action ");
+          this.cardLayout.show(this.panelContent, ManageBookPanel.CONSTRAINT_NOTIFY);
+        });
+
     actionBtPn.add(notificationBt);
 
     add(leftPanel, BorderLayout.EAST);

@@ -1,16 +1,15 @@
 package com.g15.library_system.view.overrideComponent;
 
 import com.g15.library_system.entity.Book;
-import com.g15.library_system.enums.BookStatus;
-import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentGenerators.TextFieldGenerator;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Optional;
 import javax.swing.*;
+import lombok.extern.slf4j.Slf4j;
 
-@Deprecated
+@Slf4j
 public class UpsertBookPanel extends JPanel {
   private JTextField txtBookTitle;
   private JTextField txtQuantity;
@@ -30,19 +29,25 @@ public class UpsertBookPanel extends JPanel {
     this.initPanel();
   }
 
-  public UpsertBookPanel(int width, int height, Book book) {
+  public UpsertBookPanel() {}
+
+  public UpsertBookPanel(int width, int height, Optional<Book> book) {
     this.width = width;
     this.height = height;
     this.initPanel();
 
-    this.txtBookTitle.setText(book.getTitle());
-    txtQuantity.setText(String.valueOf(book.getTotalQuantity()));
-    txtAuthor.setText(book.getAuthor());
-    txtPublisher.setText(book.getPublisher());
-    txtPublisherYear.setText(book.getPublishYear() + "");
-    txtGenre.setText(book.getGenreType() + "");
+    if (book == null) {
+      log.error("Book not found");
+      return;
+    }
+    this.txtBookTitle.setText(book.get().getTitle());
+    txtQuantity.setText(String.valueOf(book.get().getTotalQuantity()));
+    txtAuthor.setText(book.get().getAuthor());
+    txtPublisher.setText(book.get().getPublisher());
+    txtPublisherYear.setText(book.get().getPublishYear() + "");
+    txtGenre.setText(book.get().getGenreType() + "");
 
-    this.featurePanel.loadImagesFromUrls(book.getImages());
+    this.featurePanel.loadImagesFromUrls(book.get().getImages());
   }
 
   public void initPanel() {
@@ -153,31 +158,31 @@ public class UpsertBookPanel extends JPanel {
     return panel;
   }
 
-  public static void main(String[] args) {
-
-    var l = new ArrayList<String>();
-    l.add("src/main/resources/icons/removeIconTrashBin.png");
-    var b =
-        Book.builder()
-            .id(5L)
-            .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
-            .author("J.R.R. Tolkien")
-            .bookStatus(BookStatus.AVAILABLE)
-            .title("The Hobbit")
-            .publisher("George Allen & Unwin")
-            .publishYear(1937)
-            .genreType(GenreType.FANTASY)
-            .currentQuantity(7)
-            .totalQuantity(35)
-            .images(l)
-            .build();
-
-    JFrame frame = new JFrame("Top Panel UI");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(600, 100);
-    frame.add(new UpsertBookPanel(300, 300, b));
-    frame.setLocationRelativeTo(null);
-    frame.setVisible(true);
-  }
+  //  public static void main(String[] args) {
+  //
+  //    var l = new ArrayList<String>();
+  //    l.add("src/main/resources/icons/removeIconTrashBin.png");
+  //    var b =
+  //        Book.builder()
+  //            .id(5L)
+  //            .createdAt(System.currentTimeMillis())
+  //            .updatedAt(System.currentTimeMillis())
+  //            .author("J.R.R. Tolkien")
+  //            .bookStatus(BookStatus.AVAILABLE)
+  //            .title("The Hobbit")
+  //            .publisher("George Allen & Unwin")
+  //            .publishYear(1937)
+  //            .genreType(GenreType.FANTASY)
+  //            .currentQuantity(7)
+  //            .totalQuantity(35)
+  //            .images(l)
+  //            .build();
+  //
+  //    JFrame frame = new JFrame("Top Panel UI");
+  //    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+  //    frame.setSize(600, 100);
+  //    frame.add(new UpsertBookPanel(300, 300, b));
+  //    frame.setLocationRelativeTo(null);
+  //    frame.setVisible(true);
+  //  }
 }

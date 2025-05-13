@@ -39,8 +39,4 @@ public class BaseEntity {
   public boolean hasSameId(Long id) {
     return this.id == id;
   }
-
-  public boolean isActive(BookActiveType type) {
-    return this.isActive == type.getActive();
-  }
 }
