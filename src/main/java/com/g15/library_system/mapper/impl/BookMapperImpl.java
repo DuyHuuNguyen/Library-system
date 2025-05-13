@@ -50,6 +50,15 @@ public class BookMapperImpl implements BookMapper {
   }
 
   @Override
+  public String toDataSearch(Book book, String text) {
+    if (book.isSamePublisher(text)) return book.getPublisher();
+
+    if (book.isSameTitle(text)) return book.getTitle();
+
+    return book.getAuthor();
+  }
+
+  @Override
   public Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books) {
     if (books == null) return null;
     Object[][] data = new Object[books.size()][];

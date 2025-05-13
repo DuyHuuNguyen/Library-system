@@ -10,5 +10,7 @@ public interface BookMapper {
 
   Object[][] toBookData(List<BookResponse> bookResponses);
 
+  String toDataSearch(Book book, String text);
+
   Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books);
 }

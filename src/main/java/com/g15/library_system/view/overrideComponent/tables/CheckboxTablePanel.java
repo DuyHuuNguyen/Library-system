@@ -10,18 +10,18 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CheckboxTablePanel extends JPanel {
-  // table comp
+  private static final Logger log = LoggerFactory.getLogger(CheckboxTablePanel.class);
+  private String[] columnNames;
+  private String[] statuses = {"Returned", "Lost", "Damaged", "Overdue"};
+  private Object[][] tableData;
   private JTable table;
   private CustomTableModel tableModel;
   private TableColumn checkboxCol;
   private TableColumnModel columnModel;
-  private Object[][] tableData; // data
-
-  // customization
-  private String[] columnNames;
-  private String[] statuses = {"Returned", "Lost", "Damaged", "Overdue"};
   private boolean isSelectAll = false;
   private boolean isEditMode = false; // edit mode (button turn it on)
   private Set<Integer> alwaysEditableColumns =
@@ -92,6 +92,22 @@ public class CheckboxTablePanel extends JPanel {
   public void addDataToTable(Object[][] data) {
     this.tableData = data;
     this.tableModel.addRow(this.tableData);
+  }
+
+  public Object[] getSelectedRowData() {
+    int selectedRow = table.getSelectedRow();
+
+    if (selectedRow == -1) {
+      return null;
+    }
+
+    Object[] rowData = new Object[this.columnNames.length];
+
+    for (int i = 0; i < rowData.length; i++) {
+      rowData[i] = table.getValueAt(selectedRow, i);
+    }
+
+    return rowData;
   }
 
   private class HeaderCheckboxRenderer implements TableCellRenderer {

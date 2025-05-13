@@ -175,4 +175,10 @@ public class ImageDropPanel extends JPanel {
     revalidate();
     repaint();
   }
+
+  public void clearALlImages() {
+    imagesContainer.removeAll();
+    revalidate();
+    repaint();
+  }
 }

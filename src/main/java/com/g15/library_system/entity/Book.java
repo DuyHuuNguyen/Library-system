@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ToString(callSuper = true)
 @Getter
 @SuperBuilder
@@ -39,5 +41,21 @@ public class Book extends BaseEntity {
 
   public boolean hasSameTitle(String title) {
     return this.title.equalsIgnoreCase(title);
+  }
+
+  public boolean isSameInfo(String text) {
+    return this.isSameAuthor(text) || this.isSameTitle(text) || this.isSamePublisher(text);
+  }
+
+  public boolean isSameTitle(String text) {
+    return this.title.toLowerCase().contains(text.toLowerCase());
+  }
+
+  public boolean isSameAuthor(String text) {
+    return this.author.toLowerCase().contains(text.toLowerCase());
+  }
+
+  public boolean isSamePublisher(String text) {
+    return this.publisher.toLowerCase().contains(text.toLowerCase());
   }
 }
