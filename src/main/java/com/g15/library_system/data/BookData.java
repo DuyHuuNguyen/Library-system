@@ -3,14 +3,17 @@ package com.g15.library_system.data;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
+import com.g15.library_system.observers.BookLendedObserver;
+import com.g15.library_system.observers.SubjectBookLended;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class BookData implements Data<Book> {
+public class BookData implements Data<Book>, SubjectBookLended {
   private static final BookData INSTANCE = new BookData();
   private final List<Book> books = new ArrayList<>();
+  private List<BookLendedObserver> observers = new ArrayList<>();
 
   private BookData() {
     this.initializeData();
@@ -19,6 +22,7 @@ public class BookData implements Data<Book> {
   @Override
   public void add(Book b) {
     this.books.add(b);
+    notifyObservers();
   }
 
   @Override
@@ -299,5 +303,23 @@ public class BookData implements Data<Book> {
                 .build());
 
     books.addAll(bookInt);
+  }
+
+  // observer
+  @Override
+  public void registerObserver(BookLendedObserver o) {
+    observers.add(o);
+  }
+
+  @Override
+  public void removeObserver(BookLendedObserver o) {
+    observers.remove(o);
+  }
+
+  @Override
+  public void notifyObservers() {
+    for (BookLendedObserver o : observers) {
+      o.update();
+    }
   }
 }

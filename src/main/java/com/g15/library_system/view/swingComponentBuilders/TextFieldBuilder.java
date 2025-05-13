@@ -14,7 +14,7 @@ import javax.swing.event.DocumentListener;
 
 public class TextFieldBuilder extends JTextField {
   private Color borderColor;
-  private static final int LIMIT_POPUPMENU = 5;
+  private static final int LIMIT_POPUPMENU = 8;
   private boolean popupEnabled = true;
 
   public static TextFieldBuilder builder() {
@@ -146,7 +146,7 @@ public class TextFieldBuilder extends JTextField {
               }
 
               popupMenu.setPopupSize(
-                  getWidth(), Math.min(suggestions.size(), LIMIT_POPUPMENU) * 25);
+                  getWidth(), Math.min(suggestions.size(), LIMIT_POPUPMENU) * 30);
               popupMenu.show(TextFieldBuilder.this, 0, getHeight());
 
               requestFocusInWindow();

@@ -1,4 +1,4 @@
-package com.g15.library_system.view.overrideComponent;
+package com.g15.library_system.view.managementView.manageBooks;
 
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.BookStatus;

@@ -8,7 +8,6 @@ import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.mapper.impl.BookMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.UpsertBookPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
 import javax.swing.*;

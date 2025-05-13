@@ -5,7 +5,6 @@ import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.tableModel.CustomTableModel;
 import com.g15.library_system.view.overrideComponent.tables.tableRenderers.*;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -234,8 +233,12 @@ public class CheckboxTablePanel extends JPanel {
         editButton.setText("Edit");
         editButton.setIcon("/icons/edit.png", 15);
 
-        new ToastNotification(JOptionPane.getFrameForComponent(this),  ToastNotification.Type.INFO,
-                ToastNotification.Location.TOP_CENTER, "Your changes have been saved.").showNotification();
+        new ToastNotification(
+                JOptionPane.getFrameForComponent(this),
+                ToastNotification.Type.INFO,
+                ToastNotification.Location.TOP_CENTER,
+                "Your changes have been saved.")
+            .showNotification();
 
         for (int i = 0; i < tableModel.getRowCount(); i++) {
           if (tableModel.getColumnName(0).equals("")) {
