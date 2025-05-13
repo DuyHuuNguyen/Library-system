@@ -1,5 +1,9 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
+import com.g15.library_system.data.BookData;
+import com.g15.library_system.entity.Book;
+import com.g15.library_system.enums.BookStatus;
+import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
@@ -141,6 +145,23 @@ public class ToolPanel extends JPanel {
     actionMap.put(
         "Export",
         () -> {
+          Book newBook =
+              Book.builder()
+                  .id(1L)
+                  .createdAt(System.currentTimeMillis())
+                  .updatedAt(System.currentTimeMillis())
+                  .author("J.K. Rowling")
+                  .bookStatus(BookStatus.OVERDUE)
+                  .title("Harry Potter and the Sorcerer's Stone")
+                  .publisher("Bloomsbury")
+                  .publishYear(1997)
+                  .genreType(GenreType.FANTASY)
+                  .currentQuantity(10)
+                  .totalQuantity(100)
+                  .build();
+          BookData.getInstance().add(newBook);
+          System.out.println(BookData.getInstance().getBooks().toString());
+
           JOptionPane.showMessageDialog(this, "Exporting...");
         });
     actionMap.put("Import", () -> JOptionPane.showMessageDialog(this, "Importing..."));

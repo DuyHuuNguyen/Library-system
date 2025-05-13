@@ -32,7 +32,7 @@ public class AddReturnBookPanel extends JPanel {
   private String[] columnNames = {
     "", "Book ID", "Cover Image", "Book Title", "Borrow Date", "Due Date", "Status"
   };
-  private Object[][] borrowData;
+  private Object[][] borrowData = new Object[][] {{""}};
   // controller
   private ReaderController readerController =
       ApplicationContextProvider.getBean(ReaderController.class);
@@ -53,20 +53,21 @@ public class AddReturnBookPanel extends JPanel {
     rightPanel.setLayout(new BorderLayout());
     rightPanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 20, 25));
 
-    borrowData =
-        new Object[][] {
-          {
-            "B01",
-            new ImageIcon(
-                getClass()
-                    .getResource("/images/Harry_Potter_The_Prison_of_Azkaban_Book_cover.jpg")),
-            "Java Programming",
-            "2025-04-20",
-            "2025-04-30",
-            "lost"
-          },
-          {"B02", null, "Data Structures", "2025-04-15", "2025-04-25", "lost"}
-        };
+    //    borrowData =
+    //        new Object[][] {
+    //          {
+    //            "B01",
+    //            new ImageIcon(
+    //                getClass()
+    //
+    // .getResource("/images/Harry_Potter_The_Prison_of_Azkaban_Book_cover.jpg")),
+    //            "Java Programming",
+    //            "2025-04-20",
+    //            "2025-04-30",
+    //            "lost"
+    //          },
+    //          {"B02", null, "Data Structures", "2025-04-15", "2025-04-25", "lost"}
+    //        };
 
     tablePanel = new CheckboxTablePanel(columnNames, borrowData);
     tablePanel.setAlwaysEditableColumns(Set.of(6));

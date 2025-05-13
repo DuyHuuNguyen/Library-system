@@ -20,6 +20,10 @@ public class CustomTableModel extends DefaultTableModel {
       return data;
     }
 
+    if (data == null || data.length == 0) {
+      return new Object[0][columnNames.length];
+    }
+
     Object[][] newData = new Object[data.length][data[0].length + 1];
     for (int i = 0; i < data.length; i++) {
       newData[i][0] = false;
