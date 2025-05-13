@@ -1,6 +1,7 @@
-package com.g15.library_system.view.overrideComponent;
+package com.g15.library_system.view.managementView.manageBooks;
 
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.overrideComponent.TablePanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
 import javax.swing.*;

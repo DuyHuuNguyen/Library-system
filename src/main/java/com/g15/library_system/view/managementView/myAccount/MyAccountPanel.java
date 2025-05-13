@@ -19,7 +19,7 @@ public class MyAccountPanel extends JPanel {
     JPanel mainPanel = new JPanel();
     mainPanel.setOpaque(false);
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
     // data
     this.personalData.put("First Name", "Jack 5 xu");
