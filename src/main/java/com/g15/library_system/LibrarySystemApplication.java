@@ -23,7 +23,6 @@ public class LibrarySystemApplication {
     FlatLaf.registerCustomDefaultsSource("raven.themes");
     UIManager.put(
         "defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13)); // set default font
-    UIManager.put("Separator.foreground", Color.WHITE);
     FlatMacLightLaf.setup(); // light mode
     //    FlatMacDarkLaf.setup();//dark mode (dang bug)
 

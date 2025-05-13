@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
-@Deprecated
+// @Deprecated
 public class UpsertBookPanel extends JPanel {
   private JTextField txtBookTitle;
   private JTextField txtQuantity;

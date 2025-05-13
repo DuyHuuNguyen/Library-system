@@ -8,12 +8,12 @@ import java.awt.*;
 import javax.swing.*;
 
 public class LoginFrame extends JFrame {
-  private String backgroundImagePath = "/images/NLULibrary.jpg";
+  private String backgroundImagePath = "/images/NLULibrary6.jpg";
 
   public LoginFrame() {
     this.setTitle("Library Management");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setSize(new Dimension(1000, 700));
+    this.setSize(new Dimension(800, 750));
     this.setLocationRelativeTo(null);
     this.setLocationRelativeTo(null);
     this.setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());

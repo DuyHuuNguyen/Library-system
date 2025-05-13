@@ -10,6 +10,6 @@ public class CustomCheckBoxEditor extends DefaultCellEditor {
     super(new JCheckBox());
     checkBox = (JCheckBox) getComponent();
     checkBox.setHorizontalAlignment(SwingConstants.CENTER);
-    checkBox.setBackground(Color.WHITE);
+    checkBox.setBackground(Color.PINK);
   }
 }
