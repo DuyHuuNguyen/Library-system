@@ -1,5 +1,6 @@
 package com.g15.library_system.facade.impl;
 
+import com.g15.library_system.dto.BookWithQuantityDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
@@ -32,5 +33,10 @@ public class BookFacadeImpl implements BookFacade {
   @Override
   public List<BookResponse> findAll() {
     return this.bookService.findAll().stream().map(this.bookMapper::toBookResponse).toList();
+  }
+
+  @Override
+  public Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books) {
+    return this.bookMapper.toBookDataWithQuantity(books);
   }
 }

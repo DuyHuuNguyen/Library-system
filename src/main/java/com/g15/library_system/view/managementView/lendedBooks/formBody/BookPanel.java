@@ -3,6 +3,7 @@ package com.g15.library_system.view.managementView.lendedBooks.formBody;
 import com.g15.library_system.controller.BookController;
 import com.g15.library_system.dto.BookWithQuantityDTO;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.facade.BookFacade;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
@@ -31,6 +32,7 @@ public class BookPanel extends JPanel {
   private List<BookWithQuantityDTO> books;
 
   private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
+  private BookFacade bookFacade = ApplicationContextProvider.getBean(BookFacade.class);
 
   private class ButtonPanel extends JPanel {
     private CustomButton addBookBtn, backBtn, summitBtn;
@@ -114,10 +116,10 @@ public class BookPanel extends JPanel {
 
       summitBtn.addActionListener(
           e -> {
-            addBookPanel.cancel();
-            books = addBookPanel.getSelectedBooks();
+            tablePanel.updateTable(addBookPanel.getSelectedBooks());
             cardLayout.show(cardPanel, "TABLE");
             showButton(ButtonState.ADD_BOOK);
+            addBookPanel.cancel();
           });
     }
 
@@ -133,12 +135,18 @@ public class BookPanel extends JPanel {
     public TablePanel() {
       setLayout(new BorderLayout());
 
-      String[] columnNames = {"", "test", "test", "test"};
+      String[] columnNames = {"", "Title", "Author", "GenreType", "Quantity"};
 
-      Object[][] tableData = {};
+      Object[][] tableData = bookFacade.toBookDataWithQuantity(books);
 
       bookTable = new CheckboxTablePanel(columnNames, tableData);
       add(bookTable, BorderLayout.CENTER);
+    }
+
+    public void updateTable(List<BookWithQuantityDTO> selectedBooks) {
+      books = selectedBooks;
+      bookTable.removeAllDataTable();
+      bookTable.addDataToTable(bookFacade.toBookDataWithQuantity(books));
     }
   }
 
@@ -229,7 +237,7 @@ public class BookPanel extends JPanel {
               new AncestorListener() {
                 @Override
                 public void ancestorAdded(AncestorEvent event) {
-                  SwingUtilities.invokeLater(() -> titleTF.requestFocusInWindow());
+                  titleTF.requestFocusInWindow();
                 }
 
                 @Override
@@ -266,30 +274,10 @@ public class BookPanel extends JPanel {
     add(buttonPanel, BorderLayout.NORTH);
     add(cardPanel, BorderLayout.CENTER);
   }
-
-
+  
   public void cancel() {
     cardLayout.show(cardPanel, "TABLE");
     buttonPanel.showButton(ButtonPanel.ButtonState.ADD_BOOK);
     addBookPanel.cancel();
   }
-
-  @Override
-  public void addNotify() {
-    super.addNotify();
-    addAncestorListener(
-            new AncestorListener() {
-              @Override
-              public void ancestorAdded(AncestorEvent event) {
-                cancel();
-              }
-
-              @Override
-              public void ancestorRemoved(AncestorEvent event) {}
-
-              @Override
-              public void ancestorMoved(AncestorEvent event) {}
-            });
-  }
-
 }
