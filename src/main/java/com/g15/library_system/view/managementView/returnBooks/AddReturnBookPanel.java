@@ -32,7 +32,7 @@ public class AddReturnBookPanel extends JPanel {
   private String[] columnNames = {
     "", "Book ID", "Cover Image", "Book Title", "Borrow Date", "Due Date", "Status"
   };
-  private Object[][] borrowData = new Object[][] {{""}};
+  private Object[][] borrowData = new Object[][] {};
   // controller
   private ReaderController readerController =
       ApplicationContextProvider.getBean(ReaderController.class);

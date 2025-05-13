@@ -22,5 +22,4 @@ public class DateUtil {
   public static long convertToEpochMilli(LocalDate date) {
     return date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
   }
-
 }

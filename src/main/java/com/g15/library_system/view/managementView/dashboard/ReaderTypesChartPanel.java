@@ -41,9 +41,6 @@ public class ReaderTypesChartPanel extends RoundedShadowPanel implements BookObs
       chartDataset.setValue(entry.getKey(), entry.getValue());
     }
 
-
-
-
     pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
     PiePlot plot = (PiePlot) pieChart.getPlot();
     chartDataset = (DefaultPieDataset) plot.getDataset();
