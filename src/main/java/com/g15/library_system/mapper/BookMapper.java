@@ -8,4 +8,6 @@ public interface BookMapper {
   BookResponse toBookResponse(Book book);
 
   Object[][] toBookData(List<BookResponse> bookResponses);
+
+  String toDataSearch(Book book, String text);
 }

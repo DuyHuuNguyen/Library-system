@@ -33,4 +33,25 @@ public class BookFacadeImpl implements BookFacade {
   public List<BookResponse> findAll() {
     return this.bookService.findAll().stream().map(this.bookMapper::toBookResponse).toList();
   }
+
+  @Override
+  public void add(Book newBook) {
+    this.bookService.save(newBook);
+  }
+
+  @Override
+  public List<String> supportSearch(String text) {
+    return this.bookService.findAll().stream()
+        .filter(book -> book.isSameInfo(text))
+        .map(book -> this.bookMapper.toDataSearch(book, text))
+        .toList();
+  }
+
+  @Override
+  public List<BookResponse> findByTextOfTextFieldSearchOption(String text) {
+    return this.bookService.findAll().stream()
+        .filter(book -> book.isSameInfo(text))
+        .map(book -> this.bookMapper.toBookResponse(book))
+        .toList();
+  }
 }

@@ -11,4 +11,10 @@ public interface BookFacade {
   Optional<Book> findByTitle(String selectedTitle);
 
   List<BookResponse> findAll();
+
+  void add(Book newBook);
+
+  List<String> supportSearch(String text);
+
+  List<BookResponse> findByTextOfTextFieldSearchOption(String text);
 }

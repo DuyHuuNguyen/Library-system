@@ -3,6 +3,7 @@ package com.g15.library_system.view.managementView.manageBooks;
 import com.g15.library_system.controller.BookController;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.enums.ApiKey;
 import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.mapper.impl.BookMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
@@ -12,6 +13,7 @@ import com.g15.library_system.view.overrideComponent.UpsertBookPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
 import javax.swing.*;
 import org.slf4j.Logger;
@@ -44,7 +46,23 @@ public class ManageBookPanel extends JPanel {
   private java.util.List<BookResponse> bookResponses = new ArrayList<>();
   private Optional<Book> bookModify;
 
+  private Map<ApiKey, Runnable> mapAPIs =
+      Map.of(
+          ApiKey.SELECTED_TABLE,
+          () -> this.findBookModifySelected(),
+          ApiKey.ADD,
+          () -> this.addNewBook(),
+          ApiKey.RELOAD,
+          () -> this.loadDataTable(),
+          ApiKey.SEARCH,
+          () -> this.findByTextOfTextFieldSearchOptionUpDataToTable());
+
+  private UpsertBookPanel addNewBookPanel;
+  private UpsertBookPanel modifyBookPanel;
+
   private CardLayout cardLayout;
+
+  private ToolPanel toolPanel;
 
   public static final String CONSTRAINT_TABLE_BOOK = "book_table";
   public static final String CONSTRAINT_ADD_NEW_BOOK = "add_new_book";
@@ -57,9 +75,8 @@ public class ManageBookPanel extends JPanel {
     this.cardLayout = new CardLayout();
     this.panelContent = new JPanel(cardLayout);
 
-    this.add(
-        new ToolPanel(cardLayout, panelContent, () -> this.findBookModifySelected()),
-        BorderLayout.NORTH);
+    this.toolPanel = new ToolPanel(cardLayout, panelContent, mapAPIs);
+    this.add(toolPanel, BorderLayout.NORTH);
 
     this.panelContent.setBackground(Color.GREEN);
 
@@ -76,11 +93,13 @@ public class ManageBookPanel extends JPanel {
 
     this.panelContent.add(bookFormAndDropImagesPanel, CONSTRAINT_ADD_NEW_BOOK);
 
-    this.panelContent.add(new UpsertBookPanel(1000, 500), CONSTRAINT_MODIFY_BOOK);
+    this.addNewBookPanel = new UpsertBookPanel(1000, 500);
+    this.panelContent.add(this.addNewBookPanel, CONSTRAINT_MODIFY_BOOK);
 
     this.panelContent.add(new NotifyNewBookPanel(), CONSTRAINT_NOTIFY);
 
-    this.panelContent.add(new UpsertBookPanel(1000, 500, this.bookModify), CONSTRAINT_MODIFY_BOOK);
+    this.modifyBookPanel = new UpsertBookPanel(100, 500);
+    this.panelContent.add(modifyBookPanel, CONSTRAINT_MODIFY_BOOK);
 
     add(panelContent, BorderLayout.CENTER);
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
@@ -107,9 +126,26 @@ public class ManageBookPanel extends JPanel {
 
   private void findBookModifySelected() {
     var data = this.checkboxTablePanel.getSelectedRowData();
-    for (var d : data) {
-      log.info(d.toString());
-    }
     this.bookModify = this.bookController.findByTitle(data[1].toString());
+    this.modifyBookPanel.addData(bookModify);
+    log.info("selected book {}", bookModify.toString());
+  }
+
+  private void addNewBook() {
+    var newBook = this.addNewBookPanel.getNewBook();
+    this.bookController.addNewBook(newBook.get());
+  }
+
+  public void findByTextOfTextFieldSearchOptionUpDataToTable() {
+    var text = this.toolPanel.getTextOfTextFieldSearchOption();
+    this.removeAllDataTable();
+
+    this.bookResponses.clear();
+
+    this.bookResponses.addAll(this.bookController.findByTextOfTextFieldSearchOption(text));
+    for (var item : this.bookResponses) {
+      log.info("data {}", item);
+    }
+    this.checkboxTablePanel.addDataToTable(this.bookMapper.toBookData(this.bookResponses));
   }
 }

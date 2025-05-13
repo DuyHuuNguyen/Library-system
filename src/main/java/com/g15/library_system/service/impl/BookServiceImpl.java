@@ -32,4 +32,9 @@ public class BookServiceImpl implements BookService {
   public Optional<Book> findByTitle(String title) {
     return bookRepository.findByTitle(title);
   }
+
+  @Override
+  public void save(Book newBook) {
+    this.bookRepository.save(newBook);
+  }
 }

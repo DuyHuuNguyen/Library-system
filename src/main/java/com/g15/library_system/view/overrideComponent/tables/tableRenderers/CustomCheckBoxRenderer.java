@@ -13,6 +13,7 @@ public class CustomCheckBoxRenderer extends JCheckBox implements TableCellRender
 
   public Component getTableCellRendererComponent(
       JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    System.out.println(value.toString());
     setSelected(value != null && (Boolean) value);
     return this;
   }

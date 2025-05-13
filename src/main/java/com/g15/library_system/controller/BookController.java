@@ -17,11 +17,23 @@ public class BookController {
     return bookFacade.searchTitleContains(title);
   }
 
+  public List<String> supportSearch(String text) {
+    return bookFacade.supportSearch(text);
+  }
+
   public Optional<Book> findByTitle(String title) {
     return bookFacade.findByTitle(title);
   }
 
   public List<BookResponse> findALl() {
     return this.bookFacade.findAll();
+  }
+
+  public void addNewBook(Book newBook) {
+    this.bookFacade.add(newBook);
+  }
+
+  public List<BookResponse> findByTextOfTextFieldSearchOption(String text) {
+    return this.bookFacade.findByTextOfTextFieldSearchOption(text);
   }
 }

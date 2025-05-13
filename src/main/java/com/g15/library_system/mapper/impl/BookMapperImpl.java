@@ -48,4 +48,13 @@ public class BookMapperImpl implements BookMapper {
     }
     return data;
   }
+
+  @Override
+  public String toDataSearch(Book book, String text) {
+    if (book.isSamePublisher(text)) return book.getPublisher();
+
+    if (book.isSameTitle(text)) return book.getTitle();
+
+    return book.getAuthor();
+  }
 }

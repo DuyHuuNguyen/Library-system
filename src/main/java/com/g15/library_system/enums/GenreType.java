@@ -14,5 +14,18 @@ public enum GenreType {
   MYSTERY,
   HORROR,
   MODERNIST,
-  DEMO
+  DEMO;
+
+  public static GenreType find(String name) {
+    for (var item : values()) {
+      if (item.toString().equalsIgnoreCase(name)) {
+        return item;
+      }
+    }
+    return DEMO;
+  }
+
+  public static GenreType[] getAll() {
+    return values();
+  }
 }
