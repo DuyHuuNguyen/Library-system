@@ -1,5 +1,6 @@
 package com.g15.library_system.mapper.impl;
 
+import com.g15.library_system.dto.BookWithQuantityDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.Status;
@@ -44,6 +45,25 @@ public class BookMapperImpl implements BookMapper {
             book.getTotalQuantity().toString(),
             Status.AVAILABLE.toString().toLowerCase()
           };
+    }
+    return data;
+  }
+
+  @Override
+  public Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books) {
+    if (books == null) return null;
+    Object[][] data = new Object[books.size()][];
+    for (int i = 0; i < data.length; i++) {
+      var bookWithQuantityDTO = books.get(i);
+      Book book = bookWithQuantityDTO.getBook();
+      data[i] =
+              new Object[] {
+                      false,
+                      book.getTitle(),
+                      book.getAuthor(),
+                      book.getGenreType().toString(),
+                      bookWithQuantityDTO.getQuantity().toString()
+              };
     }
     return data;
   }

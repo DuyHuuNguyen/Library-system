@@ -84,7 +84,11 @@ public class DetailPanel extends JPanel {
     gbc.gridy++;
     add(notificationL, gbc);
     gbc.gridy++;
-    add(notificationSB, gbc);
+    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    panel.add(notificationSB);
+    panel.setPreferredSize(new Dimension(30, 40));
+    panel.setOpaque(false);
+    add(panel, gbc);
   }
 
   public void cancel() {
