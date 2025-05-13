@@ -1,16 +1,19 @@
 package com.g15.library_system.view.managementView.manageBooks;
 
+import com.g15.library_system.controller.BookController;
 import com.g15.library_system.entity.Book;
-import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentGenerators.TextFieldGenerator;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Optional;
 import javax.swing.*;
+import lombok.extern.slf4j.Slf4j;
 
-// @Deprecated
+@Slf4j
 public class UpsertBookPanel extends JPanel {
   private JTextField txtBookTitle;
   private JTextField txtQuantity;
@@ -21,6 +24,8 @@ public class UpsertBookPanel extends JPanel {
 
   private ImageDropPanel featurePanel;
 
+  private Optional<Book> book;
+  private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
   private int width;
   private int height;
 
@@ -30,19 +35,45 @@ public class UpsertBookPanel extends JPanel {
     this.initPanel();
   }
 
-  public UpsertBookPanel(int width, int height, Book book) {
+  public UpsertBookPanel() {}
+
+  public UpsertBookPanel(int width, int height, Optional<Book> book) {
+    this.book = book;
     this.width = width;
     this.height = height;
     this.initPanel();
 
-    this.txtBookTitle.setText(book.getTitle());
-    txtQuantity.setText(String.valueOf(book.getTotalQuantity()));
-    txtAuthor.setText(book.getAuthor());
-    txtPublisher.setText(book.getPublisher());
-    txtPublisherYear.setText(book.getPublishYear() + "");
-    txtGenre.setText(book.getGenreType() + "");
+    if (book == null) {
+      log.error("Book not found");
+      return;
+    }
+    this.txtBookTitle.setText(this.book.get().getTitle());
+    txtQuantity.setText(String.valueOf(this.book.get().getTotalQuantity()));
+    txtAuthor.setText(this.book.get().getAuthor());
+    txtPublisher.setText(this.book.get().getPublisher());
+    txtPublisherYear.setText(this.book.get().getPublishYear() + "");
+    txtGenre.setText(this.book.get().getGenreType() + "");
 
-    this.featurePanel.loadImagesFromUrls(book.getImages());
+    this.featurePanel.loadImagesFromUrls(this.book.get().getImages());
+  }
+
+  public Optional<Book> getNewBook() {
+    if (book == null || book.isEmpty()) {
+      var newBook =
+          Book.builder()
+              .title(this.txtBookTitle.getText())
+              .totalQuantity(Integer.parseInt(this.txtQuantity.getText()))
+              .author(txtAuthor.getText())
+              .publisher(txtPublisher.getText())
+              .publishYear(Integer.parseInt(txtPublisherYear.getText()))
+              .images(this.featurePanel.getImageUrls())
+              .currentQuantity(Integer.parseInt(this.txtQuantity.getText()))
+              .genreType(GenreType.find(this.txtGenre.getText()))
+              .build();
+      log.info("new book {}", newBook.toString());
+      return this.book = Optional.of(newBook);
+    }
+    return this.book;
   }
 
   public void initPanel() {
@@ -131,7 +162,34 @@ public class UpsertBookPanel extends JPanel {
 
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     JButton btnCancel = CustomButtonBuilder.builder().text("cancel");
+    btnCancel.addActionListener(
+        e -> {
+          this.clearDataInPanel();
+          ToastNotification notification =
+              new ToastNotification(
+                  JOptionPane.getFrameForComponent(this),
+                  ToastNotification.Type.INFO,
+                  ToastNotification.Location.TOP_CENTER,
+                  "Cancel successful");
+          notification.showNotification();
+        });
     JButton btnAddBook = CustomButtonBuilder.builder().text("add");
+
+    btnAddBook.addActionListener(
+        e -> {
+          var book = this.getNewBook();
+          this.bookController.addNewBook(book.get());
+          this.clearDataInPanel();
+
+          ToastNotification notification =
+              new ToastNotification(
+                  JOptionPane.getFrameForComponent(this),
+                  ToastNotification.Type.INFO,
+                  ToastNotification.Location.TOP_CENTER,
+                  "Add book successful");
+          notification.showNotification();
+        });
+
     buttonPanel.add(btnCancel);
     buttonPanel.add(btnAddBook);
     buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
@@ -153,31 +211,24 @@ public class UpsertBookPanel extends JPanel {
     return panel;
   }
 
-  public static void main(String[] args) {
+  public void clearDataInPanel() {
+    this.txtBookTitle.setText("");
+    txtQuantity.setText("");
+    txtAuthor.setText("");
+    txtPublisher.setText("");
+    txtPublisherYear.setText("");
+    txtGenre.setText("");
+    featurePanel.clearALlImages();
+  }
 
-    var l = new ArrayList<String>();
-    l.add("src/main/resources/icons/removeIconTrashBin.png");
-    var b =
-        Book.builder()
-            .id(5L)
-            .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
-            .author("J.R.R. Tolkien")
-            .bookStatus(BookStatus.AVAILABLE)
-            .title("The Hobbit")
-            .publisher("George Allen & Unwin")
-            .publishYear(1937)
-            .genreType(GenreType.FANTASY)
-            .currentQuantity(7)
-            .totalQuantity(35)
-            .images(l)
-            .build();
+  public void addData(Optional<Book> bookModify) {
+    this.txtBookTitle.setText(bookModify.get().getTitle());
+    txtQuantity.setText(String.valueOf(bookModify.get().getTotalQuantity()));
+    txtAuthor.setText(bookModify.get().getAuthor());
+    txtPublisher.setText(bookModify.get().getPublisher());
+    txtPublisherYear.setText(bookModify.get().getPublishYear() + "");
+    txtGenre.setText(bookModify.get().getGenreType() + "");
 
-    JFrame frame = new JFrame("Top Panel UI");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(600, 100);
-    frame.add(new UpsertBookPanel(300, 300, b));
-    frame.setLocationRelativeTo(null);
-    frame.setVisible(true);
+    this.featurePanel.loadImagesFromUrls(bookModify.get().getImages());
   }
 }

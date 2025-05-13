@@ -13,5 +13,11 @@ public interface BookFacade {
 
   List<BookResponse> findAll();
 
+  void add(Book newBook);
+
+  List<String> supportSearch(String text);
+
+  List<BookResponse> findByTextOfTextFieldSearchOption(String text);
+
   Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books);
 }
