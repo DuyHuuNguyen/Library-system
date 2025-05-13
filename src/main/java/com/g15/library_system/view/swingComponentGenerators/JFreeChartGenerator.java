@@ -19,16 +19,16 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 public class JFreeChartGenerator {
-  // 1. Biểu đồ cột
-  public static JPanel createBarChart(
+
+  public static JFreeChart createBarChart(
       String chartTitle,
       String categoryAxis_X,
       String valueAxis_Y,
-      Map<String, ? extends Number> data) {
-    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    for (Map.Entry<String, ? extends Number> entry : data.entrySet()) {
-      dataset.addValue(entry.getValue(), valueAxis_Y, entry.getKey());
-    }
+      DefaultCategoryDataset dataset) {
+    //    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    //    for (Map.Entry<String, ? extends Number> entry : data.entrySet()) {
+    //      dataset.addValue(entry.getValue(), valueAxis_Y, entry.getKey());
+    //    }
 
     JFreeChart barChart =
         ChartFactory.createBarChart(chartTitle, categoryAxis_X, valueAxis_Y, dataset);
@@ -40,22 +40,16 @@ public class JFreeChartGenerator {
     //        renderer.setSeriesPaint(0, Style.CHART_BAR_COLOR_ORANGE); // set color for the bar
     //        renderer.setSeriesPaint(1, Style.CHART_BAR_COLOR_YELLOW);
     //        renderer.setSeriesPaint(2, Style.LOGIN_FRAME_BACKGROUND_COLOR_BLUE);
-    //        renderer.setSeriesPaint(3, Style.CONFIRM_BUTTON_COLOR_GREEN);
+    renderer.setSeriesPaint(0, Style.CONFIRM_BUTTON_COLOR_GREEN);
     renderer.setDrawBarOutline(false);
-    return new ChartPanel(barChart);
+    return barChart;
   }
 
-  // 2. Biểu đồ đường
-  public static JPanel createLineChart(
+  public static JFreeChart createLineChart(
       String chartTitle,
       String categoryAxis_X,
       String valueAxis_Y,
-      Map<String, ? extends Number> data) {
-    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    for (Map.Entry<String, ? extends Number> entry : data.entrySet()) {
-      dataset.addValue(entry.getValue(), valueAxis_Y, entry.getKey());
-    }
-
+      DefaultCategoryDataset dataset) {
     JFreeChart lineChart =
         ChartFactory.createLineChart(chartTitle, categoryAxis_X, valueAxis_Y, dataset);
     CategoryPlot lineChartPlot = lineChart.getCategoryPlot();
@@ -66,15 +60,10 @@ public class JFreeChartGenerator {
     renderer.setDefaultItemLabelsVisible(true);
     renderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator());
     lineChartPlot.setRenderer(renderer);
-    return new ChartPanel(lineChart);
+    return lineChart;
   }
 
-  // 3. Biểu đồ tròn
-  public static JPanel createPieChart(String chartTitle, Map<String, ? extends Number> data) {
-    DefaultPieDataset dataset = new DefaultPieDataset();
-    for (Map.Entry<String, ? extends Number> entry : data.entrySet()) {
-      dataset.setValue(entry.getKey(), entry.getValue());
-    }
+  public static JFreeChart createPieChart(String chartTitle, DefaultPieDataset dataset) {
 
     JFreeChart pieChart = ChartFactory.createPieChart(chartTitle, dataset, true, true, false);
 
@@ -84,6 +73,6 @@ public class JFreeChartGenerator {
         new StandardPieSectionLabelGenerator(
             "{0}: {2}", new DecimalFormat("0"), new DecimalFormat("0.00%")));
 
-    return new ChartPanel(pieChart);
+    return pieChart;
   }
 }

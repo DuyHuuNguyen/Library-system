@@ -7,5 +7,9 @@ import java.util.Optional;
 public interface ReaderFacade {
   List<String> searchNameContains(String name);
 
+  List<String> searchIdContains(String readerId);
+
   Optional<Reader> findByName(String name);
+
+  Optional<Reader> findById(String id);
 }

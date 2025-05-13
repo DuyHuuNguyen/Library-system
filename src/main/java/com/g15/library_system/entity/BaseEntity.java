@@ -40,6 +40,10 @@ public class BaseEntity {
     return this.id == id;
   }
 
+  public boolean idContains(Long id) {
+    return this.id.toString().contains(id.toString());
+  }
+
   //  public boolean isActive(BookActiveType type) {
   //    return this.isActive == type.getActive();
   //  }

@@ -1,5 +1,6 @@
 package com.g15.library_system.facade.impl;
 
+import com.g15.library_system.dto.BookWithQuantityDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
@@ -53,5 +54,10 @@ public class BookFacadeImpl implements BookFacade {
         .filter(book -> book.isSameInfo(text))
         .map(book -> this.bookMapper.toBookResponse(book))
         .toList();
+  }
+
+  @Override
+  public Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books) {
+    return this.bookMapper.toBookDataWithQuantity(books);
   }
 }

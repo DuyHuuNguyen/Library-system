@@ -30,4 +30,17 @@ public class Reader extends User {
     return this.firstName.toLowerCase().contains(strings[0])
         && this.lastName.toLowerCase().contains(strings[1]);
   }
+
+  public boolean findById(String id) {
+    try {
+      long parsedId = Long.parseLong(id);
+      return this.isSameId(parsedId);
+    } catch (NumberFormatException e) {
+      return false;
+    }
+  }
+
+  public boolean idContains(Long readerId) {
+    return super.idContains(readerId);
+  }
 }

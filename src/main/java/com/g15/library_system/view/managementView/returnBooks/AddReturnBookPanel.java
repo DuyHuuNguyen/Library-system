@@ -1,16 +1,18 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
+import com.g15.library_system.controller.ReaderController;
+import com.g15.library_system.entity.Reader;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import com.g15.library_system.view.swingComponentBuilders.ButtonBuilder;
+import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.Set;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 
 public class AddReturnBookPanel extends JPanel {
   private ReaderInfoPanel readerInfoPanel;
@@ -26,10 +28,14 @@ public class AddReturnBookPanel extends JPanel {
       statusField;
   private JTextArea txtNotes;
   private JLabel lblStaff;
+  // data
   private String[] columnNames = {
     "", "Book ID", "Cover Image", "Book Title", "Borrow Date", "Due Date", "Status"
   };
-  private Object[][] borrowData;
+  private Object[][] borrowData = new Object[][] {{""}};
+  // controller
+  private ReaderController readerController =
+      ApplicationContextProvider.getBean(ReaderController.class);
 
   public AddReturnBookPanel() {
     this.setLayout(new BorderLayout(10, 15));
@@ -47,20 +53,21 @@ public class AddReturnBookPanel extends JPanel {
     rightPanel.setLayout(new BorderLayout());
     rightPanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 20, 25));
 
-    borrowData =
-        new Object[][] {
-          {
-            "B01",
-            new ImageIcon(
-                getClass()
-                    .getResource("/images/Harry_Potter_The_Prison_of_Azkaban_Book_cover.jpg")),
-            "Java Programming",
-            "2025-04-20",
-            "2025-04-30",
-            "lost"
-          },
-          {"B02", null, "Data Structures", "2025-04-15", "2025-04-25", "lost"}
-        };
+    //    borrowData =
+    //        new Object[][] {
+    //          {
+    //            "B01",
+    //            new ImageIcon(
+    //                getClass()
+    //
+    // .getResource("/images/Harry_Potter_The_Prison_of_Azkaban_Book_cover.jpg")),
+    //            "Java Programming",
+    //            "2025-04-20",
+    //            "2025-04-30",
+    //            "lost"
+    //          },
+    //          {"B02", null, "Data Structures", "2025-04-15", "2025-04-25", "lost"}
+    //        };
 
     tablePanel = new CheckboxTablePanel(columnNames, borrowData);
     tablePanel.setAlwaysEditableColumns(Set.of(6));
@@ -86,11 +93,28 @@ public class AddReturnBookPanel extends JPanel {
 
       JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
       searchPanel.setOpaque(false);
-      txtSearchReader = new JTextField(25);
+      txtSearchReader =
+          TextFieldBuilder.builder()
+              .font(Style.FONT_PLAIN_13)
+              .preferredSize(new Dimension(350, 35))
+              .popupMenu(
+                  name -> {
+                    return readerController.searchIdContains(name);
+                  },
+                  selectedName -> {
+                    Reader reader = readerController.findById(selectedName).orElse(null);
+                    if (reader != null) {
+                      txtReaderID.setText(String.valueOf(reader.getId()));
+                      txtFullName.setText(reader.getFullName());
+                      txtEmail.setText(reader.getEmail());
+                      txtPhone.setText(reader.getPhoneNumber());
+                      //                          txtReturnDate.setText(reader);
+
+                    }
+                  });
+
       txtSearchReader.putClientProperty("JTextField.placeholderText", "Enter Reader ID...");
       searchPanel.add(txtSearchReader);
-      JButton btnSearch = new JButton("Search");
-      searchPanel.add(btnSearch);
       gbc.gridx = 0;
       gbc.gridy = 0;
       gbc.gridwidth = 3;
@@ -147,6 +171,7 @@ public class AddReturnBookPanel extends JPanel {
 
       gbc.gridx = 2;
       statusField = new JTextField("On due date");
+      statusField.setFont(Style.FONT_BOLD_13);
       statusField.setHorizontalAlignment(JTextField.CENTER);
       statusField.setBackground(Style.GREEN_STATUS_BACKGROUND_COLOR);
       statusField.setForeground(Style.GREEN_STATUS_FOREGROUND_COLOR);
@@ -157,7 +182,7 @@ public class AddReturnBookPanel extends JPanel {
       gbc.gridx = 0;
       this.add(new JLabel("Late Fee (VND):"), gbc);
       gbc.gridx = 1;
-      txtLateFee = new JTextField(10);
+      txtLateFee = new JTextField("0");
       txtLateFee.setEditable(false);
       this.add(txtLateFee, gbc);
 
@@ -194,6 +219,7 @@ public class AddReturnBookPanel extends JPanel {
               .textColor(Color.white)
               .font(Style.FONT_BOLD_15)
               .preferredSize(new Dimension(150, 40));
+      confirmBt.addActionListener(e -> clearPanelData());
 
       cancelBt =
           ButtonBuilder.builder("Cancel")
@@ -201,6 +227,7 @@ public class AddReturnBookPanel extends JPanel {
               .textColor(Color.BLACK)
               .font(Style.FONT_BOLD_15)
               .preferredSize(new Dimension(150, 40));
+      cancelBt.addActionListener(e -> clearPanelData());
 
       buttonPanel.add(cancelBt);
       buttonPanel.add(confirmBt);
@@ -216,12 +243,9 @@ public class AddReturnBookPanel extends JPanel {
     cancelBt.addActionListener(actionListener);
   }
 
-  public TitledBorder createTitleLineBorder(String title) {
-    LineBorder border = new LineBorder(Style.BLUE_MENU_BACKGROUND_COLOR, 2);
-    TitledBorder titledBorder = BorderFactory.createTitledBorder(border, title);
-    titledBorder.setTitleColor(Style.BLUE_MENU_BACKGROUND_COLOR);
-    titledBorder.setTitleFont(Style.FONT_BOLD_20);
-    return titledBorder;
+  public void clearPanelData() {
+    clearTableData();
+    clearAllTextField();
   }
 
   public void clearAllTextField() {
@@ -231,11 +255,16 @@ public class AddReturnBookPanel extends JPanel {
     txtEmail.setText("");
     txtPhone.setText("");
     txtReturnDate.setText("");
-    txtLateFee.setText("");
+    txtLateFee.setText("0");
     statusField.setText("");
+    txtNotes.setText("");
   }
 
-  public JPanel createHeaderPanel(String title) {
+  public void clearTableData() {
+    tablePanel.removeAllDataTable();
+  }
+
+  private JPanel createHeaderPanel(String title) {
     JPanel headerPanel = new JPanel();
     headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
     headerPanel.setOpaque(false);
