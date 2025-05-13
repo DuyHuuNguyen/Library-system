@@ -1,9 +1,9 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.CustomButton;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
-import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
+import com.g15.library_system.view.swingComponentBuilders.ButtonBuilder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -15,8 +15,15 @@ import javax.swing.border.TitledBorder;
 public class AddReturnBookPanel extends JPanel {
   private ReaderInfoPanel readerInfoPanel;
   private CheckboxTablePanel tablePanel;
-  private CustomButton confirmBt, cancelBt;
-  private JTextField txtReaderID, txtFullName, txtEmail, txtPhone, txtReturnDate, txtLateFee;
+  private JButton confirmBt, cancelBt;
+  private JTextField txtSearchReader,
+      txtReaderID,
+      txtFullName,
+      txtEmail,
+      txtPhone,
+      txtReturnDate,
+      txtLateFee,
+      statusField;
   private JTextArea txtNotes;
   private JLabel lblStaff;
   private String[] columnNames = {
@@ -25,17 +32,24 @@ public class AddReturnBookPanel extends JPanel {
   private Object[][] borrowData;
 
   public AddReturnBookPanel() {
-    this.setLayout(new BorderLayout());
-    this.setBackground(Color.WHITE);
+    this.setLayout(new BorderLayout(10, 15));
     readerInfoPanel = new ReaderInfoPanel();
 
-    JPanel rightPanel = new JPanel(new BorderLayout());
-    rightPanel.setBorder(createTitleLineBorder("Borrowed Books"));
+    RoundedShadowPanel leftPanel = new RoundedShadowPanel();
+    leftPanel.setLayout(new BorderLayout());
+    leftPanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 10, 25));
+
+    JPanel leftHeaderPanel = createHeaderPanel("Reader information");
+    leftPanel.add(leftHeaderPanel, BorderLayout.NORTH);
+    leftPanel.add(readerInfoPanel, BorderLayout.CENTER);
+
+    RoundedShadowPanel rightPanel = new RoundedShadowPanel();
+    rightPanel.setLayout(new BorderLayout());
+    rightPanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 20, 25));
 
     borrowData =
         new Object[][] {
           {
-            false,
             "B01",
             new ImageIcon(
                 getClass()
@@ -45,23 +59,25 @@ public class AddReturnBookPanel extends JPanel {
             "2025-04-30",
             "lost"
           },
-          {false, "B02", null, "Data Structures", "2025-04-15", "2025-04-25", "lost"}
+          {"B02", null, "Data Structures", "2025-04-15", "2025-04-25", "lost"}
         };
 
     tablePanel = new CheckboxTablePanel(columnNames, borrowData);
-    tablePanel.setEditableColumns(Set.of(5));
-    tablePanel.setStatusEditable(true);
+    tablePanel.setAlwaysEditableColumns(Set.of(6));
+
+    JPanel rightHeaderPanel = createHeaderPanel("Books borrowed");
+
+    rightPanel.add(rightHeaderPanel, BorderLayout.NORTH);
     rightPanel.add(tablePanel, BorderLayout.CENTER);
 
-    this.add(readerInfoPanel, BorderLayout.WEST);
+    this.add(leftPanel, BorderLayout.WEST);
     this.add(rightPanel, BorderLayout.CENTER);
   }
 
   private class ReaderInfoPanel extends JPanel {
     ReaderInfoPanel() {
       this.setLayout(new GridBagLayout());
-
-      this.setBorder(createTitleLineBorder("Return Information"));
+      this.setBackground(Color.WHITE);
 
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(6, 8, 6, 8);
@@ -69,9 +85,11 @@ public class AddReturnBookPanel extends JPanel {
       gbc.fill = GridBagConstraints.HORIZONTAL;
 
       JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-      JTextField txtSearchReader = new JTextField(25);
+      searchPanel.setOpaque(false);
+      txtSearchReader = new JTextField(25);
+      txtSearchReader.putClientProperty("JTextField.placeholderText", "Enter Reader ID...");
       searchPanel.add(txtSearchReader);
-      JButton btnSearch = new JButton("🔎 Search");
+      JButton btnSearch = new JButton("Search");
       searchPanel.add(btnSearch);
       gbc.gridx = 0;
       gbc.gridy = 0;
@@ -80,7 +98,10 @@ public class AddReturnBookPanel extends JPanel {
       gbc.gridx = 0;
       gbc.gridy++;
       gbc.gridwidth = 3;
-      this.add(new JSeparator(SwingConstants.HORIZONTAL), gbc);
+      JSeparator sp = new JSeparator(SwingConstants.HORIZONTAL);
+      sp.setPreferredSize(new Dimension(200, 2));
+      sp.setForeground(Color.LIGHT_GRAY);
+      this.add(sp, gbc);
 
       // Reader Info
       gbc.gridwidth = 1;
@@ -90,7 +111,6 @@ public class AddReturnBookPanel extends JPanel {
       gbc.gridx = 1;
       txtReaderID = new JTextField(15);
       txtReaderID.setEditable(false);
-      txtReaderID.setText("DG001");
       this.add(txtReaderID, gbc);
 
       gbc.gridy++;
@@ -99,16 +119,14 @@ public class AddReturnBookPanel extends JPanel {
       gbc.gridx = 1;
       txtFullName = new JTextField(15);
       txtFullName.setEditable(false);
-      txtFullName.setText("John Doe");
       this.add(txtFullName, gbc);
 
       gbc.gridy++;
       gbc.gridx = 0;
       this.add(new JLabel("Email:"), gbc);
       gbc.gridx = 1;
-      txtEmail = new JTextField(15);
+      txtEmail = new JTextField(18);
       txtEmail.setEditable(false);
-      txtEmail.setText("xxx@gmail.com");
       this.add(txtEmail, gbc);
 
       gbc.gridy++;
@@ -117,7 +135,6 @@ public class AddReturnBookPanel extends JPanel {
       gbc.gridx = 1;
       txtPhone = new JTextField(15);
       txtPhone.setEditable(false);
-      txtPhone.setText("0912345678");
       this.add(txtPhone, gbc);
 
       gbc.gridy++;
@@ -129,7 +146,7 @@ public class AddReturnBookPanel extends JPanel {
       this.add(txtReturnDate, gbc);
 
       gbc.gridx = 2;
-      JTextField statusField = new JTextField("On due date");
+      statusField = new JTextField("On due date");
       statusField.setHorizontalAlignment(JTextField.CENTER);
       statusField.setBackground(Style.GREEN_STATUS_BACKGROUND_COLOR);
       statusField.setForeground(Style.GREEN_STATUS_FOREGROUND_COLOR);
@@ -169,25 +186,22 @@ public class AddReturnBookPanel extends JPanel {
 
       gbc.gridy++;
       JPanel buttonPanel = new JPanel();
+      buttonPanel.setOpaque(false);
+
       confirmBt =
-          CustomButtonBuilder.builder()
-              .text("Confirm Return")
+          ButtonBuilder.builder("Confirm Return")
               .backgroundColor(new Color(76, 175, 80))
               .textColor(Color.white)
-              .drawBorder(false)
-              .preferredSize(new Dimension(150, 40))
-              .radius(12)
-              .hoverColor(new Color(76, 175, 80).darker());
+              .font(Style.FONT_BOLD_15)
+              .preferredSize(new Dimension(150, 40));
 
       cancelBt =
-          CustomButtonBuilder.builder()
-              .text("Cancel")
+          ButtonBuilder.builder("Cancel")
               .backgroundColor(Color.WHITE)
               .textColor(Color.BLACK)
-              .drawBorder(false)
-              .radius(12)
-              .hoverColor(Color.white.darker())
+              .font(Style.FONT_BOLD_15)
               .preferredSize(new Dimension(150, 40));
+
       buttonPanel.add(cancelBt);
       buttonPanel.add(confirmBt);
       this.add(buttonPanel, gbc);
@@ -208,5 +222,36 @@ public class AddReturnBookPanel extends JPanel {
     titledBorder.setTitleColor(Style.BLUE_MENU_BACKGROUND_COLOR);
     titledBorder.setTitleFont(Style.FONT_BOLD_20);
     return titledBorder;
+  }
+
+  public void clearAllTextField() {
+    txtSearchReader.setText("");
+    txtReaderID.setText("");
+    txtFullName.setText("");
+    txtEmail.setText("");
+    txtPhone.setText("");
+    txtReturnDate.setText("");
+    txtLateFee.setText("");
+    statusField.setText("");
+  }
+
+  public JPanel createHeaderPanel(String title) {
+    JPanel headerPanel = new JPanel();
+    headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+    headerPanel.setOpaque(false);
+
+    JLabel titleLabel = new JLabel(title, SwingConstants.LEFT);
+    titleLabel.setFont(Style.FONT_BOLD_20);
+
+    JSeparator separator = new JSeparator();
+    //    separator.setForeground(new Color(153, 153, 153, 55));
+    separator.setForeground(Color.LIGHT_GRAY);
+    separator.setPreferredSize(new Dimension(200, 2));
+
+    headerPanel.add(titleLabel);
+    headerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+    headerPanel.add(separator);
+    headerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+    return headerPanel;
   }
 }

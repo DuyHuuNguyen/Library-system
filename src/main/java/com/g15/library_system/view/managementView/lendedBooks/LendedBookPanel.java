@@ -3,6 +3,7 @@ package com.g15.library_system.view.managementView.lendedBooks;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.managementView.lendedBooks.formBody.*;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
@@ -29,34 +30,40 @@ public class LendedBookPanel extends JPanel {
     }
   }
 
-  private class FormPanel extends RoundedPanel {
+  private class FormPanel extends JPanel {
     private UserPanel userPn;
     private BookPanel bookPn;
     private DetailPanel detailPn;
-    private OptionPanel optionPn;
 
     public FormPanel() {
-      super(20, Color.WHITE, null);
-      setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+      setLayout(new BorderLayout(0, 0));
+
       userPn = new UserPanel();
       bookPn = new BookPanel();
       detailPn = new DetailPanel();
-      optionPn = new OptionPanel();
-      add(Box.createVerticalStrut(10));
-      add(userPn);
-      add(Box.createVerticalStrut(10));
-      add(bookPn);
-      add(Box.createVerticalStrut(10));
-      add(detailPn);
-      add(Box.createVerticalStrut(10));
-      add(optionPn);
+
+      RoundedShadowPanel leftPanel = new RoundedShadowPanel();
+      setLayout(new BorderLayout(10, 10));
+      leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+      leftPanel.setOpaque(false);
+      leftPanel.add(Box.createVerticalStrut(10));
+      leftPanel.add(userPn);
+      leftPanel.add(Box.createVerticalStrut(10));
+      leftPanel.add(detailPn);
+      Dimension halfSize = new Dimension(400, 0);
+      leftPanel.setPreferredSize(halfSize);
+      add(leftPanel, BorderLayout.WEST);
+
+      RoundedShadowPanel rightPanel = new RoundedShadowPanel();
+      rightPanel.setOpaque(false);
+      rightPanel.add(bookPn, BorderLayout.NORTH);
+      add(rightPanel, BorderLayout.CENTER);
     }
 
     private void cancel() {
       userPn.cancel();
       bookPn.cancel();
       detailPn.cancel();
-      optionPn.cancel();
     }
   }
 
@@ -66,10 +73,14 @@ public class LendedBookPanel extends JPanel {
       JButton cancelButton =
           CustomButtonBuilder.builder()
               .text("Cancel")
+              .font(Style.FONT_SANS_SERIF_PLAIN_15)
+              .textColor(Style.BLUE_MENU_BACKGROUND_COLOR)
               .backgroundColor(Color.WHITE)
-              .borderColor(Color.BLACK)
-              .thickness(1)
-              .darkerWhenPress(true);
+              .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
+              .radius(6)
+              .alignment(SwingConstants.CENTER)
+              .drawBorder(false)
+              .preferredSize(new Dimension(120, 40));
       cancelButton.addActionListener(
           e -> {
             int option =
@@ -88,11 +99,14 @@ public class LendedBookPanel extends JPanel {
       JButton lendButton =
           CustomButtonBuilder.builder()
               .text("Lend a Book")
+              .font(Style.FONT_SANS_SERIF_PLAIN_15)
               .textColor(Color.WHITE)
-              .backgroundColor(Style.PURPLE_MAIN_THEME)
-              .borderColor(Color.BLACK)
-              .thickness(1)
-              .darkerWhenPress(true);
+              .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+              .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
+              .radius(6)
+              .alignment(SwingConstants.LEFT)
+              .drawBorder(false)
+              .preferredSize(new Dimension(120, 40));
       lendButton.addActionListener(e -> {});
       add(cancelButton);
       add(lendButton);
