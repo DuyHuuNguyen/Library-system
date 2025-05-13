@@ -105,7 +105,7 @@ public class UserPanel extends JPanel {
   }
 
   public void cancel() {
-    SwingUtilities.invokeLater(() -> nameTF.requestFocusInWindow());
+    nameTF.requestFocusInWindow();
     JTextField[] TFs = {nameTF, idTF};
     for (JTextField TF : TFs) {
       TF.setText("");

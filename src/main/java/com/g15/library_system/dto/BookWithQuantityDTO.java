@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BookWithQuantityDTO {
   private Book book;
-  private int quantity;
+  private Integer quantity;
 }

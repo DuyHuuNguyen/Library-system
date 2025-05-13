@@ -2,11 +2,9 @@ package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.SwitchButton;
-import com.g15.library_system.view.overrideComponent.dateChoosers.DateBetween;
 import com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser;
 import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAction;
 import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAdapter;
-import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserListener;
 import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import com.g15.library_system.view.swingComponentGenerators.*;
@@ -49,21 +47,22 @@ public class DetailPanel extends JPanel {
 
     lendDateL = LabelGenerator.createRequireLabel("Lending Date");
     lendDateTF =
-            TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(new Dimension(300, 25));
+        TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(new Dimension(300, 25));
 
     lendDateChooser = new DateChooser();
     lendDateChooser.setTextField(lendDateTF);
-    lendDateChooser.addActionDateChooserListener(new DateChooserAdapter() {
-      @Override
-      public void dateChanged(java.util.Date date, DateChooserAction action) {
-        super.dateChanged(date, action);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_MONTH, 7);
+    lendDateChooser.addActionDateChooserListener(
+        new DateChooserAdapter() {
+          @Override
+          public void dateChanged(java.util.Date date, DateChooserAction action) {
+            super.dateChanged(date, action);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
 
-        dueDateChooser.setSelectedDate(calendar.getTime());
-      }
-    });
+            dueDateChooser.setSelectedDate(calendar.getTime());
+          }
+        });
 
     notificationL =
         LabelBuilder.builder()
@@ -85,7 +84,11 @@ public class DetailPanel extends JPanel {
     gbc.gridy++;
     add(notificationL, gbc);
     gbc.gridy++;
-    add(notificationSB, gbc);
+    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    panel.add(notificationSB);
+    panel.setPreferredSize(new Dimension(30, 40));
+    panel.setOpaque(false);
+    add(panel, gbc);
   }
 
   public void cancel() {
