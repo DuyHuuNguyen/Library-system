@@ -98,4 +98,10 @@ public class CustomButtonBuilder extends CustomButton {
     this.setIcon(path, gap);
     return this;
   }
+
+  public CustomButtonBuilder title(String text) {
+    this.setToolTipText(text);
+    ToolTipManager.sharedInstance().setInitialDelay(0);
+    return this;
+  }
 }

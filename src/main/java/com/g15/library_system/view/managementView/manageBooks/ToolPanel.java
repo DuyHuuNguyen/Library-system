@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ToolPanel extends JPanel {
+  private final Dimension DIMENSION_BUTTON = new Dimension();
   private CustomButton addBt, notificationBt, reloadBt, exportBt, importBt, gotoTableBt;
   private Map<String, Runnable> actionMap = new HashMap<>();
 
@@ -78,6 +79,7 @@ public class ToolPanel extends JPanel {
     gotoTableBt =
         CustomButtonBuilder.builder()
             .text("go to table")
+            .title("Go to table")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
@@ -87,8 +89,8 @@ public class ToolPanel extends JPanel {
             .drawBorder(false)
             .opaque(false)
             .contentAreaFilled(false)
-            .preferredSize(new Dimension(100, 30))
-            .icon("/icons/addIcon.png", 10);
+            .preferredSize(new Dimension(110, 30))
+            .icon("/icons/table.png", 10);
     gotoTableBt.addActionListener(
         e -> this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_TABLE_BOOK));
 
@@ -105,7 +107,7 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(100, 30))
-            .icon("/icons/addIcon.png", 10);
+            .icon("/icons/import-export.png", 10);
     exportBt.addActionListener(
         e -> {
           // code here
@@ -123,7 +125,7 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(100, 30))
-            .icon("/icons/addIcon.png", 10);
+            .icon("/icons/file-import.png", 10);
     importBt.addActionListener(
         e -> {
           // code here
@@ -140,8 +142,8 @@ public class ToolPanel extends JPanel {
             .drawBorder(false)
             .opaque(false)
             .contentAreaFilled(false)
-            .preferredSize(new Dimension(100, 30))
-            .icon("/icons/addIcon.png", 10);
+            .preferredSize(new Dimension(110, 30))
+            .icon("/icons/reload.png", 10);
     reloadBt.addActionListener(
         e -> {
           // code here
@@ -150,6 +152,7 @@ public class ToolPanel extends JPanel {
     addBt =
         CustomButtonBuilder.builder()
             .text("Add Book")
+            .title("Add new book")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
@@ -159,7 +162,7 @@ public class ToolPanel extends JPanel {
             .drawBorder(false)
             .opaque(false)
             .contentAreaFilled(false)
-            .preferredSize(new Dimension(100, 30))
+            .preferredSize(new Dimension(110, 30))
             .icon("/icons/addIcon.png", 10);
 
     addBt.addActionListener(
@@ -169,6 +172,7 @@ public class ToolPanel extends JPanel {
     notificationBt =
         CustomButtonBuilder.builder()
             .text("Notification")
+            .title("Notification")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
@@ -178,8 +182,8 @@ public class ToolPanel extends JPanel {
             .drawBorder(false)
             .opaque(false)
             .contentAreaFilled(false)
-            .preferredSize(new Dimension(100, 30))
-            .icon("/icons/infoYellowIcon.png", 12);
+            .preferredSize(new Dimension(129, 30))
+            .icon("/icons/notification.png", 12);
     notificationBt.addActionListener(
         e -> {
           log.info(" run action ");
