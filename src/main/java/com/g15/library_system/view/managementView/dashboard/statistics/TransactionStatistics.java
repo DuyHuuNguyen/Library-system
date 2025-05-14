@@ -38,30 +38,32 @@ public class TransactionStatistics {
     return lendingTrend;
   }
 
-//  public static Map<String, Long> aggregateLendingTrendData(int month, int year) {
-//    Map<String, Long> lendingTrend =
-//            TransactionData.getInstance().getTransactions().stream()
-//                    .filter(
-//                            t ->
-//                                    t.getTransactionType() == TransactionType.BORROW
-//                                            && Instant.ofEpochMilli(t.getCreatedAt())
-//                                            .atZone(ZoneId.systemDefault())
-//                                            .getYear()
-//                                            == year)
-//                    .map(
-//                            t ->
-//                                    Instant.ofEpochMilli(t.getCreatedAt())
-//                                            .atZone(ZoneId.systemDefault())
-//                                            .getMonth())
-//                    .collect(
-//                            Collectors.groupingBy(
-//                                    month -> month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
-//                                    () ->
-//                                            new TreeMap<>(
-//                                                    Comparator.comparingInt(
-//                                                            m -> Month.valueOf(m.toUpperCase()).getValue())),
-//                                    Collectors.counting()));
-//
-//    return lendingTrend;
-//  }
+  //  public static Map<String, Long> aggregateLendingTrendData(int month, int year) {
+  //    Map<String, Long> lendingTrend =
+  //            TransactionData.getInstance().getTransactions().stream()
+  //                    .filter(
+  //                            t ->
+  //                                    t.getTransactionType() == TransactionType.BORROW
+  //                                            && Instant.ofEpochMilli(t.getCreatedAt())
+  //                                            .atZone(ZoneId.systemDefault())
+  //                                            .getYear()
+  //                                            == year)
+  //                    .map(
+  //                            t ->
+  //                                    Instant.ofEpochMilli(t.getCreatedAt())
+  //                                            .atZone(ZoneId.systemDefault())
+  //                                            .getMonth())
+  //                    .collect(
+  //                            Collectors.groupingBy(
+  //                                    month -> month.getDisplayName(TextStyle.FULL,
+  // Locale.ENGLISH),
+  //                                    () ->
+  //                                            new TreeMap<>(
+  //                                                    Comparator.comparingInt(
+  //                                                            m ->
+  // Month.valueOf(m.toUpperCase()).getValue())),
+  //                                    Collectors.counting()));
+  //
+  //    return lendingTrend;
+  //  }
 }
