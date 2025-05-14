@@ -77,7 +77,8 @@ public class ToolPanel extends JPanel {
 
     JPanel actionBtPn = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
 
-    modifyBt =   CustomButtonBuilder.builder()
+    modifyBt =
+        CustomButtonBuilder.builder()
             .text("Modify")
             .title("Mo")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
@@ -91,10 +92,11 @@ public class ToolPanel extends JPanel {
             .contentAreaFilled(false)
             .preferredSize(new Dimension(110, 30))
             .icon("/icons/table.png", 10);
-    modifyBt.addActionListener(e->{
-      this.mapApi.get(ApiKey.SELECTED_TABLE).run();
-      this.cardLayout.show(panelContent,ManageBookPanel.CONSTRAINT_MODIFY_BOOK);
-    });
+    modifyBt.addActionListener(
+        e -> {
+          this.mapApi.get(ApiKey.SELECTED_TABLE).run();
+          this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_MODIFY_BOOK);
+        });
     gotoTableBt =
         CustomButtonBuilder.builder()
             .text("go to table")

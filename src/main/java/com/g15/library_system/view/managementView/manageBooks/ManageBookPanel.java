@@ -23,7 +23,7 @@ public class ManageBookPanel extends JPanel {
 
   private CheckboxTablePanel checkboxTablePanel;
   private final String[] columns = {
-          "",
+    "",
     "Title",
     "Author",
     "Publisher",

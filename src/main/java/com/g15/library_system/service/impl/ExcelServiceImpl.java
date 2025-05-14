@@ -1,0 +1,39 @@
+package com.g15.library_system.service.impl;
+
+import com.g15.library_system.dto.BookExcelDTO;
+import com.g15.library_system.entity.Book;
+import com.g15.library_system.mapper.BookMapper;
+import com.g15.library_system.service.ExcelService;
+import io.github.biezhi.excel.plus.Reader;
+import io.github.biezhi.excel.plus.Writer;
+import java.io.File;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import javax.swing.*;
+import lombok.*;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ExcelServiceImpl implements ExcelService {
+  private final BookMapper bookMapper;
+
+  @Override
+  @SneakyThrows
+  public void exportExcelBook(List<Book> books, String name, String title) {
+    AtomicLong index = new AtomicLong(1);
+    var b =
+        books.stream()
+            .map(book -> this.bookMapper.toBookExcelDTO(book, index.getAndIncrement()))
+            .toList();
+    Writer.create().withRows(b).headerTitle(title).to(new File("src/main/resources/excel" + name));
+  }
+
+  @Override
+  public List<Book> readExcelFileToBooks(String url) {
+    var bookExcelDTOS = Reader.create(BookExcelDTO.class).from(new File(url)).asList();
+    return bookExcelDTOS.stream()
+        .map(bookExcelDTO -> this.bookMapper.toBook(bookExcelDTO))
+        .toList();
+  }
+}
