@@ -45,8 +45,11 @@ public class ToolPanel extends JPanel {
     txtSearch.addEventOptionSelected(
         (option, index) -> {
           txtSearch.setHint("Search by " + option.getName() + "...");
-          mapApi.get(ApiKey.SEARCH).run();
+//          mapApi.get(ApiKey.SEARCH).run();
         });
+
+    txtSearch.addActionListener(
+            e -> mapApi.get(ApiKey.SEARCH).run());
 
     txtSearch.addOption(
         new SearchOption(
