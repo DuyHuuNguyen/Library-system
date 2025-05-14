@@ -99,7 +99,7 @@ public class CustomButtonBuilder extends CustomButton {
     return this;
   }
 
-  public CustomButtonBuilder holdingText(String text) {
+  public CustomButtonBuilder title(String text) {
     this.setToolTipText(text);
     ToolTipManager.sharedInstance().setInitialDelay(0);
     return this;

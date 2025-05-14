@@ -79,7 +79,7 @@ public class ToolPanel extends JPanel {
     gotoTableBt =
         CustomButtonBuilder.builder()
             .text("go to table")
-            .holdingText("Go to table")
+            .title("Go to table")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
@@ -152,7 +152,7 @@ public class ToolPanel extends JPanel {
     addBt =
         CustomButtonBuilder.builder()
             .text("Add Book")
-            .holdingText("Add new book")
+            .title("Add new book")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
@@ -172,7 +172,7 @@ public class ToolPanel extends JPanel {
     notificationBt =
         CustomButtonBuilder.builder()
             .text("Notification")
-            .holdingText("Notification")
+            .title("Notification")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
