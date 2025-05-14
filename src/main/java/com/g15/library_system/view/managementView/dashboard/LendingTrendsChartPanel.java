@@ -35,15 +35,16 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
     this.setPreferredSize(new Dimension(730, 450));
     this.setLayout(new BorderLayout());
 
-    //title panel
+    // title panel
     TitlePanel titlePn = new TitlePanel("Lending Trends");
     yearComboBox = titlePn.getYearComboBox();
     monthComboBox = titlePn.getMonthComboBox();
 
-    //chart panel
+    // chart panel
     chartDataset = new DefaultCategoryDataset();
 
-    lendingData = TransactionStatistics.aggregateLendingTrendData((int) yearComboBox.getSelectedItem());
+    lendingData =
+        TransactionStatistics.aggregateLendingTrendData((int) yearComboBox.getSelectedItem());
     if (lendingData != null && !lendingData.isEmpty()) {
       for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
         chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
@@ -70,7 +71,6 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
     this.setLayout(new BorderLayout());
     this.add(chartPanel, BorderLayout.CENTER);
     this.add(titlePn, BorderLayout.NORTH);
-
   }
 
   public void clearChartData() {

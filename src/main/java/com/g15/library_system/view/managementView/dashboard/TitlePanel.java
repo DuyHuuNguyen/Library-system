@@ -51,5 +51,4 @@ public class TitlePanel extends JPanel {
   public JComboBox<String> getMonthComboBox() {
     return this.monthComboBox;
   }
-
 }

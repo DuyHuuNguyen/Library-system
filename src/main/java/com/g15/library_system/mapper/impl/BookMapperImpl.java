@@ -66,13 +66,13 @@ public class BookMapperImpl implements BookMapper {
       var bookWithQuantityDTO = books.get(i);
       Book book = bookWithQuantityDTO.getBook();
       data[i] =
-              new Object[] {
-                      false,
-                      book.getTitle(),
-                      book.getAuthor(),
-                      book.getGenreType().toString(),
-                      bookWithQuantityDTO.getQuantity().toString()
-              };
+          new Object[] {
+            false,
+            book.getTitle(),
+            book.getAuthor(),
+            book.getGenreType().toString(),
+            bookWithQuantityDTO.getQuantity().toString()
+          };
     }
     return data;
   }

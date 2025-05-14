@@ -91,7 +91,9 @@ public class CheckboxTablePanel extends JPanel {
 
   public void addDataToTable(Object[][] data) {
     this.tableData = data;
-    this.tableModel.addRow(this.tableData);
+    for (Object[] row : data) {
+      this.tableModel.addRow(row);
+    }
   }
 
   public Object[] getSelectedRowData() {
