@@ -8,6 +8,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+@Deprecated
 public class OptionPanel extends JPanel {
   private JLabel lendingStatusL, finePolicyL;
   private JComboBox<String> statusCB;

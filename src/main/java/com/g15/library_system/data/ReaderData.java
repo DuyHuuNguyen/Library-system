@@ -1,8 +1,6 @@
 package com.g15.library_system.data;
 
-import com.g15.library_system.entity.LibraryCard;
-import com.g15.library_system.entity.Reader;
-import com.g15.library_system.entity.Transaction;
+import com.g15.library_system.entity.*;
 import com.g15.library_system.enums.LibraryCardStatus;
 import com.g15.library_system.enums.TransactionType;
 import java.util.ArrayList;
@@ -12,7 +10,11 @@ import lombok.Getter;
 @Getter
 public class ReaderData implements Data<Reader> {
   private static final ReaderData INSTANCE = new ReaderData();
+  private final List<Librarian> librarians = LibrarianData.getInstance().getLibrarians();
+  private final List<Book> books = BookData.getInstance().getBooks();
   private final List<Reader> readers = new ArrayList<>();
+  private final List<Transaction> transactions = new ArrayList<>();
+  private final List<OverdueFee> overdueFees = FineData.getInstance().getOverdueFees();
 
   private ReaderData() {
     this.initializeData();
@@ -61,8 +63,32 @@ public class ReaderData implements Data<Reader> {
             .build();
     var transactions1 =
         List.of(
-            Transaction.builder().id(101L).transactionType(TransactionType.BORROW).build(),
-            Transaction.builder().id(102L).transactionType(TransactionType.RETURN).build());
+            Transaction.builder()
+                .id(101L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.getFirst())
+                .books(
+                    List.of(
+                        books.stream()
+                            .filter(
+                                b -> b.getTitle().equals("Harry Potter and the Sorcerer's Stone"))
+                            .findFirst()
+                            .orElseThrow()))
+                .expectedReturnAt(
+                    System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000) // 30 days ago
+                .actualReturnAt(
+                    System.currentTimeMillis()
+                        - 25L * 24 * 60 * 60 * 1000) // returned 5 days after borrow
+                .description("Borrowed 'Harry Potter and the Sorcerer's Stone'")
+                .build(),
+            Transaction.builder()
+                .id(102L)
+                .transactionType(TransactionType.RETURN)
+                .expectedReturnAt(System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(System.currentTimeMillis() - 25L * 24 * 60 * 60 * 1000)
+                .description("Returned 'Harry Potter and the Sorcerer's Stone'")
+                .overdueFee(overdueFees.get(0))
+                .build());
     libCard1.addTransactions(transactions1);
     james.addLibraryCard(libCard1);
 
@@ -86,12 +112,40 @@ public class ReaderData implements Data<Reader> {
             .build();
     var transactions2 =
         List.of(
-            Transaction.builder().id(103L).transactionType(TransactionType.BORROW).build(),
-            Transaction.builder().id(104L).transactionType(TransactionType.BORROW).build());
+            Transaction.builder()
+                .id(103L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(1))
+                .books(
+                    books.stream()
+                        .filter(
+                            b ->
+                                b.getTitle().equals("The Great Gatsby")
+                                    || b.getTitle().equals("To Kill a Mockingbird"))
+                        .toList())
+                .expectedReturnAt(
+                    System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000) // 14 days from now
+                .actualReturnAt(null)
+                .description("Borrowed 'The Great Gatsby' and 'To Kill a Mockingbird'")
+                .build(),
+            Transaction.builder()
+                .id(104L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(0))
+                .books(
+                    List.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("Pride and Prejudice"))
+                            .findFirst()
+                            .orElseThrow()))
+                .expectedReturnAt(
+                    System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000) // 7 days from now
+                .actualReturnAt(null)
+                .description("Borrowed 'Pride and Prejudice'")
+                .build());
     libCard2.addTransactions(transactions2);
     emma.addLibraryCard(libCard2);
 
-    // Third reader
     var michael =
         Reader.builder()
             .id(3L)
@@ -112,12 +166,39 @@ public class ReaderData implements Data<Reader> {
             .build();
     var transactions3 =
         List.of(
-            Transaction.builder().id(105L).transactionType(TransactionType.RETURN).build(),
-            Transaction.builder().id(106L).transactionType(TransactionType.RETURN).build());
+            Transaction.builder()
+                .id(105L)
+                .transactionType(TransactionType.RETURN)
+                .librarian(librarians.get(1))
+                .books(
+                    List.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("The Hobbit"))
+                            .findFirst()
+                            .orElseThrow()))
+                .expectedReturnAt(System.currentTimeMillis() - 45L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(System.currentTimeMillis() - 40L * 24 * 60 * 60 * 1000)
+                .description("Returned 'The Hobbit'")
+                .overdueFee(overdueFees.get(1))
+                .build(),
+            Transaction.builder()
+                .id(106L)
+                .transactionType(TransactionType.RETURN)
+                .librarian(librarians.get(0))
+                .books(
+                    List.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("1984"))
+                            .findFirst()
+                            .orElseThrow()))
+                .expectedReturnAt(System.currentTimeMillis() - 60L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(System.currentTimeMillis() - 58L * 24 * 60 * 60 * 1000)
+                .description("Returned '1984'")
+                .overdueFee(overdueFees.get(2))
+                .build());
     libCard3.addTransactions(transactions3);
     michael.addLibraryCard(libCard3);
 
-    // Fourth reader
     var sophia =
         Reader.builder()
             .id(4L)
@@ -138,13 +219,52 @@ public class ReaderData implements Data<Reader> {
             .build();
     var transactions4 =
         List.of(
-            Transaction.builder().id(107L).transactionType(TransactionType.BORROW).build(),
-            Transaction.builder().id(108L).transactionType(TransactionType.BORROW).build(),
-            Transaction.builder().id(109L).transactionType(TransactionType.RETURN).build());
+            Transaction.builder()
+                .id(107L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(1))
+                .books(
+                    List.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("The Catcher in the Rye"))
+                            .findFirst()
+                            .orElseThrow()))
+                .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(null)
+                .description("Borrowed 'The Catcher in the Rye'")
+                .build(),
+            Transaction.builder()
+                .id(108L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(0))
+                .books(
+                    List.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("1984"))
+                            .findFirst()
+                            .orElseThrow()))
+                .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(null)
+                .description("Borrowed '1984'")
+                .build(),
+            Transaction.builder()
+                .id(109L)
+                .transactionType(TransactionType.RETURN)
+                .librarian(librarians.get(1))
+                .books(
+                    List.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("The Odyssey"))
+                            .findFirst()
+                            .orElseThrow()))
+                .expectedReturnAt(System.currentTimeMillis() - 15L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(System.currentTimeMillis() - 14L * 24 * 60 * 60 * 1000)
+                .description("Returned 'The Odyssey'")
+                .overdueFee(overdueFees.get(3))
+                .build());
     libCard4.addTransactions(transactions4);
     sophia.addLibraryCard(libCard4);
 
-    // Fifth reader
     var william =
         Reader.builder()
             .id(5L)
@@ -164,7 +284,20 @@ public class ReaderData implements Data<Reader> {
             .libraryCardStatus(LibraryCardStatus.SUSPENDED)
             .build();
     var transactions5 =
-        Transaction.builder().id(110L).transactionType(TransactionType.BORROW).build();
+        Transaction.builder()
+            .id(110L)
+            .transactionType(TransactionType.BORROW)
+            .librarian(librarians.get(0))
+            .books(
+                List.of(
+                    books.stream()
+                        .filter(b -> b.getTitle().equals("Moby-Dick"))
+                        .findFirst()
+                        .orElseThrow()))
+            .expectedReturnAt(System.currentTimeMillis() + 10L * 24 * 60 * 60 * 1000)
+            .actualReturnAt(null)
+            .description("Borrowed 'Moby-Dick'")
+            .build();
     libCard5.addTransaction(transactions5);
     william.addLibraryCard(libCard5);
 
@@ -188,9 +321,37 @@ public class ReaderData implements Data<Reader> {
             .build();
     var transactions6 =
         List.of(
-            Transaction.builder().id(111L).transactionType(TransactionType.BORROW).build(),
-            Transaction.builder().id(112L).transactionType(TransactionType.RETURN).build(),
-            Transaction.builder().id(113L).transactionType(TransactionType.BORROW).build());
+            Transaction.builder()
+                .id(111L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(1))
+                .books(
+                    List.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("The Old Man and the Sea"))
+                            .findFirst()
+                            .orElseThrow()))
+                .expectedReturnAt(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(null)
+                .description("The Old Man and the Sea'")
+                .build(),
+            Transaction.builder()
+                .id(112L)
+                .transactionType(TransactionType.RETURN)
+                .librarian(librarians.get(0))
+                .expectedReturnAt(System.currentTimeMillis() - 20L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(System.currentTimeMillis() - 19L * 24 * 60 * 60 * 1000)
+                .description("Returned 'Fahrenheit 451'")
+                .overdueFee(overdueFees.get(4))
+                .build(),
+            Transaction.builder()
+                .id(113L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(1))
+                .expectedReturnAt(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(null)
+                .description("Borrowed 'The Odyssey'")
+                .build());
     libCard6.addTransactions(transactions6);
     olivia.addLibraryCard(libCard6);
 
@@ -214,8 +375,23 @@ public class ReaderData implements Data<Reader> {
             .build();
     var transactions7 =
         List.of(
-            Transaction.builder().id(114L).transactionType(TransactionType.RETURN).build(),
-            Transaction.builder().id(115L).transactionType(TransactionType.BORROW).build());
+            Transaction.builder()
+                .id(114L)
+                .transactionType(TransactionType.RETURN)
+                .librarian(librarians.get(0))
+                .expectedReturnAt(System.currentTimeMillis() - 10L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(System.currentTimeMillis() - 8L * 24 * 60 * 60 * 1000)
+                .description("Returned 'Moby Dick'")
+                .overdueFee(overdueFees.get(5))
+                .build(),
+            Transaction.builder()
+                .id(115L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(1))
+                .expectedReturnAt(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(null)
+                .description("Borrowed 'Don Quixote'")
+                .build());
     libCard7.addTransactions(transactions7);
     ethan.addLibraryCard(libCard7);
 
@@ -238,7 +414,14 @@ public class ReaderData implements Data<Reader> {
             .libraryCardStatus(LibraryCardStatus.ACTIVE)
             .build();
     var transactions8 =
-        Transaction.builder().id(116L).transactionType(TransactionType.BORROW).build();
+        Transaction.builder()
+            .id(116L)
+            .transactionType(TransactionType.BORROW)
+            .librarian(librarians.get(0))
+            .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
+            .actualReturnAt(null)
+            .description("Borrowed 'War and Peace'")
+            .build();
     libCard8.addTransaction(transactions8);
     ava.addLibraryCard(libCard8);
 
@@ -262,10 +445,40 @@ public class ReaderData implements Data<Reader> {
             .build();
     var transactions9 =
         List.of(
-            Transaction.builder().id(117L).transactionType(TransactionType.BORROW).build(),
-            Transaction.builder().id(118L).transactionType(TransactionType.RETURN).build(),
-            Transaction.builder().id(119L).transactionType(TransactionType.BORROW).build(),
-            Transaction.builder().id(120L).transactionType(TransactionType.RETURN).build());
+            Transaction.builder()
+                .id(117L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(1))
+                .expectedReturnAt(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(null)
+                .description("Borrowed 'Crime and Punishment'")
+                .build(),
+            Transaction.builder()
+                .id(118L)
+                .transactionType(TransactionType.RETURN)
+                .librarian(librarians.get(0))
+                .expectedReturnAt(System.currentTimeMillis() - 25L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(System.currentTimeMillis() - 23L * 24 * 60 * 60 * 1000)
+                .description("Returned 'The Divine Comedy'")
+                .overdueFee(overdueFees.get(6))
+                .build(),
+            Transaction.builder()
+                .id(119L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(1))
+                .expectedReturnAt(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(null)
+                .description("Borrowed 'Les Misérables'")
+                .build(),
+            Transaction.builder()
+                .id(120L)
+                .transactionType(TransactionType.RETURN)
+                .librarian(librarians.get(0))
+                .expectedReturnAt(System.currentTimeMillis() - 15L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(System.currentTimeMillis() - 14L * 24 * 60 * 60 * 1000)
+                .description("Returned 'The Count of Monte Cristo'")
+                .overdueFee(overdueFees.get(7))
+                .build());
     libCard9.addTransactions(transactions9);
     alexander.addLibraryCard(libCard9);
 
@@ -289,8 +502,23 @@ public class ReaderData implements Data<Reader> {
             .build();
     var transactions10 =
         List.of(
-            Transaction.builder().id(121L).transactionType(TransactionType.BORROW).build(),
-            Transaction.builder().id(122L).transactionType(TransactionType.RETURN).build());
+            Transaction.builder()
+                .id(121L)
+                .transactionType(TransactionType.BORROW)
+                .librarian(librarians.get(1))
+                .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(null)
+                .description("Borrowed 'Jane Eyre'")
+                .build(),
+            Transaction.builder()
+                .id(122L)
+                .transactionType(TransactionType.RETURN)
+                .librarian(librarians.get(0))
+                .expectedReturnAt(System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000)
+                .actualReturnAt(System.currentTimeMillis() - 28L * 24 * 60 * 60 * 1000)
+                .description("Returned 'Wuthering Heights'")
+                .overdueFee(overdueFees.get(8))
+                .build());
     libCard10.addTransactions(transactions10);
     isabella.addLibraryCard(libCard10);
 
@@ -304,5 +532,16 @@ public class ReaderData implements Data<Reader> {
     readers.add(ava);
     readers.add(alexander);
     readers.add(isabella);
+
+    transactions.addAll(transactions1);
+    transactions.addAll(transactions2);
+    transactions.addAll(transactions3);
+    transactions.addAll(transactions4);
+    transactions.add(transactions5);
+    transactions.addAll(transactions6);
+    transactions.addAll(transactions7);
+    transactions.add(transactions8);
+    transactions.addAll(transactions9);
+    transactions.addAll(transactions10);
   }
 }

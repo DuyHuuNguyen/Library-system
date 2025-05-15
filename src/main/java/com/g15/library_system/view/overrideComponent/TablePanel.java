@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 @Deprecated
-public class TablePanel extends Panel implements TableService {
+public class TablePanel extends RoundedShadowPanel implements TableService {
   private final String[] columns;
   private Object[][] data;
   private final int height;

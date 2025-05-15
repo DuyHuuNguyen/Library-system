@@ -1,16 +1,16 @@
 package com.g15.library_system.dto;
 
-import com.g15.library_system.entity.Book;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookWithQuantityDTO {
-  private Book book;
-  private Integer quantity;
+@Getter
+public class EmailNotificationNewBooksDTO {
+  private String[] emails;
+  private List<TitleAndFirstImageBookDTO> titleAndFirstImageDTOS;
 }

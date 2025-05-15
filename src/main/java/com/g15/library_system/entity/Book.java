@@ -66,4 +66,12 @@ public class Book extends BaseEntity implements Comparable<Book> {
       return this.getTitle().compareTo(o.getTitle());
     return this.getAuthor().compareTo(o.author);
   }
+
+  public String getFirstImage() {
+    return this.images.getFirst();
+  }
+
+  public boolean hasFirstImage() {
+    return !this.images.isEmpty();
+  }
 }

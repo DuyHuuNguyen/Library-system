@@ -5,23 +5,21 @@ import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
+import net.miginfocom.swing.MigLayout;
 
 public class EmailFormPanel extends RoundedShadowPanel {
   private JTextField toField;
   private JTextField subjectField;
-  private JTextArea bodyArea;
+  private JPanel body;
+  private JTextArea contentEmail;
+  private ImageDropPanel bodyArea;
   private JScrollPane bodyScroll;
   private JButton sendButton;
 
-  private JPanel formPanel;
-
   public EmailFormPanel() {
-    setLayout(new BorderLayout(10, 10));
-
-    this.formPanel = new JPanel(new GridBagLayout());
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.insets = new Insets(10, 10, 10, 10);
-    gbc.anchor = GridBagConstraints.WEST;
+    setLayout(new MigLayout("insets 20, wrap 2", "[right]10[grow, fill]", "[]10[]10[]10[]"));
+    setBackground(Color.WHITE);
+    setBorder(BorderFactory.createLineBorder(Style.BLUE_HEADER_TABLE_AND_BUTTON));
 
     JLabel toLabel = new JLabel("To (email):");
     this.toField = new JTextField(25);
@@ -30,8 +28,20 @@ public class EmailFormPanel extends RoundedShadowPanel {
     this.subjectField = new JTextField(25);
 
     JLabel bodyLabel = new JLabel("Message:");
-    this.bodyArea = new JTextArea(30, 50);
-    this.bodyScroll = new JScrollPane(bodyArea);
+    this.body = new JPanel(new MigLayout("insets 5, wrap 1", "[grow, fill]", "[]10[]"));
+
+    this.bodyArea = new ImageDropPanel(300, 300);
+
+    this.contentEmail = new JTextArea();
+    this.contentEmail.setRows(15);
+    this.contentEmail.setLineWrap(true);
+    this.contentEmail.setWrapStyleWord(true);
+
+    this.body.add(contentEmail, "growx");
+    this.body.add(bodyArea, "center, growx");
+
+    this.bodyScroll = new JScrollPane(body);
+    this.bodyScroll.setPreferredSize(new Dimension(400, 800));
 
     this.sendButton =
         CustomButtonBuilder.builder()
@@ -39,43 +49,18 @@ public class EmailFormPanel extends RoundedShadowPanel {
             .backgroundColor(Style.BLUE_HEADER_TABLE_AND_BUTTON)
             .preferredSize(new Dimension(120, 35));
 
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    formPanel.add(toLabel, gbc);
-    gbc.gridx = 1;
-    formPanel.add(toField, gbc);
+    add(toLabel);
+    add(toField, "growx");
 
-    gbc.gridx = 0;
-    gbc.gridy = 1;
-    formPanel.add(subjectLabel, gbc);
-    gbc.gridx = 1;
-    formPanel.add(subjectField, gbc);
+    add(subjectLabel);
+    add(subjectField, "growx");
 
-    gbc.gridx = 0;
-    gbc.gridy = 2;
-    formPanel.add(bodyLabel, gbc);
-    gbc.gridx = 1;
-    formPanel.add(bodyScroll, gbc);
+    add(bodyLabel, "top");
+    add(bodyScroll, "growx, growy, height 250::600");
 
-    gbc.gridx = 1;
-    gbc.gridy = 3;
-    gbc.anchor = GridBagConstraints.EAST;
-    formPanel.add(sendButton, gbc);
+    add(new JLabel());
+    add(sendButton, "right, width 120!");
 
-    formPanel.setBackground(Color.WHITE);
-    formPanel.setBorder(BorderFactory.createLineBorder(Style.BLUE_HEADER_TABLE_AND_BUTTON));
-    add(formPanel, BorderLayout.CENTER);
-  }
-
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(
-        () -> {
-          JFrame frame = new JFrame("Send Mail");
-          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-          frame.setSize(500, 400);
-          frame.setLocationRelativeTo(null);
-          frame.setContentPane(new EmailFormPanel());
-          frame.setVisible(true);
-        });
+    this.setPreferredSize(new Dimension(600, 500));
   }
 }
