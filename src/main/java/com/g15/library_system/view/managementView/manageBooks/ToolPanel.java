@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ToolPanel extends JPanel {
   private final Dimension DIMENSION_BUTTON = new Dimension();
-  private CustomButton addBt, notificationBt, reloadBt, exportBt, importBt, gotoTableBt;
+  private CustomButton addBt, notificationBt, reloadBt, exportBt, importBt, gotoTableBt, modifyBt;
   private Map<String, Runnable> actionMap = new HashMap<>();
 
   private CardLayout cardLayout;
@@ -43,6 +43,7 @@ public class ToolPanel extends JPanel {
         },
         null);
     txtSearch.setPreferredSize(new Dimension(350, 40));
+    txtSearch.addKeyListener(null);
     txtSearch.addEventOptionSelected(
         (option, index) -> {
           txtSearch.setHint("Search by " + option.getName() + "...");
@@ -78,6 +79,26 @@ public class ToolPanel extends JPanel {
 
     JPanel actionBtPn = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
 
+    modifyBt =
+        CustomButtonBuilder.builder()
+            .text("Modify")
+            .title("Mo")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Color.WHITE)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
+            .radius(1)
+            .alignment(SwingConstants.LEFT)
+            .drawBorder(false)
+            .opaque(false)
+            .contentAreaFilled(false)
+            .preferredSize(new Dimension(110, 30))
+            .icon("/icons/table.png", 10);
+    modifyBt.addActionListener(
+        e -> {
+          this.mapApi.get(ApiKey.SELECTED_TABLE).run();
+          this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_MODIFY_BOOK);
+        });
     gotoTableBt =
         CustomButtonBuilder.builder()
             .text("go to table")
@@ -192,6 +213,7 @@ public class ToolPanel extends JPanel {
           this.cardLayout.show(this.panelContent, ManageBookPanel.CONSTRAINT_NOTIFY);
         });
 
+    actionBtPn.add(modifyBt);
     actionBtPn.add(notificationBt);
     actionBtPn.add(reloadBt);
     actionBtPn.add(importBt);

@@ -16,11 +16,10 @@ import lombok.experimental.SuperBuilder;
 public class Transaction extends BaseEntity {
 
   private List<Book> books;
-
   private User librarian;
-
-  private long expectedReturnAt;
-  private long actualReturnAt;
-
+  private LibraryCard card;
+  private Long expectedReturnAt;
+  private Long actualReturnAt;
+  private String description;
   private TransactionType transactionType;
 }

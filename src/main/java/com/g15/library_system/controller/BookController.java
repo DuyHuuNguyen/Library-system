@@ -4,6 +4,7 @@ import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -35,5 +36,17 @@ public class BookController {
 
   public List<BookResponse> findByTextOfTextFieldSearchOption(String text) {
     return this.bookFacade.findByTextOfTextFieldSearchOption(text);
+  }
+
+
+  public Object[][] toBookDataWithQuantity(Map<Book, Integer> bookWithQuantity) {
+    return this.bookFacade.toBookDataWithQuantity(bookWithQuantity);
+
+  public void exportExcelBooks(List<Book> books, String nameFile, String headerFile) {
+    this.bookFacade.exportExcel(books, nameFile, headerFile);
+  }
+
+  public List<Book> getAll() {
+    return this.bookFacade.getAll();
   }
 }

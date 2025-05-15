@@ -1,11 +1,14 @@
 package com.g15.library_system.mapper.impl;
 
-import com.g15.library_system.dto.BookWithQuantityDTO;
+import com.g15.library_system.dto.BookExcelDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.enums.BookStatus;
+import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.enums.Status;
 import com.g15.library_system.mapper.BookMapper;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,7 +39,6 @@ public class BookMapperImpl implements BookMapper {
       var book = bookResponses.get(i);
       data[i] =
           new Object[] {
-            //            false,
             book.getTitle(),
             book.getAuthor(),
             book.getPublisher(),
@@ -60,21 +62,52 @@ public class BookMapperImpl implements BookMapper {
   }
 
   @Override
-  public Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books) {
+  public Object[][] toBookDataWithQuantity(Map<Book, Integer> books) {
     if (books == null) return null;
     Object[][] data = new Object[books.size()][];
-    for (int i = 0; i < data.length; i++) {
-      var bookWithQuantityDTO = books.get(i);
-      Book book = bookWithQuantityDTO.getBook();
+    int i = 0;
+    for (Map.Entry<Book, Integer> entry : books.entrySet()) {
+      Book book = entry.getKey();
       data[i] =
           new Object[] {
 //            false,
             book.getTitle(),
             book.getAuthor(),
             book.getGenreType().toString(),
-            bookWithQuantityDTO.getQuantity().toString()
+            entry.getValue().toString()
           };
+      i++;
     }
     return data;
+  }
+
+  @Override
+  public BookExcelDTO toBookExcelDTO(Book book, Long index) {
+    if (book == null) return null;
+    return BookExcelDTO.builder()
+        .index(index)
+        .title(book.getTitle())
+        .author(book.getAuthor())
+        .publisher(book.getPublisher())
+        .publishYear(book.getPublishYear())
+        .genreType(book.getGenreType().toString())
+        .currentQuantity(book.getCurrentQuantity())
+        .totalQuantity(book.getTotalQuantity())
+        .bookStatus(book.getBookStatus().toString())
+        .build();
+  }
+
+  @Override
+  public Book toBook(BookExcelDTO bookExcelDTO) {
+    return Book.builder()
+        .title(bookExcelDTO.getTitle())
+        .author(bookExcelDTO.getAuthor())
+        .publisher(bookExcelDTO.getPublisher())
+        .publishYear(bookExcelDTO.getPublishYear())
+        .genreType(Enum.valueOf(GenreType.class, bookExcelDTO.getGenreType()))
+        .currentQuantity(bookExcelDTO.getCurrentQuantity())
+        .totalQuantity(bookExcelDTO.getTotalQuantity())
+        .bookStatus(Enum.valueOf(BookStatus.class, bookExcelDTO.getBookStatus()))
+        .build();
   }
 }

@@ -10,8 +10,10 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @AllArgsConstructor
-public class Fine extends BaseEntity {
-  private float price;
-  private int overdueDays;
+public class OverdueFee extends BaseEntity {
+  private Float price;
+  private LibraryCard card;
+  private Integer overdueDays;
   private FineStatus fineStatus;
+  private OverdueFeeStrategy strategy;
 }

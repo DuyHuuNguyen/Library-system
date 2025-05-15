@@ -23,7 +23,7 @@ public class TestFrame extends JFrame {
       "Return Date",
       "Returned Books",
       "Status",
-      "Fine (VND)",
+      "OverdueFee (VND)",
       "Processed By",
       "Notes"
     };

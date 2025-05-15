@@ -18,7 +18,7 @@ public class LibraryCard extends BaseEntity {
   private Long expireAt;
   private List<Transaction> transactions;
   private LibraryCardStatus libraryCardStatus;
-  private Fine fine;
+  private List<OverdueFee> overdueFees;
 
   public void addOwner(Reader reader) {
     this.owner = reader;
