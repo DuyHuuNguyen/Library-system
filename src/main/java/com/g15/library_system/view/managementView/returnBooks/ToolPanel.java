@@ -149,7 +149,6 @@ public class ToolPanel extends JPanel {
               Book.builder()
                   .id(1L)
                   .createdAt(System.currentTimeMillis())
-        
                   .author("J.K. Rowling")
                   .bookStatus(BookStatus.OVERDUE)
                   .title("Harry Potter and the Sorcerer's Stone")

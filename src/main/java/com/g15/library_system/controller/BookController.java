@@ -38,10 +38,10 @@ public class BookController {
     return this.bookFacade.findByTextOfTextFieldSearchOption(text);
   }
 
-
   public Object[][] toBookDataWithQuantity(Map<Book, Integer> bookWithQuantity) {
     return this.bookFacade.toBookDataWithQuantity(bookWithQuantity);
   }
+
   public void exportExcelBooks(List<Book> books, String nameFile, String headerFile) {
     this.bookFacade.exportExcel(books, nameFile, headerFile);
   }

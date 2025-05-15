@@ -7,8 +7,6 @@ import com.g15.library_system.enums.LibraryCardStatus;
 import com.g15.library_system.enums.TransactionType;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -58,6 +56,7 @@ public class ReaderData implements Data<Reader> {
     var transactions1 = List.of(
             Transaction.builder().id(101L).transactionType(TransactionType.BORROW).build(),
             Transaction.builder().id(102L).transactionType(TransactionType.RETURN).build());
+
     libCard1.addTransactions(transactions1);
     james.addLibraryCard(libCard1);
 
