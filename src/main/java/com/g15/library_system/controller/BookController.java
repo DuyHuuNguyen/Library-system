@@ -36,4 +36,12 @@ public class BookController {
   public List<BookResponse> findByTextOfTextFieldSearchOption(String text) {
     return this.bookFacade.findByTextOfTextFieldSearchOption(text);
   }
+
+  public void exportExcelBooks(List<Book> books, String nameFile, String headerFile) {
+    this.bookFacade.exportExcel(books, nameFile, headerFile);
+  }
+
+  public List<Book> getAll() {
+    return this.bookFacade.getAll();
+  }
 }
