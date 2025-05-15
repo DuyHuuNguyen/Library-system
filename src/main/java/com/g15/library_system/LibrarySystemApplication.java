@@ -36,7 +36,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(1L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(
                 List.of(
                     Book.builder()
@@ -54,7 +53,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(2L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(List.of(Book.builder().id(2L).title("1984").author("George Orwell").build()))
             .librarian(User.builder().id(102L).firstName("Bob").lastName("Tran").build())
             .expectedReturnAt(System.currentTimeMillis() + 14 * 24 * 60 * 60 * 1000L)
@@ -66,7 +64,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(3L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(
                 List.of(
                     Book.builder()
@@ -89,7 +86,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(4L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(
                 List.of(Book.builder().id(5L).title("The Hobbit").author("J.R.R. Tolkien").build()))
             .librarian(User.builder().id(104L).firstName("David").lastName("Pham").build())
@@ -102,7 +98,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(5L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(
                 List.of(Book.builder().id(6L).title("War and Peace").author("Leo Tolstoy").build()))
             .librarian(User.builder().id(105L).firstName("Emma").lastName("Vu").build())
@@ -116,7 +111,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(6L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(
                 List.of(
                     Book.builder()
@@ -134,7 +128,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(7L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(
                 List.of(
                     Book.builder()
@@ -152,7 +145,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(8L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(
                 List.of(
                     Book.builder()
@@ -170,7 +162,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(9L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(List.of(Book.builder().id(10L).title("The Odyssey").author("Homer").build()))
             .librarian(User.builder().id(109L).firstName("Ethan").lastName("Vo").build())
             .expectedReturnAt(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000L)
@@ -182,7 +173,6 @@ public class LibrarySystemApplication {
         Transaction.builder()
             .id(10L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .books(
                 List.of(
                     Book.builder()
@@ -200,7 +190,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(1L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(1L)
@@ -220,7 +209,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(2L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(2L)
@@ -239,7 +227,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(3L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(3L)
@@ -258,7 +245,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(4L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(4L)
@@ -277,7 +263,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(5L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(5L)
@@ -294,7 +279,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(6L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(6L)
@@ -314,7 +298,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(7L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(7L)
@@ -333,7 +316,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(8L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(8L)
@@ -350,7 +332,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(9L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(9L)
@@ -366,7 +347,6 @@ public class LibrarySystemApplication {
         LibraryCard.builder()
             .id(10L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(10L)

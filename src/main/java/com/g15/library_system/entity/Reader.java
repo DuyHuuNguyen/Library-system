@@ -17,7 +17,7 @@ public class Reader extends User {
 
   public void addLibraryCard(LibraryCard libraryCard) {
     this.libraryCard = libraryCard;
-    //    this.libraryCard.addOwner(this);
+    this.libraryCard.addOwner(this);
   }
 
   public boolean nameContains(String name) {
