@@ -149,7 +149,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(7L)
             .createdAt(System.currentTimeMillis())
-
             .owner(
                 Reader.builder()
                     .id(7L)

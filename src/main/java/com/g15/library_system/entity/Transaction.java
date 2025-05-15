@@ -22,4 +22,8 @@ public class Transaction extends BaseEntity {
   private Long actualReturnAt;
   private String description;
   private TransactionType transactionType;
+
+  public void addLibrarycard(LibraryCard card) {
+    this.card = card;
+  }
 }

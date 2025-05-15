@@ -24,5 +24,4 @@ public interface BookFacade {
   void exportExcel(List<Book> books, String nameFile, String headerFile);
 
   List<Book> getAll();
-
 }

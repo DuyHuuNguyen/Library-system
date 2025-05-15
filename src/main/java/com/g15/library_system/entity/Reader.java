@@ -20,7 +20,7 @@ public class Reader extends User {
       throw new IllegalStateException("This Reader already has a LibraryCard assigned.");
     }
     this.libraryCard = libraryCard;
-    //    this.libraryCard.addOwner(this);
+    this.libraryCard.addOwner(this);
   }
 
   public boolean nameContains(String name) {
