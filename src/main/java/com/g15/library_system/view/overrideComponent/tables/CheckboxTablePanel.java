@@ -90,6 +90,17 @@ public class CheckboxTablePanel extends JPanel {
   }
 
   public void addDataToTable(Object[][] data) {
+    for (int i = 0; i < data.length; i++) {
+      if (data[i].length == columnNames.length - 1) {
+        Object[] newRow = new Object[columnNames.length];
+        newRow[0] = Boolean.FALSE;
+        System.arraycopy(data[i], 0, newRow, 1, data[i].length);
+        data[i] = newRow;
+      } else if (!(data[i][0] instanceof Boolean)) {
+        data[i][0] = Boolean.FALSE;
+      }
+    }
+
     this.tableData = data;
     for (Object[] row : data) {
       this.tableModel.addRow(row);

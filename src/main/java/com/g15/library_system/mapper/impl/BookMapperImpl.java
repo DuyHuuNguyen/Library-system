@@ -39,7 +39,6 @@ public class BookMapperImpl implements BookMapper {
       var book = bookResponses.get(i);
       data[i] =
           new Object[] {
-            //                  "",
             book.getTitle(),
             book.getAuthor(),
             book.getPublisher(),
