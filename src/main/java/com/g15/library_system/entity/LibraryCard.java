@@ -16,7 +16,6 @@ public class LibraryCard extends BaseEntity {
   private Long expireAt;
   @Builder.Default private List<Transaction> transactions = new ArrayList<>();
   private LibraryCardStatus libraryCardStatus;
-  @Builder.Default private List<OverdueFee> overdueFees = new ArrayList<>();
 
   public void addOwner(Reader reader) {
     this.owner = reader;

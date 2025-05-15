@@ -17,13 +17,14 @@ public class Transaction extends BaseEntity {
 
   private List<Book> books;
   private User librarian;
-  private LibraryCard card;
+  private LibraryCard libraryCard;
   private Long expectedReturnAt;
   private Long actualReturnAt;
   private String description;
   private TransactionType transactionType;
+  private OverdueFee overdueFee;
 
   public void addLibrarycard(LibraryCard card) {
-    this.card = card;
+    this.libraryCard = card;
   }
 }

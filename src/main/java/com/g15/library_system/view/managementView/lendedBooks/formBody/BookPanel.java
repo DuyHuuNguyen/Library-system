@@ -25,7 +25,8 @@ public class BookPanel extends JPanel {
   private CardLayout cardLayout;
   private Map<Book, Integer> bookWithQuantity = new TreeMap<>();
 
-  private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
+  private final BookController bookController =
+      ApplicationContextProvider.getBean(BookController.class);
 
   private class ButtonPanel extends JPanel {
     private CustomButton addBookBtn, backBtn, summitBtn;

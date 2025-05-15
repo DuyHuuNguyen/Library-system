@@ -8,15 +8,19 @@ import lombok.Getter;
 public class LibraryData implements Data<Library> {
   private static final LibraryData INSTANCE = new LibraryData();
   private final BookData bookData = BookData.getInstance();
+  private final ReaderData readerData = ReaderData.getInstance();
+  private final LibrarianData librarianData = LibrarianData.getInstance();
   private final UserData userData = UserData.getInstance();
 
   private final Library library =
-      new Library()
-          .builder()
+      Library.builder()
           .id(1L)
           .name("Library NLU")
           .books(bookData.getBooks())
           .users(userData.getUsers())
+          .readers(readerData.getReaders())
+          .librarians(librarianData.getLibrarians())
+          .transactions(readerData.getTransactions())
           .build();
 
   private LibraryData() {

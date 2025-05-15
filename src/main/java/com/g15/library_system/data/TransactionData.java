@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class TransactionData implements Data<Transaction>, TransactionSubject {
   private static final TransactionData INSTANCE = new TransactionData();
   private final List<Transaction> transactions = new ArrayList<>();
