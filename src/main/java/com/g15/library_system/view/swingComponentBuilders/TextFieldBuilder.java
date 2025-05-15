@@ -233,4 +233,14 @@ public class TextFieldBuilder extends JTextField {
     }
     this.addKeyListener(keyAdapter);
   }
+
+  public TextFieldBuilder columns(int columns) {
+    this.setColumns(columns);
+    return this;
+  }
+
+  public TextFieldBuilder horizontalAlignment(int alignment) {
+    this.setHorizontalAlignment(alignment);
+    return this;
+  }
 }

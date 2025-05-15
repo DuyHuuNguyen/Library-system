@@ -1,7 +1,6 @@
 package com.g15.library_system.mapper.impl;
 
 import com.g15.library_system.dto.BookExcelDTO;
-import com.g15.library_system.dto.BookWithQuantityDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.BookStatus;
@@ -9,6 +8,7 @@ import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.enums.Status;
 import com.g15.library_system.mapper.BookMapper;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -62,20 +62,21 @@ public class BookMapperImpl implements BookMapper {
   }
 
   @Override
-  public Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books) {
+  public Object[][] toBookDataWithQuantity(Map<Book, Integer> books) {
     if (books == null) return null;
     Object[][] data = new Object[books.size()][];
-    for (int i = 0; i < data.length; i++) {
-      var bookWithQuantityDTO = books.get(i);
-      Book book = bookWithQuantityDTO.getBook();
+    int i = 0;
+    for (Map.Entry<Book, Integer> entry : books.entrySet()) {
+      Book book = entry.getKey();
       data[i] =
           new Object[] {
             false,
             book.getTitle(),
             book.getAuthor(),
             book.getGenreType().toString(),
-            bookWithQuantityDTO.getQuantity().toString()
+            entry.getValue().toString()
           };
+      i++;
     }
     return data;
   }

@@ -1,10 +1,11 @@
 package com.g15.library_system.mapper;
 
+
 import com.g15.library_system.dto.BookExcelDTO;
-import com.g15.library_system.dto.BookWithQuantityDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import java.util.List;
+import java.util.Map;
 
 public interface BookMapper {
   BookResponse toBookResponse(Book book);
@@ -13,9 +14,10 @@ public interface BookMapper {
 
   String toDataSearch(Book book, String text);
 
-  Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books);
+  Object[][] toBookDataWithQuantity(Map<Book, Integer> books);
 
   BookExcelDTO toBookExcelDTO(Book book, Long index);
 
   Book toBook(BookExcelDTO bookExcelDTO);
+
 }

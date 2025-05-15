@@ -17,7 +17,7 @@ public enum ErrorCode {
   ROLE_NOT_FOUND("1011", "Role not found"),
 
   BOOK_NOT_FOUND("112", "Book not found"),
-  FINE_NOT_FOUND("113", "Fine not found"),
+  FINE_NOT_FOUND("113", "OverdueFee not found"),
   LIBRARIAN_NOT_FOUND("114", "Librarian not found"),
   LIBRARY_NOT_FOUND("115", "Library not found"),
   LIBRARY_CARD_NOT_FOUND("116", "LibraryCard not found"),

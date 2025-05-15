@@ -1,6 +1,5 @@
 package com.g15.library_system.facade.impl;
 
-import com.g15.library_system.dto.BookWithQuantityDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
@@ -9,6 +8,7 @@ import com.g15.library_system.service.BookService;
 import com.g15.library_system.service.ExcelService;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,7 +60,7 @@ public class BookFacadeImpl implements BookFacade {
   }
 
   @Override
-  public Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books) {
+  public Object[][] toBookDataWithQuantity(Map<Book, Integer> books) {
     return this.bookMapper.toBookDataWithQuantity(books);
   }
 

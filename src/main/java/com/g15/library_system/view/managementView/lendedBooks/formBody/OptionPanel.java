@@ -35,7 +35,7 @@ public class OptionPanel extends JPanel {
 
     finePolicyL =
         LabelBuilder.builder()
-            .text("Fine Policy")
+            .text("OverdueFee Policy")
             .font(Style.FONT_PLAIN_13)
             .horizontal(SwingConstants.LEFT);
     fineTF =
