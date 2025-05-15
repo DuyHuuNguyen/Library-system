@@ -494,18 +494,18 @@ public class LibrarySystemApplication {
                 .phoneNumber("222333444")
                 .build());
 
-    List<Fine> fines =
+    List<OverdueFee> overdueFees =
         List.of(
-            Fine.builder().price(0.2f).overdueDays(5).fineStatus(FineStatus.DEMO).build(),
-            Fine.builder().price(0.3f).overdueDays(6).fineStatus(FineStatus.DEMO).build(),
-            Fine.builder().price(0.4f).overdueDays(7).fineStatus(FineStatus.DEMO).build(),
-            Fine.builder().price(0.5f).overdueDays(8).fineStatus(FineStatus.DEMO).build(),
-            Fine.builder().price(0.6f).overdueDays(9).fineStatus(FineStatus.DEMO).build(),
-            Fine.builder().price(0.7f).overdueDays(10).fineStatus(FineStatus.DEMO).build(),
-            Fine.builder().price(0.8f).overdueDays(11).fineStatus(FineStatus.DEMO).build(),
-            Fine.builder().price(0.9f).overdueDays(12).fineStatus(FineStatus.DEMO).build(),
-            Fine.builder().price(1.0f).overdueDays(13).fineStatus(FineStatus.DEMO).build(),
-            Fine.builder().price(1.1f).overdueDays(14).fineStatus(FineStatus.DEMO).build());
+            OverdueFee.builder().price(0.2f).overdueDays(5).fineStatus(FineStatus.RETURN).build(),
+            OverdueFee.builder().price(0.3f).overdueDays(6).fineStatus(FineStatus.RETURN).build(),
+            OverdueFee.builder().price(0.4f).overdueDays(7).fineStatus(FineStatus.RETURN).build(),
+            OverdueFee.builder().price(0.5f).overdueDays(8).fineStatus(FineStatus.RETURN).build(),
+            OverdueFee.builder().price(0.6f).overdueDays(9).fineStatus(FineStatus.RETURN).build(),
+            OverdueFee.builder().price(0.7f).overdueDays(10).fineStatus(FineStatus.RETURN).build(),
+            OverdueFee.builder().price(0.8f).overdueDays(11).fineStatus(FineStatus.RETURN).build(),
+            OverdueFee.builder().price(0.9f).overdueDays(12).fineStatus(FineStatus.RETURN).build(),
+            OverdueFee.builder().price(1.0f).overdueDays(13).fineStatus(FineStatus.RETURN).build(),
+            OverdueFee.builder().price(1.1f).overdueDays(14).fineStatus(FineStatus.RETURN).build());
 
     List<Librarian> librarians = new ArrayList<>();
 

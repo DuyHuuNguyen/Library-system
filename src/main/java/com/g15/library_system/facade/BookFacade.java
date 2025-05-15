@@ -1,9 +1,9 @@
 package com.g15.library_system.facade;
 
-import com.g15.library_system.dto.BookWithQuantityDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface BookFacade {
@@ -19,5 +19,5 @@ public interface BookFacade {
 
   List<BookResponse> findByTextOfTextFieldSearchOption(String text);
 
-  Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books);
+  Object[][] toBookDataWithQuantity(Map<Book, Integer> books);
 }

@@ -1,13 +1,14 @@
 package com.g15.library_system.view.overrideComponent.cards;
 
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import java.awt.*;
 import javax.swing.*;
 import lombok.Getter;
 
 public class BookCardPanel extends JPanel {
   @Getter private final Book book;
-  private final JTextField quantityTF;
+  private final TextFieldBuilder quantityTF;
 
   public BookCardPanel(Book book, Runnable onRemove) {
     this.book = book;
@@ -29,8 +30,14 @@ public class BookCardPanel extends JPanel {
     JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     JButton minusBtn = new JButton("-");
     JButton plusBtn = new JButton("+");
-    quantityTF = new JTextField("1", 3);
-    quantityTF.setHorizontalAlignment(JTextField.CENTER);
+    quantityTF =
+        TextFieldBuilder.builder()
+            .text("1")
+            .columns(3)
+            .editable(false)
+            .horizontalAlignment(JTextField.CENTER);
+
+    quantityTF.setColumns(3);
     JButton removeBtn = new JButton("Remove");
 
     minusBtn.addActionListener(
@@ -43,6 +50,7 @@ public class BookCardPanel extends JPanel {
         e -> {
           int current = Integer.parseInt(quantityTF.getText());
           if (current < book.getCurrentQuantity()) quantityTF.setText(String.valueOf(current + 1));
+          else JOptionPane.showMessageDialog(this, "Out of bounds quantity");
         });
 
     removeBtn.addActionListener(

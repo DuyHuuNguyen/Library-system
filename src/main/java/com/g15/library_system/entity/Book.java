@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book extends BaseEntity {
+public class Book extends BaseEntity implements Comparable<Book> {
   private String title;
 
   private String author;
@@ -57,5 +57,13 @@ public class Book extends BaseEntity {
 
   public boolean isSamePublisher(String text) {
     return this.publisher.toLowerCase().contains(text.toLowerCase());
+  }
+
+  @Override
+  public int compareTo(Book o) {
+    if (!this.hasSameId(o.getId())) return this.getId().compareTo(o.getId());
+    else if (!this.getTitle().equalsIgnoreCase(o.getTitle()))
+      return this.getTitle().compareTo(o.getTitle());
+    return this.getAuthor().compareTo(o.author);
   }
 }
