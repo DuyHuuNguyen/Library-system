@@ -41,7 +41,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(1L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(1L)
@@ -61,7 +60,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(2L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(2L)
@@ -80,7 +78,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(3L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(3L)
@@ -99,7 +96,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(4L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(4L)
@@ -118,7 +114,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(5L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(5L)
@@ -135,7 +130,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(6L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(6L)
@@ -155,7 +149,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(7L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(7L)
@@ -174,7 +167,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(8L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(8L)
@@ -191,7 +183,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(9L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(9L)
@@ -207,7 +198,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(10L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(10L)

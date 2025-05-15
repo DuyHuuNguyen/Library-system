@@ -1,6 +1,5 @@
 package com.g15.library_system.mapper;
 
-
 import com.g15.library_system.dto.BookExcelDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
@@ -19,5 +18,4 @@ public interface BookMapper {
   BookExcelDTO toBookExcelDTO(Book book, Long index);
 
   Book toBook(BookExcelDTO bookExcelDTO);
-
 }
