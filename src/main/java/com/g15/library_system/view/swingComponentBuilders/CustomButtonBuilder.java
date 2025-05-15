@@ -99,6 +99,16 @@ public class CustomButtonBuilder extends CustomButton {
     return this;
   }
 
+  public CustomButtonBuilder visible(boolean isVisible) {
+    this.setVisible(isVisible);
+    return this;
+  }
+
+  public CustomButtonBuilder enabled(boolean isEnabled) {
+    this.setEnabled(isEnabled);
+    return this;
+  }
+
   public CustomButtonBuilder title(String text) {
     this.setToolTipText(text);
     ToolTipManager.sharedInstance().setInitialDelay(0);

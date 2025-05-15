@@ -36,7 +36,7 @@ public class BookMapperImpl implements BookMapper {
       var book = bookResponses.get(i);
       data[i] =
           new Object[] {
-//            false,
+            //            false,
             book.getTitle(),
             book.getAuthor(),
             book.getPublisher(),
@@ -68,7 +68,7 @@ public class BookMapperImpl implements BookMapper {
       Book book = bookWithQuantityDTO.getBook();
       data[i] =
           new Object[] {
-            false,
+//            false,
             book.getTitle(),
             book.getAuthor(),
             book.getGenreType().toString(),

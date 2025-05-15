@@ -5,6 +5,10 @@ import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.returnBooks.commands.Command;
+import com.g15.library_system.view.managementView.returnBooks.commands.EditCommand;
+import com.g15.library_system.view.managementView.returnBooks.commands.ExportCommand;
+import com.g15.library_system.view.managementView.returnBooks.commands.RefreshCommand;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
@@ -16,10 +20,13 @@ import java.util.Map;
 import javax.swing.*;
 
 public class ToolPanel extends JPanel {
-  private CustomButton addBt, mainBt, dropdownBt;
+  private CustomButton addBt, editBt, exportBt, refreshBt, cancelBt;
   private Map<String, Runnable> actionMap = new HashMap<>();
   private ContentAction contentPnAction;
-  private final String[] items = {"Edit", "Export", "Refresh"};
+  private final String[] items = {"Add","Edit", "Export", "Refresh"};
+    private Command editCommand = new EditCommand();
+    private Command exportCommand = new ExportCommand();
+    private Command refreshCommand = new RefreshCommand();
 
   public ToolPanel(ContentAction contentPnAction) {
     this.contentPnAction = contentPnAction;
@@ -45,11 +52,10 @@ public class ToolPanel extends JPanel {
             .contentAreaFilled(false)
             .preferredSize(new Dimension(170, 40))
             .icon("/icons/addIcon.png", 5);
-    actionBtPn.add(addBt);
 
-    mainBt =
+    editBt =
         CustomButtonBuilder.builder()
-            .text("Actions")
+            .text("Edit")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
@@ -58,61 +64,64 @@ public class ToolPanel extends JPanel {
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .preferredSize(new Dimension(120, 40))
-            .roundedSide(CustomButton.RoundedSide.LEFT);
+            .icon("/icons/edit.png", 17);
 
-    dropdownBt =
+    exportBt =
         CustomButtonBuilder.builder()
-            .text("▼")
+            .text("Export")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
             .radius(6)
-            .alignment(SwingConstants.CENTER)
+            .alignment(SwingConstants.LEFT)
             .drawBorder(false)
-            .roundedSide(CustomButton.RoundedSide.RIGHT)
-            .preferredSize(new Dimension(45, 40));
+            .preferredSize(new Dimension(120, 40))
+            .icon("/icons/export.png", 17);
 
-    JPanel dropdownBtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-    dropdownBtPanel.add(mainBt);
-    dropdownBtPanel.add(dropdownBt);
+    refreshBt =
+        CustomButtonBuilder.builder()
+            .text("Refresh")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Color.WHITE)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
+            .radius(6)
+            .alignment(SwingConstants.LEFT)
+            .drawBorder(false)
+            .preferredSize(new Dimension(120, 40))
+            .icon("/icons/refresh.png", 17);
 
-    JPopupMenu menu = new JPopupMenu();
-    Font menuFont = new Font("Segoe UI", Font.PLAIN, 14);
-    int popupWidth = mainBt.getPreferredSize().width + dropdownBt.getPreferredSize().width - 2;
-    int popupHeight = 35;
+      cancelBt =
+        CustomButtonBuilder.builder()
+            .text("Cancel")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .backgroundColor(Color.white)
+            .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
+            .radius(6)
+            .alignment(SwingConstants.LEFT)
+            .drawBorder(false)
+                .visible(false)
+                .enabled(false)
+            .preferredSize(new Dimension(120, 40))
+            .icon("/icons/cancel.png", 17);
 
     setActionForActionMap();
 
-    for (String itemText : items) {
-      JMenuItem item = new JMenuItem(itemText);
-      item.setFont(menuFont);
-      item.setPreferredSize(new Dimension(popupWidth, popupHeight));
+    editBt.addActionListener(e -> actionMap.get("Edit").run());
+    exportBt.addActionListener(e -> actionMap.get("Export").run());
+    refreshBt.addActionListener(e -> actionMap.get("Refresh").run());
 
-      item.addActionListener(
-          e -> {
-            mainBt.setText(itemText);
-            mainBt.setIcon("/icons/" + itemText.toLowerCase() + ".png", 17);
-            actionMap.get(itemText).run();
+      editBt.addActionListener(e -> editCommand.execute());
+      exportBt.addActionListener(e -> exportCommand.execute());
+      refreshBt.addActionListener(e -> refreshCommand.execute());
 
-            for (ActionListener al : mainBt.getActionListeners()) {
-              mainBt.removeActionListener(al);
-            }
-            mainBt.addActionListener(
-                ev -> {
-                  Runnable action = actionMap.get(itemText);
-                  if (action != null) action.run();
-                });
-          });
-
-      menu.add(item);
-    }
-
-    dropdownBt.addActionListener(
-        e -> {
-          menu.show(dropdownBtPanel, 0, dropdownBtPanel.getHeight());
-        });
-    actionBtPn.add(dropdownBtPanel);
+    actionBtPn.add(addBt);
+    actionBtPn.add(exportBt);
+    actionBtPn.add(refreshBt);
+    actionBtPn.add(editBt);
+    actionBtPn.add(cancelBt);
 
     return actionBtPn;
   }
@@ -141,7 +150,7 @@ public class ToolPanel extends JPanel {
   }
 
   private void setActionForActionMap() {
-    actionMap.put("Edit", contentPnAction.editTable(mainBt));
+    actionMap.put("Edit", contentPnAction.editTable(editBt, cancelBt));
     actionMap.put(
         "Export",
         () -> {

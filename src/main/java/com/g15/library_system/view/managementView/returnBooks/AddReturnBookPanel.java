@@ -180,7 +180,7 @@ public class AddReturnBookPanel extends JPanel {
 
       gbc.gridy++;
       gbc.gridx = 0;
-      this.add(new JLabel("Late Fee (VND):"), gbc);
+      this.add(new JLabel("Fine (VND):"), gbc);
       gbc.gridx = 1;
       txtLateFee = new JTextField("0");
       txtLateFee.setEditable(false);

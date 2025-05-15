@@ -32,6 +32,10 @@ public class ReaderData implements Data<Reader> {
     return INSTANCE;
   }
 
+  public List<Reader> getReaders() {
+    return readers;
+  }
+
   private void initializeData() {
     List<Reader> readerInt =
         List.of(

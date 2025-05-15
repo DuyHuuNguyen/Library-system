@@ -1,5 +1,7 @@
 package com.g15.library_system.view.overrideComponent.tables;
 
+import com.g15.library_system.data.BookData;
+import com.g15.library_system.entity.Book;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.tableModel.CustomTableModel;
@@ -227,60 +229,85 @@ public class CheckboxTablePanel extends JPanel {
     }
   }
 
-  public Runnable getActionForEditingTable(CustomButton editButton) {
+  // action for edit button
+  public Runnable getActionForEditingTable(CustomButton editButton, CustomButton cancelButton) {
     return () -> {
       if (!isEditMode) {
-        boolean hasSelection = false;
-        Set<Integer> editableRows = new HashSet<>();
-
-        for (int viewRow = 0; viewRow < table.getRowCount(); viewRow++) {
-          int modelRow = table.convertRowIndexToModel(viewRow);
-          boolean isSelectedByCheckbox = Boolean.TRUE.equals(tableModel.getValueAt(modelRow, 0));
-          boolean isSelectedByMouse = table.isRowSelected(viewRow);
-
-          if (isSelectedByCheckbox || isSelectedByMouse) {
-            editableRows.add(modelRow);
-            hasSelection = true;
-            if (tableModel.getColumnName(0).equals("")) {
-              tableModel.setValueAt(true, modelRow, 0);
-            }
-          }
-        }
-
-        if (!hasSelection) {
-          JOptionPane.showMessageDialog(this, "Please select at least one row to edit!");
-          return;
-        }
-
-        isEditMode = true;
-        editButton.setText("Save");
-        editButton.setIcon("/icons/save.png", 15);
-        tableModel.setEditableRows(editableRows);
-
+        enterEditMode(editButton);
+        cancelButton.setEnabled(true);
+        cancelButton.setVisible(true);
       } else {
-        isEditMode = false;
-        editButton.setText("Edit");
-        editButton.setIcon("/icons/edit.png", 15);
-
-        new ToastNotification(
-                JOptionPane.getFrameForComponent(this),
-                ToastNotification.Type.INFO,
-                ToastNotification.Location.TOP_CENTER,
-                "Your changes have been saved.")
-            .showNotification();
-
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-          if (tableModel.getColumnName(0).equals("")) {
-            tableModel.setValueAt(false, i, 0);
-          }
-        }
-
-        tableModel.clearEditableRows();
-        table.clearSelection();
+        cancelButton.setVisible(false);
+        cancelButton.setEnabled(false);
+        saveEdits(editButton);
       }
-
       table.repaint();
     };
+  }
+
+  private void enterEditMode(CustomButton editButton) {
+    boolean hasSelection = false;
+    Set<Integer> editableRows = new HashSet<>();
+
+    for (int viewRow = 0; viewRow < table.getRowCount(); viewRow++) {
+      int modelRow = table.convertRowIndexToModel(viewRow);
+      boolean isSelectedByCheckbox = Boolean.TRUE.equals(tableModel.getValueAt(modelRow, 0));
+      boolean isSelectedByMouse = table.isRowSelected(viewRow);
+
+      if (isSelectedByCheckbox || isSelectedByMouse) {
+        editableRows.add(modelRow);
+        hasSelection = true;
+        if (tableModel.getColumnName(0).equals("")) {
+          tableModel.setValueAt(true, modelRow, 0);
+        }
+      }
+    }
+
+    if (!hasSelection) {
+      JOptionPane.showMessageDialog(this, "Please select at least one row to edit!");
+      return;
+    }
+
+    isEditMode = true;
+    editButton.setText("Save");
+    editButton.setIcon("/icons/save.png", 15);
+    tableModel.setEditableRows(editableRows);
+  }
+
+  private void saveEdits(CustomButton editButton) {
+    isEditMode = false;
+    editButton.setText("Edit");
+    editButton.setIcon("/icons/edit.png", 15);
+
+    for (Integer modelRow : tableModel.getEditableRows()) {
+      Object[] rowData = new Object[tableModel.getColumnCount()];
+      for (int col = 0; col < tableModel.getColumnCount(); col++) {
+        rowData[col] = tableModel.getValueAt(modelRow, col);
+      }
+      // Find the corresponding Book in BookData (e.g., by ID column)
+//          Long bookId = (Long) rowData[idColumnIndex]; // set idColumnIndex to your ID column
+//          Book book = BookData.getInstance().findById(bookId);
+//          if (book != null) {
+//            // Update book fields with new values from rowData
+//            book.setTitle((String) rowData[titleColIndex]);
+//          }
+    }
+
+    new ToastNotification(
+            JOptionPane.getFrameForComponent(this),
+            ToastNotification.Type.INFO,
+            ToastNotification.Location.TOP_CENTER,
+            "Your changes have been saved.")
+            .showNotification();
+
+    for (int i = 0; i < tableModel.getRowCount(); i++) {
+      if (tableModel.getColumnName(0).equals("")) {
+        tableModel.setValueAt(false, i, 0);
+      }
+    }
+
+    tableModel.clearEditableRows();
+    table.clearSelection();
   }
 
   public void setEditableColumns(Set<Integer> columns) {

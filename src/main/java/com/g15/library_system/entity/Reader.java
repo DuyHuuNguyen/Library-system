@@ -16,6 +16,9 @@ public class Reader extends User {
   private LibraryCard libraryCard;
 
   public void addLibraryCard(LibraryCard libraryCard) {
+    if (this.libraryCard != null) {
+      throw new IllegalStateException("This Reader already has a LibraryCard assigned.");
+    }
     this.libraryCard = libraryCard;
     //    this.libraryCard.addOwner(this);
   }

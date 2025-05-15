@@ -23,11 +23,6 @@ public class JFreeChartGenerator {
       String categoryAxis_X,
       String valueAxis_Y,
       DefaultCategoryDataset dataset) {
-    //    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    //    for (Map.Entry<String, ? extends Number> entry : data.entrySet()) {
-    //      dataset.addValue(entry.getValue(), valueAxis_Y, entry.getKey());
-    //    }
-
     JFreeChart barChart =
         ChartFactory.createBarChart(chartTitle, categoryAxis_X, valueAxis_Y, dataset);
     CategoryPlot plot = barChart.getCategoryPlot();
@@ -35,10 +30,10 @@ public class JFreeChartGenerator {
     BarRenderer renderer = (BarRenderer) plot.getRenderer();
 
     renderer.setBarPainter(new StandardBarPainter());
-    //        renderer.setSeriesPaint(0, Style.CHART_BAR_COLOR_ORANGE); // set color for the bar
+    renderer.setSeriesPaint(0, Style.GREEN_CONFIRM_BUTTON_COLOR); // set color for the bar
     //        renderer.setSeriesPaint(1, Style.CHART_BAR_COLOR_YELLOW);
     //        renderer.setSeriesPaint(2, Style.LOGIN_FRAME_BACKGROUND_COLOR_BLUE);
-    renderer.setSeriesPaint(0, Style.CONFIRM_BUTTON_COLOR_GREEN);
+
     renderer.setDrawBarOutline(false);
     return barChart;
   }
@@ -53,7 +48,8 @@ public class JFreeChartGenerator {
     CategoryPlot lineChartPlot = lineChart.getCategoryPlot();
     lineChartPlot.setBackgroundPaint(Style.CHART_BACKGROUND_COLOR);
     LineAndShapeRenderer renderer = new LineAndShapeRenderer();
-    renderer.setSeriesPaint(0, new Color(20, 169, 20));
+    //    renderer.setSeriesPaint(0, new Color(20, 169, 20));
+    renderer.setSeriesPaint(0, Style.CONFIRM_BUTTON_COLOR_GREEN);
     renderer.setSeriesStroke(0, new BasicStroke(4.0f));
     renderer.setDefaultItemLabelsVisible(true);
     renderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator());
