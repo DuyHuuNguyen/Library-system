@@ -2,17 +2,15 @@ package com.g15.library_system.dto;
 
 import io.github.biezhi.excel.plus.annotation.ExcelColumn;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class BookExcelDTO {
-  @ExcelColumn(title = "Index", index = 0)
-  private Long index;
+public class BookExcelDTO extends BaseExcelDTO {
 
   @ExcelColumn(title = "Title", index = 1)
   private String title;
