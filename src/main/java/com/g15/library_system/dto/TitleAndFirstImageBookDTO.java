@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 public class TitleAndFirstImageBookDTO {
-    public static final String NO_IMAGE = "no-image";
-    private String firstImage;
-    private String title;
+  public static final String NO_IMAGE = "no-image";
+  private String firstImage;
+  private String title;
 
-    public boolean isNoImage() {
-        return firstImage.equals(NO_IMAGE);
-    }
+  public boolean isNoImage() {
+    return firstImage.equals(NO_IMAGE);
+  }
 }
