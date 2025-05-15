@@ -70,7 +70,7 @@ public class BookMapperImpl implements BookMapper {
       Book book = entry.getKey();
       data[i] =
           new Object[] {
-//            false,
+            //            false,
             book.getTitle(),
             book.getAuthor(),
             book.getGenreType().toString(),

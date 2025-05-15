@@ -100,8 +100,6 @@ public class BookAvailabilityChartPanel extends RoundedShadowPanel implements Bo
 
     Map<String, Long> newData = BookStatistics.aggregateBookAvailabilityData();
 
-    System.out.println(newData);
-
     for (Map.Entry<String, ? extends Number> entry : newData.entrySet()) {
       chartDataset.setValue(entry.getKey(), entry.getValue());
     }

@@ -1,7 +1,5 @@
 package com.g15.library_system.view.overrideComponent.tables;
 
-import com.g15.library_system.data.BookData;
-import com.g15.library_system.entity.Book;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.tableModel.CustomTableModel;
@@ -285,12 +283,13 @@ public class CheckboxTablePanel extends JPanel {
         rowData[col] = tableModel.getValueAt(modelRow, col);
       }
       // Find the corresponding Book in BookData (e.g., by ID column)
-//          Long bookId = (Long) rowData[idColumnIndex]; // set idColumnIndex to your ID column
-//          Book book = BookData.getInstance().findById(bookId);
-//          if (book != null) {
-//            // Update book fields with new values from rowData
-//            book.setTitle((String) rowData[titleColIndex]);
-//          }
+      //          Long bookId = (Long) rowData[idColumnIndex]; // set idColumnIndex to your ID
+      // column
+      //          Book book = BookData.getInstance().findById(bookId);
+      //          if (book != null) {
+      //            // Update book fields with new values from rowData
+      //            book.setTitle((String) rowData[titleColIndex]);
+      //          }
     }
 
     new ToastNotification(
@@ -298,7 +297,7 @@ public class CheckboxTablePanel extends JPanel {
             ToastNotification.Type.INFO,
             ToastNotification.Location.TOP_CENTER,
             "Your changes have been saved.")
-            .showNotification();
+        .showNotification();
 
     for (int i = 0; i < tableModel.getRowCount(); i++) {
       if (tableModel.getColumnName(0).equals("")) {

@@ -38,13 +38,20 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
     // title panel
     TitlePanel titlePn = new TitlePanel("Lending Trends");
     yearComboBox = titlePn.getYearComboBox();
+    yearComboBox.addActionListener(e ->{
+      selectedYear = Integer.valueOf(String.valueOf(yearComboBox.getSelectedItem()));
+      updateChart();
+    } );
     monthComboBox = titlePn.getMonthComboBox();
+    monthComboBox.addActionListener(e ->{
+      selectedMonth = String.valueOf(monthComboBox.getSelectedItem());
+      updateChart();
+    } );
 
     // chart panel
     chartDataset = new DefaultCategoryDataset();
 
-    lendingData =
-        TransactionStatistics.aggregateLendingTrendData((int) yearComboBox.getSelectedItem());
+    lendingData = TransactionStatistics.aggregateLendingTrendData((int) yearComboBox.getSelectedItem());
     if (lendingData != null && !lendingData.isEmpty()) {
       for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
         chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
@@ -77,6 +84,55 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
     chartDataset.clear();
   }
 
+  private void updateChart() {
+
+    if (selectedYear == null) return;
+
+    if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
+      // Show statistics by month for the selected year
+      showMonthlyStatistics(selectedYear);
+    } else {
+      // Show statistics by day for the selected month of the selected year
+      showDailyStatistics(selectedMonth, selectedYear);
+    }
+    chartPanel.revalidate();
+    chartPanel.repaint();
+  }
+
+  private void showMonthlyStatistics(int year) {
+    lendingData = TransactionStatistics.aggregateLendingTrendData(year);
+    clearChartData();
+
+    if (lendingData != null && !lendingData.isEmpty()) {
+      for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
+        chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
+      }
+    }
+    chartPanel.repaint();
+  }
+
+  private void showDailyStatistics(String month, int year) {
+    lendingData = TransactionStatistics.aggregateLendingTrendData(month,year);
+    clearChartData();
+
+    if (lendingData != null && !lendingData.isEmpty()) {
+      for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
+        chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
+      }
+    }
+    chartPanel.repaint();
+  }
+
   @Override
-  public void update() {}
+  public void update() {
+    clearChartData();
+    lendingData = TransactionStatistics.aggregateLendingTrendData(selectedYear);
+    if (lendingData != null && !lendingData.isEmpty()) {
+      for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
+        chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
+      }
+    }
+
+    chartPanel.repaint();
+  }
 }

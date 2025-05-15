@@ -23,10 +23,10 @@ public class ToolPanel extends JPanel {
   private CustomButton addBt, editBt, exportBt, refreshBt, cancelBt;
   private Map<String, Runnable> actionMap = new HashMap<>();
   private ContentAction contentPnAction;
-  private final String[] items = {"Add","Edit", "Export", "Refresh"};
-    private Command editCommand = new EditCommand();
-    private Command exportCommand = new ExportCommand();
-    private Command refreshCommand = new RefreshCommand();
+  private final String[] items = {"Add", "Edit", "Export", "Refresh"};
+  private Command editCommand = new EditCommand();
+  private Command exportCommand = new ExportCommand();
+  private Command refreshCommand = new RefreshCommand();
 
   public ToolPanel(ContentAction contentPnAction) {
     this.contentPnAction = contentPnAction;
@@ -92,7 +92,7 @@ public class ToolPanel extends JPanel {
             .preferredSize(new Dimension(120, 40))
             .icon("/icons/refresh.png", 17);
 
-      cancelBt =
+    cancelBt =
         CustomButtonBuilder.builder()
             .text("Cancel")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
@@ -102,8 +102,8 @@ public class ToolPanel extends JPanel {
             .radius(6)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
-                .visible(false)
-                .enabled(false)
+            .visible(false)
+            .enabled(false)
             .preferredSize(new Dimension(120, 40))
             .icon("/icons/cancel.png", 17);
 
@@ -113,9 +113,9 @@ public class ToolPanel extends JPanel {
     exportBt.addActionListener(e -> actionMap.get("Export").run());
     refreshBt.addActionListener(e -> actionMap.get("Refresh").run());
 
-      editBt.addActionListener(e -> editCommand.execute());
-      exportBt.addActionListener(e -> exportCommand.execute());
-      refreshBt.addActionListener(e -> refreshCommand.execute());
+    editBt.addActionListener(e -> editCommand.execute());
+    exportBt.addActionListener(e -> exportCommand.execute());
+    refreshBt.addActionListener(e -> refreshCommand.execute());
 
     actionBtPn.add(addBt);
     actionBtPn.add(exportBt);
@@ -158,7 +158,6 @@ public class ToolPanel extends JPanel {
               Book.builder()
                   .id(1L)
                   .createdAt(System.currentTimeMillis())
-        
                   .author("J.K. Rowling")
                   .bookStatus(BookStatus.OVERDUE)
                   .title("Harry Potter and the Sorcerer's Stone")

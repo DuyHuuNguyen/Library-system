@@ -1,12 +1,15 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
-import com.g15.library_system.data.LibraryCardData;
+import com.g15.library_system.controller.ReaderController;
 import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.dto.ReturnBookDTO;
 import com.g15.library_system.entity.LibraryCard;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.enums.TransactionType;
+import com.g15.library_system.mapper.ReturnBookMapper;
+import com.g15.library_system.mapper.ReturnBookMapperImpl;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
@@ -19,16 +22,15 @@ import javax.swing.*;
 public class ReturnBookPanel extends JPanel implements ContentAction {
   private AddReturnBookPanel addReturnBookPanel;
   private ContentPanel mainContentPn;
-
   private ToolPanel toolPn;
   private CheckboxTablePanel tablePn;
   private CardLayout cardLayout;
-
   private String[] columnNames = {
     "",
     "Return ID",
     "Reader Name",
     "Reader Number",
+    "Reader Email",
     "Return Date",
     "Returned Books",
     "Status",
@@ -36,7 +38,13 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
     "Processed By",
     "Notes"
   };
+  private String[] statuses = {"Returned", "Overdue"};
+
+  // data
   private Object[][] tableData;
+  private ReaderController readerController =
+      ApplicationContextProvider.getBean(ReaderController.class);
+  private ReturnBookMapper returnBookMapper = new ReturnBookMapperImpl();
 
   public ReturnBookPanel() {
     cardLayout = new CardLayout(10, 10);
@@ -67,6 +75,7 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
 
       tablePn = new CheckboxTablePanel(columnNames, tableData);
       tablePn.setEditableColumns(Set.of(4, 6, 7, 8, 9));
+      tablePn.setStatuses(statuses);
       this.add(tablePn, BorderLayout.CENTER);
     }
 
@@ -76,7 +85,25 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
   }
 
   public void initData() {
+    List<Reader> readers = ReaderData.getInstance().getReaders();
+    List<ReturnBookDTO> returnBookRows = new ArrayList<>();
 
+    //    for (Reader reader : readers) {
+    //      LibraryCard card = reader.getLibraryCard();
+    //      if (card != null && card.getTransactions() != null) {
+    //        for (Transaction trans : card.getTransactions()) {
+    //          if (trans.getTransactionType() == TransactionType.RETURN) {
+    //            returnBookRows.add(returnBookMapper.toReturnBookDTO(reader, trans));
+    //          }
+    //        }
+    //      }
+    //    }
+    //
+    //    tableData = returnBookMapper.toReturnBookTableData(returnBookRows);
+
+  }
+
+  public void initData2() {
 
     List<Reader> readers = ReaderData.getInstance().getReaders();
     List<ReturnBookDTO> returnBookRows = new ArrayList<>();
@@ -86,17 +113,17 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
       if (card != null && card.getTransactions() != null) {
         for (Transaction tx : card.getTransactions()) {
           if (tx.getTransactionType() == TransactionType.RETURN) {
-//            returnBookRows.add(
-//                    new ReturnBookDTO(
-//                            reader.getId(),
-//                            reader.getFirstName(),
-//                            reader.getLastName(),
-//                            card.getId(),
-//                            tx.getId(),
-//                            tx.getTransactionType(),
-//                            tx.getCreatedAt() // or other relevant fields
-//                    )
-//            );
+            //            returnBookRows.add(
+            //                    new ReturnBookDTO(
+            //                            reader.getId(),
+            //                            reader.getFirstName(),
+            //                            reader.getLastName(),
+            //                            card.getId(),
+            //                            tx.getId(),
+            //                            tx.getTransactionType(),
+            //                            tx.getCreatedAt() // or other relevant fields
+            //                    )
+            //            );
           }
         }
       }
@@ -148,7 +175,7 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
 
   @Override
   public Runnable editTable(CustomButton editButton, CustomButton cancelButton) {
-    return tablePn.getActionForEditingTable(editButton,cancelButton);
+    return tablePn.getActionForEditingTable(editButton, cancelButton);
   }
 
   @Override

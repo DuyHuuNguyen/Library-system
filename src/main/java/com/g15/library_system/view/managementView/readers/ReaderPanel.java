@@ -75,23 +75,23 @@ import javax.swing.*;
 // }
 
 public class ReaderPanel extends JPanel {
-//  public ContentPanel contentPn = new ContentPanel(this);
-//  public ToolPanel toolPn = new ToolPanel(this);
-//  public FooterPanel footerPn = new FooterPanel();
+  //  public ContentPanel contentPn = new ContentPanel(this);
+  //  public ToolPanel toolPn = new ToolPanel(this);
+  //  public FooterPanel footerPn = new FooterPanel();
 
   public ReaderPanel() {
     setLayout(new BorderLayout());
     // Tool Panel
-//    add(toolPn, BorderLayout.NORTH);
-//
-//    // Content Panel
-//    add(contentPn, BorderLayout.CENTER);
-//
-//    // Footer Panel
-//    add(footerPn, BorderLayout.SOUTH);
-//  }
+    //    add(toolPn, BorderLayout.NORTH);
+    //
+    //    // Content Panel
+    //    add(contentPn, BorderLayout.CENTER);
+    //
+    //    // Footer Panel
+    //    add(footerPn, BorderLayout.SOUTH);
+    //  }
 
-  //  private void setAddBtListener() {
-  //    toolPn.setAddButtonListener(e -> showPanel("addMemberPanel"));}
-    }
+    //  private void setAddBtListener() {
+    //    toolPn.setAddButtonListener(e -> showPanel("addMemberPanel"));}
+  }
 }

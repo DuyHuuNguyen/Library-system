@@ -1,11 +1,12 @@
 package com.g15.library_system.view.managementView.manageBooks;
 
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
 
-public class EmailFormPanel extends JPanel {
+public class EmailFormPanel extends RoundedShadowPanel {
   private JTextField toField;
   private JTextField subjectField;
   private JTextArea bodyArea;

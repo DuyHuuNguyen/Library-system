@@ -1,25 +1,19 @@
 package com.g15.library_system.mapper;
 
-import com.g15.library_system.dto.BookWithQuantityDTO;
-
+import com.g15.library_system.dto.ReturnBookDTO;
+import com.g15.library_system.entity.Reader;
+import com.g15.library_system.entity.Transaction;
 import java.util.List;
 
-public class ReturnBookMapper {
+public interface ReturnBookMapper {
 
-    public Object[][] toBookDataWithQuantity(List<BookWithQuantityDTO> books) {
-        Object[][] data = new Object[books.size()][];
-        for (int i = 0; i < data.length; i++) {
-            var book = books.get(i);
-            data[i] = new Object[] {
-                book.getTitle(),
-                book.getAuthor(),
-                book.getPublisher(),
-                book.getPublishYear().toString(),
-                book.getGenreType().toString(),
-                book.getCurrentQuantity().toString(),
-                book.getTotalQuantity().toString()
-            };
-        }
-        return data;
-    }
+  /**
+   * Converts a list of ReturnBookDTO objects to a 2D Object array for table representation.
+   *
+   * @param returnBookDTOs the list of ReturnBookDTO objects to convert
+   * @return a 2D Object array representing the data in the ReturnBookDTO objects
+   */
+  Object[][] toReturnBookTableData(List<ReturnBookDTO> returnBookDTOs);
+
+  ReturnBookDTO toReturnBookDTO(Reader reader, Transaction transaction);
 }
