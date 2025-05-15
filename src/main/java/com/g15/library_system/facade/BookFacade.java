@@ -20,4 +20,9 @@ public interface BookFacade {
   List<BookResponse> findByTextOfTextFieldSearchOption(String text);
 
   Object[][] toBookDataWithQuantity(Map<Book, Integer> books);
+
+  void exportExcel(List<Book> books, String nameFile, String headerFile);
+
+  List<Book> getAll();
+
 }
