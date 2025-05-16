@@ -12,11 +12,10 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LibraryCard extends BaseEntity {
-  private Reader owner;
+  @ToString.Exclude private Reader owner;
   private Long expireAt;
   @Builder.Default private List<Transaction> transactions = new ArrayList<>();
   private LibraryCardStatus libraryCardStatus;
-  @Builder.Default private List<OverdueFee> overdueFees = new ArrayList<>();
 
   public void addOwner(Reader reader) {
     this.owner = reader;
@@ -29,5 +28,10 @@ public class LibraryCard extends BaseEntity {
 
   public void addTransactions(List<Transaction> transactions) {
     transactions.forEach(transaction -> this.addTransaction(transaction));
+  }
+
+  @ToString.Include(name = "userId")
+  public Long getUserId() {
+    return this.owner != null ? this.owner.getId() : null;
   }
 }

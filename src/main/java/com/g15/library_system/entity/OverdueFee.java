@@ -12,8 +12,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class OverdueFee extends BaseEntity {
   private Float price;
-  private LibraryCard card;
-  private Integer overdueDays;
   private FineStatus fineStatus;
   private OverdueFeeStrategy strategy;
 }

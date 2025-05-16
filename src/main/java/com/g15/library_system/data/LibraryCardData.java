@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
+@Deprecated
 public class LibraryCardData implements Data<LibraryCard> {
   private static final LibraryCardData INSTANCE = new LibraryCardData();
   private final List<LibraryCard> LibraryCards = new ArrayList<>();

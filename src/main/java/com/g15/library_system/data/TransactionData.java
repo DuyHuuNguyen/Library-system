@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class TransactionData implements Data<Transaction>, TransactionSubject {
   private static final TransactionData INSTANCE = new TransactionData();
   private final List<Transaction> transactions = new ArrayList<>();
@@ -64,10 +65,10 @@ public class TransactionData implements Data<Transaction>, TransactionSubject {
         List.of(
             Transaction.builder()
                 .id(1L)
-                .books(
-                    List.of(
-                        BookData.getInstance().getBooks().get(2),
-                        BookData.getInstance().getBooks().get(3)))
+                //                .books(
+                //                    List.of(
+                //                        BookData.getInstance().getBooks().get(2),
+                //                        BookData.getInstance().getBooks().get(3)))
                 .librarian(LibrarianData.getInstance().getLibrarians().get(0))
                 .expectedReturnAt(1726214400000L)
                 .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 9, 1)))
@@ -76,10 +77,10 @@ public class TransactionData implements Data<Transaction>, TransactionSubject {
                 .build(),
             Transaction.builder()
                 .id(2L)
-                .books(
-                    List.of(
-                        BookData.getInstance().getBooks().get(0),
-                        BookData.getInstance().getBooks().get(1)))
+                //                .books(
+                //                    List.of(
+                //                        BookData.getInstance().getBooks().get(0),
+                //                        BookData.getInstance().getBooks().get(1)))
                 .librarian(LibrarianData.getInstance().getLibrarians().get(1))
                 .expectedReturnAt(1726300800000L)
                 .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 8, 1)))
@@ -88,7 +89,7 @@ public class TransactionData implements Data<Transaction>, TransactionSubject {
                 .build(),
             Transaction.builder()
                 .id(3L)
-                .books(List.of(BookData.getInstance().getBooks().get(4)))
+                //                .books(List.of(BookData.getInstance().getBooks().get(4)))
                 .librarian(LibrarianData.getInstance().getLibrarians().get(0))
                 .expectedReturnAt(1726387200000L)
                 .actualReturnAt(0L)
