@@ -3,8 +3,7 @@ package com.g15.library_system.data;
 import com.g15.library_system.entity.*;
 import com.g15.library_system.enums.LibraryCardStatus;
 import com.g15.library_system.enums.TransactionType;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import lombok.Getter;
 
 @Getter
@@ -53,6 +52,7 @@ public class ReaderData implements Data<Reader> {
             .dateOfBirth(978307200000L) // 2001-01-01
             .avatarKey("avatar1")
             .phoneNumber("123456789")
+            .isSubscribe(true)
             .build();
     var libCard1 =
         LibraryCard.builder()
@@ -68,12 +68,16 @@ public class ReaderData implements Data<Reader> {
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.getFirst())
                 .books(
-                    List.of(
-                        books.stream()
-                            .filter(
-                                b -> b.getTitle().equals("Harry Potter and the Sorcerer's Stone"))
-                            .findFirst()
-                            .orElseThrow()))
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(
+                                    b ->
+                                        b.getTitle()
+                                            .equals("Harry Potter and the Sorcerer's Stone"))
+                                .findFirst()
+                                .orElseThrow(),
+                            3)))
                 .expectedReturnAt(
                     System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000) // 30 days ago
                 .actualReturnAt(
@@ -102,6 +106,7 @@ public class ReaderData implements Data<Reader> {
             .dateOfBirth(1009843200000L) // 2002-01-01
             .avatarKey("avatar2")
             .phoneNumber("234567890")
+            .isSubscribe(true)
             .build();
     var libCard2 =
         LibraryCard.builder()
@@ -117,12 +122,18 @@ public class ReaderData implements Data<Reader> {
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(1))
                 .books(
-                    books.stream()
-                        .filter(
-                            b ->
-                                b.getTitle().equals("The Great Gatsby")
-                                    || b.getTitle().equals("To Kill a Mockingbird"))
-                        .toList())
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("The Great Gatsby"))
+                                .findFirst()
+                                .orElseThrow(),
+                            3,
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("To Kill a Mockingbird"))
+                                .findFirst()
+                                .orElseThrow(),
+                            2)))
                 .expectedReturnAt(
                     System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000) // 14 days from now
                 .actualReturnAt(null)
@@ -133,13 +144,14 @@ public class ReaderData implements Data<Reader> {
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(0))
                 .books(
-                    List.of(
-                        books.stream()
-                            .filter(b -> b.getTitle().equals("Pride and Prejudice"))
-                            .findFirst()
-                            .orElseThrow()))
-                .expectedReturnAt(
-                    System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000) // 7 days from now
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("Pride and Prejudice"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
+                .expectedReturnAt(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(null)
                 .description("Borrowed 'Pride and Prejudice'")
                 .build());
@@ -171,11 +183,13 @@ public class ReaderData implements Data<Reader> {
                 .transactionType(TransactionType.RETURN)
                 .librarian(librarians.get(1))
                 .books(
-                    List.of(
-                        books.stream()
-                            .filter(b -> b.getTitle().equals("The Hobbit"))
-                            .findFirst()
-                            .orElseThrow()))
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("The Hobbit"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() - 45L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(System.currentTimeMillis() - 40L * 24 * 60 * 60 * 1000)
                 .description("Returned 'The Hobbit'")
@@ -186,11 +200,13 @@ public class ReaderData implements Data<Reader> {
                 .transactionType(TransactionType.RETURN)
                 .librarian(librarians.get(0))
                 .books(
-                    List.of(
-                        books.stream()
-                            .filter(b -> b.getTitle().equals("1984"))
-                            .findFirst()
-                            .orElseThrow()))
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("1984"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() - 60L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(System.currentTimeMillis() - 58L * 24 * 60 * 60 * 1000)
                 .description("Returned '1984'")
@@ -224,11 +240,13 @@ public class ReaderData implements Data<Reader> {
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(1))
                 .books(
-                    List.of(
-                        books.stream()
-                            .filter(b -> b.getTitle().equals("The Catcher in the Rye"))
-                            .findFirst()
-                            .orElseThrow()))
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("The Catcher in the Rye"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(null)
                 .description("Borrowed 'The Catcher in the Rye'")
@@ -238,11 +256,13 @@ public class ReaderData implements Data<Reader> {
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(0))
                 .books(
-                    List.of(
-                        books.stream()
-                            .filter(b -> b.getTitle().equals("1984"))
-                            .findFirst()
-                            .orElseThrow()))
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("1984"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(null)
                 .description("Borrowed '1984'")
@@ -252,11 +272,13 @@ public class ReaderData implements Data<Reader> {
                 .transactionType(TransactionType.RETURN)
                 .librarian(librarians.get(1))
                 .books(
-                    List.of(
-                        books.stream()
-                            .filter(b -> b.getTitle().equals("The Odyssey"))
-                            .findFirst()
-                            .orElseThrow()))
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("The Odyssey"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() - 15L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(System.currentTimeMillis() - 14L * 24 * 60 * 60 * 1000)
                 .description("Returned 'The Odyssey'")
@@ -275,6 +297,7 @@ public class ReaderData implements Data<Reader> {
             .dateOfBirth(1104537600000L) // 2005-01-01
             .avatarKey("avatar5")
             .phoneNumber("567890123")
+            .isSubscribe(true)
             .build();
     var libCard5 =
         LibraryCard.builder()
@@ -289,11 +312,13 @@ public class ReaderData implements Data<Reader> {
             .transactionType(TransactionType.BORROW)
             .librarian(librarians.get(0))
             .books(
-                List.of(
-                    books.stream()
-                        .filter(b -> b.getTitle().equals("Moby-Dick"))
-                        .findFirst()
-                        .orElseThrow()))
+                new TreeMap<>(
+                    Map.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("Moby-Dick"))
+                            .findFirst()
+                            .orElseThrow(),
+                        1)))
             .expectedReturnAt(System.currentTimeMillis() + 10L * 24 * 60 * 60 * 1000)
             .actualReturnAt(null)
             .description("Borrowed 'Moby-Dick'")
@@ -311,6 +336,7 @@ public class ReaderData implements Data<Reader> {
             .dateOfBirth(1136073600000L) // 2006-01-01
             .avatarKey("avatar6")
             .phoneNumber("678901234")
+            .isSubscribe(true)
             .build();
     var libCard6 =
         LibraryCard.builder()
@@ -326,11 +352,13 @@ public class ReaderData implements Data<Reader> {
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(1))
                 .books(
-                    List.of(
-                        books.stream()
-                            .filter(b -> b.getTitle().equals("The Old Man and the Sea"))
-                            .findFirst()
-                            .orElseThrow()))
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("The Old Man and the Sea"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(null)
                 .description("The Old Man and the Sea'")
@@ -379,6 +407,14 @@ public class ReaderData implements Data<Reader> {
                 .id(114L)
                 .transactionType(TransactionType.RETURN)
                 .librarian(librarians.get(0))
+                .books(
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("Moby-Dick"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() - 10L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(System.currentTimeMillis() - 8L * 24 * 60 * 60 * 1000)
                 .description("Returned 'Moby Dick'")
@@ -388,9 +424,16 @@ public class ReaderData implements Data<Reader> {
                 .id(115L)
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(1))
+                .books(
+                    Map.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("Great Expectations"))
+                            .findFirst()
+                            .orElseThrow(),
+                        1))
                 .expectedReturnAt(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(null)
-                .description("Borrowed 'Don Quixote'")
+                .description("Borrowed 'Great Expectations'")
                 .build());
     libCard7.addTransactions(transactions7);
     ethan.addLibraryCard(libCard7);
@@ -418,6 +461,14 @@ public class ReaderData implements Data<Reader> {
             .id(116L)
             .transactionType(TransactionType.BORROW)
             .librarian(librarians.get(0))
+            .books(
+                new TreeMap<>(
+                    Map.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("War and Peace"))
+                            .findFirst()
+                            .orElseThrow(),
+                        1)))
             .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
             .actualReturnAt(null)
             .description("Borrowed 'War and Peace'")
@@ -449,6 +500,14 @@ public class ReaderData implements Data<Reader> {
                 .id(117L)
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(1))
+                .books(
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("Crime and Punishment"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(null)
                 .description("Borrowed 'Crime and Punishment'")
@@ -457,6 +516,14 @@ public class ReaderData implements Data<Reader> {
                 .id(118L)
                 .transactionType(TransactionType.RETURN)
                 .librarian(librarians.get(0))
+                .books(
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("The Divine Comedy"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() - 25L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(System.currentTimeMillis() - 23L * 24 * 60 * 60 * 1000)
                 .description("Returned 'The Divine Comedy'")
@@ -466,17 +533,34 @@ public class ReaderData implements Data<Reader> {
                 .id(119L)
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(1))
+                .books(
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("To Kill a Mockingbird"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(null)
-                .description("Borrowed 'Les Misérables'")
+                .description("Borrowed 'To Kill a Mockingbird'")
                 .build(),
             Transaction.builder()
                 .id(120L)
                 .transactionType(TransactionType.RETURN)
                 .librarian(librarians.get(0))
+                .books(
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(
+                                    b -> b.getTitle().equals("The Adventures of Sherlock Holmes"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() - 15L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(System.currentTimeMillis() - 14L * 24 * 60 * 60 * 1000)
-                .description("Returned 'The Count of Monte Cristo'")
+                .description("Returned 'The Adventures of Sherlock Holmes'")
                 .overdueFee(overdueFees.get(7))
                 .build());
     libCard9.addTransactions(transactions9);
@@ -506,17 +590,36 @@ public class ReaderData implements Data<Reader> {
                 .id(121L)
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(1))
+                .books(
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("The Divine Comedy"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(null)
-                .description("Borrowed 'Jane Eyre'")
+                .description("Borrowed 'The Divine Comedy'")
                 .build(),
             Transaction.builder()
                 .id(122L)
                 .transactionType(TransactionType.RETURN)
                 .librarian(librarians.get(0))
+                .books(
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(
+                                    b ->
+                                        b.getTitle()
+                                            .equals("Harry Potter and the Sorcerer's Stone"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
                 .expectedReturnAt(System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(System.currentTimeMillis() - 28L * 24 * 60 * 60 * 1000)
-                .description("Returned 'Wuthering Heights'")
+                .description("Returned 'Harry Potter and the Sorcerer's Stone'")
                 .overdueFee(overdueFees.get(8))
                 .build());
     libCard10.addTransactions(transactions10);

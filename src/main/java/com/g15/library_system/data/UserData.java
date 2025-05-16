@@ -12,7 +12,6 @@ import lombok.Getter;
 public class UserData implements Data<User> {
   private static final UserData INSTANCE = new UserData();
   private final List<Observer> users = new ArrayList<>();
-  private final List<Librarian> librarians = LibrarianData.getInstance().getLibrarians();
   private final List<Reader> readers = ReaderData.getInstance().getReaders();
 
   private UserData() {
@@ -36,7 +35,6 @@ public class UserData implements Data<User> {
   }
 
   private void initializeData() {
-    //    this.users.addAll(librarians);
-    //    this.users.addAll(readers);
+    this.users.addAll(readers.stream().filter(Reader::getIsSubscribe).toList());
   }
 }

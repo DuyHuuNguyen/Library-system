@@ -1,9 +1,6 @@
 package com.g15.library_system.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @ToString(callSuper = true)
@@ -14,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 public class Reader extends User {
   private ReaderType readerType;
   private LibraryCard libraryCard;
+  @Builder.Default private Boolean isSubscribe = false;
 
   public void addLibraryCard(LibraryCard libraryCard) {
     if (this.libraryCard != null) {

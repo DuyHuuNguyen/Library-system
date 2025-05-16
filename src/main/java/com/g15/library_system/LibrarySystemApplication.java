@@ -3,8 +3,6 @@ package com.g15.library_system;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import com.g15.library_system.entity.*;
-import com.g15.library_system.enums.*;
 import com.g15.library_system.view.LoginFrame;
 import java.awt.*;
 import javax.swing.*;
