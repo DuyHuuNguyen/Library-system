@@ -7,5 +7,6 @@ public enum ApiKey {
   SELECTED_TABLE,
   NOTIFICATION,
   RELOAD,
-  SEARCH;
+  SEARCH,
+  SEND_EMAIL;
 }

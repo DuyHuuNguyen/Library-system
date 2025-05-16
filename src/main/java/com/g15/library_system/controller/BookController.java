@@ -1,6 +1,8 @@
 package com.g15.library_system.controller;
 
+import com.g15.library_system.dto.request.ExportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
+import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
 import java.util.List;
@@ -48,5 +50,13 @@ public class BookController {
 
   public List<Book> getAll() {
     return this.bookFacade.getAll();
+  }
+
+  public List<NotifyBookResponse> getAllNewBooks() {
+    return this.bookFacade.getAllNewBook();
+  }
+
+  public void exportExcel(ExportExcelRequest request) {
+    this.bookFacade.exportExcel(request);
   }
 }

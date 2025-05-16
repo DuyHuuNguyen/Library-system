@@ -14,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 public class Reader extends User {
   private ReaderType readerType;
   private LibraryCard libraryCard;
+  private boolean IsReceiveNotify;
 
   public void addLibraryCard(LibraryCard libraryCard) {
     this.libraryCard = libraryCard;

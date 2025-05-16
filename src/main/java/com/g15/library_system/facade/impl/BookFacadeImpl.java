@@ -1,21 +1,26 @@
 package com.g15.library_system.facade.impl;
 
+import com.g15.library_system.dto.request.ExportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
+import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
 import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.service.BookService;
 import com.g15.library_system.service.ExcelService;
-import jakarta.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class BookFacadeImpl implements BookFacade {
+  private static final Logger log = LoggerFactory.getLogger(BookFacadeImpl.class);
   private final BookService bookService;
   private final BookMapper bookMapper;
   private final ExcelService excelService;
@@ -74,9 +79,22 @@ public class BookFacadeImpl implements BookFacade {
     return this.bookService.findAll();
   }
 
-  @PostConstruct
-  public void run() {
-    //    this.exportExcel(this.getAll(),"demo-api-export.xlsx","header");
-    this.excelService.readExcelFileToBooks("src/main/resources/exceldemo-api-export.xlsx");
+  @Override
+  public List<NotifyBookResponse> getAllNewBook() {
+    var newBooks = new ArrayList<NotifyBookResponse>();
+    for (var book : this.bookService.findAll()) {
+      if (book.isNewBook() || true) {
+        var m = this.bookMapper.toNotifyBookResponse(book);
+        log.info("data ->{}", m);
+        newBooks.add(m);
+        book.changeIsNewBookState(false);
+      }
+    }
+    return newBooks;
+  }
+
+  @Override
+  public void exportExcel(ExportExcelRequest request) {
+    log.info("excel exporting .... {}", request);
   }
 }

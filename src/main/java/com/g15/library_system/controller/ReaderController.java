@@ -27,4 +27,8 @@ public class ReaderController {
   public Optional<Reader> findById(String id) {
     return readerFacade.findById(id);
   }
+
+  public String[] getAllEmailAcceptNotifyNewBook() {
+    return this.readerFacade.getAllEmailAcceptNotifyNewBook();
+  }
 }

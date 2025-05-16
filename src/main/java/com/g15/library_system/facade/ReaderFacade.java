@@ -12,4 +12,6 @@ public interface ReaderFacade {
   Optional<Reader> findByName(String name);
 
   Optional<Reader> findById(String id);
+
+  String[] getAllEmailAcceptNotifyNewBook();
 }

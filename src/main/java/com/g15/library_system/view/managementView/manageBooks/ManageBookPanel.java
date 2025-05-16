@@ -134,7 +134,7 @@ public class ManageBookPanel extends JPanel {
     this.bookController.addNewBook(newBook.get());
   }
 
-  public void findByTextOfTextFieldSearchOptionUpDataToTable() {
+  private void findByTextOfTextFieldSearchOptionUpDataToTable() {
     var text = this.toolPanel.getTextOfTextFieldSearchOption();
     this.removeAllDataTable();
 
@@ -145,5 +145,13 @@ public class ManageBookPanel extends JPanel {
       log.info("data {}", item);
     }
     this.checkboxTablePanel.addDataToTable(this.bookMapper.toBookData(this.bookResponses));
+  }
+
+  private void exportExcel() {
+    var ExportExcelRequest =
+        com.g15.library_system.dto.request.ExportExcelRequest.builder()
+            .nameFile("")
+            .headerSheet("")
+            .build();
   }
 }
