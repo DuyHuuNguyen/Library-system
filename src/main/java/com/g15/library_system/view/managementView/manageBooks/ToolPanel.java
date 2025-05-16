@@ -133,7 +133,7 @@ public class ToolPanel extends JPanel {
             .icon("/icons/import-export.png", 10);
     exportBt.addActionListener(
         e -> {
-          // code here
+          this.mapApi.get(ApiKey.EXPORT_EXCEL).run();
         });
     importBt =
         CustomButtonBuilder.builder()

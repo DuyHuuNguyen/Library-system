@@ -1,5 +1,6 @@
 package com.g15.library_system.facade.impl;
 
+import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.dto.request.ExportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
@@ -7,8 +8,10 @@ import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
 import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.service.BookService;
+import com.g15.library_system.service.EmailProducerService;
+import com.g15.library_system.service.ExcelProducerService;
 import com.g15.library_system.service.ExcelService;
-import java.util.ArrayList;
+import com.g15.library_system.util.DateUtil;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +27,8 @@ public class BookFacadeImpl implements BookFacade {
   private final BookService bookService;
   private final BookMapper bookMapper;
   private final ExcelService excelService;
+  private final EmailProducerService emailProducerService;
+  private final ExcelProducerService excelProducerService;
 
   @Override
   public List<String> searchTitleContains(String title) {
@@ -81,20 +86,20 @@ public class BookFacadeImpl implements BookFacade {
 
   @Override
   public List<NotifyBookResponse> getAllNewBook() {
-    var newBooks = new ArrayList<NotifyBookResponse>();
-    for (var book : this.bookService.findAll()) {
-      if (book.isNewBook() || true) {
-        var m = this.bookMapper.toNotifyBookResponse(book);
-        log.info("data ->{}", m);
-        newBooks.add(m);
-        book.changeIsNewBookState(false);
-      }
-    }
-    return newBooks;
+    return this.bookService.findAll().stream()
+        .filter(book -> DateUtil.isNowDay(book.getCreatedAt()))
+        .map(book -> this.bookMapper.toNotifyBookResponse(book))
+        .toList();
   }
 
   @Override
   public void exportExcel(ExportExcelRequest request) {
-    log.info("excel exporting .... {}", request);
+    this.excelProducerService.export(request);
+  }
+
+  @Override
+  public void sendEmailNotificationNewBook(
+      EmailNotificationNewBooksDTO emailNotificationNewBooksDTO) {
+    this.emailProducerService.send(emailNotificationNewBooksDTO);
   }
 }

@@ -1,5 +1,6 @@
 package com.g15.library_system.controller;
 
+import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.dto.request.ExportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
@@ -58,5 +59,10 @@ public class BookController {
 
   public void exportExcel(ExportExcelRequest request) {
     this.bookFacade.exportExcel(request);
+  }
+
+  public void sendEmailNotificationNewBook(
+      EmailNotificationNewBooksDTO emailNotificationNewBooksDTO) {
+    this.bookFacade.sendEmailNotificationNewBook(emailNotificationNewBooksDTO);
   }
 }

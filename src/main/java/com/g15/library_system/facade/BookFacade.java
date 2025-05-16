@@ -1,5 +1,6 @@
 package com.g15.library_system.facade;
 
+import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.dto.request.ExportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
@@ -30,4 +31,6 @@ public interface BookFacade {
   List<NotifyBookResponse> getAllNewBook();
 
   void exportExcel(ExportExcelRequest request);
+
+  void sendEmailNotificationNewBook(EmailNotificationNewBooksDTO emailNotificationNewBooksDTO);
 }

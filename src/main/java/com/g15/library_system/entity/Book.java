@@ -35,8 +35,6 @@ public class Book extends BaseEntity implements Comparable<Book> {
 
   private BookStatus bookStatus;
 
-  private boolean isNewBook;
-
   public boolean titleContains(String title) {
     return this.title.toLowerCase().contains(title.toLowerCase());
   }
@@ -76,9 +74,5 @@ public class Book extends BaseEntity implements Comparable<Book> {
 
   public boolean hasFirstImage() {
     return !this.images.isEmpty();
-  }
-
-  public void changeIsNewBookState(boolean isNewBook) {
-    this.isNewBook = isNewBook;
   }
 }
