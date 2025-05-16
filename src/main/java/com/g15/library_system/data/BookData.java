@@ -212,7 +212,7 @@ public class BookData implements Data<Book>, BookSubject {
                 .id(13L)
                 .createdAt(System.currentTimeMillis())
                 .author("Herman Melville")
-                .bookStatus(BookStatus.AVAILABLE)
+                .bookStatus(BookStatus.LOST)
                 .title("Moby-Dick")
                 .publisher("Harper & Brothers")
                 .publishYear(1851)
