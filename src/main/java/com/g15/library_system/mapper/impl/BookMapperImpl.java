@@ -1,7 +1,9 @@
 package com.g15.library_system.mapper.impl;
 
 import com.g15.library_system.dto.BookExcelDTO;
+import com.g15.library_system.dto.TitleAndFirstImageBookDTO;
 import com.g15.library_system.dto.response.BookResponse;
+import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
@@ -108,6 +110,37 @@ public class BookMapperImpl implements BookMapper {
         .currentQuantity(bookExcelDTO.getCurrentQuantity())
         .totalQuantity(bookExcelDTO.getTotalQuantity())
         .bookStatus(Enum.valueOf(BookStatus.class, bookExcelDTO.getBookStatus()))
+        .build();
+  }
+
+  @Override
+  public NotifyBookResponse toNotifyBookResponse(Book book) {
+    if (book == null) return null;
+    return NotifyBookResponse.builder()
+        .title(book.getTitle())
+        .author(book.getAuthor())
+        .publisher(book.getPublisher())
+        .firstImage(book.getFirstImage())
+        .build();
+  }
+
+  @Override
+  public Object[][] toDataNotifyBookTable(List<NotifyBookResponse> responses) {
+    Object[][] data = new Object[responses.size()][];
+    for (int i = 0; i < data.length; i++) {
+      var book = responses.get(i);
+      if (book != null)
+        data[i] = new Object[] {book.getTitle(), book.getAuthor(), book.getPublisher()};
+    }
+    return data;
+  }
+
+  @Override
+  public TitleAndFirstImageBookDTO toTitleAndFirstImageBookDTO(NotifyBookResponse response) {
+    if (response == null) return null;
+    return TitleAndFirstImageBookDTO.builder()
+        .title(response.getTitle())
+        .firstImage(response.firstImage)
         .build();
   }
 }

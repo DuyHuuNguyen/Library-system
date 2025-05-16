@@ -1,9 +1,11 @@
 package com.g15.library_system.view.managementView.manageBooks;
 
+import com.g15.library_system.enums.ApiKey;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
+import java.util.Map;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 
@@ -16,7 +18,10 @@ public class EmailFormPanel extends RoundedShadowPanel {
   private JScrollPane bodyScroll;
   private JButton sendButton;
 
-  public EmailFormPanel() {
+  private Map<ApiKey, Runnable> mapApi;
+
+  public EmailFormPanel(Map<ApiKey, Runnable> mapApi) {
+    this.mapApi = mapApi;
     setLayout(new MigLayout("insets 20, wrap 2", "[right]10[grow, fill]", "[]10[]10[]10[]"));
     setBackground(Color.WHITE);
     setBorder(BorderFactory.createLineBorder(Style.BLUE_HEADER_TABLE_AND_BUTTON));
@@ -48,18 +53,19 @@ public class EmailFormPanel extends RoundedShadowPanel {
             .text("Send")
             .backgroundColor(Style.BLUE_HEADER_TABLE_AND_BUTTON)
             .preferredSize(new Dimension(120, 35));
+    this.sendButton.addActionListener(e -> mapApi.get(ApiKey.SEND_EMAIL).run());
 
-    add(toLabel);
-    add(toField, "growx");
+    this.add(toLabel);
+    this.add(toField, "growx");
 
-    add(subjectLabel);
-    add(subjectField, "growx");
+    this.add(subjectLabel);
+    this.add(subjectField, "growx");
 
-    add(bodyLabel, "top");
-    add(bodyScroll, "growx, growy, height 250::600");
+    this.add(bodyLabel, "top");
+    this.add(bodyScroll, "growx, growy, height 250::600");
 
-    add(new JLabel());
-    add(sendButton, "right, width 120!");
+    this.add(new JLabel());
+    this.add(sendButton, "right, width 120!");
 
     this.setPreferredSize(new Dimension(600, 500));
   }

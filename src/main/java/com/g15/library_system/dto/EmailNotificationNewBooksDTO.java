@@ -1,15 +1,13 @@
 package com.g15.library_system.dto;
 
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@ToString
 public class EmailNotificationNewBooksDTO {
   private String[] emails;
   private List<TitleAndFirstImageBookDTO> titleAndFirstImageDTOS;

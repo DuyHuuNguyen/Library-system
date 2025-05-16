@@ -33,6 +33,7 @@ public class MailServiceImpl implements MailService {
         javaMailSender.send(mail);
     }
 
+    @Override
     @SneakyThrows
     public void sendNotificationNewBooks(EmailNotificationNewBooksDTO notificationNewBooksDTO) {
         log.info("send email notification new books");
