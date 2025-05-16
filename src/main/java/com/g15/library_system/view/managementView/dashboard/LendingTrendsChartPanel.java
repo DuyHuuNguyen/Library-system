@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+
+import org.apache.commons.math3.util.Pair;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -38,20 +40,24 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
     // title panel
     TitlePanel titlePn = new TitlePanel("Lending Trends");
     yearComboBox = titlePn.getYearComboBox();
-    yearComboBox.addActionListener(e ->{
-      selectedYear = Integer.valueOf(String.valueOf(yearComboBox.getSelectedItem()));
-      updateChart();
-    } );
+    yearComboBox.addActionListener(
+        e -> {
+          selectedYear = Integer.valueOf(String.valueOf(yearComboBox.getSelectedItem()));
+          updateChart();
+        });
     monthComboBox = titlePn.getMonthComboBox();
-    monthComboBox.addActionListener(e ->{
-      selectedMonth = String.valueOf(monthComboBox.getSelectedItem());
-      updateChart();
-    } );
+    monthComboBox.addActionListener(
+        e -> {
+          selectedYear = Integer.valueOf(String.valueOf(yearComboBox.getSelectedItem()));
+          selectedMonth = String.valueOf(monthComboBox.getSelectedItem());
+          updateChart();
+        });
 
     // chart panel
     chartDataset = new DefaultCategoryDataset();
 
-    lendingData = TransactionStatistics.aggregateLendingTrendData((int) yearComboBox.getSelectedItem());
+    lendingData =
+        TransactionStatistics.aggregateLendingTrendData((int) yearComboBox.getSelectedItem());
     if (lendingData != null && !lendingData.isEmpty()) {
       for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
         chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
@@ -60,7 +66,7 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
 
     barChart =
         JFreeChartGenerator.createBarChart(
-            "", "Number of Months", "Number of Books borrowed", chartDataset);
+            "", "Months", "Books borrowed", chartDataset);
 
     CategoryPlot plot = (CategoryPlot) barChart.getPlot();
     NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -86,13 +92,9 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
 
   private void updateChart() {
 
-    if (selectedYear == null) return;
-
     if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
-      // Show statistics by month for the selected year
       showMonthlyStatistics(selectedYear);
     } else {
-      // Show statistics by day for the selected month of the selected year
       showDailyStatistics(selectedMonth, selectedYear);
     }
     chartPanel.revalidate();
@@ -107,12 +109,12 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
       for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
         chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
       }
+      renderChart("Months");
     }
-    chartPanel.repaint();
   }
 
   private void showDailyStatistics(String month, int year) {
-    lendingData = TransactionStatistics.aggregateLendingTrendData(month,year);
+    lendingData = TransactionStatistics.aggregateLendingTrendData(month, year);
     clearChartData();
 
     if (lendingData != null && !lendingData.isEmpty()) {
@@ -120,7 +122,18 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
         chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
       }
     }
-    chartPanel.repaint();
+    renderChart("Days");
+  }
+
+  private void renderChart(String categoryAxisLabel) {
+    barChart =
+        JFreeChartGenerator.createBarChart(
+            "", categoryAxisLabel, "Number of Books borrowed", chartDataset);
+    this.remove(chartPanel);
+    chartPanel = new ChartPanel(barChart);
+    this.add(chartPanel, BorderLayout.CENTER);
+    this.revalidate();
+    this.repaint();
   }
 
   @Override
@@ -132,7 +145,6 @@ public class LendingTrendsChartPanel extends RoundedShadowPanel implements Trans
         chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
       }
     }
-
     chartPanel.repaint();
   }
 }

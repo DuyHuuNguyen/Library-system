@@ -2,8 +2,6 @@ package com.g15.library_system.view.overrideComponent.tables.tableRenderers;
 
 import com.g15.library_system.enums.Status;
 import com.g15.library_system.view.Style;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import javax.swing.*;

@@ -7,8 +7,6 @@ import com.g15.library_system.entity.*;
 import com.g15.library_system.enums.*;
 import com.g15.library_system.view.LoginFrame;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;

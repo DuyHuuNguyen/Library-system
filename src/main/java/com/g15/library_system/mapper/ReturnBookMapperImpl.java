@@ -1,6 +1,5 @@
 package com.g15.library_system.mapper;
 
-import com.g15.library_system.dto.BookWithQuantityDTO;
 import com.g15.library_system.dto.ReturnBookDTO;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.Transaction;
@@ -23,7 +22,7 @@ public class ReturnBookMapperImpl implements ReturnBookMapper {
             returnBook.getReaderPhoneNumber(),
             returnBook.getReaderEmail(),
             returnBook.getReturnDate(),
-            returnBook.getBooks().stream().map(bookDTO -> bookDTO.getBook().getTitle()).toList(),
+            returnBook.getBooks().stream().map(book -> book.getTitle()).toList(),
             returnBook.getStatus(),
             returnBook.getTotalFine(),
             returnBook.getStaffProcessed(),
@@ -42,14 +41,15 @@ public class ReturnBookMapperImpl implements ReturnBookMapper {
         .readerPhoneNumber(reader.getPhoneNumber())
         .readerEmail(reader.getEmail())
         .returnDate(transaction.getCreatedAt().toString())
-        .books(
-            transaction.getBooks().stream().map(book -> new BookWithQuantityDTO(book, 1)).toList())
-        //                .status(transaction.getStatus().getValue())
-        //                .totalFine(transaction.getTotalFine() != null ?
-        // transaction.getTotalFine().toString() : "0")
-        //                .staffProcessed(transaction.getStaff() != null ?
-        // transaction.getStaff().getFullName() : "")
-        //                .notes(transaction.getNotes())
+        .books(transaction.getBooks())
+        .status(transaction.getTransactionType().toString())
+        .totalFine(
+            transaction.getOverdueFee() != null
+                ? transaction.getOverdueFee().getPrice().toString()
+                : "0")
+        .staffProcessed(
+            transaction.getLibrarian() != null ? transaction.getLibrarian().getFullName() : "")
+        .notes(transaction.getDescription())
         .build();
   }
 }
