@@ -43,4 +43,11 @@ public class ReaderFacadeImpl implements ReaderFacade {
   public Optional<Reader> findById(String id) {
     return readerService.findById(id);
   }
+
+  @Override
+  public String[] getAllEmailAcceptNotifyNewBook() {
+    return this.readerService.findAll().stream()
+//        .filter(reader -> reader.isIsReceiveNotify())
+        .toArray(String[]::new);
+  }
 }

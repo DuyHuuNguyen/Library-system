@@ -3,6 +3,7 @@ package com.g15.library_system.util;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
 
 public class DateUtil {
   public static boolean isSameDay(long timestamp1, long timestamp2) {
@@ -21,5 +22,14 @@ public class DateUtil {
 
   public static long convertToEpochMilli(LocalDate date) {
     return date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+  }
+
+  public static boolean isNowDay(long timestamp) {
+    Calendar currentDate = Calendar.getInstance();
+    Calendar dateToCheck = Calendar.getInstance();
+    dateToCheck.setTimeInMillis(timestamp);
+    return currentDate.get(Calendar.YEAR) == dateToCheck.get(Calendar.YEAR)
+        && currentDate.get(Calendar.MONTH) == dateToCheck.get(Calendar.MONTH)
+        && currentDate.get(Calendar.DAY_OF_MONTH) == dateToCheck.get(Calendar.DAY_OF_MONTH);
   }
 }
