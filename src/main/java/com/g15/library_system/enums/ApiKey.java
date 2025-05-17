@@ -9,5 +9,6 @@ public enum ApiKey {
   RELOAD,
   SEARCH,
   SEND_EMAIL,
-  EXPORT_EXCEL;
+  EXPORT_EXCEL,
+  IMPORT_EXCEL;
 }

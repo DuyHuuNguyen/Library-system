@@ -2,6 +2,7 @@ package com.g15.library_system.service.impl;
 
 import com.g15.library_system.dto.request.ExportExcelRequest;
 import com.g15.library_system.dto.request.ImportExcelRequest;
+import com.g15.library_system.service.BookService;
 import com.g15.library_system.service.ExcelConsumerService;
 import com.g15.library_system.service.ExcelService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class ExcelConsumerServiceImpl implements ExcelConsumerService {
 
   private final ExcelService excelService;
+
+  private final BookService bookService;
 
   @Override
   @RabbitHandler
@@ -32,12 +35,11 @@ public class ExcelConsumerServiceImpl implements ExcelConsumerService {
   @RabbitHandler
   @RabbitListener(queues = {"${rabbitmq.importQueue}"})
   public void receive(ImportExcelRequest importExcelRequest) {
-    log.info("👌👌👌👌 I received message ExportExcelRequest {} ", importExcelRequest);
-    var book = this.excelService.readExcelFileToBooks(importExcelRequest.getUrl());
-    //    log.info("hello {} " , book.getFirst());
-    //    for(var item :  this.excelService.readExcelFileToBooks(importExcelRequest.getUrl())) {
-    //      log.info("read -> {} ", item);
-    //    }
-
+    log.info("👌👌👌👌 I received message ExportExcelRequest {} ", importExcelRequest.getUrl());
+    var books = this.excelService.readExcelFileToBooks(importExcelRequest.getUrl());
+    for (var book : books) {
+      log.info("😍 New book => {}", book.getTitle());
+    }
+    this.bookService.save(books);
   }
 }

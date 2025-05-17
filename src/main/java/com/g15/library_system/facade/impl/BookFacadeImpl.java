@@ -13,7 +13,6 @@ import com.g15.library_system.service.EmailProducerService;
 import com.g15.library_system.service.ExcelProducerService;
 import com.g15.library_system.service.ExcelService;
 import com.g15.library_system.util.DateUtil;
-import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -108,10 +107,5 @@ public class BookFacadeImpl implements BookFacade {
   @Override
   public void importExcel(ImportExcelRequest importExcelRequest) {
     this.excelProducerService.importExcel(importExcelRequest);
-  }
-
-  @PostConstruct
-  void run() {
-    this.importExcel(new ImportExcelRequest("src/main/resources/exceldemo-api-export.xlsx"));
   }
 }

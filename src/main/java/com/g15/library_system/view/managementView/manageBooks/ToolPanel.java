@@ -152,6 +152,7 @@ public class ToolPanel extends JPanel {
     importBt.addActionListener(
         e -> {
           // code here
+          this.mapApi.get(ApiKey.IMPORT_EXCEL).run();
         });
     reloadBt =
         CustomButtonBuilder.builder()
