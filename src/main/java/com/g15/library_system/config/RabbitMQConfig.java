@@ -30,6 +30,12 @@ public class RabbitMQConfig {
   @Value("${rabbitmq.exportExcelRouter}")
   private String exportExcelRouter;
 
+  @Value("${rabbitmq.importQueue}")
+  private String importQueue;
+
+  @Value("${rabbitmq.importRouter}")
+  private String importExcelRouter;
+
   @Bean
   public TopicExchange exchange() {
     return new TopicExchange(topicExchangeEmail);
@@ -65,5 +71,17 @@ public class RabbitMQConfig {
     return BindingBuilder.bind(this.exportExcelQueue())
         .to(exchangeExcel())
         .with(this.exportExcelRouter);
+  }
+
+  @Bean
+  public Queue importExcelQueue() {
+    return new Queue(this.importQueue);
+  }
+
+  @Bean
+  public Binding importExcelBinding() {
+    return BindingBuilder.bind(this.importExcelQueue())
+        .to(this.exchangeExcel())
+        .with(this.importExcelRouter);
   }
 }

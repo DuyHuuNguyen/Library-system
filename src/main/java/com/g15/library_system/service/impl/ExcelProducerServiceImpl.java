@@ -1,6 +1,7 @@
 package com.g15.library_system.service.impl;
 
 import com.g15.library_system.dto.request.ExportExcelRequest;
+import com.g15.library_system.dto.request.ImportExcelRequest;
 import com.g15.library_system.service.ExcelProducerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,20 @@ public class ExcelProducerServiceImpl implements ExcelProducerService {
   @Value("${rabbitmq.exportExcelRouter}")
   private String exportExcelRouter;
 
+  @Value("${rabbitmq.importRouter}")
+  private String importExcelRouter;
+
   @Override
   public void export(ExportExcelRequest exportExcelRequest) {
     log.info("👌👌👌 I send..... ExportExcelRequest");
     this.rabbitTemplate.convertAndSend(
         topicExchangeExportExcel, exportExcelRouter, exportExcelRequest);
+  }
+
+  @Override
+  public void importExcel(ImportExcelRequest importExcelRequest) {
+    log.info("👌👌👌 I send..... ImportExcelRequest");
+    this.rabbitTemplate.convertAndSend(
+        topicExchangeExportExcel, importExcelRouter, importExcelRequest);
   }
 }

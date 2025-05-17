@@ -21,10 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NotifyNewBookPanel extends JPanel {
   private CheckboxTablePanel checkboxTablePanel;
+  private EmailFormPanel emailContentPanel;
 
   private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
   private ReaderController readerController =
       ApplicationContextProvider.getBean(ReaderController.class);
+
+  private String[] emailReceiveNotification = new String[0];
+  private java.util.List<TitleAndFirstImageBookDTO> titleAndFirstImageBookDTOS = new ArrayList<>();
 
   private BookMapper bookMapper = ApplicationContextProvider.getBean(BookMapperImpl.class);
   private java.util.List<NotifyBookResponse> notifyBookResponses = new ArrayList<>();
@@ -56,10 +60,11 @@ public class NotifyNewBookPanel extends JPanel {
     roundedShadowPanel.add(this.checkboxTablePanel);
 
     RoundedShadowPanel roundedShadowPanelEmailForm = new RoundedShadowPanel();
-    JPanel emailContentPanel = new EmailFormPanel(this.mapApi);
-    emailContentPanel.setPreferredSize(new Dimension(750, 650));
-    emailContentPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
-    roundedShadowPanelEmailForm.add(emailContentPanel);
+    this.emailContentPanel = new EmailFormPanel(this.mapApi);
+
+    this.emailContentPanel.setPreferredSize(new Dimension(750, 650));
+    this.emailContentPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    roundedShadowPanelEmailForm.add(this.emailContentPanel);
 
     centerPanel.add(roundedShadowPanel, BorderLayout.CENTER);
     centerPanel.add(roundedShadowPanelEmailForm, BorderLayout.EAST);
@@ -73,6 +78,8 @@ public class NotifyNewBookPanel extends JPanel {
     this.notifyBookResponses.addAll(this.bookController.getAllNewBooks());
     this.checkboxTablePanel.addDataToTable(
         this.bookMapper.toDataNotifyBookTable(this.notifyBookResponses));
+    // tmp
+    this.initData();
   }
 
   private java.util.List<TitleAndFirstImageBookDTO> buildEmailNotificationNewBooks() {
@@ -83,12 +90,37 @@ public class NotifyNewBookPanel extends JPanel {
   }
 
   private void sendEmailNotifyNewBook() {
+
     var content =
         EmailNotificationNewBooksDTO.builder()
-            .emails(this.readerController.getAllEmailAcceptNotifyNewBook())
-            .titleAndFirstImageDTOS(this.buildEmailNotificationNewBooks())
+            .emails(this.emailReceiveNotification)
+            .titleAndFirstImageDTOS(this.titleAndFirstImageBookDTOS)
             .build();
     log.info(" 😁😁😁😁😁 Build content send email {}", content);
-    // continue...
+    this.bookController.sendEmailNotificationNewBook(content);
+  }
+
+  public void initData() {
+    this.emailReceiveNotification = this.readerController.getAllEmailAcceptNotifyNewBook();
+    this.titleAndFirstImageBookDTOS = this.buildEmailNotificationNewBooks();
+    this.loadEmails();
+    this.loadContentEmails();
+    this.loadImages();
+  }
+
+  public void loadImages() {
+    var images =
+        this.titleAndFirstImageBookDTOS.stream()
+            .map(TitleAndFirstImageBookDTO::getFirstImage)
+            .toList();
+    this.emailContentPanel.loadImages(images);
+  }
+
+  public void loadContentEmails() {
+    this.emailContentPanel.loadEmail(this.emailReceiveNotification);
+  }
+
+  public void loadEmails() {
+    this.emailContentPanel.loadContent("heheh");
   }
 }

@@ -8,5 +8,6 @@ public enum ApiKey {
   NOTIFICATION,
   RELOAD,
   SEARCH,
-  SEND_EMAIL, EXPORT_EXCEL;
+  SEND_EMAIL,
+  EXPORT_EXCEL;
 }

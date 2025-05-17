@@ -2,13 +2,16 @@ package com.g15.library_system.view.managementView.manageBooks;
 
 import com.g15.library_system.controller.BookController;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.enums.ApiKey;
 import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.provider.ApplicationContextProvider;
+import com.g15.library_system.verifier.NumberVerifier;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
-import com.g15.library_system.view.swingComponentGenerators.TextFieldGenerator;
+import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import java.awt.*;
+import java.util.Map;
 import java.util.Optional;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +29,13 @@ public class UpsertBookPanel extends JPanel {
 
   private Optional<Book> book;
   private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
+  private Map<ApiKey, Runnable> mapApi;
+
   private int width;
   private int height;
 
-  public UpsertBookPanel(int width, int height) {
+  public UpsertBookPanel(int width, int height, Map<ApiKey, Runnable> mapApi) {
+    this.mapApi = mapApi;
     this.width = width;
     this.height = height;
     this.initPanel();
@@ -37,7 +43,8 @@ public class UpsertBookPanel extends JPanel {
 
   public UpsertBookPanel() {}
 
-  public UpsertBookPanel(int width, int height, Optional<Book> book) {
+  public UpsertBookPanel(int width, int height, Optional<Book> book, Map<ApiKey, Runnable> mapApi) {
+    this.mapApi = mapApi;
     this.book = book;
     this.width = width;
     this.height = height;
@@ -86,47 +93,36 @@ public class UpsertBookPanel extends JPanel {
     bookInfoPanel.setBorder(BorderFactory.createTitledBorder("Book Information"));
 
     txtBookTitle =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(new Dimension(300, 25));
     txtQuantity =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .addInputVerifier(new NumberVerifier());
+    ;
+
     txtAuthor =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .popupMenu(name -> bookController.supportSearch(name), null);
+
     txtPublisher =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .popupMenu(name -> bookController.supportSearch(name), null);
     txtPublisherYear =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .addInputVerifier(new NumberVerifier());
+
     txtGenre =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .popupMenu(name -> GenreType.findByName(name), null);
 
     var panelTitle = createFieldPanel("Book Title *", txtBookTitle);
     panelTitle.setBackground(Style.LIGHT_WHITE_BACKGROUND);
@@ -156,7 +152,7 @@ public class UpsertBookPanel extends JPanel {
 
     this.featurePanel = new ImageDropPanel(300, 300);
 
-    featurePanel.setBorder(BorderFactory.createTitledBorder("Features"));
+    featurePanel.setBorder(BorderFactory.createTitledBorder("Drop Image"));
     featurePanel.setPreferredSize(new Dimension(800, 200));
     featurePanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
@@ -188,6 +184,7 @@ public class UpsertBookPanel extends JPanel {
                   ToastNotification.Location.TOP_CENTER,
                   "Add book successful");
           notification.showNotification();
+          this.clearDataInPanel();
         });
 
     buttonPanel.add(btnCancel);
@@ -230,5 +227,29 @@ public class UpsertBookPanel extends JPanel {
     txtGenre.setText(bookModify.get().getGenreType() + "");
 
     this.featurePanel.loadImagesFromUrls(bookModify.get().getImages());
+  }
+
+  public void addNewBook() {
+    var book =
+        Book.builder()
+            .title(this.txtBookTitle.getText())
+            .currentQuantity(Integer.parseInt(this.txtQuantity.getText()))
+            .totalQuantity(Integer.parseInt(this.txtQuantity.getText()))
+            .publisher(this.txtPublisher.getText())
+            .publishYear(Integer.parseInt(this.txtPublisherYear.getText()))
+            .genreType(GenreType.valueOf(txtGenre.getText()))
+            .images(featurePanel.getImageUrls())
+            .build();
+    log.info("new book {}", book);
+    this.bookController.addNewBook(book);
+
+    ToastNotification panel =
+        new ToastNotification(
+            JOptionPane.getFrameForComponent(this),
+            ToastNotification.Type.INFO,
+            ToastNotification.Location.TOP_CENTER,
+            "Add successful");
+    panel.showNotification();
+    this.mapApi.get(ApiKey.RELOAD).run();
   }
 }

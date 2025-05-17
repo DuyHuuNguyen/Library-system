@@ -52,7 +52,7 @@ public class EmailFormPanel extends JPanel {
             .text("Send")
             .backgroundColor(Style.BLUE_HEADER_TABLE_AND_BUTTON)
             .preferredSize(new Dimension(120, 35));
-    this.sendButton.addActionListener(e -> mapApi.get(ApiKey.SEND_EMAIL).run());
+    this.sendButton.addActionListener(e -> this.mapApi.get(ApiKey.SEND_EMAIL).run());
 
     this.add(toLabel);
     this.add(toField, "growx");
@@ -67,5 +67,23 @@ public class EmailFormPanel extends JPanel {
     this.add(sendButton, "right, width 120!");
 
     this.setPreferredSize(new Dimension(600, 500));
+  }
+
+  public void loadEmail(String[] emails) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < emails.length; i++) {
+      sb.append(emails[i]);
+      var isLastItem = (i + 1 == emails.length);
+      if (!isLastItem) sb.append(", ");
+    }
+    this.toField.setText(sb.toString());
+  }
+
+  public void loadImages(java.util.List<String> images) {
+    this.bodyArea.loadImagesFromUrls(images);
+  }
+
+  public void loadContent(String content) {
+    this.contentEmail.setText("cc");
   }
 }

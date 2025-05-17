@@ -10,14 +10,12 @@ import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.OptionPaneInputFileExcel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import javax.swing.*;
-
-
-import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +58,7 @@ public class ManageBookPanel extends JPanel {
           ApiKey.SEARCH,
           () -> this.findByTextOfTextFieldSearchOptionUpDataToTable(),
           ApiKey.EXPORT_EXCEL,
-          ()-> this.exportExcel());
+          () -> this.exportExcel());
 
   private UpsertBookPanel addNewBookPanel;
   private UpsertBookPanel modifyBookPanel;
@@ -92,18 +90,18 @@ public class ManageBookPanel extends JPanel {
 
     this.bookFormAndDropImagesPanel = new JPanel(new BorderLayout());
     this.bookFormAndDropImagesPanel.setBackground(Color.PINK);
-    this.bookFormPanel = new UpsertBookPanel(1000, 500);
+    this.bookFormPanel = new UpsertBookPanel(1000, 500, this.mapAPIs);
 
     this.bookFormAndDropImagesPanel.add(bookFormPanel, BorderLayout.CENTER);
 
     this.panelContent.add(bookFormAndDropImagesPanel, CONSTRAINT_ADD_NEW_BOOK);
 
-    this.addNewBookPanel = new UpsertBookPanel(1000, 500);
+    this.addNewBookPanel = new UpsertBookPanel(1000, 500, this.mapAPIs);
     this.panelContent.add(this.addNewBookPanel, CONSTRAINT_MODIFY_BOOK);
 
     this.panelContent.add(new NotifyNewBookPanel(), CONSTRAINT_NOTIFY);
 
-    this.modifyBookPanel = new UpsertBookPanel(100, 500);
+    this.modifyBookPanel = new UpsertBookPanel(100, 500, this.mapAPIs);
     this.panelContent.add(modifyBookPanel, CONSTRAINT_MODIFY_BOOK);
 
     add(panelContent, BorderLayout.CENTER);
@@ -155,25 +153,31 @@ public class ManageBookPanel extends JPanel {
   }
 
   private void exportExcel() {
-    Pair<String,String> fileAndHeaderSheet = OptionPaneInputFileExcel.buildPane();
-    if(fileAndHeaderSheet == null ) {
-      ToastNotification panel = new
-              ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.WARNING,
-              ToastNotification.Location.TOP_CENTER, "Export fail");
+    Pair<String, String> fileAndHeaderSheet = OptionPaneInputFileExcel.buildPane();
+    if (fileAndHeaderSheet == null) {
+      ToastNotification panel =
+          new ToastNotification(
+              JOptionPane.getFrameForComponent(this),
+              ToastNotification.Type.WARNING,
+              ToastNotification.Location.TOP_CENTER,
+              "Export fail");
       panel.showNotification();
       return;
     }
 
-    ToastNotification panel = new
-            ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.SUCCESS,
-            ToastNotification.Location.TOP_CENTER, "Export successfully");
+    ToastNotification panel =
+        new ToastNotification(
+            JOptionPane.getFrameForComponent(this),
+            ToastNotification.Type.SUCCESS,
+            ToastNotification.Location.TOP_CENTER,
+            "Export successfully");
     panel.showNotification();
 
     var exportExcelRequest =
         com.g15.library_system.dto.request.ExportExcelRequest.builder()
             .nameFile(fileAndHeaderSheet.getFirst())
             .headerSheet(fileAndHeaderSheet.getSecond())
-                .books(this.bookController.getAll())
+            .books(this.bookController.getAll())
             .build();
     this.bookController.exportExcel(exportExcelRequest);
   }

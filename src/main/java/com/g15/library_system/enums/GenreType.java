@@ -1,5 +1,8 @@
 package com.g15.library_system.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum GenreType {
   FANTASY,
   DYSTOPIAN,
@@ -27,5 +30,12 @@ public enum GenreType {
 
   public static GenreType[] getAll() {
     return values();
+  }
+
+  public static List<String> findByName(String name) {
+    return Arrays.stream(values())
+        .map(genreType -> genreType.toString())
+        .filter(genreTypeString -> genreTypeString.toLowerCase().contains(name.toLowerCase()))
+        .toList();
   }
 }

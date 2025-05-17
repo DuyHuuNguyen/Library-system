@@ -1,2 +1,12 @@
-package com.g15.library_system.util;public @interface AutoIncrement {
+package com.g15.library_system.util;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface AutoIncrement {
+  // build logic di anh
 }
