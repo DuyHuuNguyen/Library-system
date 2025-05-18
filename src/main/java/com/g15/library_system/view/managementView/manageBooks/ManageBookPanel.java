@@ -193,9 +193,13 @@ public class ManageBookPanel extends JPanel {
     if (option == JFileChooser.APPROVE_OPTION) {
       File selectedFile = fileChooser.getSelectedFile();
       String path = selectedFile.getAbsolutePath();
-      JOptionPane.showMessageDialog(this, "Đường dẫn file: " + path);
 
-      log.info("Url import excel {}", path);
+      ToastNotification panel = new
+              ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.INFO,
+              ToastNotification.Location.TOP_CENTER, "File name : " + selectedFile.getName());
+      panel.showNotification();
+
+      log.info("Url import excel {}", selectedFile.getName());
       this.bookController.importExcel(ImportExcelRequest.builder().url(path).build());
 
     } else {

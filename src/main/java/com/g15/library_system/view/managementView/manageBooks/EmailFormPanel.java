@@ -15,7 +15,7 @@ public class EmailFormPanel extends JPanel {
   private JTextArea contentEmail;
   private ImageDropPanel bodyArea;
   private JScrollPane bodyScroll;
-  private JButton sendButton;
+  private JButton sendButton,reloadBtn;
 
   private Map<ApiKey, Runnable> mapApi;
 
@@ -54,6 +54,12 @@ public class EmailFormPanel extends JPanel {
             .preferredSize(new Dimension(120, 35));
     this.sendButton.addActionListener(e -> this.mapApi.get(ApiKey.SEND_EMAIL).run());
 
+    this.reloadBtn =  CustomButtonBuilder.builder()
+            .text("reload")
+            .backgroundColor(Style.BLUE_HEADER_TABLE_AND_BUTTON)
+            .preferredSize(new Dimension(120, 35));
+    this.reloadBtn.addActionListener(e->this.mapApi.get(ApiKey.RELOAD).run());
+
     this.add(toLabel);
     this.add(toField, "growx");
 
@@ -63,13 +69,23 @@ public class EmailFormPanel extends JPanel {
     this.add(bodyLabel, "top");
     this.add(bodyScroll, "growx, growy, height 250::600");
 
+    // Đặt hai nút vào một JPanel để chúng nằm sát nhau
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+    buttonPanel.setOpaque(false);
+    buttonPanel.add(reloadBtn);
+    buttonPanel.add(sendButton);
+
     this.add(new JLabel());
-    this.add(sendButton, "right, width 120!");
+    this.add(buttonPanel, "right, spanx");
 
     this.setPreferredSize(new Dimension(600, 500));
   }
 
   public void loadEmail(String[] emails) {
+    if (emails == null) {
+      this.toField.setText("");
+      return;
+    };
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < emails.length; i++) {
       sb.append(emails[i]);
@@ -83,7 +99,12 @@ public class EmailFormPanel extends JPanel {
     this.bodyArea.loadImagesFromUrls(images);
   }
 
-  public void loadContent(String content) {
-    this.contentEmail.setText("cc");
+  public void loadContent(String content,String subject) {
+    this.subjectField.setText(subject);
+    this.contentEmail.setText(content);
+  }
+
+  public void removeAllImages() {
+    this.bodyArea.clearALlImages();
   }
 }
