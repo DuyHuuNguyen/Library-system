@@ -8,6 +8,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -131,10 +132,10 @@ public class ImageDropPanel extends JPanel {
     }
 
     for (String path : urls) {
-      File file = new File(path);
-      if (file.exists() && isImageFile(file)) {
+      URL resourceUrl = getClass().getResource(path);
+      if (resourceUrl != null) {
         try {
-          BufferedImage img = ImageIO.read(file);
+          BufferedImage img = ImageIO.read(resourceUrl);
           Image scaled = img.getScaledInstance(widthOfImage, heightOfImage, Image.SCALE_SMOOTH);
           JLabel imgLabel = new JLabel(new ImageIcon(scaled));
           imgLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -154,12 +155,8 @@ public class ImageDropPanel extends JPanel {
                     imagesContainer.revalidate();
                     imagesContainer.repaint();
 
-                    if (file.exists()) {
-                      file.delete();
-                      System.out.println("Đã xóa ảnh: " + file.getAbsolutePath());
-                    }
-
-                    imageUrls.remove(file.getAbsolutePath());
+                    System.out.println("Đã xóa ảnh khỏi giao diện: " + path);
+                    imageUrls.remove(path);
                   }
                 }
               });
@@ -169,6 +166,8 @@ public class ImageDropPanel extends JPanel {
           System.err.println("Không thể đọc ảnh từ: " + path);
           e.printStackTrace();
         }
+      } else {
+        System.err.println("Không tìm thấy file resource: " + path);
       }
     }
 

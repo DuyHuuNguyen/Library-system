@@ -3,7 +3,7 @@ package com.g15.library_system;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import com.g15.library_system.view.LoginFrame;
+import com.g15.library_system.view.loginView.LoginFrame;
 import java.awt.*;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class LibrarySystemApplication {
     UIManager.put(
         "defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13)); // set default font
     FlatMacLightLaf.setup(); // light mode
-    //    FlatMacDarkLaf.setup();//dark mode (dang bug)
+
 
     SpringApplication app = new SpringApplication(LibrarySystemApplication.class);
     app.setHeadless(false);

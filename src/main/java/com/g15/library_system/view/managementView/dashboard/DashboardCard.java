@@ -5,19 +5,22 @@ import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentGenerators.LabelGenerator;
+import lombok.Setter;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class DashboardCard extends RoundedPanel {
-  private final String title;
-  private final String amount;
+  private String title;
+  @Setter
+  private String amount;
   private Font font;
-  private final CustomButton viewButton;
-  private final String iconPath;
-  private final Color backgroundColor;
-  private final Color borderColor;
-  private final Color iconBackgroundColor = Color.white;
+  private CustomButton viewButton;
+  private String iconPath;
+  private Color backgroundColor;
+  private Color borderColor;
+  private Color iconBackgroundColor = Color.white;
   private int radius;
 
   public DashboardCard(
@@ -34,8 +37,8 @@ public class DashboardCard extends RoundedPanel {
     this.backgroundColor = backgroundColor;
     this.borderColor = borderColor;
 
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-    setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
     RoundedPanel iconPanel = new RoundedPanel(12, iconBackgroundColor, borderColor);
     iconPanel.setPreferredSize(new Dimension(50, 50));
@@ -74,13 +77,13 @@ public class DashboardCard extends RoundedPanel {
 
     //    viewButton.setFocusPainted(false);
     viewButton.setAlignmentX(CENTER_ALIGNMENT);
-    add(iconPanel);
-    add(Box.createVerticalStrut(10));
-    add(titleLabel);
-    add(Box.createVerticalStrut(5));
-    add(numberLabel);
-    add(Box.createVerticalStrut(10));
-    add(viewButton);
+    this.add(iconPanel);
+    this.add(Box.createVerticalStrut(10));
+    this.add(titleLabel);
+    this.add(Box.createVerticalStrut(5));
+    this.add(numberLabel);
+    this.add(Box.createVerticalStrut(10));
+    this.add(viewButton);
   }
 
   public void setDashBoardCardButtonListener(ActionListener listener) {

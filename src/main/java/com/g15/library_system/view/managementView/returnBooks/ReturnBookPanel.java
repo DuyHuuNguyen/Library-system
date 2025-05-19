@@ -27,7 +27,6 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
   private CardLayout cardLayout;
   private String[] columnNames = {
     "",
-    "Return ID",
     "Reader Name",
     "Reader Number",
     "Reader Email",

@@ -1,6 +1,5 @@
 package com.g15.library_system.data;
 
-import com.g15.library_system.entity.Librarian;
 import com.g15.library_system.entity.Observer;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.User;
