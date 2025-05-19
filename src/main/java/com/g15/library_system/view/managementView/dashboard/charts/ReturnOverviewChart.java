@@ -1,5 +1,7 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
+import com.g15.library_system.data.BookData;
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.observers.BookObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
@@ -18,8 +20,6 @@ public class ReturnOverviewChart extends RoundedShadowPanel
     implements BookObserver, FilterObserver {
   private ChartPanel chartPanel;
   private JFreeChart pieChart;
-  private JComboBox<Integer> yearComboBox;
-  private JComboBox<String> monthComboBox;
   private String selectedMonth;
   private Integer selectedYear;
   // data
@@ -31,17 +31,17 @@ public class ReturnOverviewChart extends RoundedShadowPanel
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setLayout(new BorderLayout());
     this.setPreferredSize(new Dimension(500, 450));
+    BookData.getInstance().registerObserver(this);
 
     // title panel
     TitlePanel titlePn = new TitlePanel("Return Overview");
-    this.yearComboBox = titlePn.getYearComboBox();
-    this.monthComboBox = titlePn.getMonthComboBox();
-    this.yearComboBox.setSelectedItem(2024);
+    this.selectedYear = titlePn.getSelectedYear();
+    this.selectedMonth = titlePn.getSelectedMonth();
     // chart panel
     this.chartDataset = new DefaultPieDataset();
 
     this.returnOverviewData =
-        transactionStatistics.countReturnStatusDistribution((int) yearComboBox.getSelectedItem());
+        transactionStatistics.countReturnStatusDistribution(selectedYear);
     if (hasData()) {
       for (Map.Entry<String, Long> entry : returnOverviewData.entrySet()) {
         chartDataset.setValue(entry.getKey(), entry.getValue());

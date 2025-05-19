@@ -3,7 +3,6 @@ package com.g15.library_system.data;
 import com.g15.library_system.entity.Librarian;
 import com.g15.library_system.observers.LibrarianObserver;
 import com.g15.library_system.observers.LibrarianSubject;
-
 import java.util.ArrayList;
 import java.util.List;
 

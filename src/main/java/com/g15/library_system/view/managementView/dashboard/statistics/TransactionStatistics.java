@@ -3,6 +3,7 @@ package com.g15.library_system.view.managementView.dashboard.statistics;
 import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.enums.ReturnStatus;
 import com.g15.library_system.enums.TransactionType;
+import com.g15.library_system.util.DateUtil;
 import java.time.*;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -10,8 +11,6 @@ import java.time.format.TextStyle;
 import java.util.*;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.g15.library_system.util.DateUtil;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -19,19 +18,20 @@ public class TransactionStatistics {
 
   public Map<String, Long> aggregateLateReturnTrend(int year) {
     return ReaderData.getInstance().getTransactions().stream()
-            .filter(trans ->
-                    trans.getActualReturnAt() != null &&
-                            trans.getExpectedReturnAt() != null &&
-                            trans.getReturnStatus() == ReturnStatus.OVERDUE &&
-                            DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year)
-            .map(trans ->
-                    DateUtil.convertToLocalDate(trans.getActualReturnAt())
-                            .getMonth())
-            .collect(Collectors.groupingBy(
-                    month -> month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
-                    () -> new TreeMap<>(Comparator.comparingInt(m -> Month.valueOf(m.toUpperCase()).getValue())),
-                    Collectors.counting()
-            ));
+        .filter(
+            trans ->
+                trans.getActualReturnAt() != null
+                    && trans.getExpectedReturnAt() != null
+                    && trans.getReturnStatus() == ReturnStatus.OVERDUE
+                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year)
+        .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth())
+        .collect(
+            Collectors.groupingBy(
+                month -> month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                () ->
+                    new TreeMap<>(
+                        Comparator.comparingInt(m -> Month.valueOf(m.toUpperCase()).getValue())),
+                Collectors.counting()));
   }
 
   public Map<String, Long> aggregateLateReturnTrend(String selectedMonth, int year) {
@@ -39,20 +39,19 @@ public class TransactionStatistics {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
 
     return ReaderData.getInstance().getTransactions().stream()
-            .filter(trans ->
-                            trans.getActualReturnAt() != null &&
-                            trans.getExpectedReturnAt() != null &&
-                            trans.getReturnStatus() == ReturnStatus.OVERDUE &&
-                            DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year &&
-                            DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth() == monthConverted)
-            .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()))
-            .collect(Collectors.groupingBy(
-                    date -> date.format(formatter),
-                    TreeMap::new,
-                    Collectors.counting()
-            ));
+        .filter(
+            trans ->
+                trans.getActualReturnAt() != null
+                    && trans.getExpectedReturnAt() != null
+                    && trans.getReturnStatus() == ReturnStatus.OVERDUE
+                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year
+                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth()
+                        == monthConverted)
+        .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()))
+        .collect(
+            Collectors.groupingBy(
+                date -> date.format(formatter), TreeMap::new, Collectors.counting()));
   }
-
 
   public Map<String, Long> countReturnStatusDistribution(int year) {
     return ReaderData.getInstance().getTransactions().stream()

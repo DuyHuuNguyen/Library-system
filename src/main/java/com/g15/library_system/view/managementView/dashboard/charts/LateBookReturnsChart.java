@@ -1,5 +1,6 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.observers.ReaderObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
@@ -15,42 +16,40 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-public class LendingTrendsChart extends RoundedShadowPanel
+public class LateBookReturnsChart extends RoundedShadowPanel
     implements ReaderObserver, FilterObserver {
   private ChartPanel chartPanel;
   private JFreeChart barChart;
 
   private TransactionStatistics transactionStatistics = new TransactionStatistics();
-  private JComboBox<Integer> yearComboBox;
-  private JComboBox<String> monthComboBox;
-  private ArrayList<Integer> years = new ArrayList<>();
   private String selectedMonth;
   private Integer selectedYear;
   private Map<String, Long> lendingData = new HashMap<>();
   private DefaultCategoryDataset chartDataset;
 
-  public LendingTrendsChart() {
+  public LateBookReturnsChart() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setPreferredSize(new Dimension(730, 450));
     this.setLayout(new BorderLayout());
-
+    ReaderData.getInstance().registerObserver(this);//important to update the chart*
     // title panel
     TitlePanel titlePn = new TitlePanel("Late Book Returns Over Time");
-    yearComboBox = titlePn.getYearComboBox();
-    monthComboBox = titlePn.getMonthComboBox();
+    this.selectedYear = titlePn.getSelectedYear();
+    this.selectedMonth = titlePn.getSelectedMonth();
 
     // chart panel
     chartDataset = new DefaultCategoryDataset();
 
     lendingData =
-        transactionStatistics.aggregateLateReturnTrend((int) yearComboBox.getSelectedItem());
+        transactionStatistics.aggregateLateReturnTrend(selectedYear);
     if (lendingData != null && !lendingData.isEmpty()) {
       for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
         chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
       }
     }
 
-    barChart = JFreeChartGenerator.createLineChart("", "Months", "Number of Late Returns", chartDataset);
+    barChart =
+        JFreeChartGenerator.createLineChart("", "Months", "Number of Late Returns", chartDataset);
 
     chartPanel = new ChartPanel(barChart);
     titlePn.addObserver(this);

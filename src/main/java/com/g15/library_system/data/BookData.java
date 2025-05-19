@@ -22,19 +22,30 @@ public class BookData implements Data<Book>, BookSubject {
   }
 
   @Override
-  public void add(Book b) {
-    this.books.add(b);
+  public void add(Book book) {
+    this.books.add(book);
     notifyObservers();
   }
 
   @Override
-  public void add(List<Book> t) {}
+  public void add(List<Book> books) {
+    this.books.addAll(books);
+    notifyObservers();
+  }
 
   @Override
-  public void remove(Book book) {}
+  public void remove(Book book) {
+    this.books.remove(book);
+    notifyObservers();
+  }
 
   @Override
-  public void remove(int index) {}
+  public void remove(int index) {
+    if (index >= 0 && index < books.size()) {
+      this.books.remove(index);
+      notifyObservers();
+    }
+  }
 
   public static BookData getInstance() {
     return INSTANCE;
@@ -53,11 +64,10 @@ public class BookData implements Data<Book>, BookSubject {
                 .publishYear(1997)
                 .genreType(GenreType.FANTASY)
                 .currentQuantity(10)
-                .totalQuantity(100)
+                .totalQuantity(20)
                 .images(
                     new ArrayList<>(
-                        List.of(
-                                "/bookImages/harryPotterAndTheSorcererStone/image1.png")))
+                        List.of("/bookImages/harryPotterAndTheSorcererStone/image1.png")))
                 .build(),
             Book.builder()
                 .id(2L)
@@ -69,7 +79,7 @@ public class BookData implements Data<Book>, BookSubject {
                 .publishYear(1949)
                 .genreType(GenreType.DYSTOPIAN)
                 .currentQuantity(8)
-                .totalQuantity(50)
+                .totalQuantity(25)
                 .images(new ArrayList<>(List.of("/bookImages/iBelieve/IBelieve.png")))
                 .build(),
             Book.builder()
@@ -183,7 +193,7 @@ public class BookData implements Data<Book>, BookSubject {
                 .publishYear(-800)
                 .genreType(GenreType.EPIC)
                 .currentQuantity(9)
-                .totalQuantity(40)
+                .totalQuantity(12)
                 .images(new ArrayList<>(List.of("/bookImages/theOdyssey/The Odyssey.jpg")))
                 .build(),
             Book.builder()
@@ -214,7 +224,7 @@ public class BookData implements Data<Book>, BookSubject {
                 .publishYear(1866)
                 .genreType(GenreType.PHILOSOPHICAL)
                 .currentQuantity(2)
-                .totalQuantity(18)
+                .totalQuantity(21)
                 .images(
                     new ArrayList<>(
                         List.of(
@@ -232,7 +242,7 @@ public class BookData implements Data<Book>, BookSubject {
                 .publishYear(1851)
                 .genreType(GenreType.ADVENTURE)
                 .currentQuantity(5)
-                .totalQuantity(22)
+                .totalQuantity(28)
                 .images(
                     new ArrayList<>(
                         List.of(
@@ -250,7 +260,7 @@ public class BookData implements Data<Book>, BookSubject {
                 .publishYear(1996)
                 .genreType(GenreType.FANTASY)
                 .currentQuantity(10)
-                .totalQuantity(50)
+                .totalQuantity(32)
                 .images(
                     new ArrayList<>(
                         List.of(
@@ -267,7 +277,7 @@ public class BookData implements Data<Book>, BookSubject {
                 .publishYear(1892)
                 .genreType(GenreType.MYSTERY)
                 .currentQuantity(3)
-                .totalQuantity(20)
+                .totalQuantity(23)
                 .images(
                     new ArrayList<>(
                         List.of(
@@ -355,9 +365,7 @@ public class BookData implements Data<Book>, BookSubject {
   }
 
   public int totalBooksQuantity() {
-    return books.stream()
-        .mapToInt(Book::getTotalQuantity)
-        .sum();
+    return books.stream().mapToInt(Book::getTotalQuantity).sum();
   }
 
   // observer

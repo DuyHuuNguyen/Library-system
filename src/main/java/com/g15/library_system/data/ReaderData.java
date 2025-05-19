@@ -27,8 +27,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   }
 
   @Override
-  public void add(Reader b) {
-    this.readers.add(b);
+  public void add(Reader reader) {
+    this.readers.add(reader);
     notifyObservers();
   }
 
@@ -64,25 +64,25 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
 
   public int getTotalReturnedBooks() {
     return transactions.stream()
-            .filter(t -> t.getTransactionType() == TransactionType.RETURN)
-            .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
-            .sum();
+        .filter(t -> t.getTransactionType() == TransactionType.RETURN)
+        .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
+        .sum();
   }
 
   public int getTotalLendedBooks() {
     return transactions.stream()
-            .filter(t -> t.getTransactionType() == TransactionType.BORROW)
-            .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
-            .sum();
+        .filter(t -> t.getTransactionType() == TransactionType.BORROW)
+        .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
+        .sum();
   }
 
   public int getTotalOverdueBooks() {
     return transactions.stream()
-            .filter(t -> t.getTransactionType() == TransactionType.BORROW)
-            .filter(t -> t.getActualReturnAt() != null && t.getExpectedReturnAt() != null)
-            .filter(t -> t.getActualReturnAt() > t.getExpectedReturnAt())
-            .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
-            .sum();
+        .filter(t -> t.getTransactionType() == TransactionType.BORROW)
+        .filter(t -> t.getActualReturnAt() != null && t.getExpectedReturnAt() != null)
+        .filter(t -> t.getActualReturnAt() > t.getExpectedReturnAt())
+        .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
+        .sum();
   }
 
   private void initializeData() {
@@ -122,10 +122,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(
-                                    b ->
-                                        b.getTitle()
-                                            .equals("I Believe"))
+                                .filter(b -> b.getTitle().equals("I Believe"))
                                 .findFirst()
                                 .orElseThrow(),
                             3)))
@@ -657,7 +654,10 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(b -> b.getTitle().equals("Harry Potter and the Sorcerer's Stone"))
+                                .filter(
+                                    b ->
+                                        b.getTitle()
+                                            .equals("Harry Potter and the Sorcerer's Stone"))
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
@@ -722,7 +722,10 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(b -> b.getTitle().equals("Harry Potter and the Sorcerer's Stone"))
+                                .filter(
+                                    b ->
+                                        b.getTitle()
+                                            .equals("Harry Potter and the Sorcerer's Stone"))
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
@@ -739,10 +742,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(
-                                    b ->
-                                        b.getTitle()
-                                            .equals("I Believe"))
+                                .filter(b -> b.getTitle().equals("I Believe"))
                                 .findFirst()
                                 .orElseThrow(),
                             1)))

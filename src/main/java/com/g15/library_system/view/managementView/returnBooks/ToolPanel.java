@@ -1,7 +1,10 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
 import com.g15.library_system.data.BookData;
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.entity.Reader;
+import com.g15.library_system.entity.StudentReaderType;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.view.Style;
@@ -168,9 +171,28 @@ public class ToolPanel extends JPanel {
                   .totalQuantity(100)
                   .build();
           BookData.getInstance().add(newBook);
-          System.out.println(BookData.getInstance().getBooks().toString());
-
-          JOptionPane.showMessageDialog(this, "Exporting...");
+          System.out.println(BookData.getInstance().getBooks().size());
+          var tui =
+                  Reader.builder()
+                          .id(1L)
+                          .email("ok")
+                          .firstName("Tao neeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+                          .lastName("Ok")
+                          .address("123 Main St")
+                          .dateOfBirth(978307200000L) // 2001-01-01
+                          .createdAt(1746988800000L) // 2025-05-11
+                          .avatarKey("avatar1")
+                          .phoneNumber("123456789")
+                          .isSubscribe(true)
+                          .readerType(
+                                  StudentReaderType.builder()
+                                          .faculty("Information Technology")
+                                          .enrollmentYear(2021)
+                                          .studentID("IT2021001")
+                                          .build())
+                          .build();
+          ReaderData.getInstance().add(tui);
+            System.out.println(ReaderData.getInstance().getReaders().size());
         });
     actionMap.put("Import", () -> JOptionPane.showMessageDialog(this, "Importing..."));
     actionMap.put("Refresh", () -> JOptionPane.showMessageDialog(this, "Refreshing..."));

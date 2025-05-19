@@ -21,7 +21,6 @@ public class LibrarySystemApplication {
         "defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13)); // set default font
     FlatMacLightLaf.setup(); // light mode
 
-
     SpringApplication app = new SpringApplication(LibrarySystemApplication.class);
     app.setHeadless(false);
     app.run(args);

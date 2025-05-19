@@ -3,6 +3,7 @@ package com.g15.library_system.view.managementView.dashboard.statistics;
 import com.g15.library_system.data.BookData;
 import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.enums.TransactionType;
 import java.time.Instant;
 import java.time.Month;
 import java.time.ZoneId;
@@ -11,8 +12,6 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.g15.library_system.enums.TransactionType;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -33,52 +32,52 @@ public class BookStatistics {
                 Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
   }
 
+  public Map<Book, Long> getMostBorrowedBooks(int limit, int year) {
+    return ReaderData.getInstance().getTransactions().stream()
+        .filter(transaction -> transaction.getTransactionType() == TransactionType.BORROW)
+        .filter(
+            transaction ->
+                Instant.ofEpochMilli(transaction.getCreatedAt())
+                        .atZone(ZoneId.systemDefault())
+                        .getYear()
+                    == year)
+        .flatMap(transaction -> transaction.getBooks().entrySet().stream())
+        .collect(
+            Collectors.groupingBy(Map.Entry::getKey, Collectors.summingLong(Map.Entry::getValue)))
+        .entrySet()
+        .stream()
+        .sorted(Map.Entry.<Book, Long>comparingByValue(Comparator.reverseOrder()))
+        .limit(limit)
+        .collect(
+            Collectors.toMap(
+                Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+  }
 
-    public Map<Book, Long> getMostBorrowedBooks(int limit, int year) {
-        return ReaderData.getInstance().getTransactions().stream()
-            .filter(transaction -> transaction.getTransactionType() == TransactionType.BORROW)
-            .filter(
-                transaction ->
-                    Instant.ofEpochMilli(transaction.getCreatedAt())
-                            .atZone(ZoneId.systemDefault())
-                            .getYear()
-                        == year)
-            .flatMap(transaction -> transaction.getBooks().entrySet().stream())
-            .collect(
-                Collectors.groupingBy(Map.Entry::getKey, Collectors.summingLong(Map.Entry::getValue)))
-            .entrySet()
-            .stream()
-            .sorted(Map.Entry.<Book, Long>comparingByValue(Comparator.reverseOrder()))
-            .limit(limit)
-            .collect(
-                Collectors.toMap(
-                    Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-    }
-    public Map<Book, Long> getMostBorrowedBooks(int limit, String month, int year) {
+  public Map<Book, Long> getMostBorrowedBooks(int limit, String month, int year) {
 
-        return ReaderData.getInstance().getTransactions().stream()
-            .filter(transaction -> transaction.getTransactionType() == TransactionType.BORROW)
-            .filter(
-                transaction ->
-                    Instant.ofEpochMilli(transaction.getCreatedAt())
+    return ReaderData.getInstance().getTransactions().stream()
+        .filter(transaction -> transaction.getTransactionType() == TransactionType.BORROW)
+        .filter(
+            transaction ->
+                Instant.ofEpochMilli(transaction.getCreatedAt())
                             .atZone(ZoneId.systemDefault())
                             .getYear()
                         == year
-                        && Instant.ofEpochMilli(transaction.getCreatedAt())
-                                .atZone(ZoneId.systemDefault())
-                                .getMonth()
-                            == Month.valueOf(month.toUpperCase()))
-            .flatMap(transaction -> transaction.getBooks().entrySet().stream())
-            .collect(
-                Collectors.groupingBy(Map.Entry::getKey, Collectors.summingLong(Map.Entry::getValue)))
-            .entrySet()
-            .stream()
-            .sorted(Map.Entry.<Book, Long>comparingByValue(Comparator.reverseOrder()))
-            .limit(limit)
-            .collect(
-                Collectors.toMap(
-                    Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-    }
+                    && Instant.ofEpochMilli(transaction.getCreatedAt())
+                            .atZone(ZoneId.systemDefault())
+                            .getMonth()
+                        == Month.valueOf(month.toUpperCase()))
+        .flatMap(transaction -> transaction.getBooks().entrySet().stream())
+        .collect(
+            Collectors.groupingBy(Map.Entry::getKey, Collectors.summingLong(Map.Entry::getValue)))
+        .entrySet()
+        .stream()
+        .sorted(Map.Entry.<Book, Long>comparingByValue(Comparator.reverseOrder()))
+        .limit(limit)
+        .collect(
+            Collectors.toMap(
+                Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+  }
 
   public Map<String, Long> aggregateBookAvailabilityData() {
     return BookData.getInstance().getBooks().stream()

@@ -94,7 +94,7 @@ public class DashBoardPanel extends JPanel {
     private ReaderTypesChart readerTypesChart;
     private ReturnOverviewChart booksByGenreChart;
     private BookAvailabilityChart bookAvailabilityChart;
-    private LendingTrendsChart lendingTrendsChart;
+    private LateBookReturnsChart lendingTrendsChart;
     private BorrowsByGenreChart borrowsByGenreChart;
 
     public ContentPanel() {
@@ -111,11 +111,11 @@ public class DashBoardPanel extends JPanel {
       this.add(quickAccessPanel, gbc);
 
       // ROW 1.5
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.gridwidth = 3;
+      gbc.gridx = 0;
+      gbc.gridy++;
+      gbc.gridwidth = 3;
 
-            this.add(new TopChoicesPanel(), gbc);
+      this.add(new TopChoicesPanel(), gbc);
 
       // ========== ROW 2 ==========
       gbc.gridx = 0;
@@ -144,7 +144,7 @@ public class DashBoardPanel extends JPanel {
       gbc.gridx = 0;
       gbc.gridy++;
       gbc.gridwidth = 2;
-      lendingTrendsChart = new LendingTrendsChart();
+      lendingTrendsChart = new LateBookReturnsChart();
       this.add(lendingTrendsChart, gbc);
 
       gbc.gridx = 2;
@@ -153,8 +153,6 @@ public class DashBoardPanel extends JPanel {
       this.add(readerTypesChart, gbc);
     }
   }
-
-
 
   public void setTotalBooksCardButtonListener(ActionListener listener) {
     this.quickAccessPanel.setTotalBooksCardButtonListener(listener);

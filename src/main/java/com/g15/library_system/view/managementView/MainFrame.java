@@ -127,11 +127,11 @@ public class MainFrame extends JFrame {
           setHover(NavigationType.OVERDUE_BOOKS);
         });
 
-      workspacePanel.setReadersCardButtonListener(
-              e -> {
-                  workspacePanel.showPanel(NavigationType.READERS);
-                  setHover(NavigationType.READERS);
-              });
+    workspacePanel.setReadersCardButtonListener(
+        e -> {
+          workspacePanel.showPanel(NavigationType.READERS);
+          setHover(NavigationType.READERS);
+        });
 
     workspacePanel.setLibrariansCardButtonListener(
         e -> {

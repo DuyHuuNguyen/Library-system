@@ -1,5 +1,6 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.observers.ReaderObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
@@ -21,8 +22,6 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
   private JFreeChart stackedBarChart;
 
   private TransactionStatistics transactionStatistics = new TransactionStatistics();
-  private JComboBox<Integer> yearComboBox;
-  private JComboBox<String> monthComboBox;
   private ArrayList<Integer> years = new ArrayList<>();
   private String selectedMonth;
   private Integer selectedYear;
@@ -34,17 +33,18 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setPreferredSize(new Dimension(730, 450));
     this.setLayout(new BorderLayout());
+    ReaderData.getInstance().registerObserver(this);
 
     // title panel
     TitlePanel titlePn = new TitlePanel("Book Borrows By Genre");
-    yearComboBox = titlePn.getYearComboBox();
-    monthComboBox = titlePn.getMonthComboBox();
+    this.selectedYear = titlePn.getSelectedYear();
+    this.selectedMonth = titlePn.getSelectedMonth();
 
     // chart panel
     chartDataset = new DefaultCategoryDataset();
 
     borrowingData =
-        transactionStatistics.aggregateGenreBorrowData((int) yearComboBox.getSelectedItem());
+        transactionStatistics.aggregateGenreBorrowData(selectedYear);
 
     if (borrowingData != null && !borrowingData.isEmpty()) {
       for (Map.Entry<String, Map<String, Long>> monthEntry : borrowingData.entrySet()) {
@@ -102,6 +102,7 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
         }
       }
     }
+//    System.out.println(borrowingData);
     renderChart("Days");
   }
 
@@ -123,8 +124,8 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
 
   @Override
   public void updateBasedOnComboBox(String month, int year) {
-    selectedMonth = (String) monthComboBox.getSelectedItem();
-    selectedYear = (Integer) yearComboBox.getSelectedItem();
+    selectedMonth = month;
+    selectedYear = year;
     if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
       showMonthlyStatistics(selectedYear);
     } else {

@@ -1,5 +1,6 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.observers.ReaderObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
@@ -17,8 +18,6 @@ import org.jfree.data.general.DefaultPieDataset;
 public class ReaderTypesChart extends RoundedShadowPanel implements ReaderObserver, FilterObserver {
   private ChartPanel chartPanel;
   private JFreeChart pieChart;
-  private JComboBox<Integer> yearComboBox;
-  private JComboBox<String> monthComboBox;
   private String selectedMonth;
   private Integer selectedYear;
   // data
@@ -30,17 +29,17 @@ public class ReaderTypesChart extends RoundedShadowPanel implements ReaderObserv
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setLayout(new BorderLayout());
     this.setPreferredSize(new Dimension(500, 450));
+    ReaderData.getInstance().registerObserver(this);
 
     // title panel
     TitlePanel titlePn = new TitlePanel("Reader Types");
-    this.yearComboBox = titlePn.getYearComboBox();
-    this.monthComboBox = titlePn.getMonthComboBox();
-    this.yearComboBox.setSelectedItem(2024);
+    this.selectedYear = titlePn.getSelectedYear();
+    this.selectedMonth = titlePn.getSelectedMonth();
     // chart panel
     this.chartDataset = new DefaultPieDataset();
 
     this.readerTypeData =
-        readerStatistics.aggregateReaderTypeData((int) yearComboBox.getSelectedItem());
+        readerStatistics.aggregateReaderTypeData(selectedYear);
     if (hasData()) {
       for (Map.Entry<String, Long> entry : readerTypeData.entrySet()) {
         chartDataset.setValue(entry.getKey(), entry.getValue());
