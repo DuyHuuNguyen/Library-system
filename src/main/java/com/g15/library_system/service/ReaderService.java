@@ -8,5 +8,7 @@ public interface ReaderService {
 
   Optional<Reader> findByName(String name);
 
+  Optional<Reader> findById(String id);
+
   List<Reader> findAll();
 }

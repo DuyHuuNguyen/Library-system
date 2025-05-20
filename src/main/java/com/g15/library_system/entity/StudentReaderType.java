@@ -11,8 +11,13 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentReaderType extends BaseEntity implements ReaderType {
+public class StudentReaderType implements ReaderType {
   private String faculty;
   private int enrollmentYear;
   private String studentID;
+
+  @Override
+  public String getTypeName() {
+    return "Student";
+  }
 }

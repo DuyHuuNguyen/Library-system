@@ -1,7 +1,10 @@
 package com.g15.library_system.entity;
 
+import com.g15.library_system.enums.ReturnStatus;
 import com.g15.library_system.enums.TransactionType;
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,12 +18,43 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class Transaction extends BaseEntity {
 
-  private List<Book> books;
-
+  private Map<Book, Integer> books;
   private User librarian;
-
-  private long expectedReturnAt;
-  private long actualReturnAt;
-
+  @ToString.Exclude private LibraryCard libraryCard;
+  private Long expectedReturnAt;
+  private Long actualReturnAt;
+  private String description;
   private TransactionType transactionType;
+  private OverdueFee overdueFee;
+
+  public void addLibrarycard(LibraryCard card) {
+    this.libraryCard = card;
+  }
+
+  @ToString.Include(name = "libraryCardId")
+  public Long getLibraryCardId() {
+    return this.libraryCard != null ? this.libraryCard.getId() : null;
+  }
+
+  public Stream<Map.Entry<String, Long>> getGenreWithQuantities() {
+    if (this.books == null) return Stream.empty();
+    return this.books.entrySet().stream()
+        .map(entry -> Map.entry(entry.getKey().getGenreType().getValue(), (long) entry.getValue()));
+  }
+
+  public Map<Book, Integer> getBooks() {
+    return this.books != null ? this.books : Collections.emptyMap();
+  }
+
+  public ReturnStatus getReturnStatus() {
+    if (this.actualReturnAt == null) {
+      return ReturnStatus.UNRETURNED;
+    }
+
+    if (expectedReturnAt == null) {
+      return ReturnStatus.ON_TIME; // *
+    }
+
+    return actualReturnAt <= expectedReturnAt ? ReturnStatus.ON_TIME : ReturnStatus.OVERDUE;
+  }
 }

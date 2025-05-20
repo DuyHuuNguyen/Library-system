@@ -7,5 +7,7 @@ import java.util.Optional;
 public interface ReaderRepository {
   Optional<Reader> findByName(String name);
 
+  Optional<Reader> findById(String id);
+
   List<Reader> findAll();
 }

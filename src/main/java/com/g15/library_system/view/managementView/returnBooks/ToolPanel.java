@@ -1,6 +1,17 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
+import com.g15.library_system.data.BookData;
+import com.g15.library_system.data.ReaderData;
+import com.g15.library_system.entity.Book;
+import com.g15.library_system.entity.Reader;
+import com.g15.library_system.entity.StudentReaderType;
+import com.g15.library_system.enums.BookStatus;
+import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.returnBooks.commands.Command;
+import com.g15.library_system.view.managementView.returnBooks.commands.EditCommand;
+import com.g15.library_system.view.managementView.returnBooks.commands.ExportCommand;
+import com.g15.library_system.view.managementView.returnBooks.commands.RefreshCommand;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
@@ -12,9 +23,13 @@ import java.util.Map;
 import javax.swing.*;
 
 public class ToolPanel extends JPanel {
-  private CustomButton addBt, mainButton, dropdownButton;
+  private CustomButton addBt, editBt, exportBt, refreshBt, cancelBt;
   private Map<String, Runnable> actionMap = new HashMap<>();
   private ContentAction contentPnAction;
+  private final String[] items = {"Add", "Edit", "Export", "Refresh"};
+  private Command editCommand = new EditCommand();
+  private Command exportCommand = new ExportCommand();
+  private Command refreshCommand = new RefreshCommand();
 
   public ToolPanel(ContentAction contentPnAction) {
     this.contentPnAction = contentPnAction;
@@ -40,11 +55,10 @@ public class ToolPanel extends JPanel {
             .contentAreaFilled(false)
             .preferredSize(new Dimension(170, 40))
             .icon("/icons/addIcon.png", 5);
-    actionBtPn.add(addBt);
 
-    mainButton =
+    editBt =
         CustomButtonBuilder.builder()
-            .text("Actions")
+            .text("Edit")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
@@ -53,62 +67,64 @@ public class ToolPanel extends JPanel {
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .preferredSize(new Dimension(120, 40))
-            .roundedSide(CustomButton.RoundedSide.LEFT);
+            .icon("/icons/edit.png", 17);
 
-    dropdownButton =
+    exportBt =
         CustomButtonBuilder.builder()
-            .text("▼")
+            .text("Export")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
             .radius(6)
-            .alignment(SwingConstants.CENTER)
+            .alignment(SwingConstants.LEFT)
             .drawBorder(false)
-            .roundedSide(CustomButton.RoundedSide.RIGHT)
-            .preferredSize(new Dimension(45, 40));
+            .preferredSize(new Dimension(120, 40))
+            .icon("/icons/export.png", 17);
 
-    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-    panel.add(mainButton);
-    panel.add(dropdownButton);
+    refreshBt =
+        CustomButtonBuilder.builder()
+            .text("Refresh")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Color.WHITE)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
+            .radius(6)
+            .alignment(SwingConstants.LEFT)
+            .drawBorder(false)
+            .preferredSize(new Dimension(120, 40))
+            .icon("/icons/refresh.png", 17);
 
-    JPopupMenu menu = new JPopupMenu();
-
-    String[] items = {"Edit", "Export", "Refresh"};
-    Font menuFont = new Font("Segoe UI", Font.PLAIN, 14);
-    int popupWidth =
-        mainButton.getPreferredSize().width + dropdownButton.getPreferredSize().width - 2;
-    int popupHeight = 35;
+    cancelBt =
+        CustomButtonBuilder.builder()
+            .text("Cancel")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .backgroundColor(Color.white)
+            .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
+            .radius(6)
+            .alignment(SwingConstants.LEFT)
+            .drawBorder(false)
+            .visible(false)
+            .enabled(false)
+            .preferredSize(new Dimension(120, 40))
+            .icon("/icons/cancel.png", 17);
 
     setActionForActionMap();
 
-    for (String itemText : items) {
-      JMenuItem item = new JMenuItem(itemText);
-      item.setFont(menuFont);
-      item.setPreferredSize(new Dimension(popupWidth, popupHeight));
+    editBt.addActionListener(e -> actionMap.get("Edit").run());
+    exportBt.addActionListener(e -> actionMap.get("Export").run());
+    refreshBt.addActionListener(e -> actionMap.get("Refresh").run());
 
-      item.addActionListener(
-          e -> {
-            mainButton.setText(itemText);
-            mainButton.setIcon("/icons/" + itemText.toLowerCase() + ".png", 17);
-            for (ActionListener al : mainButton.getActionListeners()) {
-              mainButton.removeActionListener(al);
-            }
-            mainButton.addActionListener(
-                ev -> {
-                  Runnable action = actionMap.get(itemText);
-                  if (action != null) action.run();
-                });
-          });
+    editBt.addActionListener(e -> editCommand.execute());
+    exportBt.addActionListener(e -> exportCommand.execute());
+    refreshBt.addActionListener(e -> refreshCommand.execute());
 
-      menu.add(item);
-    }
-
-    dropdownButton.addActionListener(
-        e -> {
-          menu.show(panel, 0, panel.getHeight());
-        });
-    actionBtPn.add(panel);
+    actionBtPn.add(addBt);
+    actionBtPn.add(exportBt);
+    actionBtPn.add(refreshBt);
+    actionBtPn.add(editBt);
+    actionBtPn.add(cancelBt);
 
     return actionBtPn;
   }
@@ -137,11 +153,46 @@ public class ToolPanel extends JPanel {
   }
 
   private void setActionForActionMap() {
-    actionMap.put("Edit", contentPnAction.editTable(mainButton));
+    actionMap.put("Edit", contentPnAction.editTable(editBt, cancelBt));
     actionMap.put(
         "Export",
         () -> {
-          JOptionPane.showMessageDialog(this, "Exporting...");
+          Book newBook =
+              Book.builder()
+                  .id(1L)
+                  .createdAt(System.currentTimeMillis())
+                  .author("J.K. Rowling")
+                  .bookStatus(BookStatus.OVERDUE)
+                  .title("Harry Potter and the Sorcerer's Stone")
+                  .publisher("Bloomsbury")
+                  .publishYear(1997)
+                  .genreType(GenreType.FANTASY)
+                  .currentQuantity(10)
+                  .totalQuantity(100)
+                  .build();
+          BookData.getInstance().add(newBook);
+          System.out.println(BookData.getInstance().getBooks().size());
+          var tui =
+                  Reader.builder()
+                          .id(1L)
+                          .email("ok")
+                          .firstName("Tao neeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+                          .lastName("Ok")
+                          .address("123 Main St")
+                          .dateOfBirth(978307200000L) // 2001-01-01
+                          .createdAt(1746988800000L) // 2025-05-11
+                          .avatarKey("avatar1")
+                          .phoneNumber("123456789")
+                          .isSubscribe(true)
+                          .readerType(
+                                  StudentReaderType.builder()
+                                          .faculty("Information Technology")
+                                          .enrollmentYear(2021)
+                                          .studentID("IT2021001")
+                                          .build())
+                          .build();
+          ReaderData.getInstance().add(tui);
+            System.out.println(ReaderData.getInstance().getReaders().size());
         });
     actionMap.put("Import", () -> JOptionPane.showMessageDialog(this, "Importing..."));
     actionMap.put("Refresh", () -> JOptionPane.showMessageDialog(this, "Refreshing..."));

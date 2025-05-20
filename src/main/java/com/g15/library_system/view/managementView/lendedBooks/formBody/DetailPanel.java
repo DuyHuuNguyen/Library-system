@@ -1,15 +1,25 @@
 package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.overrideComponent.SwitchButton;
+import com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser;
+import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAction;
+import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAdapter;
+import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import com.g15.library_system.view.swingComponentGenerators.*;
 import java.awt.*;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 public class DetailPanel extends JPanel {
-  private JLabel lendDateL, dueDateL, copiesL;
-  private JTextField lendDateTF, dueDateTF, copiesTF;
+  private JLabel lendDateL, dueDateL, notificationL;
+  private JTextField lendDateTF, dueDateTF;
+  private DateChooser lendDateChooser, dueDateChooser;
+  private SwitchButton notificationSB;
 
   public DetailPanel() {
     Border whiteLine = BorderFactory.createLineBorder(Color.WHITE);
@@ -26,64 +36,63 @@ public class DetailPanel extends JPanel {
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.HORIZONTAL;
     gbc.insets = new Insets(5, 5, 5, 5);
-    gbc.gridx = 0;
-
-    lendDateL = LabelGenerator.createRequireLabel("Lending Date");
-    lendDateTF =
-        TextFieldBuilder.builder()
-            .placeholder("YYYY-MM-DD")
-            .font(Style.FONT_PLAIN_13)
-            .preferredSize(new Dimension(300, 25))
-            .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
 
     dueDateL = LabelGenerator.createRequireLabel("Due Date");
     dueDateTF =
-        TextFieldBuilder.builder()
-            .placeholder("YYYY-MM-DD")
+        TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(new Dimension(300, 25));
+
+    dueDateChooser = new DateChooser();
+    dueDateChooser.setSelectedDate(Date.valueOf(LocalDate.now().plusWeeks(1)));
+    dueDateChooser.setTextField(dueDateTF);
+
+    lendDateL = LabelGenerator.createRequireLabel("Lending Date");
+    lendDateTF =
+        TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(new Dimension(300, 25));
+
+    lendDateChooser = new DateChooser();
+    lendDateChooser.setTextField(lendDateTF);
+    lendDateChooser.addActionDateChooserListener(
+        new DateChooserAdapter() {
+          @Override
+          public void dateChanged(java.util.Date date, DateChooserAction action) {
+            super.dateChanged(date, action);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
+
+            dueDateChooser.setSelectedDate(calendar.getTime());
+          }
+        });
+
+    notificationL =
+        LabelBuilder.builder()
+            .text("Notification")
             .font(Style.FONT_PLAIN_13)
-            .preferredSize(new Dimension(300, 25))
-            .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
+            .horizontal(SwingConstants.LEFT);
+    notificationSB = new SwitchButton();
 
-    copiesL = LabelGenerator.createRequireLabel("Copies Lent");
-    copiesTF =
-        TextFieldBuilder.builder()
-            .font(Style.FONT_PLAIN_13)
-            .preferredSize(new Dimension(300, 25))
-            .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
-
-    gbc.gridy = 0;
-    gbc.gridwidth = 3;
-    gbc.weightx = 1;
-    JSeparator separatorBot = new JSeparator(SwingConstants.HORIZONTAL);
-    add(separatorBot, gbc);
-
-    gbc.insets = new Insets(5, 5, 5, 10);
-    gbc.gridwidth = 1;
-    gbc.weightx = 0;
-    gbc.gridy = 1;
+    gbc.gridy++;
     add(lendDateL, gbc);
-    gbc.gridy = 2;
+    gbc.gridy++;
     add(lendDateTF, gbc);
 
-    gbc.gridx++;
-    gbc.gridy = 1;
+    gbc.gridy++;
     add(dueDateL, gbc);
-    gbc.gridy = 2;
+    gbc.gridy++;
     add(dueDateTF, gbc);
 
-    gbc.gridx++;
-    gbc.gridy = 1;
-    add(copiesL, gbc);
-    gbc.gridy = 2;
-    add(copiesTF, gbc);
+    gbc.gridy++;
+    add(notificationL, gbc);
+    gbc.gridy++;
+    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    panel.add(notificationSB);
+    panel.setPreferredSize(new Dimension(30, 40));
+    panel.setOpaque(false);
+    add(panel, gbc);
   }
 
   public void cancel() {
-    JTextField[] TFs = {copiesTF};
-    for (JTextField TF : TFs) {
-      TF.setText("");
-    }
-    lendDateTF.setText("YYYY-MM-DD");
-    dueDateTF.setText("YYYY-MM-DD");
+    if (notificationSB.isSelected()) notificationSB.doClick();
+    lendDateChooser.toDay();
   }
 }

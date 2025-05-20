@@ -1,6 +1,7 @@
 package com.g15.library_system.view.managementView.dashboard;
 
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.dashboard.charts.*;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
@@ -17,7 +18,7 @@ public class DashBoardPanel extends JPanel {
 
   public DashBoardPanel() {
     this.setLayout(new BorderLayout());
-    setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
     welcomePanel = new WelcomePanel();
     this.add(welcomePanel, BorderLayout.NORTH);
 
@@ -28,13 +29,13 @@ public class DashBoardPanel extends JPanel {
         scrollPane, Style.BLUE_MENU_BACKGROUND_COLOR, Style.CHART_BACKGROUND_COLOR);
     scrollPane.getVerticalScrollBar().setUnitIncrement(20);
     scrollPane.setBorder(null);
-    add(scrollPane, BorderLayout.CENTER);
+    this.add(scrollPane, BorderLayout.CENTER);
   }
 
   public class WelcomePanel extends JPanel {
     WelcomePanel() {
       this.setLayout(new GridBagLayout());
-      setBackground(Style.LIGHT_WHITE_BACKGROUND);
+      this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(10, 40, 10, 10);
       gbc.gridy = 0;
@@ -89,66 +90,67 @@ public class DashBoardPanel extends JPanel {
   }
 
   public class ContentPanel extends JPanel {
-    private LenderChartPanel lenderChartPanel;
-    private ReaderTypesChartPanel readerTypesChartPanel;
-    private BookAvailabilityChartPanel bookAvailabilityChartPanel;
-    private LendingTrendsChartPanel lendingTrendsChartPanel;
+    private ReaderRegisteredTrendsChart readerChart;
+    private ReaderTypesChart readerTypesChart;
+    private ReturnOverviewChart booksByGenreChart;
+    private BookAvailabilityChart bookAvailabilityChart;
+    private LateBookReturnsChart lendingTrendsChart;
+    private BorrowsByGenreChart borrowsByGenreChart;
 
     public ContentPanel() {
-      setBackground(Style.LIGHT_WHITE_BACKGROUND);
-      setLayout(new GridBagLayout());
+      this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+      this.setLayout(new GridBagLayout());
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(5, 5, 5, 5);
       gbc.fill = GridBagConstraints.BOTH;
       // ========== ROW 1 ==========
       gbc.gridx = 0;
       gbc.gridy = 0;
-      gbc.gridwidth = 3; // chiếm 3 cột
+      gbc.gridwidth = 3;
       quickAccessPanel = new QuickAccessPanel();
-      add(quickAccessPanel, gbc);
-      // ========== ROW 2 ==========
-      // Visitors Chart
-      gbc.gridx = 0;
-      gbc.gridy = 1;
-      gbc.gridwidth = 2;
-      lendingTrendsChartPanel = new LendingTrendsChartPanel();
-      add(lendingTrendsChartPanel, gbc);
+      this.add(quickAccessPanel, gbc);
 
-      // Book Allocation
+      // ROW 1.5
+      gbc.gridx = 0;
+      gbc.gridy++;
+      gbc.gridwidth = 3;
+
+      this.add(new TopChoicesPanel(), gbc);
+
+      // ========== ROW 2 ==========
+      gbc.gridx = 0;
+      gbc.gridy++;
+      gbc.gridwidth = 2;
+      readerChart = new ReaderRegisteredTrendsChart();
+      this.add(readerChart, gbc);
+
       gbc.gridx = 2;
-      gbc.gridy = 1;
       gbc.gridwidth = 1;
-      readerTypesChartPanel = new ReaderTypesChartPanel();
-      add(readerTypesChartPanel, gbc);
+      booksByGenreChart = new ReturnOverviewChart();
+      this.add(booksByGenreChart, gbc);
 
       // ========== ROW 3 ==========
-      // Book Availability
       gbc.gridx = 0;
-      gbc.gridy = 2;
+      gbc.gridy++;
       gbc.gridwidth = 1;
-      bookAvailabilityChartPanel = new BookAvailabilityChartPanel();
-      add(bookAvailabilityChartPanel, gbc);
+      bookAvailabilityChart = new BookAvailabilityChart();
+      this.add(bookAvailabilityChart, gbc);
 
-      // Book Lending Trends
       gbc.gridx = 1;
-      gbc.gridy = 2;
       gbc.gridwidth = 2;
-      lenderChartPanel = new LenderChartPanel();
-      add(lenderChartPanel, gbc);
+      borrowsByGenreChart = new BorrowsByGenreChart();
+      this.add(borrowsByGenreChart, gbc);
       // ========== ROW 4 ===========
-      // Visitors Chart
       gbc.gridx = 0;
-      gbc.gridy = 3;
+      gbc.gridy++;
       gbc.gridwidth = 2;
-      //            lendingTrendsChartPanel = new LendingTrendsChartPanel();
-      add(new LendingTrendsChartPanel(), gbc);
+      lendingTrendsChart = new LateBookReturnsChart();
+      this.add(lendingTrendsChart, gbc);
 
-      // Book Allocation
       gbc.gridx = 2;
-      gbc.gridy = 3;
       gbc.gridwidth = 1;
-      //            readerTypesChartPanel = new ReaderTypesChartPanel();
-      add(new ReaderTypesChartPanel(), gbc);
+      readerTypesChart = new ReaderTypesChart();
+      this.add(readerTypesChart, gbc);
     }
   }
 
@@ -164,12 +166,12 @@ public class DashBoardPanel extends JPanel {
     this.quickAccessPanel.setReturnedBooksCardButtonListener(listener);
   }
 
-  public void setAvailableBooksCardButtonListener(ActionListener listener) {
-    this.quickAccessPanel.setAvailableBooksCardButtonListener(listener);
+  public void setReadersCardButtonListener(ActionListener listener) {
+    this.quickAccessPanel.setReadersCardButtonListener(listener);
   }
 
-  public void setTotalUsersCardButtonListener(ActionListener listener) {
-    this.quickAccessPanel.setTotalUsersCardButtonListener(listener);
+  public void setLibrariansCardButtonListener(ActionListener listener) {
+    this.quickAccessPanel.setLibrariansCardButtonListener(listener);
   }
 
   public void setOverdueBooksCardButtonListener(ActionListener listener) {

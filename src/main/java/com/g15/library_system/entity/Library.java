@@ -17,6 +17,9 @@ public class Library extends BaseEntity implements Subject {
   private String name;
   private String event;
   private List<Book> books;
+  private List<Reader> readers;
+  private List<Librarian> librarians;
+  private List<Transaction> transactions;
 
   @Override
   public void addObserver(Observer o) {}

@@ -17,6 +17,11 @@ public class ReaderRepositoryImpl implements ReaderRepository {
   }
 
   @Override
+  public Optional<Reader> findById(String id) {
+    return readerData.getReaders().stream().filter(reader -> reader.findById(id)).findFirst();
+  }
+
+  @Override
   public List<Reader> findAll() {
     return readerData.getReaders();
   }

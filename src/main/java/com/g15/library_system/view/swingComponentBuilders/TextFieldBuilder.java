@@ -14,7 +14,7 @@ import javax.swing.event.DocumentListener;
 
 public class TextFieldBuilder extends JTextField {
   private Color borderColor;
-  private static final int LIMIT_POPUPMENU = 5;
+  public static final int LIMIT_POPUPMENU = 8;
   private boolean popupEnabled = true;
 
   public static TextFieldBuilder builder() {
@@ -146,10 +146,9 @@ public class TextFieldBuilder extends JTextField {
               }
 
               popupMenu.setPopupSize(
-                  getWidth(), Math.min(suggestions.size(), LIMIT_POPUPMENU) * 25);
+                  getWidth(), Math.min(suggestions.size(), LIMIT_POPUPMENU) * 30);
               popupMenu.show(TextFieldBuilder.this, 0, getHeight());
 
-              requestFocusInWindow();
               setupKeyNavigation(menuItems, popupMenu);
             });
     debounceTimer.setRepeats(false);
@@ -233,5 +232,15 @@ public class TextFieldBuilder extends JTextField {
       if (l instanceof KeyAdapter) removeKeyListener(l);
     }
     this.addKeyListener(keyAdapter);
+  }
+
+  public TextFieldBuilder columns(int columns) {
+    this.setColumns(columns);
+    return this;
+  }
+
+  public TextFieldBuilder horizontalAlignment(int alignment) {
+    this.setHorizontalAlignment(alignment);
+    return this;
   }
 }

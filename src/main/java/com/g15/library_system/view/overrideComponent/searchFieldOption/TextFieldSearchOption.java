@@ -1,16 +1,20 @@
 package com.g15.library_system.view.overrideComponent.searchFieldOption;
 
+import static com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder.LIMIT_POPUPMENU;
+
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
@@ -45,6 +49,9 @@ public class TextFieldSearchOption extends JTextField {
   private Color normalBorderColor = new Color(150, 150, 150);
   private Color borderColor = normalBorderColor;
   private final int arc = 15;
+
+  private boolean isFirstSelected = false;
+  private boolean popupEnabled = true;
 
   public TextFieldSearchOption() {
     setBorder(new EmptyBorder(8, 35, 8, 8));
@@ -157,6 +164,10 @@ public class TextFieldSearchOption extends JTextField {
 
   private void runEvent() {
     for (SearchOptionEvent event : events) {
+      if (!this.isFirstSelected) {
+        this.isFirstSelected = !this.isFirstSelected;
+        break;
+      }
       event.optionSelected(getSelectedOption(), selectedIndex);
     }
   }
@@ -345,6 +356,125 @@ public class TextFieldSearchOption extends JTextField {
 
   public void setColorOverlay2(Color colorOverlay2) {
     this.colorOverlay2 = colorOverlay2;
+  }
+
+  public TextFieldSearchOption popupMenu(
+      Function<String, List<String>> contextProvider, Consumer<String> onSelect) {
+    JPopupMenu popupMenu = new JPopupMenu();
+    popupMenu.setFocusable(false);
+
+    List<JMenuItem> menuItems = new ArrayList<>();
+
+    Timer debounceTimer =
+        new Timer(
+            300,
+            e -> {
+              if (!popupEnabled) return;
+              String input = getText().trim();
+              popupMenu.setVisible(false);
+              popupMenu.removeAll();
+              menuItems.clear();
+
+              if (input.isEmpty()) return;
+
+              List<String> suggestions = contextProvider.apply(input);
+              if (suggestions == null || suggestions.isEmpty()) return;
+
+              for (int i = 0; i < suggestions.size() && i < LIMIT_POPUPMENU; i++) {
+                String suggestion = suggestions.get(i);
+                JMenuItem item = buildMenuItem(suggestion, onSelect, popupMenu);
+                popupMenu.add(item);
+                menuItems.add(item);
+              }
+
+              popupMenu.setPopupSize(
+                  getWidth(), Math.min(suggestions.size(), LIMIT_POPUPMENU) * 25);
+              popupMenu.show(this, 0, getHeight());
+
+              requestFocusInWindow();
+              setupKeyNavigation(menuItems, popupMenu);
+            });
+    debounceTimer.setRepeats(false);
+
+    this.getDocument()
+        .addDocumentListener(
+            new DocumentListener() {
+              public void insertUpdate(DocumentEvent e) {
+                popupEnabled = true;
+                debounceTimer.restart();
+              }
+
+              public void removeUpdate(DocumentEvent e) {
+                popupEnabled = true;
+                debounceTimer.restart();
+              }
+
+              public void changedUpdate(DocumentEvent e) {}
+            });
+
+    this.addFocusListener(
+        new FocusAdapter() {
+          public void focusLost(FocusEvent e) {
+            popupMenu.setVisible(false);
+          }
+        });
+
+    return this;
+  }
+
+  private JMenuItem buildMenuItem(
+      String suggestion, Consumer<String> onSelect, JPopupMenu popupMenu) {
+    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+    panel.setOpaque(false);
+
+    JLabel label = LabelBuilder.builder().text(suggestion).font(Style.FONT_PLAIN_13);
+    panel.add(label);
+    JMenuItem item = new JMenuItem();
+    item.setLayout(new BorderLayout());
+    item.add(panel, BorderLayout.CENTER);
+    item.setPreferredSize(new Dimension(getWidth(), 25));
+    item.addActionListener(
+        event -> {
+          setText(suggestion);
+          popupMenu.setVisible(false);
+          if (onSelect != null) onSelect.accept(suggestion);
+          popupEnabled = false;
+        });
+    return item;
+  }
+
+  private void setupKeyNavigation(List<JMenuItem> menuItems, JPopupMenu popupMenu) {
+    KeyAdapter keyAdapter =
+        new KeyAdapter() {
+          int selectedIndex = -1;
+
+          @Override
+          public void keyPressed(KeyEvent e) {
+            if (!popupMenu.isVisible()) return;
+
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_DOWN) {
+              selectedIndex = (selectedIndex + 1) % menuItems.size();
+              highlight(selectedIndex);
+            } else if (key == KeyEvent.VK_UP) {
+              selectedIndex = (selectedIndex - 1 + menuItems.size()) % menuItems.size();
+              highlight(selectedIndex);
+            } else if (key == KeyEvent.VK_ENTER && selectedIndex >= 0) {
+              menuItems.get(selectedIndex).doClick();
+            }
+          }
+
+          private void highlight(int index) {
+            for (int i = 0; i < menuItems.size(); i++) {
+              menuItems.get(i).setArmed(i == index);
+            }
+          }
+        };
+
+    for (KeyListener l : this.getKeyListeners()) {
+      if (l instanceof KeyAdapter) removeKeyListener(l);
+    }
+    this.addKeyListener(keyAdapter);
   }
 
   public static void main(String[] args) {

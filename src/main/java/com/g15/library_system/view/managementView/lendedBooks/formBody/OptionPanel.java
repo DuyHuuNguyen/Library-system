@@ -1,7 +1,6 @@
 package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.SwitchButton;
 import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import com.g15.library_system.view.swingComponentGenerators.*;
@@ -9,11 +8,11 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+@Deprecated
 public class OptionPanel extends JPanel {
-  private JLabel lendingStatusL, finePolicyL, notificationL;
+  private JLabel lendingStatusL, finePolicyL;
   private JComboBox<String> statusCB;
   private JTextField fineTF;
-  private SwitchButton notificationCB;
 
   public OptionPanel() {
     Border whiteLine = BorderFactory.createLineBorder(Color.WHITE);
@@ -37,21 +36,11 @@ public class OptionPanel extends JPanel {
 
     finePolicyL =
         LabelBuilder.builder()
-            .text("Fine Policy")
+            .text("OverdueFee Policy")
             .font(Style.FONT_PLAIN_13)
             .horizontal(SwingConstants.LEFT);
     fineTF =
-        TextFieldBuilder.builder()
-            .font(Style.FONT_PLAIN_13)
-            .preferredSize(new Dimension(300, 25))
-            .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
-
-    notificationL =
-        LabelBuilder.builder()
-            .text("Notification")
-            .font(Style.FONT_PLAIN_13)
-            .horizontal(SwingConstants.LEFT);
-    notificationCB = new SwitchButton();
+        TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(new Dimension(300, 25));
 
     gbc.gridy = 0;
     gbc.gridwidth = 4;
@@ -62,12 +51,6 @@ public class OptionPanel extends JPanel {
     gbc.insets = new Insets(5, 5, 5, 100);
     gbc.gridwidth = 1;
     gbc.weightx = 0;
-
-    gbc.gridx++;
-    gbc.gridy = 1;
-    add(notificationL, gbc);
-    gbc.gridy = 2;
-    add(notificationCB, gbc);
 
     gbc.gridx++;
     gbc.gridy = 1;
@@ -83,7 +66,6 @@ public class OptionPanel extends JPanel {
   }
 
   public void cancel() {
-    if (notificationCB.isSelected()) notificationCB.doClick();
     JComboBox[] CBs = {statusCB};
     for (JComboBox CB : CBs) {
       if (CB.getItemCount() > 0) CB.setSelectedIndex(0);

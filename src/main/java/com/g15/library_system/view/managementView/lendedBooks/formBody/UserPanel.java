@@ -35,7 +35,6 @@ public class UserPanel extends JPanel {
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.HORIZONTAL;
     gbc.insets = new Insets(5, 5, 5, 5);
-    gbc.gridx = 0;
 
     nameL =
         LabelBuilder.builder()
@@ -58,47 +57,32 @@ public class UserPanel extends JPanel {
                     KeyboardFocusManager.getCurrentKeyboardFocusManager()
                         .focusNextComponent(emailTF);
                   }
-                })
-            .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
+                });
+
     idL = LabelGenerator.createRequireLabel("Membership ID");
     idTF =
-        TextFieldBuilder.builder()
-            .font(Style.FONT_PLAIN_13)
-            .preferredSize(new Dimension(300, 25))
-            .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
+        TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(new Dimension(300, 25));
 
     emailL = LabelGenerator.createRequireLabel("Email");
     emailTF =
         TextFieldBuilder.builder()
             .placeholder("www.example.com")
             .font(Style.FONT_PLAIN_13)
-            .preferredSize(new Dimension(300, 25))
-            .withFocusBorderEffect(Style.PURPLE_MAIN_THEME);
+            .preferredSize(new Dimension(300, 25));
 
-    gbc.gridy = 0;
-    gbc.gridwidth = 3;
-    gbc.weightx = 1;
-    JSeparator separatorBot = new JSeparator(SwingConstants.HORIZONTAL);
-    add(separatorBot, gbc);
-
-    gbc.insets = new Insets(5, 5, 5, 10);
-    gbc.gridwidth = 1;
-    gbc.weightx = 0;
-    gbc.gridy = 1;
+    gbc.gridy++;
     add(nameL, gbc);
-    gbc.gridy = 2;
+    gbc.gridy++;
     add(nameTF, gbc);
 
-    gbc.gridx++;
-    gbc.gridy = 1;
+    gbc.gridy++;
     add(idL, gbc);
-    gbc.gridy = 2;
+    gbc.gridy++;
     add(idTF, gbc);
 
-    gbc.gridx++;
-    gbc.gridy = 1;
+    gbc.gridy++;
     add(emailL, gbc);
-    gbc.gridy = 2;
+    gbc.gridy++;
     add(emailTF, gbc);
   }
 
@@ -121,7 +105,7 @@ public class UserPanel extends JPanel {
   }
 
   public void cancel() {
-    SwingUtilities.invokeLater(() -> nameTF.requestFocusInWindow());
+    nameTF.requestFocusInWindow();
     JTextField[] TFs = {nameTF, idTF};
     for (JTextField TF : TFs) {
       TF.setText("");
