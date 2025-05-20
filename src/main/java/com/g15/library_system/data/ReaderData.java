@@ -3,12 +3,19 @@ package com.g15.library_system.data;
 import com.g15.library_system.entity.*;
 import com.g15.library_system.enums.LibraryCardStatus;
 import com.g15.library_system.enums.TransactionType;
+import com.g15.library_system.observers.ReaderObserver;
+import com.g15.library_system.observers.ReaderSubject;
+import com.g15.library_system.util.DateUtil;
+import java.time.LocalDate;
 import java.util.*;
 import lombok.Getter;
 
 @Getter
-public class ReaderData implements Data<Reader> {
+public class ReaderData implements Data<Reader>, ReaderSubject {
   private static final ReaderData INSTANCE = new ReaderData();
+  // observers
+  private List<ReaderObserver> observers = new ArrayList<>();
+
   private final List<Librarian> librarians = LibrarianData.getInstance().getLibrarians();
   private final List<Book> books = BookData.getInstance().getBooks();
   private final List<Reader> readers = new ArrayList<>();
@@ -20,21 +27,62 @@ public class ReaderData implements Data<Reader> {
   }
 
   @Override
-  public void add(Reader b) {
-    this.readers.add(b);
+  public void add(Reader reader) {
+    this.readers.add(reader);
+    notifyObservers();
   }
 
   @Override
-  public void add(List<Reader> t) {}
+  public void add(List<Reader> readers) {
+    this.readers.addAll(readers);
+    notifyObservers();
+  }
 
   @Override
-  public void remove(Reader Reader) {}
+  public void remove(Reader Reader) {
+    this.readers.remove(Reader);
+    notifyObservers();
+  }
 
   @Override
-  public void remove(int index) {}
+  public void remove(int index) {
+    if (index >= 0 && index < readers.size()) {
+      this.readers.remove(index);
+      notifyObservers();
+    } else {
+      throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+    }
+  }
 
   public static ReaderData getInstance() {
     return INSTANCE;
+  }
+
+  public List<Reader> getReaders() {
+    return readers;
+  }
+
+  public int getTotalReturnedBooks() {
+    return transactions.stream()
+        .filter(t -> t.getTransactionType() == TransactionType.RETURN)
+        .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
+        .sum();
+  }
+
+  public int getTotalLendedBooks() {
+    return transactions.stream()
+        .filter(t -> t.getTransactionType() == TransactionType.BORROW)
+        .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
+        .sum();
+  }
+
+  public int getTotalOverdueBooks() {
+    return transactions.stream()
+        .filter(t -> t.getTransactionType() == TransactionType.BORROW)
+        .filter(t -> t.getActualReturnAt() != null && t.getExpectedReturnAt() != null)
+        .filter(t -> t.getActualReturnAt() > t.getExpectedReturnAt())
+        .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
+        .sum();
   }
 
   private void initializeData() {
@@ -46,9 +94,16 @@ public class ReaderData implements Data<Reader> {
             .lastName("Doe")
             .address("123 Main St")
             .dateOfBirth(978307200000L) // 2001-01-01
+            .createdAt(1746988800000L) // 2025-05-11
             .avatarKey("avatar1")
             .phoneNumber("123456789")
             .isSubscribe(true)
+            .readerType(
+                StudentReaderType.builder()
+                    .faculty("Information Technology")
+                    .enrollmentYear(2021)
+                    .studentID("IT2021001")
+                    .build())
             .build();
     var libCard1 =
         LibraryCard.builder()
@@ -67,26 +122,23 @@ public class ReaderData implements Data<Reader> {
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(
-                                    b ->
-                                        b.getTitle()
-                                            .equals("Harry Potter and the Sorcerer's Stone"))
+                                .filter(b -> b.getTitle().equals("I Believe"))
                                 .findFirst()
                                 .orElseThrow(),
                             3)))
-                .expectedReturnAt(
-                    System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000) // 30 days ago
-                .actualReturnAt(
-                    System.currentTimeMillis()
-                        - 25L * 24 * 60 * 60 * 1000) // returned 5 days after borrow
-                .description("Borrowed 'Harry Potter and the Sorcerer's Stone'")
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 15)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 22)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 10)))
+                .description("Borrowed")
                 .build(),
             Transaction.builder()
                 .id(102L)
+                .createdAt(1746988800000L) // 2025-05-11
                 .transactionType(TransactionType.RETURN)
-                .expectedReturnAt(System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(System.currentTimeMillis() - 25L * 24 * 60 * 60 * 1000)
-                .description("Returned 'Harry Potter and the Sorcerer's Stone'")
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 25)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 1)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 10)))
+                .description("Returned")
                 .overdueFee(overdueFees.get(0))
                 .build());
     libCard1.addTransactions(transactions1);
@@ -99,10 +151,17 @@ public class ReaderData implements Data<Reader> {
             .firstName("Emma")
             .lastName("Wilson")
             .address("456 Oak Ave, Apt 2B")
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 21)))
             .dateOfBirth(1009843200000L) // 2002-01-01
             .avatarKey("avatar2")
             .phoneNumber("234567890")
             .isSubscribe(true)
+            .readerType(
+                StudentReaderType.builder()
+                    .faculty("Information Technology")
+                    .enrollmentYear(2021)
+                    .studentID("IT2021002")
+                    .build())
             .build();
     var libCard2 =
         LibraryCard.builder()
@@ -120,19 +179,19 @@ public class ReaderData implements Data<Reader> {
                 .books(
                     new TreeMap<>(
                         Map.of(
-                            books.stream()
+                            this.books.stream()
                                 .filter(b -> b.getTitle().equals("The Great Gatsby"))
                                 .findFirst()
                                 .orElseThrow(),
                             3,
-                            books.stream()
+                            this.books.stream()
                                 .filter(b -> b.getTitle().equals("To Kill a Mockingbird"))
                                 .findFirst()
                                 .orElseThrow(),
                             2)))
-                .expectedReturnAt(
-                    System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000) // 14 days from now
-                .actualReturnAt(null)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 1)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 11, 1)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 30)))
                 .description("Borrowed 'The Great Gatsby' and 'To Kill a Mockingbird'")
                 .build(),
             Transaction.builder()
@@ -147,8 +206,9 @@ public class ReaderData implements Data<Reader> {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(null)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 10)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 5)))
                 .description("Borrowed 'Pride and Prejudice'")
                 .build());
     libCard2.addTransactions(transactions2);
@@ -161,9 +221,15 @@ public class ReaderData implements Data<Reader> {
             .firstName("Michael")
             .lastName("Brown")
             .address("789 Pine Rd, Suite 301")
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2023, 9, 30)))
             .dateOfBirth(1041379200000L) // 2003-01-01
             .avatarKey("avatar3")
             .phoneNumber("345678901")
+            .readerType(
+                LecturerReaderType.builder()
+                    .department("Computer Science")
+                    .position("Dean")
+                    .build())
             .build();
     var libCard3 =
         LibraryCard.builder()
@@ -176,7 +242,7 @@ public class ReaderData implements Data<Reader> {
         List.of(
             Transaction.builder()
                 .id(105L)
-                .transactionType(TransactionType.RETURN)
+                .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(1))
                 .books(
                     new TreeMap<>(
@@ -186,26 +252,28 @@ public class ReaderData implements Data<Reader> {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() - 45L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(System.currentTimeMillis() - 40L * 24 * 60 * 60 * 1000)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 20)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 20)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 18)))
                 .description("Returned 'The Hobbit'")
                 .overdueFee(overdueFees.get(1))
                 .build(),
             Transaction.builder()
                 .id(106L)
-                .transactionType(TransactionType.RETURN)
+                .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(0))
                 .books(
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(b -> b.getTitle().equals("1984"))
+                                .filter(b -> b.getTitle().equals("I Believe"))
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() - 60L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(System.currentTimeMillis() - 58L * 24 * 60 * 60 * 1000)
-                .description("Returned '1984'")
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 10)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 7)))
+                .description("Returned 'I Believe'")
                 .overdueFee(overdueFees.get(2))
                 .build());
     libCard3.addTransactions(transactions3);
@@ -218,9 +286,15 @@ public class ReaderData implements Data<Reader> {
             .firstName("Sophia")
             .lastName("Garcia")
             .address("321 Elm St, PH5")
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 9)))
             .dateOfBirth(1072915200000L) // 2004-01-01
             .avatarKey("avatar4")
             .phoneNumber("456789012")
+            .readerType(
+                LecturerReaderType.builder()
+                    .department("Information Technology")
+                    .position("Senior Lecturer")
+                    .build())
             .build();
     var libCard4 =
         LibraryCard.builder()
@@ -243,8 +317,9 @@ public class ReaderData implements Data<Reader> {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(null)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 28)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 28)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 25)))
                 .description("Borrowed 'The Catcher in the Rye'")
                 .build(),
             Transaction.builder()
@@ -255,13 +330,14 @@ public class ReaderData implements Data<Reader> {
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(b -> b.getTitle().equals("1984"))
+                                .filter(b -> b.getTitle().equals("I Believe"))
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(null)
-                .description("Borrowed '1984'")
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 25)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 2)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 10)))
+                .description("Borrowed 'I Believe'")
                 .build(),
             Transaction.builder()
                 .id(109L)
@@ -275,8 +351,9 @@ public class ReaderData implements Data<Reader> {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() - 15L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(System.currentTimeMillis() - 14L * 24 * 60 * 60 * 1000)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 1)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 1)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 28)))
                 .description("Returned 'The Odyssey'")
                 .overdueFee(overdueFees.get(3))
                 .build());
@@ -290,10 +367,17 @@ public class ReaderData implements Data<Reader> {
             .firstName("William")
             .lastName("Taylor")
             .address("654 Maple Dr, Unit 12")
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 3, 1)))
             .dateOfBirth(1104537600000L) // 2005-01-01
             .avatarKey("avatar5")
             .phoneNumber("567890123")
             .isSubscribe(true)
+            .readerType(
+                StudentReaderType.builder()
+                    .faculty("Software Engineering")
+                    .enrollmentYear(2022)
+                    .studentID("SE2022001")
+                    .build())
             .build();
     var libCard5 =
         LibraryCard.builder()
@@ -315,8 +399,9 @@ public class ReaderData implements Data<Reader> {
                             .findFirst()
                             .orElseThrow(),
                         1)))
-            .expectedReturnAt(System.currentTimeMillis() + 10L * 24 * 60 * 60 * 1000)
-            .actualReturnAt(null)
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 10)))
+            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 10)))
+            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 5)))
             .description("Borrowed 'Moby-Dick'")
             .build();
     libCard5.addTransaction(transactions5);
@@ -329,10 +414,17 @@ public class ReaderData implements Data<Reader> {
             .firstName("Olivia")
             .lastName("Martinez")
             .address("987 Cedar Ln, Floor 3")
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 9)))
             .dateOfBirth(1136073600000L) // 2006-01-01
             .avatarKey("avatar6")
             .phoneNumber("678901234")
             .isSubscribe(true)
+            .readerType(
+                StudentReaderType.builder()
+                    .faculty("Computer Science")
+                    .enrollmentYear(2020)
+                    .studentID("CS2020003")
+                    .build())
             .build();
     var libCard6 =
         LibraryCard.builder()
@@ -355,16 +447,18 @@ public class ReaderData implements Data<Reader> {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(null)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 20)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 20)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 18)))
                 .description("The Old Man and the Sea'")
                 .build(),
             Transaction.builder()
                 .id(112L)
                 .transactionType(TransactionType.RETURN)
                 .librarian(librarians.get(0))
-                .expectedReturnAt(System.currentTimeMillis() - 20L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(System.currentTimeMillis() - 19L * 24 * 60 * 60 * 1000)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 20)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 18)))
                 .description("Returned 'Fahrenheit 451'")
                 .overdueFee(overdueFees.get(4))
                 .build(),
@@ -372,8 +466,9 @@ public class ReaderData implements Data<Reader> {
                 .id(113L)
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(1))
-                .expectedReturnAt(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(null)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 20)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 18)))
                 .description("Borrowed 'The Odyssey'")
                 .build());
     libCard6.addTransactions(transactions6);
@@ -386,9 +481,16 @@ public class ReaderData implements Data<Reader> {
             .firstName("Ethan")
             .lastName("Anderson")
             .address("147 Birch Ave, Room 7B")
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 9)))
             .dateOfBirth(1167609600000L) // 2007-01-01
             .avatarKey("avatar7")
             .phoneNumber("789012345")
+            .readerType(
+                StudentReaderType.builder()
+                    .faculty("Information Systems")
+                    .enrollmentYear(2023)
+                    .studentID("IS2023001")
+                    .build())
             .build();
     var libCard7 =
         LibraryCard.builder()
@@ -411,8 +513,9 @@ public class ReaderData implements Data<Reader> {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() - 10L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(System.currentTimeMillis() - 8L * 24 * 60 * 60 * 1000)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 20)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 18)))
                 .description("Returned 'Moby Dick'")
                 .overdueFee(overdueFees.get(5))
                 .build(),
@@ -427,7 +530,8 @@ public class ReaderData implements Data<Reader> {
                             .findFirst()
                             .orElseThrow(),
                         1))
-                .expectedReturnAt(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 20)))
                 .actualReturnAt(null)
                 .description("Borrowed 'Great Expectations'")
                 .build());
@@ -441,9 +545,16 @@ public class ReaderData implements Data<Reader> {
             .firstName("Ava")
             .lastName("Thompson")
             .address("258 Walnut St, Apt 4C")
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 15)))
             .dateOfBirth(1199145600000L) // 2008-01-01
             .avatarKey("avatar8")
             .phoneNumber("890123456")
+            .readerType(
+                StudentReaderType.builder()
+                    .faculty("Data Science")
+                    .enrollmentYear(2022)
+                    .studentID("DS2022004")
+                    .build())
             .build();
     var libCard8 =
         LibraryCard.builder()
@@ -455,7 +566,7 @@ public class ReaderData implements Data<Reader> {
     var transactions8 =
         Transaction.builder()
             .id(116L)
-            .transactionType(TransactionType.BORROW)
+            .transactionType(TransactionType.RETURN)
             .librarian(librarians.get(0))
             .books(
                 new TreeMap<>(
@@ -465,8 +576,9 @@ public class ReaderData implements Data<Reader> {
                             .findFirst()
                             .orElseThrow(),
                         1)))
-            .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
-            .actualReturnAt(null)
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 10)))
+            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 20)))
+            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 18)))
             .description("Borrowed 'War and Peace'")
             .build();
     libCard8.addTransaction(transactions8);
@@ -479,9 +591,16 @@ public class ReaderData implements Data<Reader> {
             .firstName("Alexander")
             .lastName("White")
             .address("369 Cherry Rd, Suite 15")
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 3, 21)))
             .dateOfBirth(1230768000000L) // 2009-01-01
             .avatarKey("avatar9")
             .phoneNumber("901234567")
+            .readerType(
+                StudentReaderType.builder()
+                    .faculty("Artificial Intelligence")
+                    .enrollmentYear(2021)
+                    .studentID("AI2021003")
+                    .build())
             .build();
     var libCard9 =
         LibraryCard.builder()
@@ -504,8 +623,9 @@ public class ReaderData implements Data<Reader> {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(null)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 20)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 18)))
                 .description("Borrowed 'Crime and Punishment'")
                 .build(),
             Transaction.builder()
@@ -520,8 +640,9 @@ public class ReaderData implements Data<Reader> {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() - 25L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(System.currentTimeMillis() - 23L * 24 * 60 * 60 * 1000)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 16)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 23)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 18)))
                 .description("Returned 'The Divine Comedy'")
                 .overdueFee(overdueFees.get(6))
                 .build(),
@@ -533,12 +654,16 @@ public class ReaderData implements Data<Reader> {
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(b -> b.getTitle().equals("To Kill a Mockingbird"))
+                                .filter(
+                                    b ->
+                                        b.getTitle()
+                                            .equals("Harry Potter and the Sorcerer's Stone"))
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(null)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 20)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 18)))
                 .description("Borrowed 'To Kill a Mockingbird'")
                 .build(),
             Transaction.builder()
@@ -569,9 +694,16 @@ public class ReaderData implements Data<Reader> {
             .firstName("Isabella")
             .lastName("Lee")
             .address("741 Ash Ct, PH3")
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 2)))
             .dateOfBirth(1262304000000L) // 2010-01-01
             .avatarKey("avatar10")
             .phoneNumber("012345678")
+            .readerType(
+                StudentReaderType.builder()
+                    .faculty("Cybersecurity")
+                    .enrollmentYear(2023)
+                    .studentID("CY2023002")
+                    .build())
             .build();
     var libCard10 =
         LibraryCard.builder()
@@ -590,12 +722,16 @@ public class ReaderData implements Data<Reader> {
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(b -> b.getTitle().equals("The Divine Comedy"))
+                                .filter(
+                                    b ->
+                                        b.getTitle()
+                                            .equals("Harry Potter and the Sorcerer's Stone"))
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .expectedReturnAt(System.currentTimeMillis() + 21L * 24 * 60 * 60 * 1000)
-                .actualReturnAt(null)
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 20)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 27)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 11, 1)))
                 .description("Borrowed 'The Divine Comedy'")
                 .build(),
             Transaction.builder()
@@ -606,16 +742,13 @@ public class ReaderData implements Data<Reader> {
                     new TreeMap<>(
                         Map.of(
                             books.stream()
-                                .filter(
-                                    b ->
-                                        b.getTitle()
-                                            .equals("Harry Potter and the Sorcerer's Stone"))
+                                .filter(b -> b.getTitle().equals("I Believe"))
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
                 .expectedReturnAt(System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000)
                 .actualReturnAt(System.currentTimeMillis() - 28L * 24 * 60 * 60 * 1000)
-                .description("Returned 'Harry Potter and the Sorcerer's Stone'")
+                .description("Returned")
                 .overdueFee(overdueFees.get(8))
                 .build());
     libCard10.addTransactions(transactions10);
@@ -642,5 +775,23 @@ public class ReaderData implements Data<Reader> {
     transactions.add(transactions8);
     transactions.addAll(transactions9);
     transactions.addAll(transactions10);
+  }
+
+  // observer methods for sign up trends chart
+  @Override
+  public void registerObserver(ReaderObserver o) {
+    this.observers.add(o);
+  }
+
+  @Override
+  public void removeObserver(ReaderObserver o) {
+    this.observers.remove(o);
+  }
+
+  @Override
+  public void notifyObservers() {
+    for (ReaderObserver observer : observers) {
+      observer.updateReaderData();
+    }
   }
 }

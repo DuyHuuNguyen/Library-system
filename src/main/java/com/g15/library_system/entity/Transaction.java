@@ -1,7 +1,10 @@
 package com.g15.library_system.entity;
 
+import com.g15.library_system.enums.ReturnStatus;
 import com.g15.library_system.enums.TransactionType;
+import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,5 +34,27 @@ public class Transaction extends BaseEntity {
   @ToString.Include(name = "libraryCardId")
   public Long getLibraryCardId() {
     return this.libraryCard != null ? this.libraryCard.getId() : null;
+  }
+
+  public Stream<Map.Entry<String, Long>> getGenreWithQuantities() {
+    if (this.books == null) return Stream.empty();
+    return this.books.entrySet().stream()
+        .map(entry -> Map.entry(entry.getKey().getGenreType().getValue(), (long) entry.getValue()));
+  }
+
+  public Map<Book, Integer> getBooks() {
+    return this.books != null ? this.books : Collections.emptyMap();
+  }
+
+  public ReturnStatus getReturnStatus() {
+    if (this.actualReturnAt == null) {
+      return ReturnStatus.UNRETURNED;
+    }
+
+    if (expectedReturnAt == null) {
+      return ReturnStatus.ON_TIME; // *
+    }
+
+    return actualReturnAt <= expectedReturnAt ? ReturnStatus.ON_TIME : ReturnStatus.OVERDUE;
   }
 }

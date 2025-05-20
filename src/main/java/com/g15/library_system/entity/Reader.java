@@ -14,6 +14,9 @@ public class Reader extends User {
   @Builder.Default private Boolean isSubscribe = false;
 
   public void addLibraryCard(LibraryCard libraryCard) {
+    if (this.libraryCard != null) {
+      throw new IllegalStateException("This Reader already has a LibraryCard assigned.");
+    }
     this.libraryCard = libraryCard;
     this.libraryCard.addOwner(this);
   }

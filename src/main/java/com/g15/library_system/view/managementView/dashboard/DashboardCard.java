@@ -8,16 +8,19 @@ import com.g15.library_system.view.swingComponentGenerators.LabelGenerator;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import lombok.Setter;
 
 public class DashboardCard extends RoundedPanel {
-  private final String title;
-  private final String amount;
+    @Setter private JLabel titleLabel;
+    @Setter private  JLabel numberLabel;
+  private String title;
+  private String amount;
   private Font font;
-  private final CustomButton viewButton;
-  private final String iconPath;
-  private final Color backgroundColor;
-  private final Color borderColor;
-  private final Color iconBackgroundColor = Color.white;
+  private CustomButton viewButton;
+  private String iconPath;
+  private Color backgroundColor;
+  private Color borderColor;
+  private Color iconBackgroundColor = Color.white;
   private int radius;
 
   public DashboardCard(
@@ -34,8 +37,8 @@ public class DashboardCard extends RoundedPanel {
     this.backgroundColor = backgroundColor;
     this.borderColor = borderColor;
 
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-    setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
     RoundedPanel iconPanel = new RoundedPanel(12, iconBackgroundColor, borderColor);
     iconPanel.setPreferredSize(new Dimension(50, 50));
@@ -49,12 +52,12 @@ public class DashboardCard extends RoundedPanel {
     iconPanel.setAlignmentX(CENTER_ALIGNMENT);
 
     // Card's title
-    JLabel titleLabel = new JLabel(title);
+     titleLabel = new JLabel(title);
     titleLabel.setFont(Style.FONT_SANSERIF_PLAIN_16);
     titleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
     // amount
-    JLabel numberLabel = new JLabel(amount);
+     numberLabel = new JLabel(amount);
     numberLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
     numberLabel.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -74,14 +77,23 @@ public class DashboardCard extends RoundedPanel {
 
     //    viewButton.setFocusPainted(false);
     viewButton.setAlignmentX(CENTER_ALIGNMENT);
-    add(iconPanel);
-    add(Box.createVerticalStrut(10));
-    add(titleLabel);
-    add(Box.createVerticalStrut(5));
-    add(numberLabel);
-    add(Box.createVerticalStrut(10));
-    add(viewButton);
+    this.add(iconPanel);
+    this.add(Box.createVerticalStrut(10));
+    this.add(titleLabel);
+    this.add(Box.createVerticalStrut(5));
+    this.add(numberLabel);
+    this.add(Box.createVerticalStrut(10));
+    this.add(viewButton);
   }
+
+  public void setAmount(String amount) {
+    this.amount = amount;
+    this.numberLabel.setText(amount);
+  }
+    public void setTitle(String title) {
+        this.title = title;
+        this.titleLabel.setText(title);
+    }
 
   public void setDashBoardCardButtonListener(ActionListener listener) {
     this.viewButton.addActionListener(listener);
