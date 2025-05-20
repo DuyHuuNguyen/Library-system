@@ -58,9 +58,10 @@ public class TitlePanel extends JPanel implements ChartFilterSubject {
   public String getSelectedMonth() {
     return (String) monthComboBox.getSelectedItem();
   }
-    public int getSelectedYear() {
-        return (Integer) yearComboBox.getSelectedItem();
-    }
+
+  public int getSelectedYear() {
+    return (Integer) yearComboBox.getSelectedItem();
+  }
 
   @Override
   public void addObserver(FilterObserver observer) {

@@ -76,11 +76,9 @@ public class JFreeChartGenerator {
     lineChartPlot.setBackgroundPaint(Style.CHART_BACKGROUND_COLOR);
     NumberAxis rangeAxis = (NumberAxis) lineChartPlot.getRangeAxis();
     rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-    if (dataset.getRowCount() == 1  && dataset.getValue(0, 0).intValue() == 1) {
+    if (dataset.getRowCount() == 1 && dataset.getValue(0, 0).intValue() == 1) {
       rangeAxis.setRange(0.0, 2.5);
     }
-
-
 
     LineAndShapeRenderer renderer = new LineAndShapeRenderer();
     //    renderer.setSeriesPaint(0, new Color(20, 169, 20));

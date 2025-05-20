@@ -14,4 +14,6 @@ public interface BookService {
   Optional<Book> findByTitle(String selectedTitle);
 
   void save(Book newBook);
+
+  void save(List<Book> books);
 }

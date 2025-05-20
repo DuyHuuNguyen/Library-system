@@ -1,7 +1,6 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
 import com.g15.library_system.data.BookData;
-import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.observers.BookObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
@@ -40,8 +39,7 @@ public class ReturnOverviewChart extends RoundedShadowPanel
     // chart panel
     this.chartDataset = new DefaultPieDataset();
 
-    this.returnOverviewData =
-        transactionStatistics.countReturnStatusDistribution(selectedYear);
+    this.returnOverviewData = transactionStatistics.countReturnStatusDistribution(selectedYear);
     if (hasData()) {
       for (Map.Entry<String, Long> entry : returnOverviewData.entrySet()) {
         chartDataset.setValue(entry.getKey(), entry.getValue());

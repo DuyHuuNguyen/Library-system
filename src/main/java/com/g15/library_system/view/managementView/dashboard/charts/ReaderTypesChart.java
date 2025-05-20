@@ -38,8 +38,7 @@ public class ReaderTypesChart extends RoundedShadowPanel implements ReaderObserv
     // chart panel
     this.chartDataset = new DefaultPieDataset();
 
-    this.readerTypeData =
-        readerStatistics.aggregateReaderTypeData(selectedYear);
+    this.readerTypeData = readerStatistics.aggregateReaderTypeData(selectedYear);
     if (hasData()) {
       for (Map.Entry<String, Long> entry : readerTypeData.entrySet()) {
         chartDataset.setValue(entry.getKey(), entry.getValue());

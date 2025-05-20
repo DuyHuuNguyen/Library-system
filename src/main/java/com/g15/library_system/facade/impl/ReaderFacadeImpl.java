@@ -48,6 +48,7 @@ public class ReaderFacadeImpl implements ReaderFacade {
   public String[] getAllEmailAcceptNotifyNewBook() {
     return this.readerService.findAll().stream()
         //        .filter(reader -> reader.isIsReceiveNotify())
+        .map(Reader::getEmail)
         .toArray(String[]::new);
   }
 }

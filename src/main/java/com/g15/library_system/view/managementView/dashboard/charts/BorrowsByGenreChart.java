@@ -43,8 +43,7 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
     // chart panel
     chartDataset = new DefaultCategoryDataset();
 
-    borrowingData =
-        transactionStatistics.aggregateGenreBorrowData(selectedYear);
+    borrowingData = transactionStatistics.aggregateGenreBorrowData(selectedYear);
 
     if (borrowingData != null && !borrowingData.isEmpty()) {
       for (Map.Entry<String, Map<String, Long>> monthEntry : borrowingData.entrySet()) {
@@ -102,7 +101,7 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
         }
       }
     }
-//    System.out.println(borrowingData);
+    //    System.out.println(borrowingData);
     renderChart("Days");
   }
 

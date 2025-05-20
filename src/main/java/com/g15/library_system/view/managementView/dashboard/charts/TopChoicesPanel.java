@@ -63,7 +63,7 @@ public class TopChoicesPanel extends RoundedShadowPanel implements FilterObserve
       bookData = bookStatistics.getMostBorrowedBooks(6, year);
     } else {
       bookData = bookStatistics.getMostBorrowedBooks(6, month, year);
-//      System.out.println(bookData);
+      //      System.out.println(bookData);
     }
 
     this.booksPanel.removeAll();

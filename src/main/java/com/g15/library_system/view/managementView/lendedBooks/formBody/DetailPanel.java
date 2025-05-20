@@ -1,5 +1,6 @@
 package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
+import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.SwitchButton;
 import com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser;
@@ -70,6 +71,7 @@ public class DetailPanel extends JPanel {
             .font(Style.FONT_PLAIN_13)
             .horizontal(SwingConstants.LEFT);
     notificationSB = new SwitchButton();
+    notificationSB.doClick();
 
     gbc.gridy++;
     add(lendDateL, gbc);
@@ -92,7 +94,12 @@ public class DetailPanel extends JPanel {
   }
 
   public void cancel() {
-    if (notificationSB.isSelected()) notificationSB.doClick();
+    if (!notificationSB.isSelected()) notificationSB.doClick();
     lendDateChooser.toDay();
+  }
+
+  public void accept(Transaction transaction) {
+    transaction.setCreatedAt(this.lendDateChooser.getSelectedDate().getTime());
+    transaction.setExpectedReturnAt(this.dueDateChooser.getSelectedDate().getTime());
   }
 }

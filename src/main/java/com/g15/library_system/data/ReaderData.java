@@ -89,7 +89,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
     var james =
         Reader.builder()
             .id(1L)
-            .email("reader1@gmail.com")
+            .email("duynguyenavg@gmail.com")
             .firstName("John")
             .lastName("Doe")
             .address("123 Main St")
@@ -147,7 +147,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
     var emma =
         Reader.builder()
             .id(2L)
-            .email("emma.wilson@outlook.com")
+            .email("huyhoang28752@gmail.com")
             .firstName("Emma")
             .lastName("Wilson")
             .address("456 Oak Ave, Apt 2B")

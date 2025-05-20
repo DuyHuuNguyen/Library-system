@@ -2,12 +2,12 @@ package com.g15.library_system.controller;
 
 import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.dto.request.ExportExcelRequest;
+import com.g15.library_system.dto.request.ImportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -41,10 +41,6 @@ public class BookController {
     return this.bookFacade.findByTextOfTextFieldSearchOption(text);
   }
 
-  public Object[][] toBookDataWithQuantity(Map<Book, Integer> bookWithQuantity) {
-    return this.bookFacade.toBookDataWithQuantity(bookWithQuantity);
-  }
-
   public void exportExcelBooks(List<Book> books, String nameFile, String headerFile) {
     this.bookFacade.exportExcel(books, nameFile, headerFile);
   }
@@ -64,5 +60,9 @@ public class BookController {
   public void sendEmailNotificationNewBook(
       EmailNotificationNewBooksDTO emailNotificationNewBooksDTO) {
     this.bookFacade.sendEmailNotificationNewBook(emailNotificationNewBooksDTO);
+  }
+
+  public void importExcel(ImportExcelRequest importExcelRequest) {
+    this.bookFacade.importExcel(importExcelRequest);
   }
 }

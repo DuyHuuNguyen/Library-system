@@ -8,7 +8,6 @@ import com.g15.library_system.view.managementView.dashboard.statistics.Transacti
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.swingComponentGenerators.JFreeChartGenerator;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
@@ -31,7 +30,7 @@ public class LateBookReturnsChart extends RoundedShadowPanel
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setPreferredSize(new Dimension(730, 450));
     this.setLayout(new BorderLayout());
-    ReaderData.getInstance().registerObserver(this);//important to update the chart*
+    ReaderData.getInstance().registerObserver(this); // important to update the chart*
     // title panel
     TitlePanel titlePn = new TitlePanel("Late Book Returns Over Time");
     this.selectedYear = titlePn.getSelectedYear();
@@ -40,8 +39,7 @@ public class LateBookReturnsChart extends RoundedShadowPanel
     // chart panel
     chartDataset = new DefaultCategoryDataset();
 
-    lendingData =
-        transactionStatistics.aggregateLateReturnTrend(selectedYear);
+    lendingData = transactionStatistics.aggregateLateReturnTrend(selectedYear);
     if (lendingData != null && !lendingData.isEmpty()) {
       for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
         chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
