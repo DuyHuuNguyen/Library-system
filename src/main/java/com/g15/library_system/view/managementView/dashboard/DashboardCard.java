@@ -11,8 +11,8 @@ import javax.swing.*;
 import lombok.Setter;
 
 public class DashboardCard extends RoundedPanel {
-    @Setter private JLabel titleLabel;
-    @Setter private  JLabel numberLabel;
+  @Setter private JLabel titleLabel;
+  @Setter private JLabel numberLabel;
   private String title;
   private String amount;
   private Font font;
@@ -52,12 +52,12 @@ public class DashboardCard extends RoundedPanel {
     iconPanel.setAlignmentX(CENTER_ALIGNMENT);
 
     // Card's title
-     titleLabel = new JLabel(title);
+    titleLabel = new JLabel(title);
     titleLabel.setFont(Style.FONT_SANSERIF_PLAIN_16);
     titleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
     // amount
-     numberLabel = new JLabel(amount);
+    numberLabel = new JLabel(amount);
     numberLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
     numberLabel.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -90,10 +90,11 @@ public class DashboardCard extends RoundedPanel {
     this.amount = amount;
     this.numberLabel.setText(amount);
   }
-    public void setTitle(String title) {
-        this.title = title;
-        this.titleLabel.setText(title);
-    }
+
+  public void setTitle(String title) {
+    this.title = title;
+    this.titleLabel.setText(title);
+  }
 
   public void setDashBoardCardButtonListener(ActionListener listener) {
     this.viewButton.addActionListener(listener);

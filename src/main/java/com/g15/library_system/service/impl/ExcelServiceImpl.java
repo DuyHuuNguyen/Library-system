@@ -1,23 +1,29 @@
 package com.g15.library_system.service.impl;
 
-import com.g15.library_system.dto.BookExcelDTO;
+import com.g15.library_system.dto.ImportExcelBookDTO;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.entity.Librarian;
 import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.mapper.LibrarianMapper;
 import com.g15.library_system.mapper.ReaderMapper;
 import com.g15.library_system.service.ExcelService;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import io.github.biezhi.excel.plus.Reader;
 import io.github.biezhi.excel.plus.Writer;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+import javax.swing.*;
 import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ExcelServiceImpl implements ExcelService {
+  private static final Logger log = LoggerFactory.getLogger(ExcelServiceImpl.class);
   private final BookMapper bookMapper;
   private final ReaderMapper readerMapper;
   private final LibrarianMapper librarianMapper;
@@ -38,10 +44,24 @@ public class ExcelServiceImpl implements ExcelService {
 
   @Override
   public List<Book> readExcelFileToBooks(String url) {
-    var bookExcelDTOS = Reader.create(BookExcelDTO.class).from(new File(url)).asList();
-    return bookExcelDTOS.stream()
-        .map(bookExcelDTO -> this.bookMapper.toBook(bookExcelDTO))
-        .toList();
+    var bookExcelDTOS = Reader.create(ImportExcelBookDTO.class).from(new File(url)).asList();
+    log.info("haha -> {}", bookExcelDTOS.getFirst());
+    //    return List.of();
+    try {
+      return bookExcelDTOS.stream()
+          .map(importExcelBookDTO -> this.bookMapper.toBook(importExcelBookDTO))
+          .toList();
+    } catch (Exception e) {
+      log.error("Error format excel 🫠🫠🫠");
+      ToastNotification panel =
+          new ToastNotification(
+              JOptionPane.getFrameForComponent(null),
+              ToastNotification.Type.WARNING,
+              ToastNotification.Location.TOP_CENTER,
+              "Error format excel");
+      panel.showNotification();
+      return new ArrayList<>();
+    }
   }
 
   @Override

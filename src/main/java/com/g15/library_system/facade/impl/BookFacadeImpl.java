@@ -2,6 +2,7 @@ package com.g15.library_system.facade.impl;
 
 import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.dto.request.ExportExcelRequest;
+import com.g15.library_system.dto.request.ImportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
@@ -15,6 +16,7 @@ import com.g15.library_system.util.DateUtil;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +91,7 @@ public class BookFacadeImpl implements BookFacade {
     return this.bookService.findAll().stream()
         .filter(book -> DateUtil.isNowDay(book.getCreatedAt()))
         .map(book -> this.bookMapper.toNotifyBookResponse(book))
-        .toList();
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -101,5 +103,10 @@ public class BookFacadeImpl implements BookFacade {
   public void sendEmailNotificationNewBook(
       EmailNotificationNewBooksDTO emailNotificationNewBooksDTO) {
     this.emailProducerService.send(emailNotificationNewBooksDTO);
+  }
+
+  @Override
+  public void importExcel(ImportExcelRequest importExcelRequest) {
+    this.excelProducerService.importExcel(importExcelRequest);
   }
 }
