@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseEntity {

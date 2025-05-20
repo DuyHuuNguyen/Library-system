@@ -87,7 +87,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -107,7 +107,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -124,7 +124,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -142,7 +142,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -152,6 +152,7 @@ public class ToolPanel extends JPanel {
     importBt.addActionListener(
         e -> {
           // code here
+          this.mapApi.get(ApiKey.IMPORT_EXCEL).run();
         });
     reloadBt =
         CustomButtonBuilder.builder()
@@ -160,7 +161,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -180,7 +181,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -200,7 +201,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -219,6 +220,7 @@ public class ToolPanel extends JPanel {
     actionBtPn.add(importBt);
     actionBtPn.add(exportBt);
     actionBtPn.add(gotoTableBt);
+    actionBtPn.setBorder(BorderFactory.createTitledBorder("hehe"));
 
     add(leftPanel, BorderLayout.EAST);
     add(actionBtPn, BorderLayout.WEST);

@@ -1,9 +1,14 @@
 package com.g15.library_system.view.managementView.lendedBooks;
 
+import com.g15.library_system.controller.TransactionController;
+import com.g15.library_system.entity.Transaction;
+import com.g15.library_system.enums.TransactionType;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.managementView.lendedBooks.formBody.*;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
@@ -12,11 +17,13 @@ public class LendedBookPanel extends JPanel {
   private FormPanel formPn;
   private ButtonPanel buttonPn;
 
+  private TransactionController transactionController =
+      ApplicationContextProvider.getBean(TransactionController.class);
+
   public LendedBookPanel() {
-    setLayout(new FlowLayout(FlowLayout.CENTER));
+    setLayout(new BorderLayout());
     ContainerPn containerPn = new ContainerPn();
-    containerPn.setPreferredSize(new Dimension(1200, 750));
-    add(containerPn);
+    add(containerPn, BorderLayout.CENTER);
   }
 
   private class ContainerPn extends RoundedPanel {
@@ -65,6 +72,31 @@ public class LendedBookPanel extends JPanel {
       bookPn.cancel();
       detailPn.cancel();
     }
+
+    public Transaction createTransaction() {
+      Transaction transaction =
+          Transaction.builder().transactionType(TransactionType.BORROW).build();
+      userPn.accept(transaction);
+      bookPn.accept(transaction);
+      detailPn.accept(transaction);
+      return transaction;
+    }
+
+    public boolean validateForm() {
+      try {
+        userPn.isValidate();
+        bookPn.isValidate();
+        return true;
+      } catch (IllegalArgumentException e) {
+        new ToastNotification(
+                JOptionPane.getFrameForComponent(this),
+                ToastNotification.Type.WARNING,
+                ToastNotification.Location.TOP_CENTER,
+                e.getMessage())
+            .showNotification();
+        return false;
+      }
+    }
   }
 
   private class ButtonPanel extends JPanel {
@@ -107,7 +139,22 @@ public class LendedBookPanel extends JPanel {
               .alignment(SwingConstants.LEFT)
               .drawBorder(false)
               .preferredSize(new Dimension(120, 40));
-      lendButton.addActionListener(e -> {});
+      lendButton.addActionListener(
+          e -> {
+            if (formPn.validateForm()) {
+              Boolean isCreated =
+                  transactionController.createTransaction(formPn.createTransaction());
+              if (isCreated) {
+                new ToastNotification(
+                        JOptionPane.getFrameForComponent(this),
+                        ToastNotification.Type.SUCCESS,
+                        ToastNotification.Location.BOTTOM_RIGHT,
+                        "Borrow successfully!!")
+                    .showNotification();
+                formPn.cancel();
+              }
+            }
+          });
       add(cancelButton);
       add(lendButton);
     }

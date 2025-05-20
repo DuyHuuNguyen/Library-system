@@ -56,7 +56,7 @@ public class BookData implements Data<Book>, BookSubject {
         List.of(
             Book.builder()
                 .id(1L)
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 10)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.now()))
                 .author("J.K. Rowling")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("Harry Potter and the Sorcerer's Stone")
@@ -71,7 +71,7 @@ public class BookData implements Data<Book>, BookSubject {
                 .build(),
             Book.builder()
                 .id(2L)
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 5)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.now()))
                 .author("George Orwell")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("I Believe")

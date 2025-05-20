@@ -14,9 +14,9 @@ public class EmailFormPanel extends RoundedShadowPanel {
   private JTextField subjectField;
   private JPanel body;
   private JTextArea contentEmail;
-  private ImageDropPanel bodyArea;
+  private ImageDropPanel imageDropPanel;
   private JScrollPane bodyScroll;
-  private JButton sendButton;
+  private JButton sendButton, reloadBtn;
 
   private Map<ApiKey, Runnable> mapApi;
 
@@ -35,7 +35,7 @@ public class EmailFormPanel extends RoundedShadowPanel {
     JLabel bodyLabel = new JLabel("Message:");
     this.body = new JPanel(new MigLayout("insets 5, wrap 1", "[grow, fill]", "[]10[]"));
 
-    this.bodyArea = new ImageDropPanel(300, 300);
+    this.imageDropPanel = new ImageDropPanel(300, 300);
 
     this.contentEmail = new JTextArea();
     this.contentEmail.setRows(15);
@@ -43,7 +43,7 @@ public class EmailFormPanel extends RoundedShadowPanel {
     this.contentEmail.setWrapStyleWord(true);
 
     this.body.add(contentEmail, "growx");
-    this.body.add(bodyArea, "center, growx");
+    //    this.body.add(imageDropPanel, "center, growx");
 
     this.bodyScroll = new JScrollPane(body);
     this.bodyScroll.setPreferredSize(new Dimension(400, 800));
@@ -53,7 +53,14 @@ public class EmailFormPanel extends RoundedShadowPanel {
             .text("Send")
             .backgroundColor(Style.BLUE_HEADER_TABLE_AND_BUTTON)
             .preferredSize(new Dimension(120, 35));
-    this.sendButton.addActionListener(e -> mapApi.get(ApiKey.SEND_EMAIL).run());
+    this.sendButton.addActionListener(e -> this.mapApi.get(ApiKey.SEND_EMAIL).run());
+
+    this.reloadBtn =
+        CustomButtonBuilder.builder()
+            .text("reload")
+            .backgroundColor(Style.BLUE_HEADER_TABLE_AND_BUTTON)
+            .preferredSize(new Dimension(120, 35));
+    this.reloadBtn.addActionListener(e -> this.mapApi.get(ApiKey.RELOAD).run());
 
     this.add(toLabel);
     this.add(toField, "growx");
@@ -64,9 +71,43 @@ public class EmailFormPanel extends RoundedShadowPanel {
     this.add(bodyLabel, "top");
     this.add(bodyScroll, "growx, growy, height 250::600");
 
+    // Đặt hai nút vào một JPanel để chúng nằm sát nhau
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+    buttonPanel.setOpaque(false);
+    buttonPanel.add(reloadBtn);
+    buttonPanel.add(sendButton);
+
     this.add(new JLabel());
-    this.add(sendButton, "right, width 120!");
+    this.add(buttonPanel, "right, spanx");
 
     this.setPreferredSize(new Dimension(600, 500));
+  }
+
+  public void loadEmail(String[] emails) {
+    if (emails == null) {
+      this.toField.setText("");
+      return;
+    }
+    ;
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < emails.length; i++) {
+      sb.append(emails[i]);
+      var isLastItem = (i + 1 == emails.length);
+      if (!isLastItem) sb.append(", ");
+    }
+    this.toField.setText(sb.toString());
+  }
+
+  public void loadImages(java.util.List<String> images) {
+    this.imageDropPanel.loadImagesFromUrls(images);
+  }
+
+  public void loadContent(String content, String subject) {
+    this.subjectField.setText(subject);
+    this.contentEmail.setText(content);
+  }
+
+  public void removeAllImages() {
+    this.imageDropPanel.clearALlImages();
   }
 }

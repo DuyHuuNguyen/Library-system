@@ -4,17 +4,22 @@ import com.g15.library_system.dto.EmailContent;
 import com.g15.library_system.dto.EmailMessageDTO;
 import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.service.MailService;
+import jakarta.annotation.PostConstruct;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 @Service
@@ -38,7 +43,7 @@ public class MailServiceImpl implements MailService {
     public void sendNotificationNewBooks(EmailNotificationNewBooksDTO notificationNewBooksDTO) {
         log.info("send email notification new books");
         MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(notificationNewBooksDTO.getEmails());
         helper.setSubject("📚 Fit Library, New book");
         StringBuilder htmlContent = new StringBuilder();
@@ -55,12 +60,13 @@ public class MailServiceImpl implements MailService {
             for (int i = 0; i < items.size(); i++) {
 
             htmlContent.append("<h2>");
-            htmlContent.append(i+1 + "."+items.get(i)+"\n");
+            htmlContent.append(i+1 + "."+items.get(i).getTitle()+"\n");
             htmlContent.append("</h2>");
-
-            if (items.get(i).isNoImage()) {
-                var file = new FileSystemResource(new File(items.get(i).getFirstImage()));
-                helper.addAttachment((i+1)+ items.get(i).getTitle()+".png", file);
+            var isHadImage = !items.get(i).isNoImage();
+            if (isHadImage) {
+                log.info("{} image : {} ",i,items.get(i).getFirstImage());
+                ClassPathResource image = new ClassPathResource(items.get(i).getFirstImage());
+                helper.addAttachment((i+1)+ items.get(i).getTitle()+".jpg", image);
             }
         }
 
