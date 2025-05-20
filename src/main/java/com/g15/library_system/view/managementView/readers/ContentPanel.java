@@ -22,7 +22,7 @@ public class ContentPanel extends JPanel {
           // Viết hành động bạn muốn tại đây
           Map<String, Object> rowsData = new HashMap<>();
           for (int i = 1; i < tablePn.columnNames.length; i++) {
-            for (int j = i; j < tablePn.memberData[modelRow].length; j++) {
+            for (int j = i-1; j < tablePn.memberData[modelRow].length; j++) {
               rowsData.put(tablePn.columnNames[i], tablePn.memberData[modelRow][j]);
               break;
             }

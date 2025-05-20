@@ -69,7 +69,7 @@ public class BorrowedHistoryPanel extends JPanel {
 
             tablePanel = new CheckboxTablePanel(Arrays.copyOfRange(columnNames, 0, 4), borrowedData);
             tablePanel.setEditableColumns(Set.of(4));
-            tablePanel.setStatusEditable(true);
+//            tablePanel.setStatusEditable(true);
 
             // Column checkbox giả định là cột 0
             TableColumn checkboxColumn = tablePanel.getTable().getColumnModel().getColumn(0);

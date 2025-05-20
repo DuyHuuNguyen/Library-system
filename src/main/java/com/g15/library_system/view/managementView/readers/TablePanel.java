@@ -42,7 +42,7 @@ public class TablePanel extends JPanel {
     memberData =
         new Object[][] {
           {
-            false,
+
             "U001",
             new ImageIcon(getClass().getResource("/images/John_Doe.png")),
             "John Doe",
@@ -55,7 +55,7 @@ public class TablePanel extends JPanel {
             5
           },
           {
-            false,
+
             "U002",
             new ImageIcon(getClass().getResource("/images/John_Doe.png")),
             "John Wick",
@@ -68,7 +68,7 @@ public class TablePanel extends JPanel {
             10
           },
           {
-            false,
+
             "U003",
             new ImageIcon(getClass().getResource("/images/John_Doe.png")),
             "John Cena",
@@ -84,7 +84,7 @@ public class TablePanel extends JPanel {
 
     tablePanel = new CheckboxTablePanel(Arrays.copyOfRange(columnNames, 0, 5), memberData);
     tablePanel.setEditableColumns(Set.of(5));
-    tablePanel.setStatusEditable(true);
+//    tablePanel.setStatusEditable(true);
 
     // Column checkbox giả định là cột 0
     TableColumn checkboxColumn = tablePanel.getTable().getColumnModel().getColumn(0);

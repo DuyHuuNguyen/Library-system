@@ -4,6 +4,7 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.tableModel.CustomTableModel;
 import com.g15.library_system.view.overrideComponent.tables.tableRenderers.*;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentGenerators.TableGenerator;
 import lombok.Getter;
 import lombok.Setter;
@@ -337,18 +338,18 @@ public class CheckboxTablePanel extends JPanel {
     table.setRowHeight(height);
   }
 
-    public void setRowSelectionHandler(Consumer<Integer> rowHandler) {
-        table
-                .getSelectionModel()
-                .addListSelectionListener(
-                        event -> {
-                            if (!event.getValueIsAdjusting()) {
-                                int viewRow = table.getSelectedRow();
-                                if (viewRow != -1) {
-                                    int modelRow = table.convertRowIndexToModel(viewRow);
-                                    rowHandler.accept(modelRow);
-                                }
-                            }
-                        });
-    }
+  public void setRowSelectionHandler(Consumer<Integer> rowHandler) {
+      table
+              .getSelectionModel()
+              .addListSelectionListener(
+                      event -> {
+                          if (!event.getValueIsAdjusting()) {
+                              int viewRow = table.getSelectedRow();
+                              if (viewRow != -1) {
+                                  int modelRow = table.convertRowIndexToModel(viewRow);
+                                  rowHandler.accept(modelRow);
+                              }
+                          }
+                      });
+  }
 }
