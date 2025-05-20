@@ -2,6 +2,7 @@ package com.g15.library_system.controller;
 
 import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.dto.request.ExportExcelRequest;
+import com.g15.library_system.dto.request.ImportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
@@ -59,5 +60,9 @@ public class BookController {
   public void sendEmailNotificationNewBook(
       EmailNotificationNewBooksDTO emailNotificationNewBooksDTO) {
     this.bookFacade.sendEmailNotificationNewBook(emailNotificationNewBooksDTO);
+  }
+
+  public void importExcel(ImportExcelRequest importExcelRequest) {
+    this.bookFacade.importExcel(importExcelRequest);
   }
 }

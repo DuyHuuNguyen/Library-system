@@ -47,7 +47,8 @@ public class ReaderFacadeImpl implements ReaderFacade {
   @Override
   public String[] getAllEmailAcceptNotifyNewBook() {
     return this.readerService.findAll().stream()
-//        .filter(reader -> reader.isIsReceiveNotify())
+        //        .filter(reader -> reader.isIsReceiveNotify())
+        .map(Reader::getEmail)
         .toArray(String[]::new);
   }
 }

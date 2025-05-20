@@ -51,6 +51,7 @@ public class LoginPanel extends JPanel {
     txtUsername.putClientProperty(
         FlatClientProperties.PLACEHOLDER_TEXT, "Enter your username or email");
     txtUsername.setPreferredSize(new Dimension(250, 35));
+    txtUsername.addActionListener(e -> cmdLogin.doClick());
 
     txtPassword.putClientProperty(FlatClientProperties.STYLE, "" + "showRevealButton:true");
     txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");

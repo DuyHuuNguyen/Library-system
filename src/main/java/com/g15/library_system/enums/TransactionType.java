@@ -3,5 +3,4 @@ package com.g15.library_system.enums;
 public enum TransactionType {
   BORROW,
   RETURN,
-  DEMO
 }

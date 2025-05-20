@@ -1,8 +1,8 @@
 package com.g15.library_system.view.managementView;
 
 import com.g15.library_system.enums.NavigationType;
-import com.g15.library_system.view.LoginFrame;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.loginView.LoginFrame;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import java.awt.*;
 import javax.swing.*;
@@ -127,10 +127,16 @@ public class MainFrame extends JFrame {
           setHover(NavigationType.OVERDUE_BOOKS);
         });
 
-    workspacePanel.setTotalUsersCardButtonListener(
+    workspacePanel.setReadersCardButtonListener(
         e -> {
           workspacePanel.showPanel(NavigationType.READERS);
           setHover(NavigationType.READERS);
+        });
+
+    workspacePanel.setLibrariansCardButtonListener(
+        e -> {
+          workspacePanel.showPanel(NavigationType.LIBRARIANS);
+          setHover(NavigationType.LIBRARIANS);
         });
 
     setVisible(true);

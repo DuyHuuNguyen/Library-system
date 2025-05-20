@@ -3,10 +3,7 @@ package com.g15.library_system.entity;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +30,7 @@ public class Book extends BaseEntity implements Comparable<Book> {
 
   private List<String> images;
 
-  private BookStatus bookStatus;
+  @Builder.Default private BookStatus bookStatus = BookStatus.AVAILABLE;
 
   public boolean titleContains(String title) {
     return this.title.toLowerCase().contains(title.toLowerCase());
@@ -69,7 +66,7 @@ public class Book extends BaseEntity implements Comparable<Book> {
 
   public String getFirstImage() {
     if (this.images != null) return this.images.getFirst();
-    return "bull";
+    return "no image";
   }
 
   public boolean hasFirstImage() {

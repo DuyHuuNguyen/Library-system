@@ -37,4 +37,11 @@ public class BookServiceImpl implements BookService {
   public void save(Book newBook) {
     this.bookRepository.save(newBook);
   }
+
+  @Override
+  public void save(List<Book> books) {
+    for (var book : books) {
+      this.save(book);
+    }
+  }
 }
