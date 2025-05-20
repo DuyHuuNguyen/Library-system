@@ -2,7 +2,9 @@ package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
 import com.g15.library_system.controller.ReaderController;
 import com.g15.library_system.entity.Reader;
+import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.provider.ApplicationContextProvider;
+import com.g15.library_system.verifier.EmailVerifier;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.swingComponentBuilders.LabelBuilder;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
@@ -16,6 +18,7 @@ import javax.swing.event.AncestorListener;
 public class UserPanel extends JPanel {
   private JTextField nameTF, idTF, emailTF;
   private JLabel nameL, idL, emailL;
+  private Reader reader;
 
   private ReaderController readerController =
       ApplicationContextProvider.getBean(ReaderController.class);
@@ -50,7 +53,7 @@ public class UserPanel extends JPanel {
                   return readerController.searchNameContains(name);
                 },
                 selectedName -> {
-                  Reader reader = readerController.findByName(selectedName).orElse(null);
+                  reader = readerController.findByName(selectedName).orElse(null);
                   if (reader != null) {
                     idTF.setText(String.valueOf(reader.getId()));
                     emailTF.setText(reader.getEmail());
@@ -111,5 +114,24 @@ public class UserPanel extends JPanel {
       TF.setText("");
     }
     emailTF.setText("www.example.com");
+  }
+
+  public void accept(Transaction transaction) {
+    transaction.setLibraryCard(reader.getLibraryCard());
+  }
+
+  public void isValidate() {
+    if (nameTF.getText().trim().isEmpty()) {
+      nameTF.requestFocusInWindow();
+      throw new IllegalArgumentException("Name is empty!");
+    }
+    if (idTF.getText().trim().isEmpty()) {
+      idTF.requestFocusInWindow();
+      throw new IllegalArgumentException("ID is empty!");
+    }
+    if (!new EmailVerifier().verify(emailTF)) {
+      emailTF.requestFocusInWindow();
+      throw new IllegalArgumentException("Invalid email!");
+    }
   }
 }

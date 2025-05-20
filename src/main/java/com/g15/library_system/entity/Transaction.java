@@ -2,14 +2,12 @@ package com.g15.library_system.entity;
 
 import com.g15.library_system.enums.TransactionType;
 import java.util.Map;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @ToString(callSuper = true)
 @Getter
+@Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,5 +29,9 @@ public class Transaction extends BaseEntity {
   @ToString.Include(name = "libraryCardId")
   public Long getLibraryCardId() {
     return this.libraryCard != null ? this.libraryCard.getId() : null;
+  }
+
+  public boolean findById(Long id) {
+    return this.hasSameId(id);
   }
 }
