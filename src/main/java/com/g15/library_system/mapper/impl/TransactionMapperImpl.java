@@ -1,32 +1,36 @@
-package com.g15.library_system.mapper;
+package com.g15.library_system.mapper.impl;
 
 import com.g15.library_system.dto.ReturnBookDTO;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.Transaction;
+import com.g15.library_system.mapper.TransactionMapper;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class ReturnBookMapperImpl implements ReturnBookMapper {
+public class TransactionMapperImpl implements TransactionMapper {
 
-  public ReturnBookMapperImpl() {}
+  public TransactionMapperImpl() {}
 
   @Override
   public Object[][] toReturnBookTableData(List<ReturnBookDTO> returnBookDTOs) {
     Object[][] data = new Object[returnBookDTOs.size()][];
     for (int i = 0; i < data.length; i++) {
-      var returnBook = returnBookDTOs.get(i);
+      var returnBookDTO = returnBookDTOs.get(i);
       data[i] =
           new Object[] {
-            returnBook.getTransactionId(),
-            returnBook.getReaderId(),
-            returnBook.getReaderFullName(),
-            returnBook.getReaderPhoneNumber(),
-            returnBook.getReaderEmail(),
-            returnBook.getReturnDate(),
-            returnBook.getBooks().stream().map(book -> book.getTitle()).toList(),
-            returnBook.getStatus(),
-            returnBook.getTotalFine(),
-            returnBook.getStaffProcessed(),
-            returnBook.getNotes()
+            returnBookDTO.getTransactionId(),
+            returnBookDTO.getReaderId(),
+            returnBookDTO.getReaderFullName(),
+            returnBookDTO.getReaderPhoneNumber(),
+            returnBookDTO.getReaderEmail(),
+            returnBookDTO.getReturnDate(),
+            returnBookDTO.getBooks().entrySet().stream()
+                .map(entry -> entry.getKey() + "=" + entry.getValue())
+                .collect(Collectors.joining(", ")),
+            returnBookDTO.getStatus(),
+            returnBookDTO.getTotalFine(),
+            returnBookDTO.getStaffProcessed(),
+            returnBookDTO.getNotes()
           };
     }
     return data;
@@ -41,7 +45,7 @@ public class ReturnBookMapperImpl implements ReturnBookMapper {
         .readerPhoneNumber(reader.getPhoneNumber())
         .readerEmail(reader.getEmail())
         .returnDate(transaction.getCreatedAt().toString())
-        //        .books(transaction.getBooks().entrySet())
+        .books(transaction.getBooks())
         .status(transaction.getTransactionType().toString())
         .totalFine(
             transaction.getOverdueFee() != null

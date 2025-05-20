@@ -5,7 +5,7 @@ import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.Transaction;
 import java.util.List;
 
-public interface ReturnBookMapper {
+public interface TransactionMapper {
 
   /**
    * Converts a list of ReturnBookDTO objects to a 2D Object array for table representation.

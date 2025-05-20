@@ -1,7 +1,7 @@
 package com.g15.library_system.dto;
 
 import com.g15.library_system.entity.Book;
-import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class ReturnBookDTO {
   private String readerPhoneNumber;
   private String readerEmail;
   private String returnDate;
-  private List<Book> books;
+  private Map<Book, Integer> books;
   private String status;
   private String totalFine;
   private String staffProcessed;

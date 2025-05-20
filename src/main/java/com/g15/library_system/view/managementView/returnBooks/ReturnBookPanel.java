@@ -7,8 +7,8 @@ import com.g15.library_system.entity.LibraryCard;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.enums.TransactionType;
-import com.g15.library_system.mapper.ReturnBookMapper;
-import com.g15.library_system.mapper.ReturnBookMapperImpl;
+import com.g15.library_system.mapper.TransactionMapper;
+import com.g15.library_system.mapper.impl.TransactionMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
@@ -43,7 +43,8 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
   private Object[][] tableData;
   private ReaderController readerController =
       ApplicationContextProvider.getBean(ReaderController.class);
-  private ReturnBookMapper returnBookMapper = new ReturnBookMapperImpl();
+  private TransactionMapper transactionMapper = new TransactionMapperImpl();
+    private List<Reader> readersData = ReaderData.getInstance().getReaders();
 
   public ReturnBookPanel() {
     cardLayout = new CardLayout(10, 10);
@@ -84,9 +85,15 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
   }
 
   public void initData() {
-    List<Reader> readers = ReaderData.getInstance().getReaders();
-    List<ReturnBookDTO> returnBookRows = new ArrayList<>();
 
+
+//    transactionMapper.toReturnBookDTO()
+
+
+//    this.tableData
+
+    
+    
     //    for (Reader reader : readers) {
     //      LibraryCard card = reader.getLibraryCard();
     //      if (card != null && card.getTransactions() != null) {
