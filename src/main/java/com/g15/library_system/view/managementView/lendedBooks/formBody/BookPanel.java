@@ -2,6 +2,9 @@ package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
 import com.g15.library_system.controller.BookController;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.entity.Transaction;
+import com.g15.library_system.enums.TransactionType;
+import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
@@ -12,6 +15,7 @@ import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import com.g15.library_system.view.swingComponentGenerators.*;
 import java.awt.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.AncestorEvent;
@@ -27,6 +31,7 @@ public class BookPanel extends JPanel {
 
   private final BookController bookController =
       ApplicationContextProvider.getBean(BookController.class);
+  private final BookMapper bookMapper = ApplicationContextProvider.getBean(BookMapper.class);
 
   private class ButtonPanel extends JPanel {
     private CustomButton addBookBtn, backBtn, summitBtn;
@@ -130,7 +135,7 @@ public class BookPanel extends JPanel {
 
       String[] columnNames = {"", "Title", "Author", "GenreType", "Quantity"};
 
-      Object[][] tableData = bookController.toBookDataWithQuantity(bookWithQuantity);
+      Object[][] tableData = bookMapper.toBookDataWithQuantity(bookWithQuantity);
 
       bookTable = new CheckboxTablePanel(columnNames, tableData);
       add(bookTable, BorderLayout.CENTER);
@@ -146,7 +151,7 @@ public class BookPanel extends JPanel {
         bookWithQuantity.put(entry.getKey(), value);
       }
       bookTable.removeAllDataTable();
-      bookTable.addDataToTable(bookController.toBookDataWithQuantity(bookWithQuantity));
+      bookTable.addDataToTable(bookMapper.toBookDataWithQuantity(bookWithQuantity));
     }
   }
 
@@ -282,5 +287,21 @@ public class BookPanel extends JPanel {
     buttonPanel.showButton(ButtonPanel.ButtonState.ADD_BOOK);
     addBookPanel.cancel();
     tablePanel.cancel();
+  }
+
+  public void accept(Transaction transaction) {
+    transaction.setBooks(bookWithQuantity);
+    transaction.setDescription(
+        TransactionType.BORROW
+            + ": "
+            + bookWithQuantity.entrySet().stream()
+                .map(entry -> entry.getKey().getTitle() + " quantity: " + entry.getValue())
+                .collect(Collectors.joining(", ")));
+  }
+
+  public void isValidate() {
+    if (bookWithQuantity.isEmpty()) {
+      throw new IllegalArgumentException("Empty book!!");
+    }
   }
 }

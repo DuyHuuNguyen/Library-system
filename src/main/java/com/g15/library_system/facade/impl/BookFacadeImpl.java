@@ -14,7 +14,6 @@ import com.g15.library_system.service.ExcelProducerService;
 import com.g15.library_system.service.ExcelService;
 import com.g15.library_system.util.DateUtil;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -69,11 +68,6 @@ public class BookFacadeImpl implements BookFacade {
         .filter(book -> book.isSameInfo(text))
         .map(book -> this.bookMapper.toBookResponse(book))
         .toList();
-  }
-
-  @Override
-  public Object[][] toBookDataWithQuantity(Map<Book, Integer> books) {
-    return this.bookMapper.toBookDataWithQuantity(books);
   }
 
   @Override

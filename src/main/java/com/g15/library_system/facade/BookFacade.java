@@ -7,7 +7,6 @@ import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface BookFacade {
@@ -22,8 +21,6 @@ public interface BookFacade {
   List<String> supportSearch(String text);
 
   List<BookResponse> findByTextOfTextFieldSearchOption(String text);
-
-  Object[][] toBookDataWithQuantity(Map<Book, Integer> books);
 
   void exportExcel(List<Book> books, String nameFile, String headerFile);
 

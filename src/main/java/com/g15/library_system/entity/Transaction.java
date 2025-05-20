@@ -4,15 +4,13 @@ import com.g15.library_system.enums.ReturnStatus;
 import com.g15.library_system.enums.TransactionType;
 import java.util.Collections;
 import java.util.Map;
+import lombok.*;
 import java.util.stream.Stream;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @ToString(callSuper = true)
 @Getter
+@Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,6 +33,9 @@ public class Transaction extends BaseEntity {
   public Long getLibraryCardId() {
     return this.libraryCard != null ? this.libraryCard.getId() : null;
   }
+
+  public boolean findById(Long id) {
+    return this.hasSameId(id);
 
   public Stream<Map.Entry<String, Long>> getGenreWithQuantities() {
     if (this.books == null) return Stream.empty();

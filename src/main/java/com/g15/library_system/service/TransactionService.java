@@ -1,3 +1,7 @@
 package com.g15.library_system.service;
 
-public interface TransactionService {}
+import com.g15.library_system.entity.Transaction;
+
+public interface TransactionService {
+  Boolean createTransaction(Transaction transaction);
+}
