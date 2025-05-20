@@ -36,7 +36,7 @@ public class Transaction extends BaseEntity {
 
   public boolean findById(Long id) {
     return this.hasSameId(id);
-
+  }
   public Stream<Map.Entry<String, Long>> getGenreWithQuantities() {
     if (this.books == null) return Stream.empty();
     return this.books.entrySet().stream()
