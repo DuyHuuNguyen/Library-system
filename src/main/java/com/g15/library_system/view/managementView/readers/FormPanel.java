@@ -4,7 +4,6 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import javax.swing.*;
 
@@ -116,7 +115,7 @@ public class FormPanel extends JPanel {
     membershipDateField = createTF();
     // Set current date as default
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//    membershipDateField.setText(dateFormat.format(new Date()));
+    //    membershipDateField.setText(dateFormat.format(new Date()));
     fieldConstraints.gridy = 6;
     add(membershipDateField, fieldConstraints);
 
@@ -142,17 +141,17 @@ public class FormPanel extends JPanel {
     fieldConstraints.gridy = 8;
     add(totalFineField, fieldConstraints);
 
-//    memberIdField.setText("U001");
-//    nameField.setText("John Doe");
-//    birthDateField.setText("1/1/2000");
-//    phoneField.setText("0123456");
-//    emailField.setText("john.doe@example.com");
-//    addressField.setText("Linh Trung, Thu Duc, Tp.HCM");
-//    readerTypeField.setText("Student");
+    //    memberIdField.setText("U001");
+    //    nameField.setText("John Doe");
+    //    birthDateField.setText("1/1/2000");
+    //    phoneField.setText("0123456");
+    //    emailField.setText("john.doe@example.com");
+    //    addressField.setText("Linh Trung, Thu Duc, Tp.HCM");
+    //    readerTypeField.setText("Student");
 
     // Reset date to current
-//    membershipDateField.setText("1/1/2025");
-//    totalFineField.setText(5 + "");
+    //    membershipDateField.setText("1/1/2025");
+    //    totalFineField.setText(5 + "");
   }
 
   public void setMemberIdField(JTextField memberIdField) {

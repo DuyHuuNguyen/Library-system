@@ -1,6 +1,7 @@
 package com.g15.library_system.view.managementView.manageBooks;
 
 import com.g15.library_system.controller.BookController;
+import com.g15.library_system.dto.ChangeInfoBookDTO;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.ApiKey;
 import com.g15.library_system.enums.GenreType;
@@ -26,6 +27,7 @@ public class UpsertBookPanel extends JPanel {
   private JTextField txtGenre;
 
   private ImageDropPanel dropImagePanel;
+  private Boolean isModify;
 
   private Optional<Book> book;
   private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
@@ -34,10 +36,11 @@ public class UpsertBookPanel extends JPanel {
   private int width;
   private int height;
 
-  public UpsertBookPanel(int width, int height, Map<ApiKey, Runnable> mapApi) {
+  public UpsertBookPanel(int width, int height, boolean isModify, Map<ApiKey, Runnable> mapApi) {
     this.mapApi = mapApi;
     this.width = width;
     this.height = height;
+    this.isModify = isModify;
     this.initPanel();
   }
 
@@ -174,7 +177,11 @@ public class UpsertBookPanel extends JPanel {
     btnAddBook.addActionListener(
         e -> {
           var book = this.getNewBook();
-          this.bookController.addNewBook(book.get());
+          if (isModify) {
+            // modification
+            this.changeInfoBook();
+
+          } else this.bookController.addNewBook(book.get());
           this.clearDataInPanel();
 
           ToastNotification notification =
@@ -199,6 +206,23 @@ public class UpsertBookPanel extends JPanel {
     setVisible(true);
   }
 
+  private void changeInfoBook() {
+
+    var changeInfoBookDTO =
+        ChangeInfoBookDTO.builder()
+            .title(this.txtBookTitle.getText())
+            .totalQuantity(Integer.parseInt(this.txtQuantity.getText()))
+            .author(txtAuthor.getText())
+            .publisher(txtPublisher.getText())
+            .publishYear(Integer.parseInt(txtPublisherYear.getText()))
+            .images(this.dropImagePanel.getImageUrls())
+            .currentQuantity(Integer.parseInt(this.txtQuantity.getText()))
+            .genreType(GenreType.find(this.txtGenre.getText()))
+            .build();
+    log.info("change {}", changeInfoBookDTO);
+    this.book.get().changeInfo(changeInfoBookDTO);
+  }
+
   private JPanel createFieldPanel(String label, JTextField textField) {
     JPanel panel = new JPanel(new BorderLayout(5, 5));
     JLabel jLabel = new JLabel(label);
@@ -219,6 +243,7 @@ public class UpsertBookPanel extends JPanel {
   }
 
   public void addData(Optional<Book> bookModify) {
+    this.book = bookModify;
     this.txtBookTitle.setText(bookModify.get().getTitle());
     txtQuantity.setText(String.valueOf(bookModify.get().getTotalQuantity()));
     txtAuthor.setText(bookModify.get().getAuthor());
@@ -227,6 +252,7 @@ public class UpsertBookPanel extends JPanel {
     txtGenre.setText(bookModify.get().getGenreType() + "");
 
     this.dropImagePanel.loadImagesFromUrls(bookModify.get().getImages());
+    this.dropImagePanel.addAllImages(bookModify.get().getImages());
   }
 
   public void addNewBook() {
@@ -244,7 +270,7 @@ public class UpsertBookPanel extends JPanel {
             .build();
     log.info("new book {}", book);
     this.bookController.addNewBook(book);
-    // src/main/resources/bookImages/Ảnh chụp màn hình 2025-05-18 203552.png
+
     ToastNotification panel =
         new ToastNotification(
             JOptionPane.getFrameForComponent(this),

@@ -64,7 +64,6 @@ public class ImageDropPanel extends JPanel {
         });
   }
 
-  // Set image size dynamically and reload images
   public void setImageSize(int width, int height) {
     this.widthOfImage = width;
     this.heightOfImage = height;
@@ -79,6 +78,11 @@ public class ImageDropPanel extends JPanel {
     repaint();
   }
 
+  public void addAllImages(List<String> urls) {
+    log.info("Tao add hinh roi");
+    this.imageUrls.addAll(urls);
+  }
+
   private void displayAndSaveImage(File file) throws IOException {
     log.debug("display and save image : {} ", file.getAbsolutePath());
     BufferedImage img = ImageIO.read(file);
@@ -86,7 +90,6 @@ public class ImageDropPanel extends JPanel {
     JLabel imgLabel = new JLabel(new ImageIcon(scaled));
     imgLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-    // Sự kiện click vào ảnh để xóa
     imgLabel.addMouseListener(
         new MouseAdapter() {
           @Override
