@@ -1,8 +1,10 @@
 package com.g15.library_system.entity;
 
-import com.g15.library_system.util.AutoIncrement;
-import com.g15.library_system.util.DateUtil;
-import java.time.LocalDate;
+import java.time.Instant;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -13,11 +15,11 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class BaseEntity {
 
-  @AutoIncrement private Long id;
+  private Long id;
 
   @Builder.Default private boolean isActive = true;
 
-  @Builder.Default private Long createdAt = DateUtil.convertToEpochMilli(LocalDate.now());
+  protected Long createdAt;
 
   protected boolean hasSameBrandId(long id) {
     return this.id == id;
@@ -33,5 +35,24 @@ public class BaseEntity {
 
   public boolean idContains(Long id) {
     return this.id.toString().contains(id.toString());
+  }
+
+  public Optional<Month> getCreatedMonth() {
+    if (createdAt == null) return Optional.empty();
+    return Optional.of(Instant.ofEpochMilli(createdAt).atZone(ZoneId.systemDefault()).getMonth());
+  }
+
+  public Optional<String> getCreatedDayString() {
+    if (createdAt == null) return Optional.empty();
+    return Optional.of(
+        Instant.ofEpochMilli(createdAt)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+            .format(DateTimeFormatter.ofPattern("dd")));
+  }
+
+  public Optional<Integer> getCreatedYear() {
+    if (createdAt == null) return Optional.empty();
+    return Optional.of(Instant.ofEpochMilli(createdAt).atZone(ZoneId.systemDefault()).getYear());
   }
 }

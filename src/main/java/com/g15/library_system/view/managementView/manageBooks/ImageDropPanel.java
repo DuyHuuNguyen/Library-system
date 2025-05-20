@@ -29,7 +29,6 @@ public class ImageDropPanel extends JPanel {
     setBorder(BorderFactory.createTitledBorder("Drop Images Here"));
     this.setBackground(Style.BLUE_HEADER_TABLE_AND_BUTTON);
 
-    // Use WrapLayout for auto-wrapping
     imagesContainer = new JPanel();
     imagesContainer.setLayout(new WrapLayout(FlowLayout.LEFT, 10, 10));
     imagesContainer.setBackground(Style.LIGHT_WHITE_BACKGROUND);
@@ -86,6 +85,7 @@ public class ImageDropPanel extends JPanel {
     JLabel imgLabel = new JLabel(new ImageIcon(scaled));
     imgLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
+    // Sự kiện click vào ảnh để xóa
     imgLabel.addMouseListener(
         new MouseAdapter() {
           @Override
@@ -140,7 +140,6 @@ public class ImageDropPanel extends JPanel {
     return imageUrls;
   }
 
-  /** Load images from classpath resource. Expects url in format "/images/abc.png" */
   public void loadImagesFromUrls(List<String> urls) {
     imagesContainer.removeAll();
 
@@ -189,6 +188,7 @@ public class ImageDropPanel extends JPanel {
         e.printStackTrace();
       }
     }
+
     revalidate();
     repaint();
   }

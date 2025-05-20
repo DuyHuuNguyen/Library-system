@@ -65,6 +65,10 @@ public class CustomTableModel extends DefaultTableModel {
     editableRows.clear();
   }
 
+  public Set<Integer> getEditableRows() {
+    return editableRows;
+  }
+
   public void setEditableColumns(Set<Integer> columns) {
     editableColumns = columns;
   }

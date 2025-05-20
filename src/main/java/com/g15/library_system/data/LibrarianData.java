@@ -1,12 +1,15 @@
 package com.g15.library_system.data;
 
 import com.g15.library_system.entity.Librarian;
+import com.g15.library_system.observers.LibrarianObserver;
+import com.g15.library_system.observers.LibrarianSubject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibrarianData implements Data<Librarian> {
+public class LibrarianData implements Data<Librarian>, LibrarianSubject {
   private static final LibrarianData INSTANCE = new LibrarianData();
   private final List<Librarian> librarians = new ArrayList<>();
+  private List<LibrarianObserver> observers = new ArrayList<>();
 
   private LibrarianData() {
     this.initializeData();
@@ -17,16 +20,28 @@ public class LibrarianData implements Data<Librarian> {
   }
 
   @Override
-  public void add(Librarian librarian) {}
+  public void add(Librarian librarian) {
+    this.librarians.add(librarian);
+    notifyObservers();
+  }
 
   @Override
-  public void add(List<Librarian> t) {}
+  public void add(List<Librarian> t) {
+    this.librarians.addAll(t);
+    notifyObservers();
+  }
 
   @Override
-  public void remove(Librarian librarian) {}
+  public void remove(Librarian librarian) {
+    this.librarians.remove(librarian);
+    notifyObservers();
+  }
 
   @Override
-  public void remove(int index) {}
+  public void remove(int index) {
+    this.librarians.remove(index);
+    notifyObservers();
+  }
 
   public static LibrarianData getInstance() {
     return INSTANCE;
@@ -38,7 +53,7 @@ public class LibrarianData implements Data<Librarian> {
             Librarian.builder()
                 .id(1L)
                 //                            .libraryCard(lc1)
-                .email("lib1@gmail.com")
+                .email("librarian1@gmail.com")
                 .firstName("Ronaldo")
                 .lastName("Siu")
                 .address("123 Main St")
@@ -49,7 +64,7 @@ public class LibrarianData implements Data<Librarian> {
             Librarian.builder()
                 .id(2L)
                 //                            .libraryCard(lc2)
-                .email("reader2@gmail.com")
+                .email("librarian2@gmail.com")
                 .firstName("Jane")
                 .lastName("Smith")
                 .address("456 Elm St")
@@ -60,7 +75,7 @@ public class LibrarianData implements Data<Librarian> {
             Librarian.builder()
                 .id(2L)
                 //                            .libraryCard(lc2)
-                .email("reader2@gmail.com")
+                .email("librarian3@gmail.com")
                 .firstName("Jane")
                 .lastName("Smith")
                 .address("456 Elm St")
@@ -70,5 +85,22 @@ public class LibrarianData implements Data<Librarian> {
                 .build());
 
     this.librarians.addAll(Librarians);
+  }
+
+  @Override
+  public void registerObserver(LibrarianObserver o) {
+    this.observers.add(o);
+  }
+
+  @Override
+  public void removeObserver(LibrarianObserver o) {
+    this.observers.remove(o);
+  }
+
+  @Override
+  public void notifyObservers() {
+    for (LibrarianObserver observer : observers) {
+      observer.updateLibrarianData();
+    }
   }
 }

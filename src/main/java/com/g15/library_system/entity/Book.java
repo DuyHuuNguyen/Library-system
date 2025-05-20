@@ -66,7 +66,7 @@ public class Book extends BaseEntity implements Comparable<Book> {
 
   public String getFirstImage() {
     if (this.images != null) return this.images.getFirst();
-    return "bull";
+    return "no image";
   }
 
   public boolean hasFirstImage() {

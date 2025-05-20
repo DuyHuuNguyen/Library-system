@@ -1,88 +1,101 @@
 package com.g15.library_system.view.managementView.dashboard;
 
+import com.g15.library_system.data.BookData;
+import com.g15.library_system.data.LibrarianData;
+import com.g15.library_system.data.ReaderData;
+import com.g15.library_system.observers.BookObserver;
+import com.g15.library_system.observers.LibrarianObserver;
+import com.g15.library_system.observers.ReaderObserver;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class QuickAccessPanel extends RoundedShadowPanel {
-  DashboardCard totalBooksCard,
+public class QuickAccessPanel extends RoundedShadowPanel
+    implements BookObserver, LibrarianObserver, ReaderObserver {
+  private DashboardCard totalBooksCard,
       lendedBooksCard,
       returnedBookCard,
-      availableBooksCard,
-      totalUsersCard,
+      readersCard,
+      librariansCard,
       overdueBooksCard;
+  private int totalBooks, lendedBooks, returnedBooks, overdueBooks, readers, librarians;
 
-  QuickAccessPanel() {
+  public QuickAccessPanel() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
     // Total Books
+    this.totalBooks = BookData.getInstance().totalBooksQuantity();
+    BookData.getInstance().registerObserver(this);
     totalBooksCard =
         new DashboardCard(
             "/icons/totalBook2.png",
             "Total Books",
-            "2000",
+            String.valueOf(totalBooks),
             new Color(255, 238, 215),
             new Color(255, 160, 0),
             new Color(170, 105, 0));
 
     // Lended Books
+    this.lendedBooks = ReaderData.getInstance().getTotalLendedBooks();
     lendedBooksCard =
         new DashboardCard(
             "/icons/lendBook.png",
             "Lended Books",
-            "500",
-            new Color(255, 245, 200), // Màu nền thẻ
-            new Color(255, 204, 0), // Màu nền icon
-            new Color(145, 117, 17) // Màu viền thẻ
-            );
+            String.valueOf(lendedBooks),
+            new Color(255, 245, 200),
+            new Color(255, 204, 0),
+            new Color(145, 117, 17));
 
+    this.returnedBooks = ReaderData.getInstance().getTotalReturnedBooks();
     returnedBookCard =
         new DashboardCard(
             "/icons/returnedBook.png",
             "Returned Books",
-            "200",
-            new Color(235, 235, 255), // Màu nền thẻ (Tím nhạt - Lavender)
-            new Color(130, 130, 250), // Màu nền icon (Tím/Xanh dương)
-            new Color(90, 90, 180) // Màu viền thẻ (Tím/Xanh dương đậm)
-            );
-    // Available Books
-    availableBooksCard =
-        new DashboardCard(
-            "/icons/availableBook.png",
-            "Available Books",
-            "800",
-            new Color(230, 255, 255), // Màu nền thẻ (Xanh ngọc nhạt - Pale Cyan/Aqua)
-            new Color(70, 200, 200), // Màu nền icon (Xanh ngọc - Cyan/Teal)
-            new Color(40, 140, 140) // Màu viền thẻ (Xanh ngọc đậm)
-            );
+            String.valueOf(returnedBooks),
+            new Color(235, 235, 255),
+            new Color(130, 130, 250),
+            new Color(90, 90, 180));
     // Overdue Books
+    this.overdueBooks = ReaderData.getInstance().getTotalOverdueBooks();
     overdueBooksCard =
         new DashboardCard(
             "/icons/overdue.png",
             "Overdue Books",
-            "300",
-            new Color(230, 255, 230), // Màu nền thẻ (Xanh lá cây nhạt)
-            new Color(80, 200, 80), // Màu nền icon (Xanh lá cây)
-            new Color(50, 140, 50) // Màu viền thẻ (Xanh lá cây đậm)
-            );
+            String.valueOf(overdueBooks),
+            new Color(230, 255, 255),
+            new Color(70, 200, 200),
+            new Color(40, 140, 140));
+
+    // Available Books
+    this.readers = ReaderData.getInstance().getReaders().size();
+    ReaderData.getInstance().registerObserver(this);
+    readersCard =
+        new DashboardCard(
+            "/icons/readers.png",
+            "Total Readers",
+            String.valueOf(readers),
+            new Color(230, 255, 230),
+            new Color(80, 200, 80),
+            new Color(50, 140, 50));
 
     // Total Users
-    totalUsersCard =
+    this.librarians = LibrarianData.getInstance().getLibrarians().size();
+    LibrarianData.getInstance().registerObserver(this);
+    librariansCard =
         new DashboardCard(
             "/icons/users2.png",
-            "Total Users",
-            "500",
-            new Color(255, 235, 235), // Màu nền thẻ (Hồng nhạt)
-            new Color(255, 105, 180), // Màu nền icon (Hồng)
-            new Color(180, 70, 120) // Màu viền thẻ (Hồng đậm)
-            );
+            "Total Librarians",
+            String.valueOf(librarians),
+            new Color(255, 235, 235),
+            new Color(255, 105, 180),
+            new Color(180, 70, 120));
 
-    add(totalBooksCard);
-    add(lendedBooksCard);
-    add(returnedBookCard);
-    add(availableBooksCard);
-    add(overdueBooksCard);
-    add(totalUsersCard);
+    this.add(totalBooksCard);
+    this.add(lendedBooksCard);
+    this.add(returnedBookCard);
+    this.add(overdueBooksCard);
+    this.add(readersCard);
+    this.add(librariansCard);
   }
 
   public void setTotalBooksCardButtonListener(ActionListener listener) {
@@ -97,15 +110,39 @@ public class QuickAccessPanel extends RoundedShadowPanel {
     this.returnedBookCard.setDashBoardCardButtonListener(listener);
   }
 
-  public void setAvailableBooksCardButtonListener(ActionListener listener) {
-    this.availableBooksCard.setDashBoardCardButtonListener(listener);
+  public void setReadersCardButtonListener(ActionListener listener) {
+    this.readersCard.setDashBoardCardButtonListener(listener);
   }
 
-  public void setTotalUsersCardButtonListener(ActionListener listener) {
-    this.totalUsersCard.setDashBoardCardButtonListener(listener);
+  public void setLibrariansCardButtonListener(ActionListener listener) {
+    this.librariansCard.setDashBoardCardButtonListener(listener);
   }
 
   public void setOverdueBooksCardButtonListener(ActionListener listener) {
     this.overdueBooksCard.setDashBoardCardButtonListener(listener);
+  }
+
+  @Override
+  public void updateLibrarianData() {
+    this.librarians = LibrarianData.getInstance().getLibrarians().size();
+    librariansCard.setAmount(String.valueOf(librarians));
+  }
+
+  @Override
+  public void updateReaderData() {
+    this.readers = ReaderData.getInstance().getReaders().size();
+    this.lendedBooks = ReaderData.getInstance().getTotalLendedBooks();
+    this.returnedBooks = ReaderData.getInstance().getTotalReturnedBooks();
+    this.overdueBooks = ReaderData.getInstance().getTotalOverdueBooks();
+    readersCard.setAmount(String.valueOf(readers));
+    lendedBooksCard.setAmount(String.valueOf(lendedBooks));
+    returnedBookCard.setAmount(String.valueOf(returnedBooks));
+    overdueBooksCard.setAmount(String.valueOf(overdueBooks));
+  }
+
+  @Override
+  public void updateBookData() {
+    this.totalBooks = BookData.getInstance().totalBooksQuantity();
+    totalBooksCard.setAmount(String.valueOf(totalBooks));
   }
 }
