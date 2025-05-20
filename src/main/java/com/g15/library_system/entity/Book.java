@@ -1,5 +1,6 @@
 package com.g15.library_system.entity;
 
+import com.g15.library_system.dto.ChangeInfoBookDTO;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
 import java.util.List;
@@ -71,5 +72,16 @@ public class Book extends BaseEntity implements Comparable<Book> {
 
   public boolean hasFirstImage() {
     return !this.images.isEmpty();
+  }
+
+  public void changeInfo(ChangeInfoBookDTO changeInfoBookDTO) {
+    this.title = changeInfoBookDTO.getTitle();
+    this.author = changeInfoBookDTO.getAuthor();
+    this.publisher = changeInfoBookDTO.getPublisher();
+    this.publishYear = changeInfoBookDTO.getPublishYear();
+    this.genreType = changeInfoBookDTO.getGenreType();
+    this.currentQuantity = changeInfoBookDTO.getCurrentQuantity();
+    this.totalQuantity = changeInfoBookDTO.getTotalQuantity();
+    this.images = changeInfoBookDTO.getImages();
   }
 }
