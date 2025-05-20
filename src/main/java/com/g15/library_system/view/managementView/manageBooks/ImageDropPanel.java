@@ -80,6 +80,7 @@ public class ImageDropPanel extends JPanel {
   }
 
   private void displayAndSaveImage(File file) throws IOException {
+    log.debug("display and save image : {} ", file.getAbsolutePath());
     BufferedImage img = ImageIO.read(file);
     Image scaled = img.getScaledInstance(widthOfImage, heightOfImage, Image.SCALE_SMOOTH);
     JLabel imgLabel = new JLabel(new ImageIcon(scaled));
@@ -123,7 +124,7 @@ public class ImageDropPanel extends JPanel {
     File outputFile = new File(folder, file.getName());
     ImageIO.write(img, "png", outputFile);
 
-    String resourcePath = "src/main/resources/bookImages" + file.getName();
+    String resourcePath = "/bookImages/" + file.getName();
     imageUrls.add(resourcePath);
     log.info("Đã lưu ảnh: {} ", outputFile.getAbsolutePath());
   }
@@ -144,15 +145,18 @@ public class ImageDropPanel extends JPanel {
     imagesContainer.removeAll();
 
     if (urls == null || urls.isEmpty()) {
-      log.info("Image not found");
+      log.debug("Image not found");
       return;
     }
 
     for (String path : urls) {
-      if (!path.startsWith("/")) path = "/" + path;
-      try (InputStream is = getClass().getResourceAsStream(path)) {
-        if (is != null) {
-          BufferedImage img = ImageIO.read(is);
+      try {
+        log.error("load image of feature modify {}", path);
+        path = path.contains("src/main/resources") ? "" : "src/main/resources" + path;
+
+        File imageFile = new File(path);
+        if (imageFile.exists()) {
+          BufferedImage img = ImageIO.read(imageFile);
           Image scaled = img.getScaledInstance(widthOfImage, heightOfImage, Image.SCALE_SMOOTH);
           JLabel imgLabel = new JLabel(new ImageIcon(scaled));
           imgLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -173,7 +177,7 @@ public class ImageDropPanel extends JPanel {
                     imagesContainer.revalidate();
                     imagesContainer.repaint();
 
-                    System.out.println("Đã xóa ảnh khỏi giao diện: " + finalPath);
+                    log.debug("Đã xóa ảnh khỏi giao diện: " + finalPath);
                     imageUrls.remove(finalPath);
                   }
                 }
@@ -181,16 +185,16 @@ public class ImageDropPanel extends JPanel {
 
           imagesContainer.add(imgLabel);
         } else {
-          System.err.println("Không tìm thấy file resource: " + path);
+          log.debug("Không tìm thấy file: {} ", path);
         }
       } catch (IOException e) {
-        System.err.println("Không thể đọc ảnh từ: " + path);
+        log.debug("Không thể đọc ảnh từ: {} ", path);
         e.printStackTrace();
       }
     }
 
-    revalidate();
-    repaint();
+    imagesContainer.revalidate();
+    imagesContainer.repaint();
   }
 
   public void clearALlImages() {
