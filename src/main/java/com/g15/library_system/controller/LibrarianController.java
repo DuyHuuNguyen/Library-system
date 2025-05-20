@@ -1,5 +1,6 @@
 package com.g15.library_system.controller;
 
+import com.g15.library_system.dto.request.LoginRequest;
 import com.g15.library_system.facade.LibrarianFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,4 +9,8 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class LibrarianController {
   private final LibrarianFacade librarianFacade;
+
+  public boolean login(LoginRequest loginRequest) {
+    return this.librarianFacade.login(loginRequest);
+  }
 }
