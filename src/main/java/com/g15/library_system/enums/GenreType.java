@@ -1,10 +1,9 @@
 package com.g15.library_system.enums;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import java.util.Arrays;
 import java.util.List;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Getter
 @AllArgsConstructor

@@ -94,18 +94,18 @@ public class ManageBookPanel extends JPanel {
 
     this.bookFormAndDropImagesPanel = new JPanel(new BorderLayout());
     this.bookFormAndDropImagesPanel.setBackground(Color.PINK);
-    this.bookFormPanel = new UpsertBookPanel(1000, 500,mapAPIs);
+    this.bookFormPanel = new UpsertBookPanel(1000, 500, mapAPIs);
 
     this.bookFormAndDropImagesPanel.add(bookFormPanel, BorderLayout.CENTER);
 
     this.panelContent.add(bookFormAndDropImagesPanel, CONSTRAINT_ADD_NEW_BOOK);
 
-    this.addNewBookPanel = new UpsertBookPanel(1000, 500,mapAPIs);
+    this.addNewBookPanel = new UpsertBookPanel(1000, 500, mapAPIs);
     this.panelContent.add(this.addNewBookPanel, CONSTRAINT_MODIFY_BOOK);
 
     this.panelContent.add(new NotifyNewBookPanel(), CONSTRAINT_NOTIFY);
 
-    this.modifyBookPanel = new UpsertBookPanel(100, 500,mapAPIs);
+    this.modifyBookPanel = new UpsertBookPanel(100, 500, mapAPIs);
     this.panelContent.add(modifyBookPanel, CONSTRAINT_MODIFY_BOOK);
 
     add(panelContent, BorderLayout.CENTER);
@@ -181,7 +181,7 @@ public class ManageBookPanel extends JPanel {
         com.g15.library_system.dto.request.ExportExcelRequest.builder()
             .nameFile(fileAndHeaderSheet.getFirst())
             .headerSheet(fileAndHeaderSheet.getSecond())
-                .books(this.bookController.getAll())
+            .books(this.bookController.getAll())
             .build();
     this.bookController.exportExcel(exportExcelRequest);
   }
@@ -194,9 +194,12 @@ public class ManageBookPanel extends JPanel {
       File selectedFile = fileChooser.getSelectedFile();
       String path = selectedFile.getAbsolutePath();
 
-      ToastNotification panel = new
-              ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.INFO,
-              ToastNotification.Location.TOP_CENTER, "File name : " + selectedFile.getName());
+      ToastNotification panel =
+          new ToastNotification(
+              JOptionPane.getFrameForComponent(this),
+              ToastNotification.Type.INFO,
+              ToastNotification.Location.TOP_CENTER,
+              "File name : " + selectedFile.getName());
       panel.showNotification();
 
       log.info("Url import excel {}", selectedFile.getName());

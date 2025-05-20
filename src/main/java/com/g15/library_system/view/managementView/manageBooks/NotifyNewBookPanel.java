@@ -15,6 +15,7 @@ import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.swing.*;
 
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
@@ -36,9 +37,10 @@ public class NotifyNewBookPanel extends JPanel {
   private java.util.List<NotifyBookResponse> notifyBookResponses = new ArrayList<>();
 
   private Map<ApiKey, Runnable> mapApi =
-      Map.of(ApiKey.SEND_EMAIL, () -> this.sendEmailNotifyNewBook()
+      Map.of(ApiKey.SEND_EMAIL,
+      () -> this.sendEmailNotifyNewBook()
       ,ApiKey.RELOAD,
-              ()-> this.upDataIntoTable() );
+      ()-> this.reload() );
 
   public NotifyNewBookPanel() {
     this.initPanel();
@@ -75,6 +77,7 @@ public class NotifyNewBookPanel extends JPanel {
   private void upDataIntoTable() {
     this.checkboxTablePanel.removeAllDataTable();
     this.notifyBookResponses.addAll(this.bookController.getAllNewBooks());
+    log.info("size {}",this.notifyBookResponses.size());
     this.checkboxTablePanel.addDataToTable(
     this.bookMapper.toDataNotifyBookTable(this.notifyBookResponses));
     this.initData();
@@ -84,7 +87,7 @@ public class NotifyNewBookPanel extends JPanel {
     return this.notifyBookResponses.stream()
         .map(
             notifyBookResponses -> this.bookMapper.toTitleAndFirstImageBookDTO(notifyBookResponses))
-        .toList();
+        .collect(Collectors.toList());
   }
 
   private void sendEmailNotifyNewBook() {
@@ -102,12 +105,12 @@ public class NotifyNewBookPanel extends JPanel {
             ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.INFO,
             ToastNotification.Location.TOP_CENTER, "Send notification successful");
     panel.showNotification();
-    this.reloadDataInPanel();
   }
 
   public void initData() {
     this.emailReceiveNotification = this.readerController.getAllEmailAcceptNotifyNewBook();
     this.titleAndFirstImageBookDTOS = this.buildEmailNotificationNewBooks();
+
     this.loadEmails();
     this.loadContentEmails();
     this.loadImages();
@@ -117,7 +120,8 @@ public class NotifyNewBookPanel extends JPanel {
     var images =
         this.titleAndFirstImageBookDTOS.stream()
             .map(TitleAndFirstImageBookDTO::getFirstImage)
-            .toList();
+            .collect(Collectors.toList());
+
     this.emailContentPanel.loadImages(images);
   }
 
@@ -141,11 +145,18 @@ public class NotifyNewBookPanel extends JPanel {
     this.emailContentPanel.loadEmail(this.emailReceiveNotification);
   }
 
-  public void reloadDataInPanel(){
+  public void removeAllDataInPanel(){
+    this.notifyBookResponses.clear();
+    this.titleAndFirstImageBookDTOS.clear();
     this.emailContentPanel.loadEmail(null);
     this.emailContentPanel.loadContent("","");
     this.emailContentPanel.removeAllImages();
     this.checkboxTablePanel.removeAllDataTable();
+  }
+
+  public void reload(){
+    this.removeAllDataInPanel();
+    this.upDataIntoTable();
   }
 
 

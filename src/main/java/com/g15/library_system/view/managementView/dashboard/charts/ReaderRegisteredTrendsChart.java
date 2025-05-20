@@ -9,13 +9,12 @@ import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.swingComponentGenerators.JFreeChartGenerator;
 import java.awt.*;
 import java.util.Map;
-
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class ReaderRegisteredTrendsChart extends RoundedShadowPanel
-        implements FilterObserver, ReaderObserver {
+    implements FilterObserver, ReaderObserver {
 
   private ChartPanel chartPanel;
   private JFreeChart lineChart;
@@ -53,7 +52,8 @@ public class ReaderRegisteredTrendsChart extends RoundedShadowPanel
     chartDataset = new DefaultCategoryDataset();
     updateChartDataByMonth(selectedYear);
 
-    lineChart = JFreeChartGenerator.createLineChart(
+    lineChart =
+        JFreeChartGenerator.createLineChart(
             "", "Months", "Number of registered readers", chartDataset);
 
     chartPanel = new ChartPanel(lineChart);
@@ -93,7 +93,8 @@ public class ReaderRegisteredTrendsChart extends RoundedShadowPanel
       this.remove(chartPanel);
     }
 
-    lineChart = JFreeChartGenerator.createLineChart(
+    lineChart =
+        JFreeChartGenerator.createLineChart(
             "", categoryAxisLabel, "Number of registered readers", chartDataset);
 
     chartPanel = new ChartPanel(lineChart);
@@ -114,4 +115,3 @@ public class ReaderRegisteredTrendsChart extends RoundedShadowPanel
     updateChart();
   }
 }
-

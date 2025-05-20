@@ -14,9 +14,9 @@ public class EmailFormPanel extends RoundedShadowPanel {
   private JTextField subjectField;
   private JPanel body;
   private JTextArea contentEmail;
-  private ImageDropPanel bodyArea;
+  private ImageDropPanel imageDropPanel;
   private JScrollPane bodyScroll;
-  private JButton sendButton,reloadBtn;
+  private JButton sendButton, reloadBtn;
 
   private Map<ApiKey, Runnable> mapApi;
 
@@ -35,7 +35,7 @@ public class EmailFormPanel extends RoundedShadowPanel {
     JLabel bodyLabel = new JLabel("Message:");
     this.body = new JPanel(new MigLayout("insets 5, wrap 1", "[grow, fill]", "[]10[]"));
 
-    this.bodyArea = new ImageDropPanel(300, 300);
+    this.imageDropPanel = new ImageDropPanel(300, 300);
 
     this.contentEmail = new JTextArea();
     this.contentEmail.setRows(15);
@@ -43,7 +43,7 @@ public class EmailFormPanel extends RoundedShadowPanel {
     this.contentEmail.setWrapStyleWord(true);
 
     this.body.add(contentEmail, "growx");
-    this.body.add(bodyArea, "center, growx");
+    //    this.body.add(imageDropPanel, "center, growx");
 
     this.bodyScroll = new JScrollPane(body);
     this.bodyScroll.setPreferredSize(new Dimension(400, 800));
@@ -55,11 +55,12 @@ public class EmailFormPanel extends RoundedShadowPanel {
             .preferredSize(new Dimension(120, 35));
     this.sendButton.addActionListener(e -> this.mapApi.get(ApiKey.SEND_EMAIL).run());
 
-    this.reloadBtn =  CustomButtonBuilder.builder()
+    this.reloadBtn =
+        CustomButtonBuilder.builder()
             .text("reload")
             .backgroundColor(Style.BLUE_HEADER_TABLE_AND_BUTTON)
             .preferredSize(new Dimension(120, 35));
-    this.reloadBtn.addActionListener(e->this.mapApi.get(ApiKey.RELOAD).run());
+    this.reloadBtn.addActionListener(e -> this.mapApi.get(ApiKey.RELOAD).run());
 
     this.add(toLabel);
     this.add(toField, "growx");
@@ -86,7 +87,8 @@ public class EmailFormPanel extends RoundedShadowPanel {
     if (emails == null) {
       this.toField.setText("");
       return;
-    };
+    }
+    ;
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < emails.length; i++) {
       sb.append(emails[i]);
@@ -97,15 +99,15 @@ public class EmailFormPanel extends RoundedShadowPanel {
   }
 
   public void loadImages(java.util.List<String> images) {
-    this.bodyArea.loadImagesFromUrls(images);
+    this.imageDropPanel.loadImagesFromUrls(images);
   }
 
-  public void loadContent(String content,String subject) {
+  public void loadContent(String content, String subject) {
     this.subjectField.setText(subject);
     this.contentEmail.setText(content);
   }
 
   public void removeAllImages() {
-    this.bodyArea.clearALlImages();
+    this.imageDropPanel.clearALlImages();
   }
 }

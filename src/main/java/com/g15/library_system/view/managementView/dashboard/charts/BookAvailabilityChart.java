@@ -1,7 +1,6 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
 import com.g15.library_system.data.BookData;
-import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.observers.BookObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
@@ -38,12 +37,12 @@ public class BookAvailabilityChart extends RoundedShadowPanel
     this.setPreferredSize(new Dimension(500, 450));
     BookData.getInstance().registerObserver(this);
 
-    //title
+    // title
     TitlePanel titlePn = new TitlePanel("Book Availability");
     this.selectedMonth = titlePn.getSelectedMonth();
     this.selectedYear = titlePn.getSelectedYear();
 
-    //chart
+    // chart
     chartDataset = new DefaultPieDataset();
     bookAvailabilityData = bookStatistics.aggregateBookAvailabilityData();
     for (Map.Entry<String, Long> entry : bookAvailabilityData.entrySet()) {

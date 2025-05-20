@@ -16,6 +16,7 @@ import com.g15.library_system.util.DateUtil;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,7 @@ public class BookFacadeImpl implements BookFacade {
     return this.bookService.findAll().stream()
         .filter(book -> DateUtil.isNowDay(book.getCreatedAt()))
         .map(book -> this.bookMapper.toNotifyBookResponse(book))
-        .toList();
+        .collect(Collectors.toList());
   }
 
   @Override
