@@ -1,6 +1,6 @@
 package com.g15.library_system.repository.impl;
 
-import com.g15.library_system.data.TransactionData;
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.repository.TransactionRepository;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class TransactionRepositoryImpl implements TransactionRepository {
-  private List<Transaction> transactions = TransactionData.getInstance().getTransactions();
+  private List<Transaction> transactions = ReaderData.getInstance().getTransactions();
 
   @Override
   public Optional<Transaction> findById(Long id) {
@@ -22,7 +22,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @Override
-  public Boolean save(Transaction transaction) {
-    return transactions.add(transaction);
+  public Transaction save(Transaction transaction) {
+    transaction.setId(transactions.getLast().getId() + 1);
+    transactions.add(transaction);
+    return transaction;
   }
 }
