@@ -9,7 +9,6 @@ import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOpt
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ToolPanel extends JPanel {
   private final Dimension DIMENSION_BUTTON = new Dimension();
   private CustomButton addBt, notificationBt, reloadBt, exportBt, importBt, gotoTableBt, modifyBt;
-  private Map<String, Runnable> actionMap = new HashMap<>();
 
   private CardLayout cardLayout;
   private JPanel panelContent;
@@ -170,7 +168,6 @@ public class ToolPanel extends JPanel {
             .icon("/icons/reload.png", 10);
     reloadBt.addActionListener(
         e -> {
-          // code here
           mapApi.get(ApiKey.RELOAD).run();
         });
     addBt =

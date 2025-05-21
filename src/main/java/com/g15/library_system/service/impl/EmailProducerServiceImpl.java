@@ -1,5 +1,7 @@
 package com.g15.library_system.service.impl;
 
+import com.g15.library_system.dto.EmailContent;
+import com.g15.library_system.dto.EmailMessageDTO;
 import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.dto.TransactionContentDTO;
 import com.g15.library_system.service.EmailProducerService;
@@ -18,8 +20,14 @@ public class EmailProducerServiceImpl implements EmailProducerService {
   @Value("${rabbitmq.topicExchangeEmail}")
   private String topicExchangeEmail;
 
+  @Value("${rabbitmq.exchangeEmailText}")
+  private String exchangeEmailText;
+
   @Value("${rabbitmq.sendEmailRouter}")
   private String sendEmailRouter;
+
+  @Value("${rabbitmq.sendEmailTextRouter}")
+  private String sendOTPRouter;
 
   @Override
   public void send(EmailNotificationNewBooksDTO emailNotificationNewBooksDTO) {
@@ -32,5 +40,11 @@ public class EmailProducerServiceImpl implements EmailProducerService {
   @Override
   public void send(TransactionContentDTO transaction) {
     this.rabbitTemplate.convertAndSend(this.topicExchangeEmail, this.sendEmailRouter, transaction);
+  }
+  
+  @Override
+  public <T extends EmailContent> void send(EmailMessageDTO<T> emailMessageDTO) {
+    log.info("😍😍😍 send email from {} -> routing {}", this.exchangeEmailText, this.sendOTPRouter);
+    this.rabbitTemplate.convertAndSend(this.exchangeEmailText, this.sendOTPRouter, emailMessageDTO);
   }
 }

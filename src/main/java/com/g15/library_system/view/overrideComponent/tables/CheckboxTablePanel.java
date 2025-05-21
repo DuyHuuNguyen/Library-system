@@ -8,8 +8,10 @@ import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.table.*;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +20,9 @@ public class CheckboxTablePanel extends JPanel {
   private String[] columnNames;
   private String[] statuses = {"Returned", "Lost", "Damaged", "Overdue"};
   private Object[][] tableData;
-  private JTable table;
+  @Getter private JTable table;
   private CustomTableModel tableModel;
-  private TableColumn checkboxCol;
+  @Getter private TableColumn checkboxCol;
   private TableColumnModel columnModel;
   private boolean isSelectAll = false;
   private boolean isEditMode = false; // edit mode (button turn it on)
@@ -329,5 +331,20 @@ public class CheckboxTablePanel extends JPanel {
 
   public void setRowHeight(int height) {
     table.setRowHeight(height);
+  }
+
+  public void setRowSelectionHandler(Consumer<Integer> rowHandler) {
+    table
+        .getSelectionModel()
+        .addListSelectionListener(
+            event -> {
+              if (!event.getValueIsAdjusting()) {
+                int viewRow = table.getSelectedRow();
+                if (viewRow != -1) {
+                  int modelRow = table.convertRowIndexToModel(viewRow);
+                  rowHandler.accept(modelRow);
+                }
+              }
+            });
   }
 }

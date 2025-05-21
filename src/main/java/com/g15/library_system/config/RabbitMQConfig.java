@@ -15,11 +15,20 @@ public class RabbitMQConfig {
   @Value("${rabbitmq.sendEmailQueue}")
   private String sendEmailQueue;
 
+  @Value("${rabbitmq.sendEmailTextQueue}")
+  private String sendEmailTextQueue;
+
   @Value("${rabbitmq.topicExchangeEmail}")
   private String topicExchangeEmail;
 
+  @Value("${rabbitmq.exchangeEmailText}")
+  private String exchangeEmailText;
+
   @Value("${rabbitmq.sendEmailRouter}")
   private String sendEmailRouter;
+
+  @Value("${rabbitmq.sendEmailTextRouter}")
+  private String sendEmailTextRouter;
 
   @Value("${rabbitmq.sendExportExcelQueue}")
   private String exportExcelQueue;
@@ -42,8 +51,18 @@ public class RabbitMQConfig {
   }
 
   @Bean
+  public TopicExchange exchangeEmailText() {
+    return new TopicExchange(exchangeEmailText);
+  }
+
+  @Bean
   public Queue userMailQueue() {
     return new Queue(sendEmailQueue);
+  }
+
+  @Bean
+  public Queue userEmailTextQueue() {
+    return new Queue(sendEmailTextQueue);
   }
 
   @Bean
@@ -54,6 +73,13 @@ public class RabbitMQConfig {
   @Bean
   public Binding userMailBinding() {
     return BindingBuilder.bind(userMailQueue()).to(exchange()).with(sendEmailRouter);
+  }
+
+  @Bean
+  public Binding userSendEmailTextBinding() {
+    return BindingBuilder.bind(userEmailTextQueue())
+        .to(exchangeEmailText())
+        .with(sendEmailTextRouter);
   }
 
   @Bean

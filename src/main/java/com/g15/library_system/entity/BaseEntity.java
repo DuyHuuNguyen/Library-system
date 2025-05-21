@@ -1,6 +1,8 @@
 package com.g15.library_system.entity;
 
+import com.g15.library_system.util.DateUtil;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -20,7 +22,7 @@ public class BaseEntity {
 
   @Builder.Default private boolean isActive = true;
 
-  protected Long createdAt;
+  @Builder.Default protected Long createdAt = DateUtil.convertToEpochMilli(LocalDate.now());
 
   protected boolean hasSameBrandId(long id) {
     return this.id == id;
