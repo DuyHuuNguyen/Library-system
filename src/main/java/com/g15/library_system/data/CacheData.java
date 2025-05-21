@@ -5,6 +5,7 @@ import com.g15.library_system.entity.Librarian;
 public class CacheData {
   private static Librarian CURRENT_LIBRARIAN;
   private static String OTP;
+  private static String EMAIL;
 
   public static void addOTP(String otp) {
     OTP = otp;
@@ -12,5 +13,21 @@ public class CacheData {
 
   public static void addCurrentLibrarian(Librarian librarian) {
     CURRENT_LIBRARIAN = librarian;
+  }
+
+  public static void addEmail(String email) {
+    EMAIL = email;
+  }
+
+  public static boolean isEmailEmpty() {
+    return EMAIL == "" || EMAIL == null;
+  }
+
+  public static String getEMAIL() {
+    return EMAIL;
+  }
+
+  public static String getOTP() {
+    return OTP;
   }
 }
