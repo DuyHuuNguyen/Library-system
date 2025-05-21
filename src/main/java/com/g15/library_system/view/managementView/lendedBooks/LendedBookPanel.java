@@ -1,8 +1,11 @@
 package com.g15.library_system.view.managementView.lendedBooks;
 
 import com.g15.library_system.controller.TransactionController;
+import com.g15.library_system.dto.TransactionContentDTO;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.enums.TransactionType;
+import com.g15.library_system.mapper.TransactionMapper;
+import com.g15.library_system.mapper.impl.TransactionMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.managementView.lendedBooks.formBody.*;
@@ -19,6 +22,9 @@ public class LendedBookPanel extends JPanel {
 
   private TransactionController transactionController =
       ApplicationContextProvider.getBean(TransactionController.class);
+
+  private TransactionMapper transactionMapper =
+      ApplicationContextProvider.getBean(TransactionMapperImpl.class);
 
   public LendedBookPanel() {
     setLayout(new BorderLayout());
@@ -97,6 +103,12 @@ public class LendedBookPanel extends JPanel {
         return false;
       }
     }
+
+    public void sendEmail(TransactionContentDTO transaction) {
+      if (detailPn.enableNotification()) {
+        transactionController.notifyBorrowTransaction(transaction);
+      }
+    }
   }
 
   private class ButtonPanel extends JPanel {
@@ -142,15 +154,16 @@ public class LendedBookPanel extends JPanel {
       lendButton.addActionListener(
           e -> {
             if (formPn.validateForm()) {
-              Boolean isCreated =
-                  transactionController.createTransaction(formPn.createTransaction());
-              if (isCreated) {
+              Transaction transaction = formPn.createTransaction();
+              transaction = transactionController.createTransaction(transaction);
+              if (transaction != null) {
                 new ToastNotification(
                         JOptionPane.getFrameForComponent(this),
                         ToastNotification.Type.SUCCESS,
                         ToastNotification.Location.BOTTOM_RIGHT,
                         "Borrow successfully!!")
                     .showNotification();
+                formPn.sendEmail(transactionMapper.convertToContentDTO(transaction));
                 formPn.cancel();
               }
             }
