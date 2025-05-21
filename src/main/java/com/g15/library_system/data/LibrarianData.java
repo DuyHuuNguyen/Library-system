@@ -65,7 +65,7 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
             Librarian.builder()
                 .id(2L)
                 //                            .libraryCard(lc2)
-                .email("librarian2@gmail.com")
+                .email("duynguyenavg@gmail.com")
                 .firstName("Jane")
                 .lastName("Smith")
                 .address("456 Elm St")

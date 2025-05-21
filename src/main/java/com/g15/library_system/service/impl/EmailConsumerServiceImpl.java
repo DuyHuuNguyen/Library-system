@@ -1,5 +1,7 @@
 package com.g15.library_system.service.impl;
 
+import com.g15.library_system.dto.EmailContent;
+import com.g15.library_system.dto.EmailMessageDTO;
 import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.service.EmailConsumerService;
 import com.g15.library_system.service.MailService;
@@ -22,5 +24,13 @@ public class EmailConsumerServiceImpl implements EmailConsumerService {
   public void receive(EmailNotificationNewBooksDTO emailNotificationNewBooksDTO) {
     log.info("🙌🙌🙌 I received EmailNotificationNewBooksDTO");
     this.mailService.sendNotificationNewBooks(emailNotificationNewBooksDTO);
+  }
+
+  @Override
+  @RabbitHandler
+  @RabbitListener(queues = {"${rabbitmq.sendEmailTextQueue}"})
+  public <T extends EmailContent> void receive(EmailMessageDTO<T> emailMessageDTO) {
+    log.info("send only text queue .... received message");
+    this.mailService.send(emailMessageDTO);
   }
 }
