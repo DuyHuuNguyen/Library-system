@@ -9,4 +9,8 @@ public class Librarian extends User {
   public boolean isSamePassword(String password) {
     return this.password.equals(password);
   }
+
+  public void changePassword(String newPassword) {
+    this.password = newPassword;
+  }
 }

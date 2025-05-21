@@ -1,6 +1,9 @@
 package com.g15.library_system.view.loginView;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.g15.library_system.controller.LibrarianController;
+import com.g15.library_system.dto.request.ResetPasswordRequest;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
 import java.awt.*;
@@ -11,6 +14,9 @@ public class SetNewPasswordPanel extends JPanel {
   private JPasswordField newPasswdField, confirmPasswdField;
   private JButton resetPasswdBt, backToLoginBt;
   private LoginCardPanel loginCardPanel;
+
+  private LibrarianController librarianController =
+      ApplicationContextProvider.getBean(LibrarianController.class);
 
   public SetNewPasswordPanel(LoginCardPanel loginCardPanel) {
     this.loginCardPanel = loginCardPanel;
@@ -69,10 +75,19 @@ public class SetNewPasswordPanel extends JPanel {
           boolean invalidNew = newPassword.isBlank();
           boolean invalidConfirm = confirmPassword.isBlank();
 
+          var resetPasswordRequest =
+              ResetPasswordRequest.builder()
+                  .newPassword(newPassword)
+                  .confirmPassword(confirmPassword)
+                  .build();
+
           if (invalidNew || invalidConfirm) {
             highlightInvalidField(newPasswdField, invalidNew);
             highlightInvalidField(confirmPasswdField, invalidConfirm);
-          } else if (!newPassword.equals(confirmPassword)) {
+            return;
+          }
+          var isResetPassword = this.librarianController.resetPassword(resetPasswordRequest);
+          if (!isResetPassword) {
             highlightInvalidField(newPasswdField, true);
             highlightInvalidField(confirmPasswdField, true);
           } else {

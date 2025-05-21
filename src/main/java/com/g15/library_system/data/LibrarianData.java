@@ -60,18 +60,18 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
                 .address("123 Main St")
                 .dateOfBirth(3487562934875L)
                 .avatarKey("avatar1")
-                .phoneNumber("123456789")
+                .phoneNumber("0123456789")
                 .build(),
             Librarian.builder()
                 .id(2L)
                 //                            .libraryCard(lc2)
-                .email("librarian2@gmail.com")
+                .email("duynguyenavg@gmail.com")
                 .firstName("Jane")
                 .lastName("Smith")
                 .address("456 Elm St")
                 .dateOfBirth(3487562934876L)
                 .avatarKey("avatar2")
-                .phoneNumber("987654321")
+                .phoneNumber("0987654321")
                 .build(),
             Librarian.builder()
                 .id(2L)
@@ -82,7 +82,7 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
                 .address("456 Elm St")
                 .dateOfBirth(3487562934876L)
                 .avatarKey("avatar2")
-                .phoneNumber("987654321")
+                .phoneNumber("0987654321")
                 .build());
 
     this.librarians.addAll(Librarians);
