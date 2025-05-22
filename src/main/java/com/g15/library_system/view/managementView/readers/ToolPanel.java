@@ -89,6 +89,7 @@ public class ToolPanel extends JPanel {
           clearTextFields(readerPn.contentPn.showInforPn.formPn); // Xóa trắng
           enableTextFields(readerPn.contentPn.showInforPn.formPn, true); // Cho phép nhập
           readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.ADD);
+          readerPn.contentPn.borrowedPanel.setVisible(false);
         });
     actionBtPn.add(addBt);
 
