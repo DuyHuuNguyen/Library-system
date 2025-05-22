@@ -48,19 +48,16 @@ public class BorrowedHistoryPanel extends JPanel {
             borrowedData =
                     new Object[][] {
                             {
-                                    false,
                                     "#11111",
                                     "The false in our star",
                                     "overdue"
                             },
                             {
-                                    false,
                                     "#11112",
                                     "The Science",
                                     "returned"
                             },
                             {
-                                    false,
                                     "#11113",
                                     "A Moon",
                                     "returned"

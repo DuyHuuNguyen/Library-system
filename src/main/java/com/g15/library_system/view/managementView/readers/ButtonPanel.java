@@ -1,11 +1,13 @@
 package com.g15.library_system.view.managementView.readers;
 
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
 
 public class ButtonPanel extends JPanel {
+  public JButton saveBt;
   public JButton editBt;
   public JButton removeBt;
   public JButton addBt;
@@ -13,11 +15,35 @@ public class ButtonPanel extends JPanel {
 
   private ButtonPanelMode mode;
 
-  public ButtonPanel(AvatarPanel avatar, FormPanel form) {
+  public ButtonPanel(AvatarPanel avatar, ReaderPanel readerPn) {
     setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 30));
     setBackground(Color.WHITE);
     setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
     setPreferredSize(new Dimension(this.getWidth(), 70));
+
+    // OK button
+    saveBt =
+        CustomButtonBuilder.builder()
+                .text("OK")
+                .font(Style.FONT_SANS_SERIF_PLAIN_15)
+                .textColor(Color.WHITE)
+                .backgroundColor(Style.PURPLE_MAIN_THEME)
+                .hoverColor(Style.PURPLE_MAIN_THEME.darker())
+                .radius(12)
+                .alignment(SwingConstants.LEFT)
+                .drawBorder(false)
+                .opaque(false)
+                .contentAreaFilled(false)
+                .preferredSize(new Dimension(100, 30))
+                .icon("/icons/save.png", 12);
+
+    saveBt.addActionListener(
+            e -> {
+              readerPn.toolPn.enableTextFields(readerPn.contentPn.showInforPn.formPn, false);
+              readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.VIEW);
+              JOptionPane.showMessageDialog(this, "Saved!");
+            }
+    );
 
     // Add button
     editBt =
@@ -37,7 +63,8 @@ public class ButtonPanel extends JPanel {
     editBt.addActionListener(
         e -> {
           // Add functionality here
-          JOptionPane.showMessageDialog(this, "Member edit successfully!");
+          readerPn.toolPn.enableTextFields(readerPn.contentPn.showInforPn.formPn, true);
+          readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.EDIT);
         });
 
     // Remove button
@@ -57,7 +84,7 @@ public class ButtonPanel extends JPanel {
             .icon("/icons/deleteIcon.png", 12);
     removeBt.addActionListener(
         e -> {
-          form.resetFields();
+          readerPn.contentPn.showInforPn.formPn.resetFields();
           avatar.resetAvatar();
         });
 
@@ -77,6 +104,29 @@ public class ButtonPanel extends JPanel {
             .preferredSize(new Dimension(100, 30));
 
     add(addBt);
+
+    addBt.addActionListener(
+            e -> {
+                        FormPanel formPn = readerPn.contentPn.showInforPn.formPn;
+                        if (formPn.validateForm()) {
+//                          Boolean isCreated =
+//                                  transactionController.createTransaction(formPn.createTransaction());
+//                          if (isCreated) {
+                            new ToastNotification(
+                                    JOptionPane.getFrameForComponent(this),
+                                    ToastNotification.Type.SUCCESS,
+                                    ToastNotification.Location.BOTTOM_RIGHT,
+                                    "Borrow successfully!!")
+                                    .showNotification();
+                            readerPn.toolPn.enableTextFields(formPn, false);
+                            //
+                             // -- Lưu dữ liệu đã nhập vào database ở đây
+                            //
+                            this.setMode(ButtonPanelMode.VIEW);
+//                          }
+                        }
+            }
+    );
 
     // Cancel button
     cancelBt =
@@ -111,6 +161,8 @@ public class ButtonPanel extends JPanel {
     } else if (mode == ButtonPanelMode.ADD) {
       add(addBt);
       add(cancelBt);
+    } else if (mode == ButtonPanelMode.EDIT) {
+      add(saveBt);
     }
 
     revalidate();
@@ -118,6 +170,7 @@ public class ButtonPanel extends JPanel {
   }
 
   private void removeAllButtons() {
+    remove(saveBt);
     remove(editBt);
     remove(removeBt);
     remove(addBt);

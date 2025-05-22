@@ -6,8 +6,13 @@ import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOpt
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
+import org.springframework.cglib.core.Local;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
@@ -84,7 +89,6 @@ public class ToolPanel extends JPanel {
           clearTextFields(readerPn.contentPn.showInforPn.formPn); // Xóa trắng
           enableTextFields(readerPn.contentPn.showInforPn.formPn, true); // Cho phép nhập
           readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.ADD);
-          readerPn.contentPn.borrowedPanel.setVisible(false);
         });
     actionBtPn.add(addBt);
 
@@ -176,7 +180,7 @@ public class ToolPanel extends JPanel {
   //    this.addBt.addActionListener(actionListener);
   //  }
 
-  private void clearTextFields(JPanel panel) {
+  public void clearTextFields(JPanel panel) {
     for (Component comp : panel.getComponents()) {
       if (comp instanceof JTextField) {
         ((JTextField) comp).setText("");
@@ -184,10 +188,25 @@ public class ToolPanel extends JPanel {
     }
   }
 
-  private void enableTextFields(JPanel panel, boolean editable) {
+  public void enableTextFields(FormPanel panel, boolean editable) {
     for (Component comp : panel.getComponents()) {
       if (comp instanceof JTextField) {
-        ((JTextField) comp).setEditable(editable);
+        if (comp == panel.getReaderTypeField()) {
+          panel.getReaderTypeField().setVisible(!editable);
+          panel.getReaderTypeJcb().setVisible(editable);
+        }
+        if (comp == panel.getBirthDateField()) {
+          panel.getBirthDateField().setEnabled(editable);
+        }
+        if (comp == panel.getMembershipDateField()) {
+          panel.getMembershipDateField().setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+          panel.getMembershipDateField().setEnabled(false);
+        }
+        if (comp == panel.getTotalFineField()) {
+          panel.getTotalFineField().setEditable(false);
+        } else
+          ((JTextField) comp).setEditable(editable);
+
       }
     }
   }

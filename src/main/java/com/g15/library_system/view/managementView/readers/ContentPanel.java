@@ -8,11 +8,13 @@ import javax.swing.*;
 
 public class ContentPanel extends JPanel {
   public TablePanel tablePn;
-  public ShowPanel showInforPn = new ShowPanel("Edit", "Remove");
-  public BorrowedHistoryPanel borrowedPanel = new BorrowedHistoryPanel();
+  public ShowPanel showInforPn;
+  public BorrowedHistoryPanel borrowedPanel;
 
   public ContentPanel(ReaderPanel readerPn) {
     tablePn = new TablePanel(readerPn);
+    showInforPn = new ShowPanel("Edit", "Remove", readerPn);
+    borrowedPanel = new BorrowedHistoryPanel();
 
     setLayout(new GridLayout(1, 2, 5, 20));
 
