@@ -94,18 +94,18 @@ public class ManageBookPanel extends JPanel {
 
     this.bookFormAndDropImagesPanel = new JPanel(new BorderLayout());
     this.bookFormAndDropImagesPanel.setBackground(Color.PINK);
-    this.bookFormPanel = new UpsertBookPanel(1000, 500, mapAPIs);
+    this.bookFormPanel = new UpsertBookPanel(1000, 500, true, mapAPIs);
 
     this.bookFormAndDropImagesPanel.add(bookFormPanel, BorderLayout.CENTER);
 
     this.panelContent.add(bookFormAndDropImagesPanel, CONSTRAINT_ADD_NEW_BOOK);
 
-    this.addNewBookPanel = new UpsertBookPanel(1000, 500, mapAPIs);
+    this.addNewBookPanel = new UpsertBookPanel(1000, 500, false, mapAPIs);
     this.panelContent.add(this.addNewBookPanel, CONSTRAINT_MODIFY_BOOK);
 
     this.panelContent.add(new NotifyNewBookPanel(), CONSTRAINT_NOTIFY);
 
-    this.modifyBookPanel = new UpsertBookPanel(100, 500, mapAPIs);
+    this.modifyBookPanel = new UpsertBookPanel(100, 500, true, mapAPIs);
     this.panelContent.add(modifyBookPanel, CONSTRAINT_MODIFY_BOOK);
 
     add(panelContent, BorderLayout.CENTER);
@@ -141,6 +141,7 @@ public class ManageBookPanel extends JPanel {
   private void addNewBook() {
     var newBook = this.addNewBookPanel.getNewBook();
     this.bookController.addNewBook(newBook.get());
+    this.loadDataTable();
   }
 
   private void findByTextOfTextFieldSearchOptionUpDataToTable() {

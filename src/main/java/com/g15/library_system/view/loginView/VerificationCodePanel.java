@@ -1,21 +1,30 @@
 package com.g15.library_system.view.loginView;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.g15.library_system.controller.LibrarianController;
+import com.g15.library_system.dto.request.VerifyOTPRequest;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.*;
+import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 
+@Slf4j
 public class VerificationCodePanel extends JPanel {
   private JTextField[] otpFields = new JTextField[4];
   private JButton verifyBt, backBt;
   private JButton resendCodeBt;
   private final int RESET_OTP = 0;
   private LoginCardPanel loginCardPanel;
+
+  private LibrarianController librarianController =
+      ApplicationContextProvider.getBean(LibrarianController.class);
 
   public VerificationCodePanel(LoginCardPanel loginCardPanel) {
     setOpaque(false);
@@ -135,7 +144,25 @@ public class VerificationCodePanel extends JPanel {
     verifyBt.setFont(Style.FONT_BOLD_15);
     verifyBt.setBackground(Style.BLUE_MENU_BACKGROUND_COLOR);
     verifyBt.setForeground(Color.WHITE);
-    verifyBt.addActionListener(e -> loginCardPanel.showPanel(LoginCardPanel.NEW_PASS));
+    verifyBt.addActionListener(
+        e -> {
+          var verifyOTPRequest = VerifyOTPRequest.builder().otp(this.getOTPField()).build();
+          log.info("ccc {}", verifyOTPRequest);
+
+          var isVerifyOTP = this.librarianController.verifyOTP(verifyOTPRequest);
+          log.debug("verify otp {}", isVerifyOTP);
+
+          if (!isVerifyOTP) {
+            this.clearOTPField();
+            ToastNotification notification =
+                new ToastNotification(
+                    JOptionPane.getFrameForComponent(this),
+                    ToastNotification.Type.WARNING,
+                    ToastNotification.Location.CENTER,
+                    "OTP don't match");
+            notification.showNotification();
+          } else loginCardPanel.showPanel(LoginCardPanel.NEW_PASS);
+        });
 
     backBt = new JButton("Back");
     backBt.setPreferredSize(new Dimension(250, 35));
@@ -161,5 +188,13 @@ public class VerificationCodePanel extends JPanel {
     for (int i = 0; i < otpFields.length; i++) {
       otpFields[i].setText("");
     }
+  }
+
+  public String getOTPField() {
+    String otp = "";
+    for (int i = 0; i < otpFields.length; i++) {
+      otp += otpFields[i].getText();
+    }
+    return otp;
   }
 }

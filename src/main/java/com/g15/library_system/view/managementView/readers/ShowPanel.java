@@ -41,5 +41,4 @@ public class ShowPanel extends JPanel {
     titledBorder.setTitleFont(Style.FONT_BOLD_20);
     return titledBorder;
   }
-
 }
