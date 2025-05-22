@@ -59,4 +59,8 @@ public class Transaction extends BaseEntity {
 
     return actualReturnAt <= expectedReturnAt ? ReturnStatus.ON_TIME : ReturnStatus.OVERDUE;
   }
+
+  public boolean hasSameType(TransactionType transactionType) {
+    return this.transactionType.isBorrow();
+  }
 }

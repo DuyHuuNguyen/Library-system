@@ -1,8 +1,11 @@
 package com.g15.library_system.mapper.impl;
 
 import com.g15.library_system.dto.TransactionContentDTO;
+import com.g15.library_system.entity.Book;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.mapper.TransactionMapper;
+
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -43,5 +46,32 @@ public class TransactionMapperImpl implements TransactionMapper {
                 ? Double.valueOf(transaction.getOverdueFee().getPrice())
                 : null)
         .build();
+  }
+
+  @Override
+  public Object[][] toTransactionBorrowData(List<Transaction> transactions) {
+    if (transactions == null) return null;
+    Object[][] data = new Object[transactions.size()][];
+    int i = 0;
+    for (Transaction transaction : transactions) {
+      data[i] =
+              new Object[] {
+                      transaction.getId(),
+                      transaction.getLibraryCard() != null
+                              ? transaction.getLibraryCard().getOwner().getFullName()
+                              : null,
+                      java.time.Instant
+                              .ofEpochMilli(transaction.getCreatedAt())
+                              .atZone(java.time.ZoneId.systemDefault())
+                              .toLocalDate(),
+                      java.time.Instant
+                              .ofEpochMilli(transaction.getExpectedReturnAt())
+                              .atZone(java.time.ZoneId.systemDefault())
+                              .toLocalDate(),
+                      transaction.getDescription()
+              };
+      i++;
+    }
+    return data;
   }
 }

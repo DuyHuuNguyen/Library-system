@@ -59,6 +59,7 @@ public class BookPanel extends JPanel {
 
     public ButtonPanel() {
       setLayout(new FlowLayout(FlowLayout.LEFT));
+      setOpaque(false);
       addBookBtn =
           CustomButtonBuilder.builder()
               .text("Add Book")
@@ -133,7 +134,7 @@ public class BookPanel extends JPanel {
     public TablePanel() {
       setLayout(new BorderLayout());
 
-      String[] columnNames = {"", "Title", "Author", "GenreType", "Quantity"};
+      String[] columnNames = {"", "Title", "Author", "Publisher", "Public Year", "GenreType", "Quantity"};
 
       Object[][] tableData = bookMapper.toBookDataWithQuantity(bookWithQuantity);
 
@@ -165,8 +166,10 @@ public class BookPanel extends JPanel {
 
     public AddBookPanel() {
       setLayout(new BorderLayout());
+      setOpaque(false);
 
       JPanel formPanel = new JPanel(new GridBagLayout());
+      formPanel.setOpaque(false);
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.fill = GridBagConstraints.HORIZONTAL;
       gbc.insets = new Insets(5, 5, 5, 5);
@@ -196,6 +199,7 @@ public class BookPanel extends JPanel {
       formPanel.add(titleTF, gbc);
 
       bookCardHolder = new JPanel();
+      bookCardHolder.setOpaque(false);
       bookCardHolder.setLayout(new BoxLayout(bookCardHolder, BoxLayout.Y_AXIS));
       scrollPane = new JScrollPane(bookCardHolder);
       scrollPane.setPreferredSize(new Dimension(600, 250));
@@ -250,7 +254,7 @@ public class BookPanel extends JPanel {
 
             @Override
             public void ancestorRemoved(AncestorEvent event) {}
-
+            
             @Override
             public void ancestorMoved(AncestorEvent event) {}
           });
@@ -269,8 +273,9 @@ public class BookPanel extends JPanel {
 
   private void init() {
     setLayout(new BorderLayout());
-    cardLayout = new CardLayout(10, 10);
+    cardLayout = new CardLayout(0, 0);
     cardPanel = new JPanel(cardLayout);
+    cardPanel.setOpaque(false);
 
     addBookPanel = new AddBookPanel();
     buttonPanel = new ButtonPanel();
