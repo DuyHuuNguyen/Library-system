@@ -65,4 +65,8 @@ public class BookController {
   public void importExcel(ImportExcelRequest importExcelRequest) {
     this.bookFacade.importExcel(importExcelRequest);
   }
+
+  public void markAnnouncedNewBook() {
+    this.bookFacade.markAnnouncedBook();
+  }
 }

@@ -14,7 +14,7 @@ public class EmailFormPanel extends RoundedShadowPanel {
   private JTextField subjectField;
   private JPanel body;
   private JTextArea contentEmail;
-  private ImageDropPanel imageDropPanel;
+//  private ImageDropPanel imageDropPanel;
   private JScrollPane bodyScroll;
   private JButton sendButton, reloadBtn;
 
@@ -35,7 +35,7 @@ public class EmailFormPanel extends RoundedShadowPanel {
     JLabel bodyLabel = new JLabel("Message:");
     this.body = new JPanel(new MigLayout("insets 5, wrap 1", "[grow, fill]", "[]10[]"));
 
-    this.imageDropPanel = new ImageDropPanel(300, 300);
+//    this.imageDropPanel = new ImageDropPanel(300, 300);
 
     this.contentEmail = new JTextArea();
     this.contentEmail.setRows(15);
@@ -98,16 +98,16 @@ public class EmailFormPanel extends RoundedShadowPanel {
     this.toField.setText(sb.toString());
   }
 
-  public void loadImages(java.util.List<String> images) {
-    this.imageDropPanel.loadImagesFromUrls(images);
-  }
+//  public void loadImages(java.util.List<String> images) {
+//    this.imageDropPanel.loadImagesFromUrls(images);
+//  }
 
   public void loadContent(String content, String subject) {
     this.subjectField.setText(subject);
     this.contentEmail.setText(content);
   }
 
-  public void removeAllImages() {
-    this.imageDropPanel.clearALlImages();
-  }
+//  public void removeAllImages() {
+//    this.imageDropPanel.clearALlImages();
+//  }
 }

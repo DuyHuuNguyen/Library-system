@@ -33,4 +33,6 @@ public interface BookFacade {
   void sendEmailNotificationNewBook(EmailNotificationNewBooksDTO emailNotificationNewBooksDTO);
 
   void importExcel(ImportExcelRequest importExcelRequest);
+
+  void markAnnouncedBook();
 }
