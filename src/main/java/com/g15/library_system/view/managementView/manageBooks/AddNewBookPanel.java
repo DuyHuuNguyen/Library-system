@@ -4,22 +4,20 @@ import com.g15.library_system.controller.BookController;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.provider.ApplicationContextProvider;
+import com.g15.library_system.util.SaveImageFileHelper;
 import com.g15.library_system.verifier.NumberVerifier;
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser;
-import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAction;
-import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAdapter;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import java.awt.*;
-import java.util.Calendar;
+import java.io.IOException;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AddNewBookPanel extends JPanel {
-  private DateChooser publisherDate;
+  private JTextField publisherDate;
 
   private DisplayImagePanel imagePanel;
 
@@ -38,6 +36,8 @@ public class AddNewBookPanel extends JPanel {
   private int width;
   private int height;
 
+  private String pathImage;
+
   public AddNewBookPanel(int width, int height) {
     this.width = width;
     this.height = height;
@@ -47,15 +47,17 @@ public class AddNewBookPanel extends JPanel {
   public AddNewBookPanel() {}
 
   public void initPanel() {
+    this.setBorder(BorderFactory.createTitledBorder("Add new book"));
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
     this.setPreferredSize(new Dimension(width, height));
     setLayout(new BorderLayout());
 
     JPanel mainPanel = new JPanel(new GridLayout(1, 1, 10, 10)); // Chỉ còn một phần
+    mainPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
     mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
     JPanel bookInfoPanel = new JPanel();
-    bookInfoPanel.setBorder(BorderFactory.createTitledBorder("Book Information"));
+
     bookInfoPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
     GroupLayout layout = new GroupLayout(bookInfoPanel);
@@ -73,30 +75,24 @@ public class AddNewBookPanel extends JPanel {
             .preferredSize(textFieldSize)
             .addInputVerifier(new NumberVerifier());
 
-    txtAuthor = TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(textFieldSize);
+    txtAuthor =
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(textFieldSize)
+            .popupMenu(e -> this.bookController.supportSearch(txtAuthor.getText()), null);
 
     txtPublisher =
-        TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(textFieldSize);
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(textFieldSize)
+            .popupMenu(e -> this.bookController.supportSearch(txtPublisher.getText()), null);
 
     txtPublisherYear = new JTextField();
     txtPublisherYear.setPreferredSize(textFieldSize);
-    publisherDate = new DateChooser();
-    publisherDate.setTextField(this.txtPublisherYear);
-    publisherDate.addActionDateChooserListener(
-        new DateChooserAdapter() {
-          @Override
-          public void dateChanged(java.util.Date date, DateChooserAction action) {
-            super.dateChanged(date, action);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
 
-            int year = calendar.get(Calendar.YEAR); // Lấy năm
-            System.out.println("Năm được chọn: " + year);
-
-            // Ví dụ: Hiển thị lên JLabel
-            txtPublisherYear.setText(String.valueOf(year));
-          }
-        });
+    publisherDate =
+        TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(textFieldSize);
+    publisherDate.setInputVerifier(new NumberVerifier());
 
     txtGenre =
         TextFieldBuilder.builder()
@@ -125,6 +121,11 @@ public class AddNewBookPanel extends JPanel {
             var selectedFile = fileChooser.getSelectedFile();
             log.info(selectedFile.getAbsolutePath());
             imagePanel.addImageToPanel(selectedFile.getAbsolutePath());
+            try {
+              this.pathImage = SaveImageFileHelper.saveImage(selectedFile.getAbsolutePath());
+            } catch (IOException ex) {
+              throw new RuntimeException(ex);
+            }
             // TODO: Load and display the image in the imagePanel
           } else {
             JOptionPane.showMessageDialog(this, "File selection cancelled.");
@@ -198,6 +199,7 @@ public class AddNewBookPanel extends JPanel {
     mainPanel.add(bookInfoPanel);
 
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
     JButton btnCancel = CustomButtonBuilder.builder().text("Cancel");
     btnCancel.addActionListener(
         e -> {
@@ -232,6 +234,7 @@ public class AddNewBookPanel extends JPanel {
           }
 
           this.bookController.addNewBook(this.getNewBook());
+          this.clearDataInPanel();
           this.imagePanel.removeImage();
         });
 
@@ -266,8 +269,7 @@ public class AddNewBookPanel extends JPanel {
             .genreType(GenreType.find(this.txtGenre.getText()))
             .build();
 
-    book.addImage(this.imagePanel.getPathImage());
-    System.out.println(book);
+    book.addImage(this.pathImage);
     return book;
   }
 }

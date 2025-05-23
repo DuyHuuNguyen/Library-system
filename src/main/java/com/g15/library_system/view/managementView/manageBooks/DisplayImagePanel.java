@@ -44,7 +44,7 @@ public class DisplayImagePanel extends JPanel {
 
   public void removeImage() {
     try {
-      image = ImageIO.read(new File("src/main/resources/images/John_Doe.png"));
+      image = ImageIO.read(new File("src/main/resources/icons/addIcon.png"));
       this.url = "";
       this.repaint();
       this.revalidate();
@@ -55,5 +55,19 @@ public class DisplayImagePanel extends JPanel {
 
   public String getPathImage() {
     return this.url;
+  }
+
+  public void setSizeBookImage(int w, int h) {
+    if (image != null) {
+      Image resizedImage = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+      BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+      Graphics2D g2d = newImage.createGraphics();
+      g2d.drawImage(resizedImage, 0, 0, null);
+      g2d.dispose();
+
+      this.image = newImage;
+      this.repaint();
+      this.revalidate();
+    }
   }
 }

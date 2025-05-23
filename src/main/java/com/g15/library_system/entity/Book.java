@@ -83,7 +83,8 @@ public class Book extends BaseEntity implements Comparable<Book> {
     this.genreType = changeInfoBookDTO.getGenreType();
     this.currentQuantity = changeInfoBookDTO.getCurrentQuantity();
     this.totalQuantity = changeInfoBookDTO.getTotalQuantity();
-    this.images = changeInfoBookDTO.getImages();
+    this.images.clear();
+    this.images.add(changeInfoBookDTO.getImage());
   }
 
   public void addImage(String image) {

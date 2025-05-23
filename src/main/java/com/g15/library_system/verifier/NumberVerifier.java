@@ -6,6 +6,7 @@ import javax.swing.*;
 public class NumberVerifier extends InputVerifier {
   @Override
   public boolean verify(JComponent input) {
+    System.out.println("vdffffff");
     JTextField textField = (JTextField) input;
     String text = textField.getText().trim();
     try {

@@ -17,6 +17,7 @@ import java.util.Optional;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 
+@Deprecated
 @Slf4j
 public class UpsertBookPanel extends JPanel {
   private JTextField txtBookTitle;
@@ -218,7 +219,7 @@ public class UpsertBookPanel extends JPanel {
             .author(txtAuthor.getText())
             .publisher(txtPublisher.getText())
             .publishYear(Integer.parseInt(txtPublisherYear.getText()))
-            .images(this.dropImagePanel.getImageUrls())
+            //            .images(this.dropImagePanel.getImageUrls())
             .currentQuantity(Integer.parseInt(this.txtQuantity.getText()))
             .genreType(GenreType.find(this.txtGenre.getText()))
             .build();
