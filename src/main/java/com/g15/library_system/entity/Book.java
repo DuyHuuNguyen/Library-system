@@ -3,6 +3,7 @@ package com.g15.library_system.entity;
 import com.g15.library_system.dto.ChangeInfoBookDTO;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -83,5 +84,10 @@ public class Book extends BaseEntity implements Comparable<Book> {
     this.currentQuantity = changeInfoBookDTO.getCurrentQuantity();
     this.totalQuantity = changeInfoBookDTO.getTotalQuantity();
     this.images = changeInfoBookDTO.getImages();
+  }
+
+  public void addImage(String image) {
+    if (this.images == null) this.images = new ArrayList<>();
+    this.images.add(image);
   }
 }

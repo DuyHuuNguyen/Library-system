@@ -176,9 +176,12 @@ public class UpsertBookPanel extends JPanel {
 
     btnAddBook.addActionListener(
         e -> {
+          log.error("is modify {}", isModify);
+
           var book = this.getNewBook();
           if (isModify) {
             // modification
+
             this.changeInfoBook();
 
           } else this.bookController.addNewBook(book.get());

@@ -10,7 +10,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 public class BookData implements Data<Book>, BookSubject {
   private static final BookData INSTANCE = new BookData();
@@ -23,7 +25,7 @@ public class BookData implements Data<Book>, BookSubject {
 
   @Override
   public void add(Book book) {
-    this.books.add(book);
+    log.error("is add {}", this.books.add(book));
     notifyObservers();
   }
 

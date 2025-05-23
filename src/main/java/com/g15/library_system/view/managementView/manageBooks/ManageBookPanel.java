@@ -10,6 +10,7 @@ import com.g15.library_system.mapper.impl.BookMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.OptionPaneInputFileExcel;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import java.awt.*;
@@ -40,8 +41,8 @@ public class ManageBookPanel extends JPanel {
   };
   private Object[][] data;
 
-  private JPanel bookFormAndDropImagesPanel;
-  private UpsertBookPanel bookFormPanel;
+  //  private JPanel bookFormAndDropImagesPanel;
+  //  private UpsertBookPanel bookFormPanel;
 
   private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
   private BookMapper bookMapper = ApplicationContextProvider.getBean(BookMapperImpl.class);
@@ -64,7 +65,7 @@ public class ManageBookPanel extends JPanel {
           ApiKey.IMPORT_EXCEL,
           () -> this.importExcel());
 
-  private UpsertBookPanel addNewBookPanel;
+  private AddNewBookPanel addNewBookPanel;
   private UpsertBookPanel modifyBookPanel;
 
   private CardLayout cardLayout;
@@ -85,23 +86,21 @@ public class ManageBookPanel extends JPanel {
     this.toolPanel = new ToolPanel(cardLayout, panelContent, mapAPIs);
     this.add(toolPanel, BorderLayout.NORTH);
 
-    this.panelContent.setBackground(Color.GREEN);
+    this.panelContent.setBackground(Color.WHITE);
 
     this.initData();
 
     this.checkboxTablePanel = new CheckboxTablePanel(columns, data);
     this.panelContent.add(checkboxTablePanel, CONSTRAINT_TABLE_BOOK);
 
-    this.bookFormAndDropImagesPanel = new JPanel(new BorderLayout());
-    this.bookFormAndDropImagesPanel.setBackground(Color.PINK);
-    this.bookFormPanel = new UpsertBookPanel(1000, 500, true, mapAPIs);
+    RoundedShadowPanel roundedShadowPanel = new RoundedShadowPanel();
 
-    this.bookFormAndDropImagesPanel.add(bookFormPanel, BorderLayout.CENTER);
+    this.addNewBookPanel = new AddNewBookPanel(700, 650);
+    roundedShadowPanel.add(this.addNewBookPanel);
+    roundedShadowPanel.add(Box.createVerticalStrut(50));
+    roundedShadowPanel.setPreferredSize(new Dimension(700, 650));
 
-    this.panelContent.add(bookFormAndDropImagesPanel, CONSTRAINT_ADD_NEW_BOOK);
-
-    this.addNewBookPanel = new UpsertBookPanel(1000, 500, false, mapAPIs);
-    this.panelContent.add(this.addNewBookPanel, CONSTRAINT_MODIFY_BOOK);
+    this.panelContent.add(roundedShadowPanel, CONSTRAINT_ADD_NEW_BOOK);
 
     this.panelContent.add(new NotifyNewBookPanel(), CONSTRAINT_NOTIFY);
 
@@ -140,7 +139,7 @@ public class ManageBookPanel extends JPanel {
 
   private void addNewBook() {
     var newBook = this.addNewBookPanel.getNewBook();
-    this.bookController.addNewBook(newBook.get());
+    this.bookController.addNewBook(newBook);
     this.loadDataTable();
   }
 

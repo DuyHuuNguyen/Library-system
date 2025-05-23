@@ -6,8 +6,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CircularImage extends JComponent {
+  private static final Logger log = LoggerFactory.getLogger(CircularImage.class);
   private BufferedImage image;
 
   public CircularImage(String imagePath) {
@@ -15,7 +18,8 @@ public class CircularImage extends JComponent {
       image = ImageIO.read(new File(imagePath));
       setPreferredSize(new Dimension(110, 110)); // Kích thước ảnh tròn
     } catch (Exception e) {
-      e.printStackTrace();
+      //      e.printStackTrace();
+      log.error("bug url ");
     }
   }
 

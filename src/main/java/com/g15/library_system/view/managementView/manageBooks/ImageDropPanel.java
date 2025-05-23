@@ -51,7 +51,11 @@ public class ImageDropPanel extends JPanel {
 
               for (File file : droppedFiles) {
                 if (isImageFile(file)) {
-                  displayAndSaveImage(file);
+                  try {
+                    displayAndSaveImage(file);
+                  } catch (Exception e) {
+                    log.error("hehe cccccc");
+                  }
                 }
               }
 
