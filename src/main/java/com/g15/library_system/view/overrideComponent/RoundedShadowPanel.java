@@ -14,6 +14,7 @@ public class RoundedShadowPanel extends JPanel {
 
   public RoundedShadowPanel() {
     this(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
+    this.setLayout(new BorderLayout());
   }
 
   public RoundedShadowPanel(
@@ -23,8 +24,8 @@ public class RoundedShadowPanel extends JPanel {
     this.shadowColor = shadowColor;
     this.shadowSize = shadowSize;
     this.shadowOffset = shadowOffset;
-    setOpaque(false);
-    setBorder(new EmptyBorder(15, 15, 15, 15));
+    this.setOpaque(false);
+    this.setBorder(new EmptyBorder(15, 15, 15, 15));
   }
 
   @Override

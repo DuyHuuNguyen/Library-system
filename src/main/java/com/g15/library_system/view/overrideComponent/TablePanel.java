@@ -1,6 +1,5 @@
 package com.g15.library_system.view.overrideComponent;
 
-import com.g15.library_system.enums.BookStatus;
 import java.awt.*;
 import java.util.Arrays;
 import javax.swing.*;
@@ -137,7 +136,6 @@ public class TablePanel extends RoundedShadowPanel implements TableService {
   }
 
   public static void main(String[] args) {
-    BookStatus.DEMO.getStatus();
     String[] columnNames = {
       "",
       "Book ID",

@@ -27,9 +27,9 @@ public class ToolPanel extends JPanel {
   private Map<String, Runnable> actionMap = new HashMap<>();
   private ContentAction contentPnAction;
   private final String[] items = {"Add", "Edit", "Export", "Refresh"};
-  private Command editCommand = new EditCommand();
-  private Command exportCommand = new ExportCommand();
-  private Command refreshCommand = new RefreshCommand();
+//  private Command editCommand = new EditCommand();
+//  private Command exportCommand = new ExportCommand();
+//  private Command refreshCommand = new RefreshCommand();
 
   public ToolPanel(ContentAction contentPnAction) {
     this.contentPnAction = contentPnAction;
@@ -54,6 +54,7 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(170, 40))
+            .title("Create new book return record")
             .icon("/icons/addIcon.png", 5);
 
     editBt =
@@ -67,6 +68,7 @@ public class ToolPanel extends JPanel {
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .preferredSize(new Dimension(120, 40))
+            .title("Edit return information")
             .icon("/icons/edit.png", 17);
 
     exportBt =
@@ -80,6 +82,7 @@ public class ToolPanel extends JPanel {
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .preferredSize(new Dimension(120, 40))
+            .title("Export to excel file")
             .icon("/icons/export.png", 17);
 
     refreshBt =
@@ -93,6 +96,7 @@ public class ToolPanel extends JPanel {
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .preferredSize(new Dimension(120, 40))
+            .title("Refresh table")
             .icon("/icons/refresh.png", 17);
 
     cancelBt =
@@ -108,6 +112,7 @@ public class ToolPanel extends JPanel {
             .visible(false)
             .enabled(false)
             .preferredSize(new Dimension(120, 40))
+            .title("Undo edit")
             .icon("/icons/cancel.png", 17);
 
     setActionForActionMap();
@@ -115,10 +120,6 @@ public class ToolPanel extends JPanel {
     editBt.addActionListener(e -> actionMap.get("Edit").run());
     exportBt.addActionListener(e -> actionMap.get("Export").run());
     refreshBt.addActionListener(e -> actionMap.get("Refresh").run());
-
-    editBt.addActionListener(e -> editCommand.execute());
-    exportBt.addActionListener(e -> exportCommand.execute());
-    refreshBt.addActionListener(e -> refreshCommand.execute());
 
     actionBtPn.add(addBt);
     actionBtPn.add(exportBt);
@@ -176,7 +177,7 @@ public class ToolPanel extends JPanel {
               Reader.builder()
                   .id(1L)
                   .email("ok")
-                  .firstName("Tao neeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+                  .firstName(" neeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
                   .lastName("Ok")
                   .address("123 Main St")
                   .dateOfBirth(978307200000L) // 2001-01-01

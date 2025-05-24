@@ -5,29 +5,25 @@ import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.tableModel.CustomTableModel;
 import com.g15.library_system.view.overrideComponent.tables.tableRenderers.*;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
-import com.g15.library_system.view.swingComponentGenerators.TableGenerator;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.table.*;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CheckboxTablePanel extends JPanel {
   private static final Logger log = LoggerFactory.getLogger(CheckboxTablePanel.class);
   private String[] columnNames;
-  private String[] statuses = {"Returned", "Lost", "Damaged", "Overdue"};
+  private String[] statuses = {"Returned", "Lost", "Overdue"};
   private Object[][] tableData;
-  @Getter
-  private JTable table;
+  @Getter private JTable table;
   private CustomTableModel tableModel;
-  @Getter
-  private TableColumn checkboxCol;
+  @Getter private TableColumn checkboxCol;
   private TableColumnModel columnModel;
   private boolean isSelectAll = false;
   private boolean isEditMode = false; // edit mode (button turn it on)
@@ -50,26 +46,26 @@ public class CheckboxTablePanel extends JPanel {
     TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
     table.setRowSorter(sorter);
     table.setDefaultRenderer(
-            Object.class,
-            new DefaultTableCellRenderer() {
-              public Component getTableCellRendererComponent(
-                      JTable table,
-                      Object value,
-                      boolean isSelected,
-                      boolean hasFocus,
-                      int row,
-                      int column) {
-                Component c =
-                        super.getTableCellRendererComponent(
-                                table, value, isSelected, hasFocus, row, column);
-                if (!isSelected) {
-                  c.setBackground(row % 2 == 0 ? Color.WHITE : Style.LIGHT_BLUE_TABLE_ROW_COLOR);
-                } else {
-                  c.setBackground(table.getSelectionBackground());
-                }
-                return c;
-              }
-            });
+        Object.class,
+        new DefaultTableCellRenderer() {
+          public Component getTableCellRendererComponent(
+              JTable table,
+              Object value,
+              boolean isSelected,
+              boolean hasFocus,
+              int row,
+              int column) {
+            Component c =
+                super.getTableCellRendererComponent(
+                    table, value, isSelected, hasFocus, row, column);
+            if (!isSelected) {
+              c.setBackground(row % 2 == 0 ? Color.WHITE : Style.LIGHT_BLUE_TABLE_ROW_COLOR);
+            } else {
+              c.setBackground(table.getSelectionBackground());
+            }
+            return c;
+          }
+        });
 
     // table model
     tableModel.setEditableColumns(editableColumns);
@@ -80,16 +76,27 @@ public class CheckboxTablePanel extends JPanel {
     columnModel.getColumn(1).setPreferredWidth(50);
 
     var isHaveThirdColumn = this.columnNames.length > 3;
-    if (isHaveThirdColumn) columnModel.getColumn(3).setPreferredWidth(80);
+    if (isHaveThirdColumn) columnModel.getColumn(3).setPreferredWidth(120);
 
     setupCheckBoxColumn();
     setupTableHeader();
     setupStatusColumn();
     setupBooksNameColumnRenderer();
     setupBookCoverImageRenderer();
-    resizeNotesColumn(300);
-
+    setupQuantityColumn(45);
+    resizeNotesColumn(265);
     this.add(createScrollPane(table), BorderLayout.CENTER);
+
+    table.addMouseListener(
+        new MouseAdapter() {
+          @Override
+          public void mousePressed(MouseEvent e) {
+            int row = table.rowAtPoint(e.getPoint());
+            if (row == -1) {
+              table.clearSelection();
+            }
+          }
+        });
   }
 
   public void removeAllDataTable() {
@@ -114,6 +121,14 @@ public class CheckboxTablePanel extends JPanel {
     }
   }
 
+  public void setNewDataForTable(Object[][] data) {
+    this.tableData = data;
+    this.tableModel.setRowCount(0);
+    this.addDataToTable(data);
+    this.table.revalidate();
+    this.table.repaint();
+  }
+
   public Object[] getSelectedRowData() {
     int selectedRow = table.getSelectedRow();
 
@@ -128,6 +143,42 @@ public class CheckboxTablePanel extends JPanel {
     }
 
     return rowData;
+  }
+
+  /** @return the indices of all selected rows in the table */
+  public int[] getSelectedRows() {
+    return table.getSelectedRows();
+  }
+  /** @return the indices of all rows that is checked in the table */
+  public List<Integer> getCheckedRows() {
+    List<Integer> checkedRows = new ArrayList<>();
+    for (int i = 0; i < tableModel.getRowCount(); i++) {
+      if (Boolean.TRUE.equals(tableModel.getValueAt(i, 0))) {
+        checkedRows.add(i);
+      }
+    }
+    return checkedRows;
+  }
+
+  /**
+   * get all selected rows data
+   *
+   * @return List<Object[]> of the selected rows
+   */
+  public List<Object[]> getSelectedRowsData() {
+    List<Integer> selectedRows = getCheckedRows();
+    List<Object[]> selectedData = new ArrayList<>();
+
+    for (Integer row : selectedRows) {
+      Object[] rowData = new Object[columnNames.length - 1];
+      for (int i = 1; i < columnNames.length; i++) {
+        int modelRow = table.convertRowIndexToModel(row);
+        rowData[i - 1] = tableModel.getValueAt(modelRow, i);
+      }
+      selectedData.add(rowData);
+    }
+
+    return selectedData;
   }
 
   private class HeaderCheckboxRenderer implements TableCellRenderer {
@@ -150,18 +201,25 @@ public class CheckboxTablePanel extends JPanel {
 
     @Override
     public Component getTableCellRendererComponent(
-            JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
       checkBox.setSelected(isSelectAll);
       return panel;
     }
   }
 
   private void setupBookCoverImageRenderer() {
-    int imageColumnIndex = Arrays.asList(columnNames).indexOf("Cover Image");
-    if (imageColumnIndex >= 0) {
-      columnModel.getColumn(imageColumnIndex).setPreferredWidth(50);
+    int coverImgColIndex = Arrays.asList(columnNames).indexOf("Cover Image");
+    int avaImgColIndex = Arrays.asList(columnNames).indexOf("Avatar Image");
+
+    if (coverImgColIndex >= 0) {
+      columnModel.getColumn(coverImgColIndex).setPreferredWidth(80);
       table.setRowHeight(120);
-      columnModel.getColumn(imageColumnIndex).setCellRenderer(new ImageRenderer(70, 120));
+      columnModel.getColumn(coverImgColIndex).setCellRenderer(new ImageRenderer(90, 130));
+    }
+    if (avaImgColIndex >= 0) { // set col, row size for avatar image
+      columnModel.getColumn(avaImgColIndex).setPreferredWidth(50);
+      table.setRowHeight(80);
+      columnModel.getColumn(avaImgColIndex).setCellRenderer(new ImageRenderer(70, 70));
     }
   }
 
@@ -170,7 +228,7 @@ public class CheckboxTablePanel extends JPanel {
     if (imageColumnIndex >= 0) {
       table.setRowHeight(50);
       columnModel.getColumn(imageColumnIndex).setCellRenderer(new MultiLineCellRenderer());
-      columnModel.getColumn(imageColumnIndex).setPreferredWidth(200);
+      columnModel.getColumn(imageColumnIndex).setPreferredWidth(245);
     }
   }
 
@@ -178,18 +236,18 @@ public class CheckboxTablePanel extends JPanel {
     JTableHeader header = table.getTableHeader();
     header.setReorderingAllowed(false);
     header.addMouseListener(
-            new MouseAdapter() {
-              public void mouseClicked(MouseEvent e) {
-                int col = table.columnAtPoint(e.getPoint());
-                if (col == 0) {
-                  isSelectAll = !isSelectAll;
-                  for (int i = 0; i < tableModel.getRowCount(); i++) {
-                    tableModel.setValueAt(isSelectAll, i, 0);
-                  }
-                  header.repaint();
-                }
+        new MouseAdapter() {
+          public void mouseClicked(MouseEvent e) {
+            int col = table.columnAtPoint(e.getPoint());
+            if (col == 0) {
+              isSelectAll = !isSelectAll;
+              for (int i = 0; i < tableModel.getRowCount(); i++) {
+                tableModel.setValueAt(isSelectAll, i, 0);
               }
-            });
+              header.repaint();
+            }
+          }
+        });
     header.setPreferredSize(new Dimension(header.getWidth(), 45));
     header.setBackground(Style.BLUE_HEADER_TABLE_AND_BUTTON);
   }
@@ -218,12 +276,33 @@ public class CheckboxTablePanel extends JPanel {
     }
   }
 
+  private void setupQuantityColumn(int width) {
+    int quantityColumnIndex = Arrays.asList(columnNames).indexOf("Quantity");
+    if (quantityColumnIndex >= 0) {
+      columnModel.getColumn(quantityColumnIndex).setPreferredWidth(width);
+    }
+  }
+
   private JScrollPane createScrollPane(JTable table) {
     JScrollPane scrollPane = new JScrollPane(table);
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     scrollPane.getVerticalScrollBar().setUnitIncrement(20);
     scrollPane.setBorder(BorderFactory.createEmptyBorder());
+    scrollPane
+        .getViewport()
+        .addMouseListener(
+            new MouseAdapter() {
+              @Override
+              public void mousePressed(MouseEvent e) {
+                Point p =
+                    SwingUtilities.convertPoint(scrollPane.getViewport(), e.getPoint(), table);
+                int row = table.rowAtPoint(p);
+                if (row == -1) {
+                  table.clearSelection();
+                }
+              }
+            });
     return scrollPane;
   }
 
@@ -239,9 +318,11 @@ public class CheckboxTablePanel extends JPanel {
     return () -> {
       if (!isEditMode) {
         enterEditMode(editButton);
+        editButton.setToolTipText("Save changes");
         cancelButton.setEnabled(true);
         cancelButton.setVisible(true);
       } else {
+        editButton.setToolTipText("Edit return information");
         cancelButton.setVisible(false);
         cancelButton.setEnabled(false);
         saveEdits(editButton);
@@ -339,17 +420,17 @@ public class CheckboxTablePanel extends JPanel {
   }
 
   public void setRowSelectionHandler(Consumer<Integer> rowHandler) {
-      table
-              .getSelectionModel()
-              .addListSelectionListener(
-                      event -> {
-                          if (!event.getValueIsAdjusting()) {
-                              int viewRow = table.getSelectedRow();
-                              if (viewRow != -1) {
-                                  int modelRow = table.convertRowIndexToModel(viewRow);
-                                  rowHandler.accept(modelRow);
-                              }
-                          }
-                      });
+    table
+        .getSelectionModel()
+        .addListSelectionListener(
+            event -> {
+              if (!event.getValueIsAdjusting()) {
+                int viewRow = table.getSelectedRow();
+                if (viewRow != -1) {
+                  int modelRow = table.convertRowIndexToModel(viewRow);
+                  rowHandler.accept(modelRow);
+                }
+              }
+            });
   }
 }

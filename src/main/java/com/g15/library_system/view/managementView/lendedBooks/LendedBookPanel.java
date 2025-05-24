@@ -43,7 +43,7 @@ public class LendedBookPanel extends JPanel {
     private DetailPanel detailPn;
 
     public FormPanel() {
-      setLayout(new BorderLayout(0, 0));
+      setLayout(new BorderLayout(10, 10));
 
       userPn = new UserPanel();
       bookPn = new BookPanel();

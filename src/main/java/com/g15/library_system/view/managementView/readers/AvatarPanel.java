@@ -53,9 +53,7 @@ public class AvatarPanel extends JPanel {
     //            };
     JPanel panel = new JPanel();
     panel.setBackground(Color.WHITE);
-    panel.add(
-        new CircularImage(
-            "E:\\Github\\Library-system\\src\\main\\resources\\images\\John_Doe.png"));
+    panel.add(new CircularImage("src/main/resources/images/fit_nlu_logo.jpg"));
     add(panel, BorderLayout.CENTER);
 
     //        // Upload icon

@@ -44,4 +44,17 @@ public class Reader extends User {
   public boolean idContains(Long readerId) {
     return super.idContains(readerId);
   }
+
+  public int getTotalReturnedBooks() {
+    return libraryCard.getTotalReturnedBooks();
+  }
+
+  public int getTotalBorrowedBooks() {
+    return libraryCard.getTotalBorrowedBooks();
+  }
+
+
+  public int getTotalOverdueBooks() {
+    return libraryCard.getTotalOverdueBooks();
+  }
 }

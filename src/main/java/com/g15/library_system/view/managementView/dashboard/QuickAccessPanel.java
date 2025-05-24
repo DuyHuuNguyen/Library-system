@@ -6,6 +6,7 @@ import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.observers.BookObserver;
 import com.g15.library_system.observers.LibrarianObserver;
 import com.g15.library_system.observers.ReaderObserver;
+import com.g15.library_system.service.bookService.BookService;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -19,6 +20,7 @@ public class QuickAccessPanel extends RoundedShadowPanel
       librariansCard,
       overdueBooksCard;
   private int totalBooks, lendedBooks, returnedBooks, overdueBooks, readers, librarians;
+  private BookService bookService = new BookService();
 
   public QuickAccessPanel() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
@@ -36,7 +38,7 @@ public class QuickAccessPanel extends RoundedShadowPanel
             new Color(170, 105, 0));
 
     // Lended Books
-    this.lendedBooks = ReaderData.getInstance().getTotalLendedBooks();
+    this.lendedBooks = bookService.getTotalBorrowedBooks();
     lendedBooksCard =
         new DashboardCard(
             "/icons/lendBook.png",
@@ -46,7 +48,7 @@ public class QuickAccessPanel extends RoundedShadowPanel
             new Color(255, 204, 0),
             new Color(145, 117, 17));
 
-    this.returnedBooks = ReaderData.getInstance().getTotalReturnedBooks();
+    this.returnedBooks = bookService.getTotalReturnedBooks();
     returnedBookCard =
         new DashboardCard(
             "/icons/returnedBook.png",
@@ -56,7 +58,7 @@ public class QuickAccessPanel extends RoundedShadowPanel
             new Color(130, 130, 250),
             new Color(90, 90, 180));
     // Overdue Books
-    this.overdueBooks = ReaderData.getInstance().getTotalOverdueBooks();
+    this.overdueBooks = bookService.getTotalOverdueBooks();
     overdueBooksCard =
         new DashboardCard(
             "/icons/overdue.png",
@@ -131,9 +133,9 @@ public class QuickAccessPanel extends RoundedShadowPanel
   @Override
   public void updateReaderData() {
     this.readers = ReaderData.getInstance().getReaders().size();
-    this.lendedBooks = ReaderData.getInstance().getTotalLendedBooks();
-    this.returnedBooks = ReaderData.getInstance().getTotalReturnedBooks();
-    this.overdueBooks = ReaderData.getInstance().getTotalOverdueBooks();
+    this.lendedBooks = bookService.getTotalBorrowedBooks();
+    this.returnedBooks = bookService.getTotalReturnedBooks();
+    this.overdueBooks = bookService.getTotalOverdueBooks();
     readersCard.setAmount(String.valueOf(readers));
     lendedBooksCard.setAmount(String.valueOf(lendedBooks));
     returnedBookCard.setAmount(String.valueOf(returnedBooks));

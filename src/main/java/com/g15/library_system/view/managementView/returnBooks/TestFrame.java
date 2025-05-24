@@ -3,11 +3,19 @@ package com.g15.library_system.view.managementView.returnBooks;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import com.g15.library_system.LibrarySystemApplication;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.returnBooks.controllers.ReturnBookController;
 import java.awt.*;
 import javax.swing.*;
 
+import com.g15.library_system.view.managementView.returnBooks.controllers.ReturnManagementController;
+import lombok.Getter;
+import org.springframework.boot.SpringApplication;
+
 public class TestFrame extends JFrame {
+  @Getter public ReturnBookPanel returnBookPanel = new ReturnBookPanel();
+
   public TestFrame() {
     this.setTitle("Library Management");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -16,56 +24,7 @@ public class TestFrame extends JFrame {
     this.setLocationRelativeTo(null);
     this.setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());
 
-    String[] columnNames = {
-      "Return ID",
-      "Reader Name",
-      "Reader Number",
-      "Return Date",
-      "Returned Books",
-      "Status",
-      "OverdueFee (VND)",
-      "Processed By",
-      "Notes"
-    };
-
-    Object[][] tableData = {
-      {
-        "R001",
-        "Alice",
-        "0123JQK",
-        "2024-10-01",
-        "To Kill a Mockingbird, War and Peace, Crime and Punishment, The Lord of the Rings",
-        "Returned",
-        "0",
-        "Admin",
-        ""
-      },
-      {
-        "R002",
-        "Bob",
-        "0123JQK",
-        "2024-10-02",
-        "To Kill a Mockingbird",
-        "Overdue",
-        "5000",
-        "Staff",
-        ""
-      },
-      {
-        "R002",
-        "Bob",
-        "0123JQK",
-        "2024-10-02",
-        "Crime and Punishment, The Lord of the Rings",
-        "Overdue",
-        "5000",
-        "Staff",
-        ""
-      }
-    };
-
-    //        this.add(new CheckboxTablePanel(columnNames, tableData), BorderLayout.CENTER);
-    this.add(new ReturnBookPanel());
+    this.add(returnBookPanel);
     this.setVisible(true);
   }
 
@@ -79,6 +38,14 @@ public class TestFrame extends JFrame {
         "TableHeader.cellBorder",
         BorderFactory.createLineBorder(Style.BLUE_HEADER_TABLE_AND_BUTTON));
 
-    new TestFrame();
+    SpringApplication app = new SpringApplication(LibrarySystemApplication.class);
+    app.setHeadless(false);
+    app.run(args);
+//    new ReturnBookController();
+
+    TestFrame testFrame = new TestFrame();
+
+    ReturnManagementController returnManagementController =
+        new ReturnManagementController(testFrame.getReturnBookPanel(), new ReturnBookController(testFrame.getReturnBookPanel().getAddReturnBookPanel()));
   }
 }

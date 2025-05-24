@@ -1,4 +1,4 @@
-package com.g15.library_system.dto;
+package com.g15.library_system.dto.returnBookDTOs;
 
 import com.g15.library_system.entity.Book;
 import java.util.Map;
