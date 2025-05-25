@@ -22,7 +22,6 @@ public class RabbitMQConfig {
   @Value("${rabbitmq.sendMailLendBookQueue}")
   private String sendEmailLendBookQueue;
 
-  //
 
   @Value("${rabbitmq.topicExchangeEmail}")
   private String topicExchangeEmail;
@@ -30,7 +29,6 @@ public class RabbitMQConfig {
   @Value("${rabbitmq.exchangeEmailText}")
   private String exchangeEmailText;
 
-  //
 
   @Value("${rabbitmq.sendEmailRouter}")
   private String sendEmailRouter;
@@ -41,7 +39,6 @@ public class RabbitMQConfig {
   @Value("${rabbitmq.sendEmailLendBookRouter}")
   private String sendEmailLendBookRouter;
 
-  //
 
   @Value("${rabbitmq.sendExportExcelQueue}")
   private String exportExcelQueue;
@@ -130,7 +127,7 @@ public class RabbitMQConfig {
         .with(this.importExcelRouter);
   }
 
-  // lend book
+
   @Bean
   public Binding userSendEmailLendBookBinding() {
     return BindingBuilder.bind(userMailLendBookQueue())

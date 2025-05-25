@@ -10,6 +10,7 @@ import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.mapper.impl.BookMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.manageBooks.observer.ObserverNotifyNewBook;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
@@ -26,7 +27,7 @@ import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class NotifyNewBookPanel extends JPanel {
+public class NotifyNewBookPanel extends JPanel implements ObserverNotifyNewBook {
   private CheckboxTablePanel checkboxTablePanel;
   private EmailFormPanel emailContentPanel;
 
@@ -76,15 +77,6 @@ public class NotifyNewBookPanel extends JPanel {
 
     add(centerPanel, BorderLayout.CENTER);
     this.upDataIntoTable();
-    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
-    Runnable task = () -> {
-      log.info("Reload run: {}" ,java.time.LocalTime.now());
-      this.reload();
-    };
-
-    scheduler.scheduleAtFixedRate(task, 5, 5, TimeUnit.SECONDS);
-
   }
 
   private void upDataIntoTable() {
@@ -132,20 +124,9 @@ public class NotifyNewBookPanel extends JPanel {
 
     this.loadEmails();
     this.loadContentEmails();
-    this.loadImages();
   }
-
-  public void loadImages() {
-//    var images =
-//        this.titleAndFirstImageBookDTOS.stream()
-//            .map(TitleAndFirstImageBookDTO::getFirstImage)
-//            .collect(Collectors.toList());
-//
-//    this.emailContentPanel.loadImages(images);
-  }
-
+  
   public void loadContentEmails() {
-
     StringBuilder content = new StringBuilder();
     content.append("""
                 Friendly & inviting:\n
@@ -169,7 +150,6 @@ public class NotifyNewBookPanel extends JPanel {
     this.titleAndFirstImageBookDTOS.clear();
     this.emailContentPanel.loadEmail(null);
     this.emailContentPanel.loadContent("","");
-//    this.emailContentPanel.removeAllImages();
     this.checkboxTablePanel.removeAllDataTable();
   }
 
@@ -178,14 +158,8 @@ public class NotifyNewBookPanel extends JPanel {
     this.upDataIntoTable();
   }
 
-  public static void main(String[] args) {
-    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
-    Runnable task = () -> {
-      System.out.println("Hàm chạy lúc: " + java.time.LocalTime.now());
-    };
-
-    // Bắt đầu sau 5s, sau đó cứ mỗi 5s lại chạy
-    scheduler.scheduleAtFixedRate(task, 5, 5, TimeUnit.SECONDS);
+  @Override
+  public void notifyNewBook() {
+      this.reload();
   }
 }

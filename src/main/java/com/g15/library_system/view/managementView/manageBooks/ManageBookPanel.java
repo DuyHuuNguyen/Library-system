@@ -67,6 +67,7 @@ public class ManageBookPanel extends JPanel {
 
   private AddNewBookPanel addNewBookPanel;
   private ModifyBookPanel modifyBookPanel;
+  private NotifyNewBookPanel notifyNewBookPanel;
 
   private CardLayout cardLayout;
 
@@ -102,7 +103,8 @@ public class ManageBookPanel extends JPanel {
 
     this.panelContent.add(roundedShadowPanelForAddNewBook, CONSTRAINT_ADD_NEW_BOOK);
 
-    this.panelContent.add(new NotifyNewBookPanel(), CONSTRAINT_NOTIFY);
+    this.notifyNewBookPanel = new NotifyNewBookPanel();
+    this.panelContent.add(notifyNewBookPanel, CONSTRAINT_NOTIFY);
 
     RoundedShadowPanel roundedShadowPanelForModifyBook = new RoundedShadowPanel();
     this.modifyBookPanel = new ModifyBookPanel(700, 650);
@@ -114,6 +116,7 @@ public class ManageBookPanel extends JPanel {
 
     add(panelContent, BorderLayout.CENTER);
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    this.addNewBookPanel.addObserverNotifyNewBook(this.notifyNewBookPanel);
   }
 
   private void removeAllDataTable() {

@@ -7,17 +7,21 @@ import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.util.SaveImageFileHelper;
 import com.g15.library_system.verifier.NumberVerifier;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.manageBooks.observer.ObserverNotifyNewBook;
+import com.g15.library_system.view.managementView.manageBooks.observer.SubjectNotifyNewBook;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AddNewBookPanel extends JPanel {
+public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
   private JTextField publisherDate;
+  private java.util.List<ObserverNotifyNewBook> observerNotifyNewBooks;
 
   private DisplayImagePanel imagePanel;
 
@@ -41,6 +45,7 @@ public class AddNewBookPanel extends JPanel {
   public AddNewBookPanel(int width, int height) {
     this.width = width;
     this.height = height;
+    this.observerNotifyNewBooks = new ArrayList<>();
     this.initPanel();
   }
 
@@ -235,7 +240,7 @@ public class AddNewBookPanel extends JPanel {
 
           this.bookController.addNewBook(this.getNewBook());
           this.clearDataInPanel();
-          this.imagePanel.removeImage();
+          this.notifyAllNewBook();
         });
 
     buttonPanel.add(btnCancel);
@@ -271,5 +276,18 @@ public class AddNewBookPanel extends JPanel {
 
     book.addImage(this.pathImage);
     return book;
+  }
+
+  @Override
+  public void notifyAllNewBook() {
+    log.debug("Observer thong bao sach moi");
+    this.observerNotifyNewBooks.forEach(observerNotifyNewBook -> {
+      observerNotifyNewBook.notifyNewBook();
+    });
+  }
+
+  @Override
+  public void addObserverNotifyNewBook(ObserverNotifyNewBook observerNotifyNewBook) {
+    this.observerNotifyNewBooks.add(observerNotifyNewBook);
   }
 }
