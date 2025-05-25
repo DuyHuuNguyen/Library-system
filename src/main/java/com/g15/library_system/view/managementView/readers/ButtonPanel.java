@@ -108,8 +108,9 @@ public class ButtonPanel extends JPanel {
 
             libCard.addTransactions(transactionsList);
             reader.addLibraryCard(libCard);
-
+              System.out.println(ReaderData.getInstance().getAvailableIds().toString());
             ReaderData.getInstance().add(reader);
+            System.out.println(ReaderData.getInstance().getAvailableIds().toString());
             //            System.out.println(
             //                PathUtil.convertFullPathToRelativePath(
             //                    readerPn.contentPn.showInforPn.avtPn.getImageUrl()));
@@ -231,6 +232,18 @@ public class ButtonPanel extends JPanel {
                             .studentID("IT2021001")
                             .build())
                     .build();
+
+              LibraryCard libCard =
+                      LibraryCard.builder()
+                              .id(reader.getId())
+                              .createdAt(System.currentTimeMillis())
+                              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000) // 2 months
+                              .libraryCardStatus(LibraryCardStatus.ACTIVE)
+                              .build();
+
+//              libCard.addTransactions(null);
+              reader.addLibraryCard(libCard);
+
             ReaderData.getInstance().add(reader);
             System.out.println(
                 PathUtil.convertFullPathToRelativePath(

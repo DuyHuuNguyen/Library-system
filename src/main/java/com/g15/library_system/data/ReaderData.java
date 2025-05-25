@@ -38,6 +38,9 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
         reader.setId(nextId++);
       }
     }
+    if(availableIds.contains(reader.getId())) {
+      availableIds.poll();
+    }
     this.readers.add(reader);
     notifyObservers();
   }
