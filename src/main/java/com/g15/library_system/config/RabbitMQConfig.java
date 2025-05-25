@@ -18,17 +18,30 @@ public class RabbitMQConfig {
   @Value("${rabbitmq.sendEmailTextQueue}")
   private String sendEmailTextQueue;
 
+
+  @Value("${rabbitmq.sendMailLendBookQueue}")
+  private String sendEmailLendBookQueue;
+
+  //
+
   @Value("${rabbitmq.topicExchangeEmail}")
   private String topicExchangeEmail;
 
   @Value("${rabbitmq.exchangeEmailText}")
   private String exchangeEmailText;
 
+  //
+
   @Value("${rabbitmq.sendEmailRouter}")
   private String sendEmailRouter;
 
   @Value("${rabbitmq.sendEmailTextRouter}")
   private String sendEmailTextRouter;
+
+  @Value("${rabbitmq.sendEmailLendBookRouter}")
+  private String sendEmailLendBookRouter;
+
+  //
 
   @Value("${rabbitmq.sendExportExcelQueue}")
   private String exportExcelQueue;
@@ -45,6 +58,7 @@ public class RabbitMQConfig {
   @Value("${rabbitmq.importRouter}")
   private String importExcelRouter;
 
+
   @Bean
   public TopicExchange exchange() {
     return new TopicExchange(topicExchangeEmail);
@@ -58,6 +72,11 @@ public class RabbitMQConfig {
   @Bean
   public Queue userMailQueue() {
     return new Queue(sendEmailQueue);
+  }
+
+@Bean
+  public Queue userMailLendBookQueue() {
+    return new Queue(sendEmailLendBookQueue);
   }
 
   @Bean
@@ -109,5 +128,13 @@ public class RabbitMQConfig {
     return BindingBuilder.bind(this.importExcelQueue())
         .to(this.exchangeExcel())
         .with(this.importExcelRouter);
+  }
+
+  // lend book
+  @Bean
+  public Binding userSendEmailLendBookBinding() {
+    return BindingBuilder.bind(userMailLendBookQueue())
+            .to(exchange())
+            .with(sendEmailLendBookRouter);
   }
 }

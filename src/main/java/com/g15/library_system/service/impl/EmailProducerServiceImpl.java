@@ -29,6 +29,10 @@ public class EmailProducerServiceImpl implements EmailProducerService {
   @Value("${rabbitmq.sendEmailTextRouter}")
   private String sendOTPRouter;
 
+
+  @Value("${rabbitmq.sendEmailLendBookRouter}")
+  private String sendEmailLendBookRouter;
+
   @Override
   public void send(EmailNotificationNewBooksDTO emailNotificationNewBooksDTO) {
     log.info(
@@ -39,7 +43,9 @@ public class EmailProducerServiceImpl implements EmailProducerService {
 
   @Override
   public void send(TransactionContentDTO transaction) {
-    this.rabbitTemplate.convertAndSend(this.topicExchangeEmail, this.sendEmailRouter, transaction);
+    log.info(
+            "😍😍😍 send email from {} -> routing {}", this.topicExchangeEmail, this.sendEmailLendBookRouter);
+    this.rabbitTemplate.convertAndSend(this.topicExchangeEmail, this.sendEmailLendBookRouter, transaction);
   }
   
   @Override

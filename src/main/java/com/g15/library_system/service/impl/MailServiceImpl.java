@@ -185,8 +185,8 @@ public class MailServiceImpl implements MailService {
         var items = notificationNewBooksDTO.getTitleAndFirstImageDTOS();
         for (int i = 0; i < items.size(); i++) {
             htmlContent.append("<tr style=\"border: 1px solid #ddd;\">");
-            htmlContent.append("<td style=\"border: 1px solid #ddd; padding: 8px; text-align: center;\">" + (i + 1) + "</td>");
-            htmlContent.append("<td style=\"border: 1px solid #ddd; padding: 8px;\">" + items.get(i).getTitle() + "</td>");
+            htmlContent.append("<td style=\"border: 1px solid #ddd; padding: 20px; text-align: center;\">" + (i + 1) + "</td>");
+            htmlContent.append("<td style=\"border: 1px solid #ddd; padding: 20px;\">" + items.get(i).getTitle() + "</td>");
             htmlContent.append("</tr>");
 
 
@@ -201,7 +201,7 @@ public class MailServiceImpl implements MailService {
 
         // Footer sections
         htmlContent.append("<hr style='border: 1px solid #eee; margin-top: 20px;'>");
-        htmlContent.append("<div style='text-align: center; color: #666; font-size: 12px;'>");
+        htmlContent.append("<div style='text-align: center; color: #666; font-size: 20px;'>");
         htmlContent.append("<p><strong>FIT Library</strong></p>");
         htmlContent.append("<p>Khu phố 6, phường Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</p>");
         htmlContent.append("<p>Email: library@fit.hcmus.edu.vn | Phone: (028) 3725 2002</p>");
