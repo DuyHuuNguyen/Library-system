@@ -113,4 +113,8 @@ public class DetailPanel extends JPanel {
     transaction.setCreatedAt(this.lendDateChooser.getSelectedDate().getTime());
     transaction.setExpectedReturnAt(this.dueDateChooser.getSelectedDate().getTime());
   }
+
+  public boolean enableNotification() {
+    return this.notificationSB.isSelected();
+  }
 }

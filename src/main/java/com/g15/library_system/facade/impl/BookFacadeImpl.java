@@ -83,7 +83,7 @@ public class BookFacadeImpl implements BookFacade {
   @Override
   public List<NotifyBookResponse> getAllNewBook() {
     return this.bookService.findAll().stream()
-        .filter(book -> DateUtil.isNowDay(book.getCreatedAt()))
+        .filter(book -> DateUtil.isNowDay(book.getCreatedAt()) && book.isNewBook())
         .map(book -> this.bookMapper.toNotifyBookResponse(book))
         .collect(Collectors.toList());
   }
@@ -102,5 +102,12 @@ public class BookFacadeImpl implements BookFacade {
   @Override
   public void importExcel(ImportExcelRequest importExcelRequest) {
     this.excelProducerService.importExcel(importExcelRequest);
+  }
+
+  @Override
+  public void markAnnouncedBook() {
+    for(var book : this.bookService.findAll()){
+      book.markOldBook();
+    }
   }
 }

@@ -47,13 +47,31 @@ public class BorrowedHistoryPanel extends JPanel {
     setPreferredSize(new Dimension(this.getWidth(), 210));
     setVisible(false);
 
-    columnNames = new String[] {"", "BookID", "Name", "Status"};
-    borrowedData =
-        new Object[][] {
-          {false, "#11111", "The false in our star", "overdue"},
-          {false, "#11112", "The Science", "returned"},
-          {false, "#11113", "A Moon", "returned"}
-        };
+            columnNames =
+                    new String[] {
+                            "",
+                            "BookID",
+                            "Name",
+                            "Status"
+                    };
+            borrowedData =
+                    new Object[][] {
+                            {
+                                    "#11111",
+                                    "The false in our star",
+                                    "overdue"
+                            },
+                            {
+                                    "#11112",
+                                    "The Science",
+                                    "returned"
+                            },
+                            {
+                                    "#11113",
+                                    "A Moon",
+                                    "returned"
+                            }
+                    };
 
     tablePanel = new CheckboxTablePanel(Arrays.copyOfRange(columnNames, 0, 4), borrowedData);
     tablePanel.setEditableColumns(Set.of(4));

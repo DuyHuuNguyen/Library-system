@@ -10,6 +10,7 @@ import com.g15.library_system.mapper.impl.BookMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.OptionPaneInputFileExcel;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import java.awt.*;
@@ -40,8 +41,8 @@ public class ManageBookPanel extends JPanel {
   };
   private Object[][] data;
 
-  private JPanel bookFormAndDropImagesPanel;
-  private UpsertBookPanel bookFormPanel;
+  //  private JPanel bookFormAndDropImagesPanel;
+  //  private UpsertBookPanel bookFormPanel;
 
   private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
   private BookMapper bookMapper = ApplicationContextProvider.getBean(BookMapperImpl.class);
@@ -64,8 +65,9 @@ public class ManageBookPanel extends JPanel {
           ApiKey.IMPORT_EXCEL,
           () -> this.importExcel());
 
-  private UpsertBookPanel addNewBookPanel;
-  private UpsertBookPanel modifyBookPanel;
+  private AddNewBookPanel addNewBookPanel;
+  private ModifyBookPanel modifyBookPanel;
+  private NotifyNewBookPanel notifyNewBookPanel;
 
   private CardLayout cardLayout;
 
@@ -85,31 +87,36 @@ public class ManageBookPanel extends JPanel {
     this.toolPanel = new ToolPanel(cardLayout, panelContent, mapAPIs);
     this.add(toolPanel, BorderLayout.NORTH);
 
-    this.panelContent.setBackground(Color.GREEN);
+    this.panelContent.setBackground(Color.WHITE);
 
     this.initData();
 
     this.checkboxTablePanel = new CheckboxTablePanel(columns, data);
     this.panelContent.add(checkboxTablePanel, CONSTRAINT_TABLE_BOOK);
 
-    this.bookFormAndDropImagesPanel = new JPanel(new BorderLayout());
-    this.bookFormAndDropImagesPanel.setBackground(Color.PINK);
-    this.bookFormPanel = new UpsertBookPanel(1000, 500, mapAPIs);
+    RoundedShadowPanel roundedShadowPanelForAddNewBook = new RoundedShadowPanel();
+    this.addNewBookPanel = new AddNewBookPanel(700, 650);
+    roundedShadowPanelForAddNewBook.add(this.addNewBookPanel);
+    roundedShadowPanelForAddNewBook.add(Box.createVerticalStrut(50));
+    roundedShadowPanelForAddNewBook.setPreferredSize(new Dimension(700, 650));
+    roundedShadowPanelForAddNewBook.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-    this.bookFormAndDropImagesPanel.add(bookFormPanel, BorderLayout.CENTER);
+    this.panelContent.add(roundedShadowPanelForAddNewBook, CONSTRAINT_ADD_NEW_BOOK);
 
-    this.panelContent.add(bookFormAndDropImagesPanel, CONSTRAINT_ADD_NEW_BOOK);
+    this.notifyNewBookPanel = new NotifyNewBookPanel();
+    this.panelContent.add(notifyNewBookPanel, CONSTRAINT_NOTIFY);
 
-    this.addNewBookPanel = new UpsertBookPanel(1000, 500, mapAPIs);
-    this.panelContent.add(this.addNewBookPanel, CONSTRAINT_MODIFY_BOOK);
+    RoundedShadowPanel roundedShadowPanelForModifyBook = new RoundedShadowPanel();
+    this.modifyBookPanel = new ModifyBookPanel(700, 650);
+    roundedShadowPanelForModifyBook.add(modifyBookPanel);
+    roundedShadowPanelForModifyBook.add(Box.createVerticalStrut(50));
+    roundedShadowPanelForModifyBook.setPreferredSize(new Dimension(700, 650));
 
-    this.panelContent.add(new NotifyNewBookPanel(), CONSTRAINT_NOTIFY);
-
-    this.modifyBookPanel = new UpsertBookPanel(100, 500, mapAPIs);
-    this.panelContent.add(modifyBookPanel, CONSTRAINT_MODIFY_BOOK);
+    this.panelContent.add(roundedShadowPanelForModifyBook, CONSTRAINT_MODIFY_BOOK);
 
     add(panelContent, BorderLayout.CENTER);
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    this.addNewBookPanel.addObserverNotifyNewBook(this.notifyNewBookPanel);
   }
 
   private void removeAllDataTable() {
@@ -132,15 +139,20 @@ public class ManageBookPanel extends JPanel {
   }
 
   private void findBookModifySelected() {
-    var data = this.checkboxTablePanel.getSelectedRowData();
-    this.bookModify = this.bookController.findByTitle(data[1].toString());
-    this.modifyBookPanel.addData(bookModify);
-    log.info("selected book {}", bookModify.toString());
+    try {
+      var data = this.checkboxTablePanel.getSelectedRowData();
+      this.bookModify = this.bookController.findByTitle(data[1].toString());
+      this.modifyBookPanel.addOldBook(bookModify.get());
+      log.info("selected book {}", bookModify.toString());
+    } catch (NullPointerException e) {
+      log.error("You do not select row | In manager book feature modify book");
+    }
   }
 
   private void addNewBook() {
     var newBook = this.addNewBookPanel.getNewBook();
-    this.bookController.addNewBook(newBook.get());
+    this.bookController.addNewBook(newBook);
+    this.loadDataTable();
   }
 
   private void findByTextOfTextFieldSearchOptionUpDataToTable() {

@@ -6,13 +6,20 @@ import com.g15.library_system.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
   private final TransactionRepository transactionRepository;
 
   @Override
-  public Boolean createTransaction(Transaction transaction) {
+  public Transaction createTransaction(Transaction transaction) {
     return this.transactionRepository.save(transaction);
+  }
+
+  @Override
+  public List<Transaction> findAll() {
+    return this.transactionRepository.findAll();
   }
 }

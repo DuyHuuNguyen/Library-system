@@ -22,7 +22,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @Override
-  public Boolean save(Transaction transaction) {
-    return transactions.add(transaction);
+  public Transaction save(Transaction transaction) {
+    transaction.setId(transactions.getLast().getId() + 1);
+    transactions.add(transaction);
+    return transaction;
   }
 }

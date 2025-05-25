@@ -1,7 +1,9 @@
 package com.g15.library_system.entity;
 
+import com.g15.library_system.dto.ChangeInfoBookDTO;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -30,6 +32,9 @@ public class Book extends BaseEntity implements Comparable<Book> {
   private int totalQuantity;
 
   private List<String> images;
+
+  @Builder.Default
+  private boolean isNewBook = true;
 
   @Builder.Default private BookStatus bookStatus = BookStatus.AVAILABLE;
 
@@ -72,5 +77,26 @@ public class Book extends BaseEntity implements Comparable<Book> {
 
   public boolean hasFirstImage() {
     return !this.images.isEmpty();
+  }
+
+  public void changeInfo(ChangeInfoBookDTO changeInfoBookDTO) {
+    this.title = changeInfoBookDTO.getTitle();
+    this.author = changeInfoBookDTO.getAuthor();
+    this.publisher = changeInfoBookDTO.getPublisher();
+    this.publishYear = changeInfoBookDTO.getPublishYear();
+    this.genreType = changeInfoBookDTO.getGenreType();
+    this.currentQuantity = changeInfoBookDTO.getCurrentQuantity();
+    this.totalQuantity = changeInfoBookDTO.getTotalQuantity();
+    this.images.clear();
+    this.images.add(changeInfoBookDTO.getImage());
+  }
+
+  public void addImage(String image) {
+    if (this.images == null) this.images = new ArrayList<>();
+    this.images.add(image);
+  }
+
+  public void markOldBook(){
+    this.isNewBook =false;
   }
 }

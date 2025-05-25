@@ -9,5 +9,5 @@ public interface TransactionRepository {
 
   List<Transaction> findAll();
 
-  Boolean save(Transaction transaction);
+  Transaction save(Transaction transaction);
 }
