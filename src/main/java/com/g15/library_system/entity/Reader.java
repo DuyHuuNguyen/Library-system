@@ -44,4 +44,8 @@ public class Reader extends User {
   public boolean idContains(Long readerId) {
     return super.idContains(readerId);
   }
+
+  public void setIsSubscribe(boolean isSub) {
+    this.isSubscribe = isSub;
+  }
 }

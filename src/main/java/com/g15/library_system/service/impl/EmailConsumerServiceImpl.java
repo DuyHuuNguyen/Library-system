@@ -32,8 +32,8 @@ public class EmailConsumerServiceImpl implements EmailConsumerService {
   @RabbitListener(queues = {"${rabbitmq.sendEmailQueue}"})
   public void receive(TransactionContentDTO transaction) {
     this.mailService.sendTransactionContent(transaction);
-  } 
-  
+  }
+
   @Override
   @RabbitHandler
   @RabbitListener(queues = {"${rabbitmq.sendEmailTextQueue}"})

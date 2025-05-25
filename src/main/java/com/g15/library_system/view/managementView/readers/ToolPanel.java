@@ -1,33 +1,37 @@
 package com.g15.library_system.view.managementView.readers;
 
+import com.g15.library_system.data.ReaderData;
+import com.g15.library_system.entity.Reader;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
-import org.springframework.cglib.core.Local;
-
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class ToolPanel extends JPanel {
   //  private ReaderPanel readerPn = new ReaderPanel();
   //  private FormPanel formPn = readerPn.contentPn.showPn.formPn;
   private CustomButton addBt, removeBt, mainButton, dropdownButton;
   private Map<String, Runnable> actionMap = new HashMap<>();
+  private TextFieldSearchOption txt;
+  private JPopupMenu suggestionPopup = new JPopupMenu();
+  private JList<String> suggestionList = new JList<>();
+  private List<Reader> allReaders;
 
   ToolPanel(ReaderPanel readerPn) {
     setLayout(new BorderLayout());
 
     JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
-    TextFieldSearchOption txt = new TextFieldSearchOption();
+    txt = new TextFieldSearchOption();
     txt.setPreferredSize(new Dimension(350, 40));
     txt.addEventOptionSelected(
         (option, index) -> txt.setHint("Search by " + option.getName() + "..."));
@@ -49,6 +53,37 @@ public class ToolPanel extends JPanel {
     leftPanel.add(txt);
     add(leftPanel, BorderLayout.WEST);
 
+    // Xử lí sự kiện tìm kiếm tên reader
+    // ---------------------------------------------------------
+
+      Object[][] memberData = ReaderMapper.mapAllReadersToTableData(ReaderData.getInstance().getReaders(), false);
+
+      txt.addActionListener(e -> {
+          String keyword = txt.getText().trim().toLowerCase();
+          if (keyword.isEmpty()) {
+//              JTable table = readerPn.contentPn.tablePn.getTablePanel().getTable();
+//              table.setModel(new DefaultTableModel(borrowData, columnNames));
+              readerPn.contentPn.tablePn.refreshTable();
+              return;
+          }
+
+          List<Object[]> filtered = new ArrayList<>();
+          for (Object[] row : memberData) {
+//              System.out.println(row[3]);
+              String fullName = (row[3]+"").toLowerCase(); // giả sử cột 1 là họ, cột 2 là tên
+              if (fullName.contains(keyword)) {
+                  filtered.add(row);
+              }
+          }
+          Object[][] filteredData = filtered.toArray(new Object[0][]);
+          System.out.println(Arrays.deepToString(filteredData));
+          readerPn.contentPn.tablePn.getTablePanel().removeAllDataTable();
+          readerPn.contentPn.tablePn.memberData = filteredData;
+          readerPn.contentPn.tablePn.getTablePanel().addDataToTable(filteredData);
+      });
+
+    // ---------------------------------------------------------
+
     JPanel actionBtPn = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
     removeBt =
         CustomButtonBuilder.builder()
@@ -65,7 +100,27 @@ public class ToolPanel extends JPanel {
             .preferredSize(new Dimension(160, 40))
             .icon("/icons/deleteIcon.png", 10);
     removeBt.setVisible(false);
-    removeBt.addActionListener(e -> {});
+    removeBt.addActionListener(
+        e -> {
+          JTable table = readerPn.contentPn.tablePn.getTablePanel().getTable();
+          DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+          // Duyệt ngược để tránh lỗi index khi xoá
+          for (int i = table.getRowCount() - 1; i >= 0; i--) {
+            Object val = model.getValueAt(i, 0);
+            if (val instanceof Boolean && (Boolean) val) {
+              // Xoá khỏi ReaderData (nếu cần)
+              Long readerId = (Long) model.getValueAt(i, 1); // giả sử ID ở cột 1
+              Reader reader = ReaderData.getInstance().findId(readerId);
+              if (reader != null) {
+                ReaderData.getInstance().remove(reader);
+              }
+            }
+          }
+
+          // Xoá dòng khỏi bảng
+          readerPn.contentPn.tablePn.refreshTable();
+        });
 
     actionBtPn.add(removeBt);
 
@@ -86,6 +141,8 @@ public class ToolPanel extends JPanel {
 
     addBt.addActionListener(
         e -> {
+          readerPn.contentPn.showInforPn.avtPn.setImageUrlRelative("/images/addImageAvatar.png");
+          readerPn.contentPn.showInforPn.avtPn.setSize(150, 150);
           clearTextFields(readerPn.contentPn.showInforPn.formPn); // Xóa trắng
           enableTextFields(readerPn.contentPn.showInforPn.formPn, true); // Cho phép nhập
           readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.ADD);
@@ -192,6 +249,10 @@ public class ToolPanel extends JPanel {
   public void enableTextFields(FormPanel panel, boolean editable) {
     for (Component comp : panel.getComponents()) {
       if (comp instanceof JTextField) {
+        if (comp == panel.getMemberIdField()) {
+          panel.getMemberIdField().setVisible(!editable);
+          panel.getMemberIdLabel().setVisible(!editable);
+        }
         if (comp == panel.getReaderTypeField()) {
           panel.getReaderTypeField().setVisible(!editable);
           panel.getReaderTypeJcb().setVisible(editable);
@@ -200,14 +261,14 @@ public class ToolPanel extends JPanel {
           panel.getBirthDateField().setEnabled(editable);
         }
         if (comp == panel.getMembershipDateField()) {
-          panel.getMembershipDateField().setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+          panel
+              .getMembershipDateField()
+              .setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
           panel.getMembershipDateField().setEnabled(false);
         }
         if (comp == panel.getTotalFineField()) {
           panel.getTotalFineField().setEditable(false);
-        } else
-          ((JTextField) comp).setEditable(editable);
-
+        } else ((JTextField) comp).setEditable(editable);
       }
     }
   }

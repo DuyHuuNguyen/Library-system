@@ -1,6 +1,5 @@
 package com.g15.library_system.view.managementView.readers;
 
-import com.g15.library_system.entity.Reader;
 import com.g15.library_system.view.Style;
 import java.awt.*;
 import javax.swing.*;
@@ -13,8 +12,10 @@ public class ShowPanel extends JPanel {
   public FormPanel formPn;
 
   public ShowPanel(String btn1, String btn2, ReaderPanel readerPn) {
-    avtPn = new AvatarPanel();
-    btnPn = new ButtonPanel(new AvatarPanel(), readerPn);
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBackground(Color.WHITE);
+    panel.add(avtPn = new AvatarPanel("/images/addImageAvatar.png", false));
+    btnPn = new ButtonPanel(readerPn);
     formPn = new FormPanel();
 
     // Set up the panel
@@ -25,7 +26,7 @@ public class ShowPanel extends JPanel {
     //    setPreferredSize(new Dimension(400, 580));
 
     // Avatar Panel
-    add(avtPn, BorderLayout.NORTH);
+    add(panel, BorderLayout.NORTH);
 
     // Form Panel
     add(formPn, BorderLayout.CENTER);

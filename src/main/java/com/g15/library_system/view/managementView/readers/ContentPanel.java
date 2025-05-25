@@ -1,5 +1,6 @@
 package com.g15.library_system.view.managementView.readers;
 
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
 import java.util.HashMap;
@@ -23,18 +24,37 @@ public class ContentPanel extends JPanel {
         modelRow -> {
           // Viết hành động bạn muốn tại đây
           Map<String, Object> rowsData = new HashMap<>();
-          for (int i = 1; i < tablePn.columnNames.length; i++) {
-            for (int j = i - 1; j < tablePn.memberData[modelRow].length; j++) {
-              rowsData.put(tablePn.columnNames[i], tablePn.memberData[modelRow][j]);
-              break;
-            }
+          int i = 1, j = 0;
+          if (tablePn.memberData[modelRow][0] instanceof Boolean) {
+            j = i;
+          } else {
+            j = i - 1;
           }
-
+          while (i < tablePn.columnNames.length && j < tablePn.memberData[modelRow].length) {
+            rowsData.put(tablePn.columnNames[i], tablePn.memberData[modelRow][j]);
+            i++;
+            j++;
+          }
+          //          for (; i < ; i++) {
+          //            for (; j < tablePn.memberData[modelRow].length; j++) {
+          //                if (tablePn.memberData[modelRow][j] instanceof Boolean) {
+          //
+          //                }
+          //
+          //              break;
+          //            }
+          //          }
+          showInforPn.avtPn.setImageUrlAbsolute(rowsData.get("Cover Image") + "");
+          System.out.println(rowsData.get("Cover Image") + "");
+          showInforPn.avtPn.setSize(120, 120);
           showInforPn.formPn.updateInfo(rowsData);
           showInforPn.formPn.revalidate(); // Bắt buộc
           showInforPn.formPn.repaint();
           showInforPn.btnPn.setMode(ButtonPanelMode.VIEW);
           readerPn.contentPn.borrowedPanel.setVisible(true);
+          readerPn.contentPn.borrowedPanel.setReader(
+              ReaderData.getInstance().findId(Long.valueOf(rowsData.get("ID") + "")));
+          readerPn.contentPn.borrowedPanel.refreshTable();
           // Ví dụ: mở form, bật checkbox, đổi trạng thái...
         });
 

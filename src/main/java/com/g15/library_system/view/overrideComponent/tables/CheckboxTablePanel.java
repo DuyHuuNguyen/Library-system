@@ -19,7 +19,7 @@ public class CheckboxTablePanel extends JPanel {
   private static final Logger log = LoggerFactory.getLogger(CheckboxTablePanel.class);
   private String[] columnNames;
   private String[] statuses = {"Returned", "Lost", "Damaged", "Overdue"};
-  private Object[][] tableData;
+  @Getter private Object[][] tableData;
   @Getter private JTable table;
   private CustomTableModel tableModel;
   @Getter private TableColumn checkboxCol;
@@ -100,6 +100,10 @@ public class CheckboxTablePanel extends JPanel {
         data[i] = newRow;
       } else if (!(data[i][0] instanceof Boolean)) {
         data[i][0] = Boolean.FALSE;
+        //          Object[] newRow = new Object[columnNames.length];
+        //          newRow[0] = Boolean.FALSE;
+        //          System.arraycopy(data[i], 0, newRow, 1, data[i].length);
+        //          data[i] = newRow;
       }
     }
 

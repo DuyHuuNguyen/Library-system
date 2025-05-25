@@ -41,7 +41,7 @@ public class EmailProducerServiceImpl implements EmailProducerService {
   public void send(TransactionContentDTO transaction) {
     this.rabbitTemplate.convertAndSend(this.topicExchangeEmail, this.sendEmailRouter, transaction);
   }
-  
+
   @Override
   public <T extends EmailContent> void send(EmailMessageDTO<T> emailMessageDTO) {
     log.info("😍😍😍 send email from {} -> routing {}", this.exchangeEmailText, this.sendOTPRouter);

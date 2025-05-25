@@ -7,30 +7,27 @@ import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateC
 import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAdapter;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
-import lombok.Getter;
-
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 import javax.swing.*;
+import lombok.Getter;
 
+@Getter
 public class FormPanel extends JPanel {
+  private JLabel memberIdLabel;
   private JTextField memberIdField;
-  private JTextField nameField;
-  @Getter
+  private JTextField fullNameField;
+  //  private JTextField lastNameField;
+  //  private JTextField firstNameField;
   private JTextField birthDateField;
   private JTextField phoneField;
   private JTextField addressField;
   private JTextField emailField;
-  @Getter
   private JTextField membershipDateField;
-  @Getter
   private JTextField readerTypeField;
-  @Getter
   private JComboBox<String> readerTypeJcb;
-  @Getter
   private JTextField totalFineField;
   private DateChooser dateOfBirthChooser;
   private DateChooser memberShipDateChooser;
@@ -57,49 +54,73 @@ public class FormPanel extends JPanel {
     Color labelColor = new Color(0, 51, 102);
 
     // Member ID
-    JLabel memberIdLabel = new JLabel("Member ID");
+    memberIdLabel = new JLabel("Member ID");
+    memberIdLabel.setVisible(false);
     memberIdLabel.setFont(labelFont);
     memberIdLabel.setForeground(labelColor);
     labelConstraints.gridy = 0;
     add(memberIdLabel, labelConstraints);
 
     memberIdField = createTF();
+    memberIdField.setVisible(false);
     fieldConstraints.gridy = 0;
     add(memberIdField, fieldConstraints);
 
-    // Name
-    JLabel nameLabel = new JLabel("Name");
+    // Full Name
+    JLabel nameLabel = new JLabel("Full Name");
     nameLabel.setFont(labelFont);
     nameLabel.setForeground(labelColor);
     labelConstraints.gridy = 1;
     add(nameLabel, labelConstraints);
 
-    nameField = createTF();
+    fullNameField = createTF();
     fieldConstraints.gridy = 1;
-    add(nameField, fieldConstraints);
+    add(fullNameField, fieldConstraints);
+
+    //    // Last Name
+    //    JLabel lastNameLabel = new JLabel("Last Name");
+    //    lastNameLabel.setFont(labelFont);
+    //    lastNameLabel.setForeground(labelColor);
+    //    labelConstraints.gridy = 1;
+    //    add(lastNameLabel, labelConstraints);
+    //
+    //    lastNameField = createTF();
+    //    fieldConstraints.gridy = 1;
+    //    add(lastNameField, fieldConstraints);
+    //
+    //    // First Name
+    //    JLabel firstNameLabel = new JLabel("First Name");
+    //    firstNameLabel.setFont(labelFont);
+    //    firstNameLabel.setForeground(labelColor);
+    //    labelConstraints.gridy = 2;
+    //    add(firstNameLabel, labelConstraints);
+    //
+    //    firstNameField = createTF();
+    //    fieldConstraints.gridy = 2;
+    //    add(firstNameField, fieldConstraints);
 
     // BirthDate
     JLabel birthDateLabel = new JLabel("Date of birth");
     birthDateLabel.setFont(labelFont);
     birthDateLabel.setForeground(labelColor);
-    labelConstraints.gridy = 2;
+    labelConstraints.gridy = 3;
     add(birthDateLabel, labelConstraints);
 
     birthDateField = createTF();
     dateOfBirthChooser = new DateChooser();
     dateOfBirthChooser.setTextField(birthDateField);
     dateOfBirthChooser.addActionDateChooserListener(
-            new DateChooserAdapter() {
-              @Override
-              public void dateChanged(java.util.Date date, DateChooserAction action) {
-                super.dateChanged(date, action);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                calendar.add(Calendar.DAY_OF_MONTH, 7);
-//                dueDateChooser.setSelectedDate(calendar.getTime());
-              }
-            });
-    fieldConstraints.gridy = 2;
+        new DateChooserAdapter() {
+          @Override
+          public void dateChanged(java.util.Date date, DateChooserAction action) {
+            super.dateChanged(date, action);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
+            //                dueDateChooser.setSelectedDate(calendar.getTime());
+          }
+        });
+    fieldConstraints.gridy = 3;
 
     add(birthDateField, fieldConstraints);
 
@@ -107,40 +128,40 @@ public class FormPanel extends JPanel {
     JLabel phoneLabel = new JLabel("Phone");
     phoneLabel.setFont(labelFont);
     phoneLabel.setForeground(labelColor);
-    labelConstraints.gridy = 3;
+    labelConstraints.gridy = 4;
     add(phoneLabel, labelConstraints);
 
     phoneField = createTF();
-    fieldConstraints.gridy = 3;
+    fieldConstraints.gridy = 4;
     add(phoneField, fieldConstraints);
 
     // Email
     JLabel emailLabel = new JLabel("Email");
     emailLabel.setFont(labelFont);
     emailLabel.setForeground(labelColor);
-    labelConstraints.gridy = 4;
+    labelConstraints.gridy = 5;
     add(emailLabel, labelConstraints);
 
     emailField = createTF();
-    fieldConstraints.gridy = 4;
+    fieldConstraints.gridy = 5;
     add(emailField, fieldConstraints);
 
     // Address
     JLabel addressLabel = new JLabel("Address");
     addressLabel.setFont(labelFont);
     addressLabel.setForeground(labelColor);
-    labelConstraints.gridy = 5;
+    labelConstraints.gridy = 6;
     add(addressLabel, labelConstraints);
 
     addressField = createTF();
-    fieldConstraints.gridy = 5;
+    fieldConstraints.gridy = 6;
     add(addressField, fieldConstraints);
 
     // Membership date
     JLabel membershipDateLabel = new JLabel("Membership date");
     membershipDateLabel.setFont(labelFont);
     membershipDateLabel.setForeground(labelColor);
-    labelConstraints.gridy = 6;
+    labelConstraints.gridy = 7;
     add(membershipDateLabel, labelConstraints);
 
     membershipDateField = createTF();
@@ -148,77 +169,82 @@ public class FormPanel extends JPanel {
     memberShipDateChooser = new DateChooser();
     memberShipDateChooser.setTextField(membershipDateField);
     memberShipDateChooser.addActionDateChooserListener(
-            new DateChooserAdapter() {
-              @Override
-              public void dateChanged(java.util.Date date, DateChooserAction action) {
-                super.dateChanged(date, action);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                calendar.add(Calendar.DAY_OF_MONTH, 7);
+        new DateChooserAdapter() {
+          @Override
+          public void dateChanged(java.util.Date date, DateChooserAction action) {
+            super.dateChanged(date, action);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
 
-//                dueDateChooser.setSelectedDate(calendar.getTime());
-              }
-            });
+            //                dueDateChooser.setSelectedDate(calendar.getTime());
+          }
+        });
     // Set current date as default
-//    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//    membershipDateField.setText(dateFormat.format(new Date()));
-    fieldConstraints.gridy = 6;
+    //    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    //    membershipDateField.setText(dateFormat.format(new Date()));
+    fieldConstraints.gridy = 7;
     add(membershipDateField, fieldConstraints);
 
     // Reader Type
     JLabel readerTypeLabel = new JLabel("Reader Type");
     readerTypeLabel.setFont(labelFont);
     readerTypeLabel.setForeground(labelColor);
-    labelConstraints.gridy = 7;
+    labelConstraints.gridy = 8;
     add(readerTypeLabel, labelConstraints);
 
     readerTypeField = createTF();
     readerTypeField.setVisible(false);
-    fieldConstraints.gridy = 7;
+    fieldConstraints.gridy = 8;
     add(readerTypeField, fieldConstraints);
 
     String[] readerTypeList = {"Student", "Teacher", "Other"};
     readerTypeJcb = new JComboBox<>(readerTypeList);
-    fieldConstraints.gridy = 7;
+    fieldConstraints.gridy = 8;
     add(readerTypeJcb, fieldConstraints);
 
-    readerTypeJcb.addActionListener(e -> {
-      String selected = (String) readerTypeJcb.getSelectedItem();
-      readerTypeField.setText(selected);
-    });
+    readerTypeJcb.addActionListener(
+        e -> {
+          String selected = (String) readerTypeJcb.getSelectedItem();
+          readerTypeField.setText(selected);
+        });
 
     // Total Fine
     JLabel totalFineLabel = new JLabel("Total Fine");
     totalFineLabel.setFont(labelFont);
     totalFineLabel.setForeground(labelColor);
-    labelConstraints.gridy = 8;
+    labelConstraints.gridy = 9;
     add(totalFineLabel, labelConstraints);
 
     totalFineField = createTF();
     totalFineField.setEditable(false);
-    fieldConstraints.gridy = 8;
+    fieldConstraints.gridy = 9;
     add(totalFineField, fieldConstraints);
 
-//    memberIdField.setText("U001");
-//    nameField.setText("John Doe");
-//    birthDateField.setText("1/1/2000");
-//    phoneField.setText("0123456");
-//    emailField.setText("john.doe@example.com");
-//    addressField.setText("Linh Trung, Thu Duc, Tp.HCM");
-//    readerTypeField.setText("Student");
+    //    memberIdField.setText("U001");
+    //    nameField.setText("John Doe");
+    //    birthDateField.setText("1/1/2000");
+    //    phoneField.setText("0123456");
+    //    emailField.setText("john.doe@example.com");
+    //    addressField.setText("Linh Trung, Thu Duc, Tp.HCM");
+    //    readerTypeField.setText("Student");
 
     // Reset date to current
-//    membershipDateField.setText("1/1/2025");
-//    totalFineField.setText(5 + "");
+    //    membershipDateField.setText("1/1/2025");
+    //    totalFineField.setText(5 + "");
   }
 
   public void setMemberIdField(JTextField memberIdField) {
     this.memberIdField = memberIdField;
   }
 
-  public void setNameField(JTextField nameField) {
-    this.nameField = nameField;
-  }
+  //  public void setLastNameField(JTextField lastName) {
+  //    this.lastNameField = lastName;
+  //  }
+  //
+  //  public void setFistNameField(JTextField firstName) {
+  //    this.firstNameField = firstName;
+  //  }
 
   public void setPhoneField(JTextField phoneField) {
     this.phoneField = phoneField;
@@ -239,12 +265,14 @@ public class FormPanel extends JPanel {
   // Method to reset all fields
   public void resetFields() {
     memberIdField.setText("");
-    nameField.setText("");
+    fullNameField.setText("");
+    //    lastNameField.setText("");
+    //    firstNameField.setText("");
     birthDateField.setText("");
     phoneField.setText("");
     emailField.setText("");
     addressField.setText("");
-//    readerTypeField.setText("");
+    //    readerTypeField.setText("");
 
     // Reset date to current
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -271,8 +299,12 @@ public class FormPanel extends JPanel {
   /** Cập nhật thông tin hiển thị dựa trên dữ liệu từ dòng được chọn */
   public void updateInfo(Map<String, Object> rowData) {
     if (rowData != null) {
+      memberIdLabel.setVisible(true);
+      memberIdField.setVisible(true);
       memberIdField.setEditable(false);
-      nameField.setEditable(false);
+      fullNameField.setEditable(false);
+      //      lastNameField.setEditable(false);
+      //      firstNameField.setEditable(false);
       birthDateField.setEnabled(false);
       phoneField.setEditable(false);
       emailField.setEditable(false);
@@ -284,7 +316,9 @@ public class FormPanel extends JPanel {
       totalFineField.setEditable(false);
 
       memberIdField.setText(rowData.get("ID") + "");
-      nameField.setText(rowData.get("Name") + "");
+      fullNameField.setText(rowData.get("Name") + "");
+      //      lastNameField.setText(rowData.get("Last Name") + "");
+      //      firstNameField.setText(rowData.get("First Name") + "");
       birthDateField.setText(String.valueOf(rowData.getOrDefault("Birth Date", "")));
       phoneField.setText(String.valueOf(rowData.getOrDefault("Phone", "")));
       emailField.setText(String.valueOf(rowData.getOrDefault("Email", "")));
@@ -296,13 +330,22 @@ public class FormPanel extends JPanel {
   }
 
   public void isValidate() {
-    if (memberIdField.getText().trim().isEmpty()) {
-      membershipDateField.requestFocusInWindow();
-      throw new IllegalArgumentException("MemberID is empty!");
-    }
-    if (nameField.getText().trim().isEmpty()) {
-      nameField.requestFocusInWindow();
-      throw new IllegalArgumentException("Name is empty!");
+    //    if (memberIdField.getText().trim().isEmpty()) {
+    //      membershipDateField.requestFocusInWindow();
+    //      throw new IllegalArgumentException("MemberID is empty!");
+    //    }
+    //    if (lastNameField.getText().trim().isEmpty()) {
+    //      lastNameField.requestFocusInWindow();
+    //      throw new IllegalArgumentException("Last Name is empty!");
+    //    }
+    //    if (firstNameField.getText().trim().isEmpty()) {
+    //      firstNameField.requestFocusInWindow();
+    //      throw new IllegalArgumentException("First Name is empty!");
+    //    }
+
+    if (fullNameField.getText().trim().isEmpty()) {
+      fullNameField.requestFocusInWindow();
+      throw new IllegalArgumentException("Full Name is empty!");
     }
     if (birthDateField.getText().isEmpty()) {
       birthDateField.requestFocusInWindow();
@@ -336,7 +379,7 @@ public class FormPanel extends JPanel {
               ToastNotification.Type.WARNING,
               ToastNotification.Location.TOP_CENTER,
               e.getMessage())
-              .showNotification();
+          .showNotification();
       return false;
     }
   }
