@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 
+@Deprecated
 @Slf4j
 public class ImageDropPanel extends JPanel {
   private final JPanel imagesContainer;
@@ -51,7 +52,11 @@ public class ImageDropPanel extends JPanel {
 
               for (File file : droppedFiles) {
                 if (isImageFile(file)) {
-                  displayAndSaveImage(file);
+                  try {
+                    displayAndSaveImage(file);
+                  } catch (Exception e) {
+                    log.error("hehe cccccc");
+                  }
                 }
               }
 
@@ -211,6 +216,7 @@ public class ImageDropPanel extends JPanel {
  * FlowLayout subclass that fully supports wrapping of components. Source:
  * https://tips4java.wordpress.com/2008/11/06/wrap-layout/
  */
+@Deprecated
 class WrapLayout extends FlowLayout {
   public WrapLayout() {
     super();
