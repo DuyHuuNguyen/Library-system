@@ -1,7 +1,6 @@
 package com.g15.library_system.dto;
 
 import com.g15.library_system.enums.GenreType;
-import java.util.List;
 import lombok.*;
 
 @Builder
@@ -24,5 +23,5 @@ public class ChangeInfoBookDTO {
 
   private int totalQuantity;
 
-  private List<String> images;
+  private String image;
 }

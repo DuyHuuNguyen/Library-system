@@ -10,11 +10,16 @@ import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.mapper.impl.BookMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.manageBooks.observer.ObserverNotifyNewBook;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.swing.*;
 
@@ -22,7 +27,7 @@ import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class NotifyNewBookPanel extends JPanel {
+public class NotifyNewBookPanel extends JPanel implements ObserverNotifyNewBook {
   private CheckboxTablePanel checkboxTablePanel;
   private EmailFormPanel emailContentPanel;
 
@@ -51,7 +56,7 @@ public class NotifyNewBookPanel extends JPanel {
 
     JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
 
-    String[] columns = new String[] {"", "Title", "Author"};
+    String[] columns = new String[] {"", "Title", "Author","Publisher"};
 
     Object[][] data = {};
 
@@ -76,7 +81,11 @@ public class NotifyNewBookPanel extends JPanel {
 
   private void upDataIntoTable() {
     this.checkboxTablePanel.removeAllDataTable();
-    this.notifyBookResponses.addAll(this.bookController.getAllNewBooks());
+
+    var data  = this.bookController.getAllNewBooks();
+    data.forEach(d -> log.info("-> {}",d));
+    this.notifyBookResponses.addAll(data);
+
     log.info("size {}",this.notifyBookResponses.size());
     this.checkboxTablePanel.addDataToTable(
     this.bookMapper.toDataNotifyBookTable(this.notifyBookResponses));
@@ -105,6 +114,8 @@ public class NotifyNewBookPanel extends JPanel {
             ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.INFO,
             ToastNotification.Location.TOP_CENTER, "Send notification successful");
     panel.showNotification();
+    this.bookController.markAnnouncedNewBook();
+    this.removeAllDataInPanel();
   }
 
   public void initData() {
@@ -113,20 +124,9 @@ public class NotifyNewBookPanel extends JPanel {
 
     this.loadEmails();
     this.loadContentEmails();
-    this.loadImages();
   }
-
-  public void loadImages() {
-    var images =
-        this.titleAndFirstImageBookDTOS.stream()
-            .map(TitleAndFirstImageBookDTO::getFirstImage)
-            .collect(Collectors.toList());
-
-    this.emailContentPanel.loadImages(images);
-  }
-
+  
   public void loadContentEmails() {
-
     StringBuilder content = new StringBuilder();
     content.append("""
                 Friendly & inviting:\n
@@ -136,7 +136,7 @@ public class NotifyNewBookPanel extends JPanel {
                 Check Out What’s New at the Library!\n
                 """);
     for (int i = 0; i < this.titleAndFirstImageBookDTOS.size(); i++) {
-      content.append(i + 1 + "." + this.titleAndFirstImageBookDTOS.get(i).getTitle() + "\n");
+      content.append(i + 1 + "." + this.titleAndFirstImageBookDTOS.get(i).getTitle()+"\n" );
     }
     this.emailContentPanel.loadContent(content.toString() ,"Fit Library, New book");
   }
@@ -150,7 +150,6 @@ public class NotifyNewBookPanel extends JPanel {
     this.titleAndFirstImageBookDTOS.clear();
     this.emailContentPanel.loadEmail(null);
     this.emailContentPanel.loadContent("","");
-    this.emailContentPanel.removeAllImages();
     this.checkboxTablePanel.removeAllDataTable();
   }
 
@@ -159,6 +158,8 @@ public class NotifyNewBookPanel extends JPanel {
     this.upDataIntoTable();
   }
 
-
-
+  @Override
+  public void notifyNewBook() {
+      this.reload();
+  }
 }
