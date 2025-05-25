@@ -3,14 +3,10 @@ package com.g15.library_system.view.managementView.returnBooks;
 import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.dto.returnBookDTOs.ReturnBookDTO;
 import com.g15.library_system.entity.Reader;
-import com.g15.library_system.entity.Transaction;
-import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.mapper.ITransactionMapper;
 import com.g15.library_system.mapper.impl.TransactionMapper;
-import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -18,13 +14,13 @@ import javax.swing.*;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ReturnBookPanel extends JPanel implements ContentAction {
+public class ReturnBookPanel extends JPanel {
   public static final String TABLE_PANEL = "tablePanel";
   public static final String ADD_RETURN_BOOK_PANEL = "addReturnBookPanel";
 
   @Getter private AddReturnBookPanel addReturnBookPanel;
   private ContentPanel mainContentPn;
-  private ToolPanel toolPn;
+  @Getter private ToolPanel toolPn;
   private CheckboxTablePanel tablePn;
   private CardLayout cardLayout;
   private String[] columnNames = {
@@ -61,7 +57,7 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
     //    backToTableAction();
     this.add(addReturnBookPanel, ReturnBookPanel.ADD_RETURN_BOOK_PANEL);
 
-    toolPn = new ToolPanel(this);
+    toolPn = new ToolPanel();
     mainContentPn.add(toolPn, BorderLayout.NORTH);
     mainContentPn.setAddBtListener();
 
@@ -88,56 +84,9 @@ public class ReturnBookPanel extends JPanel implements ContentAction {
     }
   }
 
-  public void initData() {
-    List<Transaction> transactions = new ArrayList<>();
-
-    for (int i = 0; i < readersData.size(); i++) {
-      try {
-        Reader reader = readersData.get(i);
-        readersData
-            .get(i)
-            .getLibraryCard()
-            .getBorrowTransactions()
-            .forEach(
-                transaction -> {
-                  if (transaction.getTransactionType() == TransactionType.RETURNED) {
-                    returnBookDTOs.add(transactionMapper.toReturnBookDTO(reader, transaction));
-                  }
-                  if (transaction.getCreatedAt() == null) {
-                    transactions.add(transaction);
-                  }
-                });
-      } catch (NullPointerException e) {
-        System.out.println("Reader " + i + " don't have data");
-      }
-    }
-
-    tableData = transactionMapper.toReturnBookTableData(returnBookDTOs);
-    tablePn.setNewDataForTable(tableData);
-  }
-
-  @Override
-  public Runnable editTable(CustomButton editButton, CustomButton cancelButton) {
-    return tablePn.getActionForEditingTable(editButton, cancelButton);
-  }
-
-  @Override
-  public void exportExcel() {}
-
-  @Override
-  public void refreshTable() {
-    returnBookDTOs.clear();
-    //    initData();
-    tablePn.setNewDataForTable(tableData);
-  }
-
   public void setTableData(Object[][] tableData) {
     this.tableData = tableData;
     tablePn.setNewDataForTable(tableData);
-  }
-
-  public void setConfirmBtListener(ActionListener actionListener) {
-    addReturnBookPanel.setConfirmBtListener(actionListener);
   }
 
   public void setCancelBtListener() {

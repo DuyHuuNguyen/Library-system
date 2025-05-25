@@ -53,7 +53,6 @@ public class Reader extends User {
     return libraryCard.getTotalBorrowedBooks();
   }
 
-
   public int getTotalOverdueBooks() {
     return libraryCard.getTotalOverdueBooks();
   }

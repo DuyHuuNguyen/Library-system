@@ -1,6 +1,5 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
-
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.strategies.FineStrategyType;
 import com.g15.library_system.view.Style;
@@ -23,15 +22,15 @@ public class AddReturnBookPanel extends JPanel {
   private JButton confirmBt, cancelBt;
   private JComboBox<FineStrategyType> comboStrategy;
   private JTextField searchReaderTxt,
-          readerIdTxt,
-          fullNameTxt,
-          emailTxt,
-          phoneTxt,
-          returnDateTxt,
-          lateFeeTxt,
+      readerIdTxt,
+      fullNameTxt,
+      emailTxt,
+      phoneTxt,
+      returnDateTxt,
+      lateFeeTxt,
       statusTxt;
   private JTextArea notesTxtArea;
-  private JLabel lblStaff;
+  private JLabel lblStaff, noDataLabel;
   private LocalDate today = LocalDate.now();
 
   // data
@@ -199,15 +198,32 @@ public class AddReturnBookPanel extends JPanel {
   }
 
   private class BorrowedBookTable extends JPanel {
+    private JPanel noDataPn;
+
     public BorrowedBookTable() {
       this.setOpaque(false);
-      this.setLayout(new BorderLayout());
+      this.setLayout(new OverlayLayout(this));
+
+      noDataPn = new JPanel(new BorderLayout());
+      noDataPn.setOpaque(false);
+      // Create no data label
+      noDataLabel = new JLabel("No borrowed books found", SwingConstants.CENTER);
+      noDataLabel.setFont(Style.FONT_BOLD_20);
+      noDataLabel.setForeground(Style.LOGOUT_RED);
+      noDataPn.add(noDataLabel, BorderLayout.CENTER);
+      noDataPn.setVisible(false);
 
       borrowBookTablePanel = new CheckboxTablePanel(columnNames, bookBorrowData);
       borrowBookTablePanel.setAlwaysEditableColumns(Set.of(7));
       borrowBookTablePanel.setStatuses(statuses);
 
-      this.add(borrowBookTablePanel, BorderLayout.CENTER);
+      this.add(noDataPn);
+      this.add(borrowBookTablePanel);
+    }
+
+    public void showNoDataMessage(boolean show) {
+      noDataPn.setVisible(show);
+      borrowBookTablePanel.setVisible(!show);
     }
   }
 
@@ -290,8 +306,20 @@ public class AddReturnBookPanel extends JPanel {
   }
 
   public void setNewBorrowDataForTable(Object[][] tableData) {
-    this.bookBorrowData = tableData; // thêm dòng set về empty nếu không xóa data cũ
+    this.bookBorrowData = tableData;
     borrowBookTablePanel.setNewDataForTable(tableData);
+
+    // Show "No data" message if table is empty
+    boolean isEmpty = tableData == null || tableData.length == 0;
+    // Tìm BorrowedBookTable parent
+    Container parent = borrowBookTablePanel;
+    while (parent != null && !(parent instanceof BorrowedBookTable)) {
+      parent = parent.getParent();
+    }
+
+    if (parent instanceof BorrowedBookTable) {
+      ((BorrowedBookTable) parent).showNoDataMessage(isEmpty);
+    }
   }
 
   public void setStatusFieldText(String status) {

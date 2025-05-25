@@ -1,17 +1,6 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
-import com.g15.library_system.data.BookData;
-import com.g15.library_system.data.ReaderData;
-import com.g15.library_system.entity.Book;
-import com.g15.library_system.entity.Reader;
-import com.g15.library_system.entity.StudentReaderType;
-import com.g15.library_system.enums.BookStatus;
-import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.managementView.returnBooks.commands.Command;
-import com.g15.library_system.view.managementView.returnBooks.commands.EditCommand;
-import com.g15.library_system.view.managementView.returnBooks.commands.ExportCommand;
-import com.g15.library_system.view.managementView.returnBooks.commands.RefreshCommand;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
@@ -25,18 +14,13 @@ import javax.swing.*;
 public class ToolPanel extends JPanel {
   private CustomButton addBt, editBt, exportBt, refreshBt, cancelBt;
   private Map<String, Runnable> actionMap = new HashMap<>();
-  private ContentAction contentPnAction;
+  private TextFieldSearchOption searchField;
   private final String[] items = {"Add", "Edit", "Export", "Refresh"};
-//  private Command editCommand = new EditCommand();
-//  private Command exportCommand = new ExportCommand();
-//  private Command refreshCommand = new RefreshCommand();
 
-  public ToolPanel(ContentAction contentPnAction) {
-    this.contentPnAction = contentPnAction;
-    setLayout(new BorderLayout(20, 20));
-
-    add(createActionButtonPanel(), BorderLayout.WEST);
-    add(createSearchPanel(), BorderLayout.EAST);
+  public ToolPanel() {
+    this.setLayout(new BorderLayout(20, 20));
+    this.add(createActionButtonPanel(), BorderLayout.WEST);
+    this.add(createSearchPanel(), BorderLayout.EAST);
   }
 
   private JPanel createActionButtonPanel() {
@@ -56,20 +40,6 @@ public class ToolPanel extends JPanel {
             .preferredSize(new Dimension(170, 40))
             .title("Create new book return record")
             .icon("/icons/addIcon.png", 5);
-
-    editBt =
-        CustomButtonBuilder.builder()
-            .text("Edit")
-            .font(Style.FONT_SANS_SERIF_PLAIN_15)
-            .textColor(Color.WHITE)
-            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
-            .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
-            .radius(6)
-            .alignment(SwingConstants.LEFT)
-            .drawBorder(false)
-            .preferredSize(new Dimension(120, 40))
-            .title("Edit return information")
-            .icon("/icons/edit.png", 17);
 
     exportBt =
         CustomButtonBuilder.builder()
@@ -99,6 +69,20 @@ public class ToolPanel extends JPanel {
             .title("Refresh table")
             .icon("/icons/refresh.png", 17);
 
+    editBt =
+        CustomButtonBuilder.builder()
+            .text("Edit")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Color.WHITE)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
+            .radius(6)
+            .alignment(SwingConstants.LEFT)
+            .drawBorder(false)
+            .preferredSize(new Dimension(120, 40))
+            .title("Edit return information")
+            .icon("/icons/edit.png", 17);
+
     cancelBt =
         CustomButtonBuilder.builder()
             .text("Cancel")
@@ -115,91 +99,67 @@ public class ToolPanel extends JPanel {
             .title("Undo edit")
             .icon("/icons/cancel.png", 17);
 
-    setActionForActionMap();
-
-    editBt.addActionListener(e -> actionMap.get("Edit").run());
-    exportBt.addActionListener(e -> actionMap.get("Export").run());
-    refreshBt.addActionListener(e -> actionMap.get("Refresh").run());
-
     actionBtPn.add(addBt);
     actionBtPn.add(exportBt);
     actionBtPn.add(refreshBt);
-    actionBtPn.add(editBt);
-    actionBtPn.add(cancelBt);
+    //    actionBtPn.add(editBt);
+    //    actionBtPn.add(cancelBt);
 
     return actionBtPn;
   }
 
   private JPanel createSearchPanel() {
     JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
-    TextFieldSearchOption txt = new TextFieldSearchOption();
-    txt.setPreferredSize(new Dimension(350, 40));
-    txt.addEventOptionSelected(
-        (option, index) -> txt.setHint("Search by " + option.getName() + "..."));
+    searchField = new TextFieldSearchOption();
+    searchField.setPreferredSize(new Dimension(380, 40));
+    searchField.addEventOptionSelected(
+        (option, index) -> searchField.setHint("Search by " + option.getName() + "..."));
 
-    txt.addOption(
+    //    txtSearch.popupMenu(
+    //            name -> {
+    //              return borrowBookController.supportSearch(name);
+    //            },
+    //            null
+    //    );
+
+    searchField.addOption(
         new SearchOption(
             "Name", new ImageIcon(getClass().getResource("/icons/searchOptionIcons/user.png"))));
-    txt.addOption(
+    searchField.addOption(
         new SearchOption(
             "Tel", new ImageIcon(getClass().getResource("/icons/searchOptionIcons/tel.png"))));
-    txt.addOption(
+    searchField.addOption(
         new SearchOption(
-            "Email", new ImageIcon(getClass().getResource("/icons/searchOptionIcons/email.png"))));
-    txt.addOption(
+            "Email", new ImageIcon(getClass().getResource("/icons/searchOptionIcons/mail.png"))));
+
+    searchField.addOption(
+        new SearchOption(
+            "Return Date",
+            new ImageIcon(getClass().getResource("/icons/searchOptionIcons/calendar.png"))));
+    searchField.addOption(
         new SearchOption("Staff", new ImageIcon(getClass().getResource("/icons/admin.png"))));
 
-    searchPanel.add(txt);
+    searchPanel.add(searchField);
     return searchPanel;
   }
 
-  private void setActionForActionMap() {
-    actionMap.put("Edit", contentPnAction.editTable(editBt, cancelBt));
-    actionMap.put(
-        "Export",
-        () -> {
-          Book newBook =
-              Book.builder()
-                  .id(1L)
-                  .createdAt(System.currentTimeMillis())
-                  .author("J.K. Rowling")
-                  .bookStatus(BookStatus.OVERDUE)
-                  .title("Harry Potter and the Sorcerer's Stone")
-                  .publisher("Bloomsbury")
-                  .publishYear(1997)
-                  .genreType(GenreType.FANTASY)
-                  .currentQuantity(10)
-                  .totalQuantity(100)
-                  .build();
-          BookData.getInstance().add(newBook);
-          System.out.println(BookData.getInstance().getBooks().size());
-          var tui =
-              Reader.builder()
-                  .id(1L)
-                  .email("ok")
-                  .firstName(" neeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-                  .lastName("Ok")
-                  .address("123 Main St")
-                  .dateOfBirth(978307200000L) // 2001-01-01
-                  .createdAt(1746988800000L) // 2025-05-11
-                  .avatarKey("avatar1")
-                  .phoneNumber("123456789")
-                  .isSubscribe(true)
-                  .readerType(
-                      StudentReaderType.builder()
-                          .faculty("Information Technology")
-                          .enrollmentYear(2021)
-                          .studentID("IT2021001")
-                          .build())
-                  .build();
-          ReaderData.getInstance().add(tui);
-          System.out.println(ReaderData.getInstance().getReaders().size());
-        });
-    actionMap.put("Import", () -> JOptionPane.showMessageDialog(this, "Importing..."));
-    actionMap.put("Refresh", () -> JOptionPane.showMessageDialog(this, "Refreshing..."));
+  public void setSearchTxtActionListener(ActionListener actionListener) {
+    this.searchField.addActionListener(actionListener);
   }
 
   public void setAddButtonListener(ActionListener actionListener) {
     this.addBt.addActionListener(actionListener);
+  }
+
+  public void setFreshButtonListener(ActionListener actionListener) {
+    this.refreshBt.addActionListener(actionListener);
+  }
+
+  public String getSearchTextLowerCase() {
+    return searchField.getText().trim().toLowerCase();
+  }
+
+  public String getSelectedSearchOption() {
+    return searchField.getSelectedOption().getName();
   }
 }

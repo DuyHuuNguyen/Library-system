@@ -5,11 +5,9 @@ import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.g15.library_system.LibrarySystemApplication;
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.managementView.returnBooks.controllers.ReturnBookController;
+import com.g15.library_system.view.managementView.returnBooks.controllers.ReturnManagementController;
 import java.awt.*;
 import javax.swing.*;
-
-import com.g15.library_system.view.managementView.returnBooks.controllers.ReturnManagementController;
 import lombok.Getter;
 import org.springframework.boot.SpringApplication;
 
@@ -41,11 +39,11 @@ public class TestFrame extends JFrame {
     SpringApplication app = new SpringApplication(LibrarySystemApplication.class);
     app.setHeadless(false);
     app.run(args);
-//    new ReturnBookController();
+    //    new ReturnBookController();
 
     TestFrame testFrame = new TestFrame();
 
     ReturnManagementController returnManagementController =
-        new ReturnManagementController(testFrame.getReturnBookPanel(), new ReturnBookController(testFrame.getReturnBookPanel().getAddReturnBookPanel()));
+        new ReturnManagementController(testFrame.getReturnBookPanel());
   }
 }

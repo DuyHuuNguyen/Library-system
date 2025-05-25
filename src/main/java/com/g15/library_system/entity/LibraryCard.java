@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -19,7 +18,7 @@ public class LibraryCard extends BaseEntity {
   @ToString.Exclude private Reader owner;
   private Long expireAt;
   @Builder.Default private List<Transaction> borrowTransactions = new ArrayList<>();
-    @Builder.Default private List<Transaction> returnTransactions = new ArrayList<>();
+  @Builder.Default private List<Transaction> returnTransactions = new ArrayList<>();
   private LibraryCardStatus libraryCardStatus;
 
   public void addOwner(Reader reader) {
@@ -62,7 +61,6 @@ public class LibraryCard extends BaseEntity {
         .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
         .sum();
   }
-
 
   public int getTotalOverdueBooks() {
     return borrowTransactions.stream()
@@ -107,12 +105,12 @@ public class LibraryCard extends BaseEntity {
     return unreturned;
   }
 
-//  public int getTotalBooks() {
-//    return borrowTransactions.stream()
-//            .filter(t -> t.getTransactionType() == TransactionType.BORROW)
-//            .filter(t -> t.getActualReturnAt() != null && t.getExpectedReturnAt() != null)
-//            .filter(t -> t.getActualReturnAt() > t.getExpectedReturnAt())
-//            .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
-//            .sum();
-//  }
+  //  public int getTotalBooks() {
+  //    return borrowTransactions.stream()
+  //            .filter(t -> t.getTransactionType() == TransactionType.BORROW)
+  //            .filter(t -> t.getActualReturnAt() != null && t.getExpectedReturnAt() != null)
+  //            .filter(t -> t.getActualReturnAt() > t.getExpectedReturnAt())
+  //            .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
+  //            .sum();
+  //  }
 }

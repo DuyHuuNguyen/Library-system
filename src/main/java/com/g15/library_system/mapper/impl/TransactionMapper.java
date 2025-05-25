@@ -17,30 +17,6 @@ public class TransactionMapper implements ITransactionMapper {
   public TransactionMapper() {}
 
   @Override
-  public Object[][] toReturnBookTableData(List<ReturnBookDTO> returnBookDTOs) {
-    Object[][] data = new Object[returnBookDTOs.size()][];
-    for (int i = 0; i < data.length; i++) {
-      var returnBookDTO = returnBookDTOs.get(i);
-      data[i] =
-          new Object[] {
-            returnBookDTO.getTransactionId(),
-            returnBookDTO.getReaderFullName(),
-            returnBookDTO.getReaderPhoneNumber(),
-            returnBookDTO.getReaderEmail(),
-            DateUtil.convertToLocalDate(Long.parseLong(returnBookDTO.getReturnDate())),
-            returnBookDTO.getBooks().entrySet().stream()
-                .map(entry -> entry.getKey().getTitle() + " x" + entry.getValue())
-                .collect(Collectors.joining(", ")),
-            returnBookDTO.getStatus(),
-            returnBookDTO.getTotalFine(),
-            returnBookDTO.getStaffProcessed(),
-            returnBookDTO.getNotes()
-          };
-    }
-    return data;
-  }
-
-  @Override
   public Object[][] toBorrowBookTableData(List<BorrowBookDTO> borrowBookDTOs) {
     Object[][] tableData = new Object[borrowBookDTOs.size()][];
     for (BorrowBookDTO borrowBookDTO : borrowBookDTOs) {
@@ -60,6 +36,44 @@ public class TransactionMapper implements ITransactionMapper {
   }
 
   @Override
+  public BorrowBookDTO toBorrowBookDTO(
+          Transaction transaction, Book book, int amount, BookStatus status) {
+    return BorrowBookDTO.builder()
+            .bookId(book.getId())
+            .firstCoverImage(new ImageIcon(getClass().getResource(book.getFirstImage())))
+            .bookTitle(book.getTitle())
+            .bookQuantity(amount)
+            .borrowDate(DateUtil.convertToLocalDate(transaction.getCreatedAt()))
+            .dueDate(DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()))
+            .status(status)
+            .build();
+  }
+
+  @Override
+  public Object[][] toReturnBookTableData(List<ReturnBookDTO> returnBookDTOs) {
+    Object[][] data = new Object[returnBookDTOs.size()][];
+    for (int i = 0; i < data.length; i++) {
+      var returnBookDTO = returnBookDTOs.get(i);
+      data[i] =
+              new Object[] {
+                      returnBookDTO.getTransactionId(),
+                      returnBookDTO.getReaderFullName(),
+                      returnBookDTO.getReaderPhoneNumber(),
+                      returnBookDTO.getReaderEmail(),
+                      returnBookDTO.getReturnDate(),
+                      returnBookDTO.getBooks().entrySet().stream()
+                              .map(entry -> entry.getKey().getTitle() + " x" + entry.getValue())
+                              .collect(Collectors.joining(", ")),
+                      returnBookDTO.getStatus(),
+                      returnBookDTO.getTotalFine(),
+                      returnBookDTO.getStaffProcessed(),
+                      returnBookDTO.getNotes()
+              };
+    }
+    return data;
+  }
+
+  @Override
   public ReturnBookDTO toReturnBookDTO(Reader reader, Transaction transaction) {
     return ReturnBookDTO.builder()
         .transactionId(transaction.getId())
@@ -67,7 +81,7 @@ public class TransactionMapper implements ITransactionMapper {
         .readerFullName(reader.getFirstName() + " " + reader.getLastName())
         .readerPhoneNumber(reader.getPhoneNumber())
         .readerEmail(reader.getEmail())
-        .returnDate(transaction.getCreatedAt().toString())
+        .returnDate(DateUtil.convertToLocalDate(transaction.getCreatedAt()))
         .books(transaction.getBooks())
         .status(transaction.getTransactionType().getValue())
         .totalFine(
@@ -80,17 +94,5 @@ public class TransactionMapper implements ITransactionMapper {
         .build();
   }
 
-  @Override
-  public BorrowBookDTO toBorrowBookDTO(
-      Transaction transaction, Book book, int amount, BookStatus status) {
-    return BorrowBookDTO.builder()
-        .bookId(book.getId())
-        .firstCoverImage(new ImageIcon(getClass().getResource(book.getFirstImage())))
-        .bookTitle(book.getTitle())
-        .bookQuantity(amount)
-        .borrowDate(DateUtil.convertToLocalDate(transaction.getCreatedAt()))
-        .dueDate(DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()))
-        .status(status)
-        .build();
-  }
+
 }

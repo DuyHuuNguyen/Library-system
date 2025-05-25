@@ -18,8 +18,6 @@ import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.util.DateUtil;
 import com.g15.library_system.util.TransactionIdGenerator;
 import com.g15.library_system.view.managementView.returnBooks.AddReturnBookPanel;
-import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
-import com.g15.library_system.view.managementView.returnBooks.TestFrame;
 import com.g15.library_system.view.managementView.returnBooks.factories.*;
 import com.g15.library_system.view.managementView.returnBooks.factories.simpleFactory.FineStrategyFactory;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
@@ -27,8 +25,9 @@ import java.time.LocalDate;
 import java.util.*;
 import javax.swing.*;
 
-public class ReturnBookController extends Observable {
+public class ReturnBookController {
   private AddReturnBookPanel addReturnBookPanel;
+  private ReturnManagementController returnManagementController;
 
   private ITransactionMapper transactionMapper = new TransactionMapper();
   private List<Reader> readersData = ReaderData.getInstance().getReaders();
@@ -54,8 +53,10 @@ public class ReturnBookController extends Observable {
           new MaxFineLimitFactory(),
           new NoFineFactory());
 
-  public ReturnBookController(AddReturnBookPanel addReturnBookPanel) {
-
+  public ReturnBookController(
+      ReturnManagementController returnManagementController,
+      AddReturnBookPanel addReturnBookPanel) {
+    this.returnManagementController = returnManagementController;
     this.addReturnBookPanel = addReturnBookPanel;
     setupCancelBtListener();
     setupConfirmBtListener();
@@ -63,7 +64,6 @@ public class ReturnBookController extends Observable {
     setupSearchFieldListener();
     setupSearchFieldPopup();
   }
-
 
   // =========================== returning book
 
@@ -77,8 +77,12 @@ public class ReturnBookController extends Observable {
       int quantity = Integer.parseInt(rowData[3].toString());
       BookStatus status = BookStatus.get((String) rowData[6]);
 
-      Book book = findBookInTransaction(bookId).orElseThrow(() ->
-              new IllegalStateException("Borrow transaction not found for book ID: " + bookId));
+      Book book =
+          findBookInTransaction(bookId)
+              .orElseThrow(
+                  () ->
+                      new IllegalStateException(
+                          "Borrow transaction not found for book ID: " + bookId));
 
       if (status == BookStatus.LOST) {
         lostBooks.put(book, quantity);
@@ -89,14 +93,16 @@ public class ReturnBookController extends Observable {
     }
 
     // Tạo transaction trả mới
-    Transaction returnTransaction = Transaction.builder()
+    Transaction returnTransaction =
+        Transaction.builder()
             .id(TransactionIdGenerator.generateId())
             .books(returningBooks)
             .libraryCard(readerFound.getLibraryCard())
             .transactionType(TransactionType.RETURNED)
             .createdAt(DateUtil.convertToEpochMilli(today))
             .actualReturnAt(DateUtil.convertToEpochMilli(today))
-            .overdueFine(new OverdueFine(
+            .overdueFine(
+                new OverdueFine(
                     Double.parseDouble(addReturnBookPanel.getLateFeeText()),
                     FineStrategyFactory.createStrategy(addReturnBookPanel.getSelectedStrategy())))
             .description(addReturnBookPanel.getNotesText())
@@ -107,7 +113,8 @@ public class ReturnBookController extends Observable {
 
     // Kiểm tra các borrowTransaction để set actualReturnAt nếu đã trả đủ
     for (Transaction borrowTx : readerFound.getLibraryCard().getBorrowTransactions()) {
-      if (isAllBooksReturned(borrowTx, readerFound.getLibraryCard().getReturnTransactions(), returningBooks)) {
+      if (isAllBooksReturned(
+          borrowTx, readerFound.getLibraryCard().getReturnTransactions(), returningBooks)) {
         borrowTx.setActualReturnAt(DateUtil.convertToEpochMilli(today));
       }
     }
@@ -115,8 +122,10 @@ public class ReturnBookController extends Observable {
     System.out.println(returnTransaction);
   }
 
-
-  private boolean isAllBooksReturned(Transaction borrowTx, List<Transaction> returnTransactions, Map<Book, Integer> currentReturn) {
+  private boolean isAllBooksReturned(
+      Transaction borrowTx,
+      List<Transaction> returnTransactions,
+      Map<Book, Integer> currentReturn) {
     Map<Book, Integer> totalReturned = new HashMap<>();
 
     // Tính tổng sách đã trả từ các returnTransactions
@@ -151,7 +160,6 @@ public class ReturnBookController extends Observable {
 
     return true;
   }
-
 
   public boolean validateDataAndProcessReturn() {
     if (addReturnBookPanel.isSearchFieldEmpty(readerFound)) {
@@ -215,10 +223,9 @@ public class ReturnBookController extends Observable {
   // setup all components action listeners in view
   public void setupCancelBtListener() {
     addReturnBookPanel.setCancelBtListener(
-            e -> {
-              setChanged();
-              notifyObservers();
-            });
+        e -> {
+          returnManagementController.refreshTable();
+        });
   }
 
   public void setupConfirmBtListener() {
@@ -232,9 +239,8 @@ public class ReturnBookController extends Observable {
                     ToastNotification.Location.TOP_CENTER,
                     "New book returned successfully!")
                 .showNotification();
-//            refreshTable();
-            setChanged();
-            notifyObservers();
+            //            refreshTable();
+            returnManagementController.refreshTable();
           }
         });
   }
@@ -270,35 +276,40 @@ public class ReturnBookController extends Observable {
       borrowTransactions.clear();
       borrowingBooks.clear();
       List<Transaction> allTrans = reader.getLibraryCard().getBorrowTransactions();
-      borrowTransactions.addAll(allTrans.stream()
-              .filter(tran -> tran.getTransactionType() == TransactionType.BORROW
-                      && tran.getActualReturnAt() == null)
+      borrowTransactions.addAll(
+          allTrans.stream()
+              .filter(
+                  tran ->
+                      tran.getTransactionType() == TransactionType.BORROW
+                          && tran.getActualReturnAt() == null)
               .toList());
 
       mappingTableData();
 
       addReturnBookPanel.setReaderFields(
-              String.valueOf(reader.getId()),
-              reader.getFullName(),
-              reader.getEmail(),
-              reader.getPhoneNumber());
+          String.valueOf(reader.getId()),
+          reader.getFullName(),
+          reader.getEmail(),
+          reader.getPhoneNumber());
 
-      String status = borrowTransactions.stream()
-              .anyMatch(tran -> DateUtil.convertToLocalDate(tran.getExpectedReturnAt()).isBefore(today))
+      String status =
+          borrowTransactions.stream()
+                  .anyMatch(
+                      tran ->
+                          DateUtil.convertToLocalDate(tran.getExpectedReturnAt()).isBefore(today))
               ? "Overdue"
               : "On due date";
       addReturnBookPanel.setStatusFieldText(status);
 
       setComboBoxAction();
-    }else{
-        new ToastNotification(
-                JOptionPane.getFrameForComponent(addReturnBookPanel),
-                ToastNotification.Type.WARNING,
-                ToastNotification.Location.TOP_CENTER,
-                "Reader not found!")
-            .showNotification();
+    } else {
+      new ToastNotification(
+              JOptionPane.getFrameForComponent(addReturnBookPanel),
+              ToastNotification.Type.WARNING,
+              ToastNotification.Location.TOP_CENTER,
+              "Reader not found!")
+          .showNotification();
     }
-
   }
 
   private void mappingTableData() {
@@ -311,10 +322,13 @@ public class ReturnBookController extends Observable {
 
         if (unreturnedBooks.containsKey(book)) {
           Integer quantity = entry.getValue();
-          BookStatus status = DateUtil.convertToLocalDate(transaction.getExpectedReturnAt())
-                  .isAfter(today) ? BookStatus.RETURNED : BookStatus.OVERDUE;
+          BookStatus status =
+              DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()).isAfter(today)
+                  ? BookStatus.RETURNED
+                  : BookStatus.OVERDUE;
 
-          borrowBookDTOs.add(transactionMapper.toBorrowBookDTO(transaction, book, quantity, status));
+          borrowBookDTOs.add(
+              transactionMapper.toBorrowBookDTO(transaction, book, quantity, status));
           borrowingBooks.put(book, borrowingBooks.getOrDefault(book, 0) + quantity);
         }
       }
