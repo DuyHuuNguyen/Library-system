@@ -281,9 +281,10 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
   @Override
   public void notifyAllNewBook() {
     log.debug("Observer thong bao sach moi");
-    this.observerNotifyNewBooks.forEach(observerNotifyNewBook -> {
-      observerNotifyNewBook.notifyNewBook();
-    });
+    this.observerNotifyNewBooks.forEach(
+        observerNotifyNewBook -> {
+          observerNotifyNewBook.notifyNewBook();
+        });
   }
 
   @Override

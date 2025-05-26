@@ -24,26 +24,25 @@ public class ButtonPanel extends JPanel {
     // OK button
     saveBt =
         CustomButtonBuilder.builder()
-                .text("OK")
-                .font(Style.FONT_SANS_SERIF_PLAIN_15)
-                .textColor(Color.WHITE)
-                .backgroundColor(Style.PURPLE_MAIN_THEME)
-                .hoverColor(Style.PURPLE_MAIN_THEME.darker())
-                .radius(12)
-                .alignment(SwingConstants.LEFT)
-                .drawBorder(false)
-                .opaque(false)
-                .contentAreaFilled(false)
-                .preferredSize(new Dimension(100, 30))
-                .icon("/icons/save.png", 12);
+            .text("OK")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Color.WHITE)
+            .backgroundColor(Style.PURPLE_MAIN_THEME)
+            .hoverColor(Style.PURPLE_MAIN_THEME.darker())
+            .radius(12)
+            .alignment(SwingConstants.LEFT)
+            .drawBorder(false)
+            .opaque(false)
+            .contentAreaFilled(false)
+            .preferredSize(new Dimension(100, 30))
+            .icon("/icons/save.png", 12);
 
     saveBt.addActionListener(
-            e -> {
-              readerPn.toolPn.enableTextFields(readerPn.contentPn.showInforPn.formPn, false);
-              readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.VIEW);
-              JOptionPane.showMessageDialog(this, "Saved!");
-            }
-    );
+        e -> {
+          readerPn.toolPn.enableTextFields(readerPn.contentPn.showInforPn.formPn, false);
+          readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.VIEW);
+          JOptionPane.showMessageDialog(this, "Saved!");
+        });
 
     // Add button
     editBt =
@@ -106,27 +105,27 @@ public class ButtonPanel extends JPanel {
     add(addBt);
 
     addBt.addActionListener(
-            e -> {
-                        FormPanel formPn = readerPn.contentPn.showInforPn.formPn;
-                        if (formPn.validateForm()) {
-//                          Boolean isCreated =
-//                                  transactionController.createTransaction(formPn.createTransaction());
-//                          if (isCreated) {
-                            new ToastNotification(
-                                    JOptionPane.getFrameForComponent(this),
-                                    ToastNotification.Type.SUCCESS,
-                                    ToastNotification.Location.BOTTOM_RIGHT,
-                                    "Borrow successfully!!")
-                                    .showNotification();
-                            readerPn.toolPn.enableTextFields(formPn, false);
-                            //
-                             // -- Lưu dữ liệu đã nhập vào database ở đây
-                            //
-                            this.setMode(ButtonPanelMode.VIEW);
-//                          }
-                        }
-            }
-    );
+        e -> {
+          FormPanel formPn = readerPn.contentPn.showInforPn.formPn;
+          if (formPn.validateForm()) {
+            //                          Boolean isCreated =
+            //
+            // transactionController.createTransaction(formPn.createTransaction());
+            //                          if (isCreated) {
+            new ToastNotification(
+                    JOptionPane.getFrameForComponent(this),
+                    ToastNotification.Type.SUCCESS,
+                    ToastNotification.Location.BOTTOM_RIGHT,
+                    "Borrow successfully!!")
+                .showNotification();
+            readerPn.toolPn.enableTextFields(formPn, false);
+            //
+            // -- Lưu dữ liệu đã nhập vào database ở đây
+            //
+            this.setMode(ButtonPanelMode.VIEW);
+            //                          }
+          }
+        });
 
     // Cancel button
     cancelBt =

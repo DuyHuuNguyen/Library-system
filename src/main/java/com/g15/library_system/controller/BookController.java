@@ -8,6 +8,7 @@ import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.facade.BookFacade;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -68,5 +69,9 @@ public class BookController {
 
   public void markAnnouncedNewBook() {
     this.bookFacade.markAnnouncedBook();
+  }
+
+  public void updateBookQuantity(Map<Book, Integer> bookWithQuantity) {
+    this.bookFacade.updateBookQuantity(bookWithQuantity);
   }
 }

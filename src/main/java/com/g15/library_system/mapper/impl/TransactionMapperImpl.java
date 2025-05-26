@@ -1,10 +1,8 @@
 package com.g15.library_system.mapper.impl;
 
 import com.g15.library_system.dto.TransactionContentDTO;
-import com.g15.library_system.entity.Book;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.mapper.TransactionMapper;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -55,21 +53,19 @@ public class TransactionMapperImpl implements TransactionMapper {
     int i = 0;
     for (Transaction transaction : transactions) {
       data[i] =
-              new Object[] {
-                      transaction.getId(),
-                      transaction.getLibraryCard() != null
-                              ? transaction.getLibraryCard().getOwner().getFullName()
-                              : null,
-                      java.time.Instant
-                              .ofEpochMilli(transaction.getCreatedAt())
-                              .atZone(java.time.ZoneId.systemDefault())
-                              .toLocalDate(),
-                      java.time.Instant
-                              .ofEpochMilli(transaction.getExpectedReturnAt())
-                              .atZone(java.time.ZoneId.systemDefault())
-                              .toLocalDate(),
-                      transaction.getDescription()
-              };
+          new Object[] {
+            transaction.getId(),
+            transaction.getLibraryCard() != null
+                ? transaction.getLibraryCard().getOwner().getFullName()
+                : null,
+            java.time.Instant.ofEpochMilli(transaction.getCreatedAt())
+                .atZone(java.time.ZoneId.systemDefault())
+                .toLocalDate(),
+            java.time.Instant.ofEpochMilli(transaction.getExpectedReturnAt())
+                .atZone(java.time.ZoneId.systemDefault())
+                .toLocalDate(),
+            transaction.getDescription()
+          };
       i++;
     }
     return data;

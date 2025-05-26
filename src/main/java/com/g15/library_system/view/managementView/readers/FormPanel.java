@@ -7,31 +7,24 @@ import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateC
 import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAdapter;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
-import lombok.Getter;
-
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 import javax.swing.*;
+import lombok.Getter;
 
 public class FormPanel extends JPanel {
   private JTextField memberIdField;
   private JTextField nameField;
-  @Getter
-  private JTextField birthDateField;
+  @Getter private JTextField birthDateField;
   private JTextField phoneField;
   private JTextField addressField;
   private JTextField emailField;
-  @Getter
-  private JTextField membershipDateField;
-  @Getter
-  private JTextField readerTypeField;
-  @Getter
-  private JComboBox<String> readerTypeJcb;
-  @Getter
-  private JTextField totalFineField;
+  @Getter private JTextField membershipDateField;
+  @Getter private JTextField readerTypeField;
+  @Getter private JComboBox<String> readerTypeJcb;
+  @Getter private JTextField totalFineField;
   private DateChooser dateOfBirthChooser;
   private DateChooser memberShipDateChooser;
 
@@ -89,16 +82,16 @@ public class FormPanel extends JPanel {
     dateOfBirthChooser = new DateChooser();
     dateOfBirthChooser.setTextField(birthDateField);
     dateOfBirthChooser.addActionDateChooserListener(
-            new DateChooserAdapter() {
-              @Override
-              public void dateChanged(java.util.Date date, DateChooserAction action) {
-                super.dateChanged(date, action);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                calendar.add(Calendar.DAY_OF_MONTH, 7);
-//                dueDateChooser.setSelectedDate(calendar.getTime());
-              }
-            });
+        new DateChooserAdapter() {
+          @Override
+          public void dateChanged(java.util.Date date, DateChooserAction action) {
+            super.dateChanged(date, action);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
+            //                dueDateChooser.setSelectedDate(calendar.getTime());
+          }
+        });
     fieldConstraints.gridy = 2;
 
     add(birthDateField, fieldConstraints);
@@ -148,20 +141,20 @@ public class FormPanel extends JPanel {
     memberShipDateChooser = new DateChooser();
     memberShipDateChooser.setTextField(membershipDateField);
     memberShipDateChooser.addActionDateChooserListener(
-            new DateChooserAdapter() {
-              @Override
-              public void dateChanged(java.util.Date date, DateChooserAction action) {
-                super.dateChanged(date, action);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                calendar.add(Calendar.DAY_OF_MONTH, 7);
+        new DateChooserAdapter() {
+          @Override
+          public void dateChanged(java.util.Date date, DateChooserAction action) {
+            super.dateChanged(date, action);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
 
-//                dueDateChooser.setSelectedDate(calendar.getTime());
-              }
-            });
+            //                dueDateChooser.setSelectedDate(calendar.getTime());
+          }
+        });
     // Set current date as default
-//    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//    membershipDateField.setText(dateFormat.format(new Date()));
+    //    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    //    membershipDateField.setText(dateFormat.format(new Date()));
     fieldConstraints.gridy = 6;
     add(membershipDateField, fieldConstraints);
 
@@ -182,10 +175,11 @@ public class FormPanel extends JPanel {
     fieldConstraints.gridy = 7;
     add(readerTypeJcb, fieldConstraints);
 
-    readerTypeJcb.addActionListener(e -> {
-      String selected = (String) readerTypeJcb.getSelectedItem();
-      readerTypeField.setText(selected);
-    });
+    readerTypeJcb.addActionListener(
+        e -> {
+          String selected = (String) readerTypeJcb.getSelectedItem();
+          readerTypeField.setText(selected);
+        });
 
     // Total Fine
     JLabel totalFineLabel = new JLabel("Total Fine");
@@ -199,17 +193,17 @@ public class FormPanel extends JPanel {
     fieldConstraints.gridy = 8;
     add(totalFineField, fieldConstraints);
 
-//    memberIdField.setText("U001");
-//    nameField.setText("John Doe");
-//    birthDateField.setText("1/1/2000");
-//    phoneField.setText("0123456");
-//    emailField.setText("john.doe@example.com");
-//    addressField.setText("Linh Trung, Thu Duc, Tp.HCM");
-//    readerTypeField.setText("Student");
+    //    memberIdField.setText("U001");
+    //    nameField.setText("John Doe");
+    //    birthDateField.setText("1/1/2000");
+    //    phoneField.setText("0123456");
+    //    emailField.setText("john.doe@example.com");
+    //    addressField.setText("Linh Trung, Thu Duc, Tp.HCM");
+    //    readerTypeField.setText("Student");
 
     // Reset date to current
-//    membershipDateField.setText("1/1/2025");
-//    totalFineField.setText(5 + "");
+    //    membershipDateField.setText("1/1/2025");
+    //    totalFineField.setText(5 + "");
   }
 
   public void setMemberIdField(JTextField memberIdField) {
@@ -244,7 +238,7 @@ public class FormPanel extends JPanel {
     phoneField.setText("");
     emailField.setText("");
     addressField.setText("");
-//    readerTypeField.setText("");
+    //    readerTypeField.setText("");
 
     // Reset date to current
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -336,7 +330,7 @@ public class FormPanel extends JPanel {
               ToastNotification.Type.WARNING,
               ToastNotification.Location.TOP_CENTER,
               e.getMessage())
-              .showNotification();
+          .showNotification();
       return false;
     }
   }

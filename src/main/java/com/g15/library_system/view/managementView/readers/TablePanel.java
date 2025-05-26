@@ -32,7 +32,7 @@ public class TablePanel extends JPanel {
           "Avatar Image",
           "Name",
           "Reader Type",
-                "User Status",
+          "User Status",
           "Birth Date",
           "Phone",
           "Email",
@@ -47,7 +47,7 @@ public class TablePanel extends JPanel {
             new ImageIcon(getClass().getResource("/images/John_Doe.png")),
             "John Doe",
             "Student",
-                  UserStatus.ACTIVE,
+            UserStatus.ACTIVE,
             "1/1/2000",
             "0123456",
             "john.doe@example.com",
@@ -60,7 +60,7 @@ public class TablePanel extends JPanel {
             new ImageIcon(getClass().getResource("/images/John_Doe.png")),
             "John Wick",
             "Student",
-                  UserStatus.INACTIVE,
+            UserStatus.INACTIVE,
             "1/2/2000",
             "012345678",
             "john.wick@example.com",
@@ -73,7 +73,7 @@ public class TablePanel extends JPanel {
             new ImageIcon(getClass().getResource("/images/John_Doe.png")),
             "John Cena",
             "Student",
-                  UserStatus.BANNED,
+            UserStatus.BANNED,
             "1/3/2000",
             "09876543",
             "john.cena@example.com",
@@ -85,23 +85,27 @@ public class TablePanel extends JPanel {
 
     tablePanel = new CheckboxTablePanel(Arrays.copyOfRange(columnNames, 0, 6), memberData);
     tablePanel.setEditableColumns(Set.of(6));
-//    tablePanel.setStatusEditable(true);
+    //    tablePanel.setStatusEditable(true);
 
     // Column checkbox giả định là cột 0
     TableColumn checkboxColumn = tablePanel.getTable().getColumnModel().getColumn(0);
     CustomCheckBoxEditor editor = new CustomCheckBoxEditor();
 
     // Lắng nghe thay đổi trong dữ liệu model
-    tablePanel.getTable().getModel().addTableModelListener(e -> {
-      int selectedCount = 0;
-      for (int i = 0; i < tablePanel.getTable().getModel().getRowCount(); i++) {
-        Object val = tablePanel.getTable().getModel().getValueAt(i, 0);
-        if (val instanceof Boolean && (Boolean) val) {
-          selectedCount++;
-        }
-      }
-      readerPn.toolPn.getRemoveBt().setVisible(selectedCount > 0);
-    });
+    tablePanel
+        .getTable()
+        .getModel()
+        .addTableModelListener(
+            e -> {
+              int selectedCount = 0;
+              for (int i = 0; i < tablePanel.getTable().getModel().getRowCount(); i++) {
+                Object val = tablePanel.getTable().getModel().getValueAt(i, 0);
+                if (val instanceof Boolean && (Boolean) val) {
+                  selectedCount++;
+                }
+              }
+              readerPn.toolPn.getRemoveBt().setVisible(selectedCount > 0);
+            });
 
     // Thiết lập editor cho cột checkbox (ví dụ cột 0)
     tablePanel.getCheckboxCol().setCellEditor(editor);
