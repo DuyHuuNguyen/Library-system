@@ -32,8 +32,7 @@ public class Book extends BaseEntity implements Comparable<Book> {
 
   private List<String> images;
 
-  @Builder.Default
-  private boolean isNewBook = true;
+  @Builder.Default private boolean isNewBook = true;
 
   @Builder.Default private BookStatus bookStatus = BookStatus.AVAILABLE;
 
@@ -95,7 +94,7 @@ public class Book extends BaseEntity implements Comparable<Book> {
     this.images.add(image);
   }
 
-  public void markOldBook(){
-    this.isNewBook =false;
+  public void markOldBook() {
+    this.isNewBook = false;
   }
 }

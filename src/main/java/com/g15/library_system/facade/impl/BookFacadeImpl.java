@@ -106,7 +106,7 @@ public class BookFacadeImpl implements BookFacade {
 
   @Override
   public void markAnnouncedBook() {
-    for(var book : this.bookService.findAll()){
+    for (var book : this.bookService.findAll()) {
       book.markOldBook();
     }
   }

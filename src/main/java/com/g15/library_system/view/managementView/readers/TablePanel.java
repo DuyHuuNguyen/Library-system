@@ -158,7 +158,7 @@ public class TablePanel extends JPanel {
 
     memberData = ReaderMapper.mapAllReadersToTableData(readers, false);
 
-//    System.out.println(Arrays.deepToString(memberData));
+    //    System.out.println(Arrays.deepToString(memberData));
 
     tablePanel.removeAllDataTable();
 

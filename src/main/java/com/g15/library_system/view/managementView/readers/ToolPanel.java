@@ -56,31 +56,33 @@ public class ToolPanel extends JPanel {
     // Xử lí sự kiện tìm kiếm tên reader
     // ---------------------------------------------------------
 
-      Object[][] memberData = ReaderMapper.mapAllReadersToTableData(ReaderData.getInstance().getReaders(), false);
+    Object[][] memberData =
+        ReaderMapper.mapAllReadersToTableData(ReaderData.getInstance().getReaders(), false);
 
-      txt.addActionListener(e -> {
+    txt.addActionListener(
+        e -> {
           String keyword = txt.getText().trim().toLowerCase();
           if (keyword.isEmpty()) {
-//              JTable table = readerPn.contentPn.tablePn.getTablePanel().getTable();
-//              table.setModel(new DefaultTableModel(borrowData, columnNames));
-              readerPn.contentPn.tablePn.refreshTable();
-              return;
+            //              JTable table = readerPn.contentPn.tablePn.getTablePanel().getTable();
+            //              table.setModel(new DefaultTableModel(borrowData, columnNames));
+            readerPn.contentPn.tablePn.refreshTable();
+            return;
           }
 
           List<Object[]> filtered = new ArrayList<>();
           for (Object[] row : memberData) {
-//              System.out.println(row[3]);
-              String fullName = (row[3]+"").toLowerCase(); // giả sử cột 1 là họ, cột 2 là tên
-              if (fullName.contains(keyword)) {
-                  filtered.add(row);
-              }
+            //              System.out.println(row[3]);
+            String fullName = (row[3] + "").toLowerCase(); // giả sử cột 1 là họ, cột 2 là tên
+            if (fullName.contains(keyword)) {
+              filtered.add(row);
+            }
           }
           Object[][] filteredData = filtered.toArray(new Object[0][]);
           System.out.println(Arrays.deepToString(filteredData));
           readerPn.contentPn.tablePn.getTablePanel().removeAllDataTable();
           readerPn.contentPn.tablePn.memberData = filteredData;
           readerPn.contentPn.tablePn.getTablePanel().addDataToTable(filteredData);
-      });
+        });
 
     // ---------------------------------------------------------
 

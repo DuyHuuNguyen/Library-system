@@ -134,7 +134,9 @@ public class BookPanel extends JPanel {
     public TablePanel() {
       setLayout(new BorderLayout());
 
-      String[] columnNames = {"", "Title", "Author", "Publisher", "Public Year", "GenreType", "Quantity"};
+      String[] columnNames = {
+        "", "Title", "Author", "Publisher", "Public Year", "GenreType", "Quantity"
+      };
 
       Object[][] tableData = bookMapper.toBookDataWithQuantity(bookWithQuantity);
 
@@ -254,7 +256,7 @@ public class BookPanel extends JPanel {
 
             @Override
             public void ancestorRemoved(AncestorEvent event) {}
-            
+
             @Override
             public void ancestorMoved(AncestorEvent event) {}
           });

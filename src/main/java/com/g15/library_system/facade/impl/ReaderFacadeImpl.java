@@ -1,7 +1,10 @@
 package com.g15.library_system.facade.impl;
 
+import com.g15.library_system.dto.EmailMessageDTO;
+import com.g15.library_system.dto.SuccessfulAddMemberEmailContentDTO;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.facade.ReaderFacade;
+import com.g15.library_system.service.EmailProducerService;
 import com.g15.library_system.service.ReaderService;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReaderFacadeImpl implements ReaderFacade {
   private final ReaderService readerService;
+  private final EmailProducerService emailProducerService;
 
   @Override
   public List<String> searchNameContains(String name) {
@@ -50,5 +54,16 @@ public class ReaderFacadeImpl implements ReaderFacade {
         //        .filter(reader -> reader.isIsReceiveNotify())
         .map(Reader::getEmail)
         .toArray(String[]::new);
+  }
+
+  @Override
+  public void sendEmailAddMemberSuccessful(String email) {
+    EmailMessageDTO emailMessage =
+        EmailMessageDTO.<SuccessfulAddMemberEmailContentDTO>builder()
+            .to(email)
+            .subject("Đăng ki thành công")
+            .content(SuccessfulAddMemberEmailContentDTO.builder().build())
+            .build();
+    emailProducerService.send(emailMessage);
   }
 }

@@ -1,11 +1,13 @@
 package com.g15.library_system.view.managementView.readers;
 
+import com.g15.library_system.controller.ReaderController;
 import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.entity.LibraryCard;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.StudentReaderType;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.enums.LibraryCardStatus;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.util.DateUtil;
 import com.g15.library_system.util.NameUtil;
 import com.g15.library_system.util.PathUtil;
@@ -24,6 +26,8 @@ public class ButtonPanel extends JPanel {
   public JButton removeBt;
   public JButton addBt;
   public JButton cancelBt;
+  private ReaderController readerController =
+      ApplicationContextProvider.getBean(ReaderController.class);
 
   private ButtonPanelMode mode;
 
@@ -108,7 +112,7 @@ public class ButtonPanel extends JPanel {
 
             libCard.addTransactions(transactionsList);
             reader.addLibraryCard(libCard);
-              System.out.println(ReaderData.getInstance().getAvailableIds().toString());
+            System.out.println(ReaderData.getInstance().getAvailableIds().toString());
             ReaderData.getInstance().add(reader);
             System.out.println(ReaderData.getInstance().getAvailableIds().toString());
             //            System.out.println(
@@ -233,16 +237,16 @@ public class ButtonPanel extends JPanel {
                             .build())
                     .build();
 
-              LibraryCard libCard =
-                      LibraryCard.builder()
-                              .id(reader.getId())
-                              .createdAt(System.currentTimeMillis())
-                              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000) // 2 months
-                              .libraryCardStatus(LibraryCardStatus.ACTIVE)
-                              .build();
+            LibraryCard libCard =
+                LibraryCard.builder()
+                    .id(reader.getId())
+                    .createdAt(System.currentTimeMillis())
+                    .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000) // 2 months
+                    .libraryCardStatus(LibraryCardStatus.ACTIVE)
+                    .build();
 
-//              libCard.addTransactions(null);
-              reader.addLibraryCard(libCard);
+            //              libCard.addTransactions(null);
+            reader.addLibraryCard(libCard);
 
             ReaderData.getInstance().add(reader);
             System.out.println(
@@ -256,6 +260,14 @@ public class ButtonPanel extends JPanel {
                     ToastNotification.Location.BOTTOM_RIGHT,
                     "Add successfully!!")
                 .showNotification();
+
+            // Gửi mail xác nhận đăng kí thành công qua gmail của reader
+            // ---------------------------------------------------------
+
+            readerController.sendEmailAddMemberSuccessful(reader.getEmail());
+
+            // ---------------------------------------------------------
+
             readerPn.toolPn.enableTextFields(formPn, false);
             readerPn.contentPn.showInforPn.formPn.getMemberIdField().setText(reader.getId() + "");
             this.setMode(ButtonPanelMode.VIEW);

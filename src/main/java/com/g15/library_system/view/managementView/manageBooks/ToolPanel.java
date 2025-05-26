@@ -4,14 +4,11 @@ import com.g15.library_system.controller.BookController;
 import com.g15.library_system.enums.ApiKey;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.managementView.manageBooks.observer.ObserverNotifyNewBook;
-import com.g15.library_system.view.managementView.manageBooks.observer.SubjectNotifyNewBook;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
@@ -190,8 +187,8 @@ public class ToolPanel extends JPanel {
             .icon("/icons/addIcon.png", 10);
 
     addBt.addActionListener(
-        e ->{
-            this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_ADD_NEW_BOOK);
+        e -> {
+          this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_ADD_NEW_BOOK);
         });
     actionBtPn.add(addBt);
 
@@ -232,5 +229,4 @@ public class ToolPanel extends JPanel {
   public String getTextOfTextFieldSearchOption() {
     return this.txtSearch.getText();
   }
-
 }

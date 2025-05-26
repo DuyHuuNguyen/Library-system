@@ -76,8 +76,8 @@ public class BookMapperImpl implements BookMapper {
             //            false,
             book.getTitle(),
             book.getAuthor(),
-                  book.getPublisher(),
-                  book.getPublishYear(),
+            book.getPublisher(),
+            book.getPublishYear(),
             book.getGenreType().toString(),
             entry.getValue().toString()
           };
