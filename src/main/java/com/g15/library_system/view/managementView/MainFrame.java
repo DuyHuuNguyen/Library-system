@@ -4,6 +4,8 @@ import com.g15.library_system.enums.NavigationType;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.loginView.LoginFrame;
 import com.g15.library_system.view.overrideComponent.CustomButton;
+import com.google.googlejavaformat.java.Main;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -117,8 +119,8 @@ public class MainFrame extends JFrame {
 
     workspacePanel.setOverdueBooksCardButtonListener(
         e -> {
-          workspacePanel.showPanel(NavigationType.OVERDUE_BOOKS);
-          setHover(NavigationType.OVERDUE_BOOKS);
+          workspacePanel.showPanel(NavigationType.RETURN_BOOKS);
+          setHover(NavigationType.RETURN_BOOKS);
         });
 
     workspacePanel.setReadersCardButtonListener(
@@ -167,4 +169,5 @@ public class MainFrame extends JFrame {
               : new Color(0, 0, 0, 0));
     }
   }
+
 }

@@ -4,7 +4,7 @@ import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.enums.ReturnStatus;
 import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.util.DateUtil;
-import java.time.*;
+
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TransactionStatistics {
 
+//Late Book return chart
   public Map<String, Long> aggregateLateReturnTrend(int year) {
-    return ReaderData.getInstance().getTransactions().stream()
+    return ReaderData.getInstance().getReturnTransactions().stream()
         .filter(
             trans ->
                 trans.getActualReturnAt() != null
-                    && trans.getExpectedReturnAt() != null
-                    && trans.getReturnStatus() == ReturnStatus.OVERDUE
+                    && trans.getOverdueFine() != null
                     && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year)
         .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth())
         .collect(
@@ -38,12 +38,11 @@ public class TransactionStatistics {
     Month monthConverted = Month.valueOf(selectedMonth.toUpperCase());
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
 
-    return ReaderData.getInstance().getTransactions().stream()
+    return ReaderData.getInstance().getReturnTransactions().stream()
         .filter(
             trans ->
                 trans.getActualReturnAt() != null
-                    && trans.getExpectedReturnAt() != null
-                    && trans.getReturnStatus() == ReturnStatus.OVERDUE
+                        && trans.getOverdueFine() != null
                     && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year
                     && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth()
                         == monthConverted)
@@ -53,8 +52,10 @@ public class TransactionStatistics {
                 date -> date.format(formatter), TreeMap::new, Collectors.counting()));
   }
 
+
+//borrow Overview Chart-------------------------------------------
   public Map<String, Long> countReturnStatusDistribution(int year) {
-    return ReaderData.getInstance().getTransactions().stream()
+    return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(tran -> tran.getTransactionType() == TransactionType.BORROW)
         .filter(tran -> tran.getCreatedYear().orElse(-1) == year)
         .collect(
@@ -65,7 +66,7 @@ public class TransactionStatistics {
   public Map<String, Long> countReturnStatusDistribution(String selectedMonth, int year) {
     Month targetMonth = Month.valueOf(selectedMonth.toUpperCase());
 
-    return ReaderData.getInstance().getTransactions().stream()
+    return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(tran -> tran.getTransactionType() == TransactionType.BORROW)
         .filter(tran -> tran.getCreatedYear().orElse(-1) == year)
         .filter(tran -> tran.getCreatedMonth().map(month -> month == targetMonth).orElse(false))
@@ -74,8 +75,10 @@ public class TransactionStatistics {
                 tran -> tran.getReturnStatus().getValue(), Collectors.counting()));
   }
 
+
+//Book borrow by genre chart---------------------------------------------
   public Map<String, Map<String, Long>> aggregateGenreBorrowData(int year) {
-    return ReaderData.getInstance().getTransactions().stream()
+    return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(
             trans ->
                 trans.getTransactionType() == TransactionType.BORROW
@@ -98,7 +101,7 @@ public class TransactionStatistics {
                                             ))))
         .collect(
             Collectors.groupingBy(
-                Map.Entry::getKey, // month as key
+                Map.Entry::getKey,
                 () ->
                     new TreeMap<>(
                         Comparator.comparingInt(m -> Month.valueOf(m.toUpperCase()).getValue())),
@@ -110,7 +113,7 @@ public class TransactionStatistics {
   public Map<String, Map<String, Long>> aggregateGenreBorrowData(String selectedMonth, int year) {
     Month targetMonth = Month.valueOf(selectedMonth.toUpperCase());
 
-    return ReaderData.getInstance().getTransactions().stream()
+    return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(
             trans ->
                 trans.getTransactionType() == TransactionType.BORROW
@@ -126,7 +129,7 @@ public class TransactionStatistics {
                                 .map(
                                     dayStr ->
                                         new AbstractMap.SimpleEntry<>(
-                                            dayStr, // key ngoài: ngày
+                                            dayStr,
                                             new AbstractMap.SimpleEntry<>(
                                                 entry.getKey(),
                                                 entry.getValue()) // value: (genre, quantity)

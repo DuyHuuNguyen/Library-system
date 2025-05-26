@@ -8,8 +8,8 @@ import com.g15.library_system.entity.strategies.FineStrategyType;
 import com.g15.library_system.entity.strategies.OverdueFineStrategy;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.TransactionType;
-import com.g15.library_system.mapper.ITransactionMapper;
-import com.g15.library_system.mapper.impl.TransactionMapper;
+import com.g15.library_system.mapper.IReturnTransactionMapper;
+import com.g15.library_system.mapper.impl.ReturnTransactionMapper;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.util.DateUtil;
 import com.g15.library_system.util.TransactionIdGenerator;
@@ -27,7 +27,7 @@ public class AddReturnBookController {
   private AddReturnBookPanel addReturnBookPanel;
   private ReturnManagementController returnManagementController;
 
-  private ITransactionMapper transactionMapper = new TransactionMapper();
+  private IReturnTransactionMapper transactionMapper = new ReturnTransactionMapper();
   private Librarian currentLibrarian = CacheData.getCURRENT_LIBRARIAN();
 
   // controller
@@ -115,10 +115,10 @@ public class AddReturnBookController {
             .description(addReturnBookPanel.getNotesText())
             .build();
 
-    // Thêm transaction trả vào danh sách
-    readerFound.getLibraryCard().getReturnTransactions().add(returnTransaction);
+    readerFound.getLibraryCard().addReturnTransaction(returnTransaction);
 
-    // Kiểm tra các borrowTransaction để set actualReturnAt nếu đã trả đủ
+
+    //check borrowTransaction -> set actualReturnAt
     for (Transaction borrowTx : readerFound.getLibraryCard().getBorrowTransactions()) {
       if (isAllBooksReturned(
           borrowTx, readerFound.getLibraryCard().getReturnTransactions(), returningBooks)) {
@@ -135,7 +135,7 @@ public class AddReturnBookController {
       Map<Book, Integer> currentReturn) {
     Map<Book, Integer> totalReturned = new HashMap<>();
 
-    // Tính tổng sách đã trả từ các returnTransactions
+
     for (Transaction returnTx : returnTransactions) {
       for (Map.Entry<Book, Integer> entry : returnTx.getBooks().entrySet()) {
         Book book = entry.getKey();
@@ -146,7 +146,7 @@ public class AddReturnBookController {
       }
     }
 
-    // Cộng thêm lượng sách đang trả hiện tại (chưa lưu vào returnTransactions)
+
     for (Map.Entry<Book, Integer> entry : currentReturn.entrySet()) {
       Book book = entry.getKey();
       if (borrowTx.getBooks().containsKey(book)) {
@@ -154,7 +154,7 @@ public class AddReturnBookController {
       }
     }
 
-    // Kiểm tra xem có trả đủ tất cả sách không
+
     for (Map.Entry<Book, Integer> entry : borrowTx.getBooks().entrySet()) {
       Book book = entry.getKey();
       int borrowedQty = entry.getValue();

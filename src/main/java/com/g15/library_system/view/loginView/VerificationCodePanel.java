@@ -30,7 +30,7 @@ public class VerificationCodePanel extends JPanel {
     setOpaque(false);
     setLayout(new MigLayout("fill,insets 20", "[center]", "[center]"));
     this.loginCardPanel = loginCardPanel;
-    RoundedPanel panel = new RoundedPanel(20, Color.WHITE, null);
+      RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237, 230), null);
     panel.setLayout(new MigLayout("wrap,fill,insets 35 45 30 45", "fill,250:280"));
     panel.putClientProperty(
         FlatClientProperties.STYLE,
@@ -44,7 +44,7 @@ public class VerificationCodePanel extends JPanel {
     verifyCodeLb.setForeground(Style.BLUE_MENU_BACKGROUND_COLOR);
 
     JPanel otpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    otpPanel.setBackground(Color.WHITE);
+    otpPanel.setOpaque(false);
     for (int i = 0; i < 4; i++) {
       otpFields[i] = new JTextField();
       otpFields[i].setFont(Style.FONT_BOLD_24);
@@ -81,7 +81,7 @@ public class VerificationCodePanel extends JPanel {
     }
 
     JPanel resendCodePn = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    resendCodePn.setBackground(Color.WHITE);
+    resendCodePn.setOpaque(false);
 
     resendCodeBt = new JButton("Re-send Verify Code");
     resendCodeBt.setForeground(Style.BLUE_MENU_BACKGROUND_COLOR);

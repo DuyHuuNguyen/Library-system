@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
+
 @Service
 @RequiredArgsConstructor
 public class LibrarianFacadeImpl implements LibrarianFacade {
@@ -40,10 +42,16 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
     var librarian = this.librarianService.findByEmail(sendOTPRequest.getEmail()).orElse(null);
     var isNotFoundLibrarian = (librarian == null);
 
+    JFrame frame = new JFrame();
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int x = (screenSize.width - frame.getWidth()) / 2;
+    int y = 100;
+    frame.setLocation(x, y);
+
     if (isNotFoundLibrarian) {
       ToastNotification panel =
           new ToastNotification(
-              JOptionPane.getFrameForComponent(null),
+                  frame,
               ToastNotification.Type.WARNING,
               ToastNotification.Location.CENTER,
               "Email not found");
@@ -54,13 +62,13 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
     log.info("Your otp : {}", otp);
     CacheData.addOTP(otp);
 
-    var emai =
+    var email =
         EmailMessageDTO.<ContentSendOTP>builder()
             .to(sendOTPRequest.getEmail())
             .subject("YOUR OTP 😊")
             .content(ContentSendOTP.builder().otp(otp).build())
             .build();
-    emailProducerService.send(emai);
+    emailProducerService.send(email);
     CacheData.addEmail(sendOTPRequest.getEmail());
   }
 

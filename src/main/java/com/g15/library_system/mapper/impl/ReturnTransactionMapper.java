@@ -6,15 +6,15 @@ import com.g15.library_system.entity.Book;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.enums.BookStatus;
-import com.g15.library_system.mapper.ITransactionMapper;
+import com.g15.library_system.mapper.IReturnTransactionMapper;
 import com.g15.library_system.util.DateUtil;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.*;
 
-public class TransactionMapper implements ITransactionMapper {
+public class ReturnTransactionMapper implements IReturnTransactionMapper {
 
-  public TransactionMapper() {}
+  public ReturnTransactionMapper() {}
 
   @Override
   public Object[][] toBorrowBookTableData(List<BorrowBookDTO> borrowBookDTOs) {
@@ -81,7 +81,7 @@ public class TransactionMapper implements ITransactionMapper {
         .readerFullName(reader.getFirstName() + " " + reader.getLastName())
         .readerPhoneNumber(reader.getPhoneNumber())
         .readerEmail(reader.getEmail())
-        .returnDate(DateUtil.convertToLocalDate(transaction.getCreatedAt()))
+        .returnDate(DateUtil.convertToLocalDate(transaction.getActualReturnAt()))
         .books(transaction.getBooks())
         .status(
             transaction.getOverdueFine() != null

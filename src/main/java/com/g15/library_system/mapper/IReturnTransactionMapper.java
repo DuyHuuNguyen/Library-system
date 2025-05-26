@@ -8,7 +8,7 @@ import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.enums.BookStatus;
 import java.util.List;
 
-public interface ITransactionMapper {
+public interface IReturnTransactionMapper {
 
   /**
    * Converts a list of ReturnBookDTO objects to a 2D Object array for table representation.

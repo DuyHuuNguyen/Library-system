@@ -16,7 +16,7 @@ public class TransactionData implements Data<Transaction>, TransactionSubject {
   private final List<Transaction> transactions;
 
   private TransactionData() {
-    transactions = ReaderData.getInstance().getTransactions();
+    transactions = ReaderData.getInstance().getBorrowTransactions();
   }
 
   public static TransactionData getInstance() {

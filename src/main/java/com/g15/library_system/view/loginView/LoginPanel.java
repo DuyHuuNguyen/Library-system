@@ -67,7 +67,6 @@ public class LoginPanel extends JPanel {
         });
 
     RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237, 230), null);
-    //    RoundedPanel panel = new RoundedPanel(20, new Color(113, 117, 115,150), null);
     panel.setLayout(new MigLayout("wrap,fill,insets 35 45 30 45", "fill,250:280"));
     panel.putClientProperty(
         FlatClientProperties.STYLE,

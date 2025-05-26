@@ -37,7 +37,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(12)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -53,7 +53,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
-            .radius(6)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .preferredSize(new Dimension(120, 40))
@@ -67,7 +67,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
-            .radius(6)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .preferredSize(new Dimension(120, 40))
@@ -121,7 +121,7 @@ public class ToolPanel extends JPanel {
     dueDateChooser.setDateSelectable(
         date -> {
           LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-          return localDate.isBefore(LocalDate.now()); // this disable past date
+          return localDate.isBefore(LocalDate.now());
         });
 
     calenderBt =
@@ -129,27 +129,17 @@ public class ToolPanel extends JPanel {
     calenderBt.setPreferredSize(new Dimension(40, 40));
     calenderBt.setBackground(Style.BLUE_MENU_BACKGROUND_COLOR);
     calenderBt.setVisible(false);
-    calenderBt.addActionListener(
-        e -> {
-          //        Date selectDate = dueDateChooser.getSelectedDate();
-          //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-          //        String formattedDate = sdf.format(selectDate);
-          //
-          //        System.out.println("Selected Date: " + formattedDate);
-
-        });
 
     searchField = new TextFieldSearchOption();
-    searchField.setPreferredSize(new Dimension(400, 40));
+    searchField.setPreferredSize(new Dimension(350, 40));
     searchField.addEventOptionSelected(
         (option, index) -> {
           searchField.setHint("Search by " + option.getName() + "...");
           if ("Return Date".equals(option.getName())) {
             calenderBt.setVisible(true);
-
           } else {
             calenderBt.setVisible(false);
-            //            dateChooser.hidePopup();
+
           }
         });
     dueDateChooser.setCalendarBtAction(calenderBt, searchField);

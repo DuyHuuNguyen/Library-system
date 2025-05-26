@@ -14,21 +14,9 @@ public class LoginFrame extends JFrame {
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setSize(new Dimension(800, 750));
     this.setLocationRelativeTo(null);
-    this.setLocationRelativeTo(null);
     this.setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());
 
     this.add(new LoginCardPanel(backgroundImagePath), BorderLayout.CENTER);
     this.setVisible(true);
-  }
-
-  public static void main(String[] args) {
-    FlatRobotoFont.install();
-    FlatLaf.registerCustomDefaultsSource("raven.themes");
-    UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
-    FlatMacLightLaf.setup();
-    //    FlatMacDarkLaf.setup();
-    UIManager.put("Separator.foreground", Color.WHITE);
-
-    EventQueue.invokeLater(() -> new LoginFrame());
   }
 }
