@@ -1,5 +1,7 @@
 package com.g15.library_system.view.managementView.dashboard;
 
+import com.g15.library_system.data.CacheData;
+import com.g15.library_system.entity.Librarian;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.managementView.dashboard.charts.*;
 import com.g15.library_system.view.overrideComponent.CustomButton;
@@ -11,7 +13,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class DashBoardPanel extends JPanel {
-  private String userName = "Admin";
+  private Librarian librarian = CacheData.getCURRENT_LIBRARIAN();
   private WelcomePanel welcomePanel;
   private ContentPanel contentPanel;
   private QuickAccessPanel quickAccessPanel;
@@ -49,7 +51,7 @@ public class DashBoardPanel extends JPanel {
       //              SwingConstants.LEFT);
       JLabel greeting =
           LabelBuilder.builder()
-              .text("<html><span style='color:black;'>Welcome, </span>" + userName + "!</html>")
+              .text("<html><span style='color:black;'>Welcome, </span>" + librarian.getFirstName() + "!</html>")
               .font(Style.FONT_BOLD_30)
               .textColor(Style.BLUE_TEXT_COLOR)
               .preferredSize(new Dimension(400, 50))
@@ -92,7 +94,7 @@ public class DashBoardPanel extends JPanel {
   public class ContentPanel extends JPanel {
     private ReaderRegisteredTrendsChart readerChart;
     private ReaderTypesChart readerTypesChart;
-    private ReturnOverviewChart booksByGenreChart;
+    private BorrowOverviewChart booksByGenreChart;
     private BookAvailabilityChart bookAvailabilityChart;
     private LateBookReturnsChart lendingTrendsChart;
     private BorrowsByGenreChart borrowsByGenreChart;
@@ -126,7 +128,7 @@ public class DashBoardPanel extends JPanel {
 
       gbc.gridx = 2;
       gbc.gridwidth = 1;
-      booksByGenreChart = new ReturnOverviewChart();
+      booksByGenreChart = new BorrowOverviewChart();
       this.add(booksByGenreChart, gbc);
 
       // ========== ROW 3 ==========

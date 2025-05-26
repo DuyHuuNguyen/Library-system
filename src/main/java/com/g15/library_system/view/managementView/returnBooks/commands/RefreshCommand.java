@@ -1,6 +1,6 @@
 package com.g15.library_system.view.managementView.returnBooks.commands;
 
-import com.g15.library_system.mapper.ITransactionMapper;
+import com.g15.library_system.mapper.IReturnTransactionMapper;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
 import com.g15.library_system.view.managementView.returnBooks.controllers.ReturnManagementController;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
@@ -9,12 +9,12 @@ import javax.swing.*;
 public class RefreshCommand implements Command {
   private final ReturnManagementController returnManagementController;
   private final ReturnBookPanel returnBookPanel;
-  private final ITransactionMapper transactionMapper;
+  private final IReturnTransactionMapper transactionMapper;
 
   public RefreshCommand(
       ReturnManagementController returnManagementController,
       ReturnBookPanel returnBookPanel,
-      ITransactionMapper transactionMapper) {
+      IReturnTransactionMapper transactionMapper) {
     this.returnManagementController = returnManagementController;
     this.returnBookPanel = returnBookPanel;
     this.transactionMapper = transactionMapper;

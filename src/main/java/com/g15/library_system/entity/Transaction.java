@@ -65,7 +65,7 @@ public class Transaction extends BaseEntity {
     }
 
     if (expectedReturnAt == null) {
-      return ReturnStatus.ON_TIME; // *
+      return ReturnStatus.UNRETURNED; // *
     }
 
     return actualReturnAt <= expectedReturnAt ? ReturnStatus.ON_TIME : ReturnStatus.OVERDUE;

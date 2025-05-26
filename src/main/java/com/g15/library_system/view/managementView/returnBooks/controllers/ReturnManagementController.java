@@ -6,10 +6,9 @@ import com.g15.library_system.entity.Book;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.enums.TransactionType;
-import com.g15.library_system.mapper.ITransactionMapper;
-import com.g15.library_system.mapper.impl.TransactionMapper;
+import com.g15.library_system.mapper.IReturnTransactionMapper;
+import com.g15.library_system.mapper.impl.ReturnTransactionMapper;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
-import com.g15.library_system.view.managementView.returnBooks.TestFrame;
 import com.g15.library_system.view.managementView.returnBooks.ToolPanel;
 import com.g15.library_system.view.managementView.returnBooks.commands.ExportExcelCommand;
 import com.g15.library_system.view.managementView.returnBooks.commands.RefreshCommand;
@@ -22,7 +21,6 @@ public class ReturnManagementController {
   // view
   @Getter private ReturnBookPanel returnBookPanel;
   private ToolPanel toolPn;
-  private TestFrame testFrame;
 
   // controller
   private AddReturnBookController returnBookController;
@@ -32,7 +30,7 @@ public class ReturnManagementController {
   private List<Transaction> borrowTransactions = new ArrayList<>();
   private Map<Book, Integer> borrowingBooks = new HashMap<>();
 
-  private ITransactionMapper transactionMapper = new TransactionMapper();
+  private IReturnTransactionMapper transactionMapper = new ReturnTransactionMapper();
   private List<Reader> readersData = ReaderData.getInstance().getReaders();
   @Getter private List<ReturnBookDTO> returnBookDTOs = new ArrayList<>();
 

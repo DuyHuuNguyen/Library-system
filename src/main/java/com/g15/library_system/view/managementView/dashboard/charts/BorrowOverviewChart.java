@@ -10,12 +10,12 @@ import com.g15.library_system.view.swingComponentGenerators.JFreeChartGenerator;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.*;
+
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
-public class ReturnOverviewChart extends RoundedShadowPanel
+public class BorrowOverviewChart extends RoundedShadowPanel
     implements BookObserver, FilterObserver {
   private ChartPanel chartPanel;
   private JFreeChart pieChart;
@@ -26,14 +26,14 @@ public class ReturnOverviewChart extends RoundedShadowPanel
   private DefaultPieDataset chartDataset;
   private Map<String, Long> returnOverviewData = new HashMap<>();
 
-  public ReturnOverviewChart() {
+  public BorrowOverviewChart() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setLayout(new BorderLayout());
     this.setPreferredSize(new Dimension(500, 450));
     BookData.getInstance().registerObserver(this);
 
     // title panel
-    TitlePanel titlePn = new TitlePanel("Return Overview");
+    TitlePanel titlePn = new TitlePanel("Borrow Overview");
     this.selectedYear = titlePn.getSelectedYear();
     this.selectedMonth = titlePn.getSelectedMonth();
     // chart panel
