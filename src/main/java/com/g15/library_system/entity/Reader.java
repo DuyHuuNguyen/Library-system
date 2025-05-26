@@ -45,7 +45,15 @@ public class Reader extends User {
     return super.idContains(readerId);
   }
 
-  public void setIsSubscribe(boolean isSub) {
-    this.isSubscribe = isSub;
+  public int getTotalReturnedBooks() {
+    return libraryCard.getTotalReturnedBooks();
+  }
+
+  public int getTotalBorrowedBooks() {
+    return libraryCard.getTotalBorrowedBooks();
+  }
+
+  public int getTotalOverdueBooks() {
+    return libraryCard.getTotalOverdueBooks();
   }
 }

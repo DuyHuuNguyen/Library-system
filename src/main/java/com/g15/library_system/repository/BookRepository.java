@@ -14,4 +14,6 @@ public interface BookRepository {
   Optional<Book> findByTitle(String title);
 
   void save(Book newBook);
+
+  void update(Book book);
 }

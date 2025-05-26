@@ -22,11 +22,11 @@ public class MyAccountPanel extends JPanel {
     mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
     // data
-    this.personalData.put("First Name", "Jack 5 xu");
+    this.personalData.put("First Name", "Jack");
     this.personalData.put("Last Name", "Adams");
     this.personalData.put("Email address", "jackadams@gmail.com");
     this.personalData.put("Phone", "(213) 555-1234");
-    this.personalData.put("Job", "Dev lỏ chuồng gà");
+    this.personalData.put("Job", "Dev");
 
     this.addressData.put("Country", "United States");
     this.addressData.put("Zip Code", "90001");

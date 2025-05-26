@@ -133,7 +133,7 @@ public class BookPanel extends JPanel {
 
     public TablePanel() {
       setLayout(new BorderLayout());
-
+      setOpaque(false);
       String[] columnNames = {
         "", "Title", "Author", "Publisher", "Public Year", "GenreType", "Quantity"
       };
@@ -201,9 +201,10 @@ public class BookPanel extends JPanel {
       formPanel.add(titleTF, gbc);
 
       bookCardHolder = new JPanel();
-      bookCardHolder.setOpaque(false);
+      bookCardHolder.setBackground(Color.WHITE);
       bookCardHolder.setLayout(new BoxLayout(bookCardHolder, BoxLayout.Y_AXIS));
       scrollPane = new JScrollPane(bookCardHolder);
+      scrollPane.setBackground(Color.WHITE);
       scrollPane.setPreferredSize(new Dimension(600, 250));
       scrollPane.setBorder(BorderFactory.createTitledBorder("Selected Books"));
 
@@ -277,6 +278,7 @@ public class BookPanel extends JPanel {
     setLayout(new BorderLayout());
     cardLayout = new CardLayout(0, 0);
     cardPanel = new JPanel(cardLayout);
+    cardPanel.setPreferredSize(new Dimension(500,650));
     cardPanel.setOpaque(false);
 
     addBookPanel = new AddBookPanel();
@@ -310,5 +312,9 @@ public class BookPanel extends JPanel {
     if (bookWithQuantity.isEmpty()) {
       throw new IllegalArgumentException("Empty book!!");
     }
+  }
+
+  public void updateBookQuantity() {
+    bookController.updateBookQuantity(bookWithQuantity);
   }
 }

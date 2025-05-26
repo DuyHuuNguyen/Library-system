@@ -83,6 +83,5 @@ public class TablePanel extends RoundedPanel implements TransactionObserver {
 
     Object[][] tableData = transactionMapper.toTransactionBorrowData(transactions);
     this.transactionTable.addDataToTable(tableData);
-    System.out.println("update");
   }
 }

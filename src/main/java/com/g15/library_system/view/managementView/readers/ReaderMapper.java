@@ -89,7 +89,7 @@ public class ReaderMapper {
     List<Object[]> rows = new ArrayList<>();
 
     LibraryCard card = reader.getLibraryCard();
-    for (Transaction transaction : card.getTransactions()) {
+    for (Transaction transaction : card.getBorrowTransactions()) {
       if (transaction.getTransactionType() == TransactionType.BORROW
           && transaction.getActualReturnAt() == null) {
         for (Map.Entry<Book, Integer> entry : transaction.getBooks().entrySet()) {

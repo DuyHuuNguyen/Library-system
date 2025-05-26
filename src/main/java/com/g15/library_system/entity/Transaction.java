@@ -2,6 +2,7 @@ package com.g15.library_system.entity;
 
 import com.g15.library_system.enums.ReturnStatus;
 import com.g15.library_system.enums.TransactionType;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -14,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Transaction extends BaseEntity {
 
   private Map<Book, Integer> books;
@@ -23,7 +25,7 @@ public class Transaction extends BaseEntity {
   private Long actualReturnAt;
   private String description;
   private TransactionType transactionType;
-  private OverdueFee overdueFee;
+  private OverdueFine overdueFine;
 
   public void addLibrarycard(LibraryCard card) {
     this.libraryCard = card;
@@ -48,13 +50,22 @@ public class Transaction extends BaseEntity {
     return this.books != null ? this.books : Collections.emptyMap();
   }
 
+  public Book findBookById(Long bookId) {
+    for (Book book : books.keySet()) {
+      if (book.getId().equals(bookId)) {
+        return book;
+      }
+    }
+    return null;
+  }
+
   public ReturnStatus getReturnStatus() {
     if (this.actualReturnAt == null) {
       return ReturnStatus.UNRETURNED;
     }
 
     if (expectedReturnAt == null) {
-      return ReturnStatus.ON_TIME; // *
+      return ReturnStatus.UNRETURNED; // *
     }
 
     return actualReturnAt <= expectedReturnAt ? ReturnStatus.ON_TIME : ReturnStatus.OVERDUE;
@@ -62,5 +73,15 @@ public class Transaction extends BaseEntity {
 
   public boolean hasSameType(TransactionType transactionType) {
     return this.transactionType.isBorrow();
+  }
+
+  public void applyFine(LocalDate returnDate) {
+    if (overdueFine != null && validateReturnDate()) {
+      overdueFine.calculateFine(this, returnDate);
+    }
+  }
+
+  public boolean validateReturnDate() {
+    return expectedReturnAt != null && actualReturnAt != null && actualReturnAt <= expectedReturnAt;
   }
 }

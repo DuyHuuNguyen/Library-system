@@ -49,7 +49,7 @@ public class BorrowedHistoryPanel extends JPanel {
     columnNames =
         new String[] {"", "BookID", "Name", "Quantity", "Create At", "Expected Return At"};
 
-    reader = ReaderData.getInstance().findId(1L);
+    reader = ReaderData.getInstance().findId(250001L);
     borrowedData = ReaderMapper.getCurrentBorrowedBooksAsTable(reader);
 
     tablePanel = new CheckboxTablePanel(Arrays.copyOfRange(columnNames, 0, 6), borrowedData);

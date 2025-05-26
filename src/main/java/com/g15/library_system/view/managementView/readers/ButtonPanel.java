@@ -42,7 +42,7 @@ public class ButtonPanel extends JPanel {
     setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
     setPreferredSize(new Dimension(this.getWidth(), 70));
 
-    // OK button
+    // Save button
     saveBt =
         CustomButtonBuilder.builder()
             .text("OK")
@@ -66,10 +66,7 @@ public class ButtonPanel extends JPanel {
             Reader readerNeedRm =
                 ReaderData.getInstance().findId(Long.valueOf(formPn.getMemberIdField().getText()));
 
-            // Lấy transaction list của readerNeedRm
-            //            Object[][] borrowedBooksAsTable =
-            // ReaderMapper.getCurrentBorrowedBooksAsTable(readerNeedRm);
-            List<Transaction> transactionsList = readerNeedRm.getLibraryCard().getTransactions();
+            List<Transaction> transactionsList = readerNeedRm.getLibraryCard().getBorrowTransactions();
 
             if (readerNeedRm != null) {
               ReaderData.getInstance().remove(readerNeedRm);
@@ -115,7 +112,7 @@ public class ButtonPanel extends JPanel {
                     .libraryCardStatus(LibraryCardStatus.ACTIVE)
                     .build();
 
-            libCard.addTransactions(transactionsList);
+            libCard.addBorrowTransactions(transactionsList);
             reader.addLibraryCard(libCard);
             System.out.println(ReaderData.getInstance().getAvailableIds().toString());
             ReaderData.getInstance().add(reader);
@@ -131,7 +128,7 @@ public class ButtonPanel extends JPanel {
           }
         });
 
-    // Add button
+    // Edit button
     editBt =
         CustomButtonBuilder.builder()
             .text("Edit")
@@ -206,10 +203,6 @@ public class ButtonPanel extends JPanel {
         e -> {
           FormPanel formPn = readerPn.getContentPn().getShowInforPn().getFormPn();
           if (formPn.validateForm()) {
-            //                          Boolean isCreated =
-            //
-            // transactionController.createTransaction(formPn.createTransaction());
-            //                          if (isCreated) {
             // -- Lưu dữ liệu đã nhập vào database ở đây
             Reader reader =
                 Reader.builder()
@@ -250,7 +243,6 @@ public class ButtonPanel extends JPanel {
                     .libraryCardStatus(LibraryCardStatus.ACTIVE)
                     .build();
 
-            //              libCard.addTransactions(null);
             reader.addLibraryCard(libCard);
 
             ReaderData.getInstance().add(reader);

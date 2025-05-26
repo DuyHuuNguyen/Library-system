@@ -26,9 +26,12 @@ public class Style {
   // 20
   public static final Font FONT_PLAIN_20 = new Font("Arial", Font.PLAIN, 20);
   public static final Font FONT_BOLD_20 = new Font("Arial", Font.BOLD, 20);
-
+  // 22
   public static final Font FONT_BOLD_22 = new Font("Arial", Font.BOLD, 22);
+
+  // 23
   public static final Font FONT_PLAIN_23 = new Font("Arial", Font.PLAIN, 23);
+  public static final Font FONT_BOLD_23 = new Font("Arial", Font.BOLD, 23);
 
   public static final Font FONT_BOLD_24 = new Font("Arial", Font.BOLD, 24);
   // 25

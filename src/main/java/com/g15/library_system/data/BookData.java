@@ -49,6 +49,17 @@ public class BookData implements Data<Book>, BookSubject {
     }
   }
 
+  public void update(Book book) {
+    for (int i = 0; i < this.books.size(); i++) {
+      Book existingBook = this.books.get(i);
+      if (existingBook.hasSameId(book.getId())) {
+        this.books.set(i, book);
+        break;
+      }
+    }
+    notifyObservers();
+  }
+
   public static BookData getInstance() {
     return INSTANCE;
   }

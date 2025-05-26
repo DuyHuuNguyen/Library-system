@@ -7,6 +7,7 @@ import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface BookFacade {
@@ -35,4 +36,6 @@ public interface BookFacade {
   void importExcel(ImportExcelRequest importExcelRequest);
 
   void markAnnouncedBook();
+
+  void updateBookQuantity(Map<Book, Integer> bookWithQuantity);
 }

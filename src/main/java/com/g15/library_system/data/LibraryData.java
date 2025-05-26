@@ -20,7 +20,7 @@ public class LibraryData implements Data<Library> {
           .users(userData.getUsers())
           .readers(readerData.getReaders())
           .librarians(librarianData.getLibrarians())
-          .transactions(readerData.getTransactions())
+          .transactions(readerData.getBorrowTransactions())
           .build();
 
   private LibraryData() {

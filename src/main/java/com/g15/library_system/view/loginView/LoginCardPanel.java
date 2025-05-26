@@ -17,7 +17,6 @@ public class LoginCardPanel extends JPanel {
 
   public LoginCardPanel(String backgroundImagePath) {
     this.backgroundImagePath = backgroundImagePath;
-    this.setBackground(Color.PINK);
     cardLayout = new CardLayout();
     this.setLayout(cardLayout);
 

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class BookStatistics {
 
   public Map<Book, Long> getMostBorrowedBooks(int limit) {
-    return ReaderData.getInstance().getTransactions().stream()
+    return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(transaction -> transaction.getTransactionType() == TransactionType.BORROW)
         .flatMap(transaction -> transaction.getBooks().entrySet().stream())
         .collect(
@@ -33,7 +33,7 @@ public class BookStatistics {
   }
 
   public Map<Book, Long> getMostBorrowedBooks(int limit, int year) {
-    return ReaderData.getInstance().getTransactions().stream()
+    return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(transaction -> transaction.getTransactionType() == TransactionType.BORROW)
         .filter(
             transaction ->
@@ -55,7 +55,7 @@ public class BookStatistics {
 
   public Map<Book, Long> getMostBorrowedBooks(int limit, String month, int year) {
 
-    return ReaderData.getInstance().getTransactions().stream()
+    return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(transaction -> transaction.getTransactionType() == TransactionType.BORROW)
         .filter(
             transaction ->

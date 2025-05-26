@@ -2,6 +2,7 @@ package com.g15.library_system.view.loginView;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.g15.library_system.controller.LibrarianController;
+import com.g15.library_system.data.CacheData;
 import com.g15.library_system.dto.request.LoginRequest;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
@@ -51,6 +52,8 @@ public class LoginPanel extends JPanel {
             if (window != null) {
               window.dispose();
             }
+
+            System.out.println(CacheData.getCURRENT_LIBRARIAN());
             new MainFrame();
           } else {
             ToastNotification panel =
@@ -64,7 +67,6 @@ public class LoginPanel extends JPanel {
         });
 
     RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237, 230), null);
-    //    RoundedPanel panel = new RoundedPanel(20, new Color(113, 117, 115,150), null);
     panel.setLayout(new MigLayout("wrap,fill,insets 35 45 30 45", "fill,250:280"));
     panel.putClientProperty(
         FlatClientProperties.STYLE,

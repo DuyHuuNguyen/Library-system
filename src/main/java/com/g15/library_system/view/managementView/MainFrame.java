@@ -4,11 +4,13 @@ import com.g15.library_system.enums.NavigationType;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.loginView.LoginFrame;
 import com.g15.library_system.view.overrideComponent.CustomButton;
+import com.google.googlejavaformat.java.Main;
+
 import java.awt.*;
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
-  private NavigationPanel navigationPanel;
+  private final NavigationPanel navigationPanel;
   private final WorkspacePanel workspacePanel;
 
   public MainFrame() {
@@ -16,18 +18,12 @@ public class MainFrame extends JFrame {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int width = (int) screenSize.getWidth();
     int height = (int) screenSize.getHeight();
-    setSize(new Dimension(width, height - 40));
+    setSize(new Dimension(width + 10, height - 40));
     setResizable(true);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
     setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());
-    //    try {
-    //      UIManager.setLookAndFeel(new FlatLightLaf());
-    //      SwingUtilities.updateComponentTreeUI(this);
-    //    } catch (Exception e) {
-    //      e.printStackTrace();
-    //    }
 
     navigationPanel = new NavigationPanel();
     workspacePanel = new WorkspacePanel();
@@ -123,8 +119,8 @@ public class MainFrame extends JFrame {
 
     workspacePanel.setOverdueBooksCardButtonListener(
         e -> {
-          workspacePanel.showPanel(NavigationType.OVERDUE_BOOKS);
-          setHover(NavigationType.OVERDUE_BOOKS);
+          workspacePanel.showPanel(NavigationType.RETURN_BOOKS);
+          setHover(NavigationType.RETURN_BOOKS);
         });
 
     workspacePanel.setReadersCardButtonListener(
@@ -174,7 +170,4 @@ public class MainFrame extends JFrame {
     }
   }
 
-  public static void main(String[] args) {
-    new MainFrame();
-  }
 }

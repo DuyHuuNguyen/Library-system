@@ -16,4 +16,6 @@ public interface BookService {
   void save(Book newBook);
 
   void save(List<Book> books);
+
+  void update(Book book);
 }

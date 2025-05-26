@@ -6,6 +6,7 @@ import com.g15.library_system.dto.request.ImportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.enums.UpdateMethod;
 import com.g15.library_system.facade.BookFacade;
 import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.service.BookService;
@@ -14,6 +15,7 @@ import com.g15.library_system.service.ExcelProducerService;
 import com.g15.library_system.service.ExcelService;
 import com.g15.library_system.util.DateUtil;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -109,5 +111,14 @@ public class BookFacadeImpl implements BookFacade {
     for (var book : this.bookService.findAll()) {
       book.markOldBook();
     }
+  }
+
+  @Override
+  public void updateBookQuantity(Map<Book, Integer> bookWithQuantity) {
+    bookWithQuantity.forEach(
+        (book, integer) -> {
+          book.updateQuantity(integer, UpdateMethod.SUBTRACT);
+          this.bookService.update(book);
+        });
   }
 }

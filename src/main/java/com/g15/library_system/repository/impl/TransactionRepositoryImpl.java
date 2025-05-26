@@ -1,6 +1,6 @@
 package com.g15.library_system.repository.impl;
 
-import com.g15.library_system.data.ReaderData;
+import com.g15.library_system.data.TransactionData;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.repository.TransactionRepository;
 import java.util.List;
@@ -9,22 +9,24 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class TransactionRepositoryImpl implements TransactionRepository {
-  private List<Transaction> transactions = ReaderData.getInstance().getTransactions();
+  private TransactionData transactionData = TransactionData.getInstance();
 
   @Override
   public Optional<Transaction> findById(Long id) {
-    return transactions.stream().filter(transaction -> transaction.findById(id)).findFirst();
+    return transactionData.getTransactions().stream()
+        .filter(transaction -> transaction.findById(id))
+        .findFirst();
   }
 
   @Override
   public List<Transaction> findAll() {
-    return transactions;
+    return transactionData.getTransactions();
   }
 
   @Override
   public Transaction save(Transaction transaction) {
-    transaction.setId(transactions.getLast().getId() + 1);
-    transactions.add(transaction);
+    transaction.setId(transactionData.getTransactions().getLast().getId() + 1);
+    transactionData.add(transaction);
     return transaction;
   }
 }
