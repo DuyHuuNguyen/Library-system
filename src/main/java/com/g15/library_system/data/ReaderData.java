@@ -68,22 +68,6 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
     return new ArrayList<>(transactions);
   }
 
-  //  public int getTotalBorrowedBooks() {
-  //    return transactions.stream()
-  //        .filter(t -> t.getTransactionType() == TransactionType.BORROW)
-  //        .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
-  //        .sum();
-  //  }
-  //
-  //  public int getTotalOverdueBooks() {
-  //    return transactions.stream()
-  //        .filter(t -> t.getTransactionType() == TransactionType.BORROW)
-  //        .filter(t -> t.getActualReturnAt() != null && t.getExpectedReturnAt() != null)
-  //        .filter(t -> t.getActualReturnAt() > t.getExpectedReturnAt())
-  //        .mapToInt(t -> t.getBooks().values().stream().mapToInt(Integer::intValue).sum())
-  //        .sum();
-  //  }
-
   private void initializeData() {
     var james =
         Reader.builder()
@@ -136,9 +120,18 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 25)))
             .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 10)))
             .description("Returned")
+                .books(
+                        new TreeMap<>(
+                                Map.of(
+                                        books.stream()
+                                                .filter(b -> b.getTitle().equals("I Believe"))
+                                                .findFirst()
+                                                .orElseThrow(),
+                                        3)))
             .overdueFine(
                 new OverdueFine(
                     1200, FineStrategyFactory.createStrategy(FineStrategyType.YEAR_BASED)))
+                .librarian(librarians.get(0))
             .build();
 
     libCard1.addBorrowTransaction(borrowTransaction1);
@@ -253,7 +246,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                             1)))
                 .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 20)))
                 .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 20)))
-                .description("Returned 'The Hobbit'")
+                .description("borrow The Hobbit")
                 .build(),
             Transaction.builder()
                 .id(106L)
@@ -793,7 +786,6 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
     transactions.addAll(transactions9);
     transactions.addAll(transactions10);
 
-    //
     var reader1 =
         Reader.builder()
             .id(11L)

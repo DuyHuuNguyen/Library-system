@@ -1,13 +1,9 @@
 package com.g15.library_system.view.managementView.returnBooks.controllers;
 
 import com.g15.library_system.controller.ReaderController;
-import com.g15.library_system.data.ReaderData;
+import com.g15.library_system.data.CacheData;
 import com.g15.library_system.dto.returnBookDTOs.BorrowBookDTO;
-import com.g15.library_system.dto.returnBookDTOs.ReturnBookDTO;
-import com.g15.library_system.entity.Book;
-import com.g15.library_system.entity.OverdueFine;
-import com.g15.library_system.entity.Reader;
-import com.g15.library_system.entity.Transaction;
+import com.g15.library_system.entity.*;
 import com.g15.library_system.entity.strategies.FineStrategyType;
 import com.g15.library_system.entity.strategies.OverdueFineStrategy;
 import com.g15.library_system.enums.BookStatus;
@@ -18,6 +14,8 @@ import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.util.DateUtil;
 import com.g15.library_system.util.TransactionIdGenerator;
 import com.g15.library_system.view.managementView.returnBooks.AddReturnBookPanel;
+import com.g15.library_system.view.managementView.returnBooks.commands.CancelCommand;
+import com.g15.library_system.view.managementView.returnBooks.commands.ConfirmReturnCommand;
 import com.g15.library_system.view.managementView.returnBooks.factories.*;
 import com.g15.library_system.view.managementView.returnBooks.factories.simpleFactory.FineStrategyFactory;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
@@ -25,13 +23,12 @@ import java.time.LocalDate;
 import java.util.*;
 import javax.swing.*;
 
-public class ReturnBookController {
+public class AddReturnBookController {
   private AddReturnBookPanel addReturnBookPanel;
   private ReturnManagementController returnManagementController;
 
   private ITransactionMapper transactionMapper = new TransactionMapper();
-  private List<Reader> readersData = ReaderData.getInstance().getReaders();
-  private List<ReturnBookDTO> returnBookDTOs = new ArrayList<>();
+  private Librarian currentLibrarian = CacheData.getCURRENT_LIBRARIAN();
 
   // controller
   private ReaderController readerController =
@@ -53,20 +50,28 @@ public class ReturnBookController {
           new MaxFineLimitFactory(),
           new NoFineFactory());
 
-  public ReturnBookController(
+  //command
+  private ConfirmReturnCommand confirmReturnCommand;
+  private CancelCommand cancelCommand;
+
+  public AddReturnBookController(
       ReturnManagementController returnManagementController,
       AddReturnBookPanel addReturnBookPanel) {
     this.returnManagementController = returnManagementController;
     this.addReturnBookPanel = addReturnBookPanel;
+
+    this.confirmReturnCommand = new ConfirmReturnCommand(this,addReturnBookPanel);
+    this.cancelCommand = new CancelCommand(returnManagementController.getReturnBookPanel(),addReturnBookPanel);
+
     setupCancelBtListener();
     setupConfirmBtListener();
     setupStrategyComboBoxListener();
     setupSearchFieldListener();
     setupSearchFieldPopup();
+    setupStaffLabel();
   }
 
   // =========================== returning book
-
   public void processReturnTransaction() {
     Map<Book, Integer> returningBooks = new HashMap<>();
     Map<Book, Integer> lostBooks = new HashMap<>();
@@ -105,6 +110,7 @@ public class ReturnBookController {
                 new OverdueFine(
                     Double.parseDouble(addReturnBookPanel.getLateFeeText()),
                     FineStrategyFactory.createStrategy(addReturnBookPanel.getSelectedStrategy())))
+                .librarian(currentLibrarian)
             .description(addReturnBookPanel.getNotesText())
             .build();
 
@@ -224,25 +230,19 @@ public class ReturnBookController {
   public void setupCancelBtListener() {
     addReturnBookPanel.setCancelBtListener(
         e -> {
-          returnManagementController.refreshTable();
+          cancelCommand.execute();
         });
   }
 
   public void setupConfirmBtListener() {
     addReturnBookPanel.setConfirmBtListener(
         e -> {
-          if (validateDataAndProcessReturn()) {
-
-            new ToastNotification(
-                    JOptionPane.getFrameForComponent(addReturnBookPanel),
-                    ToastNotification.Type.SUCCESS,
-                    ToastNotification.Location.TOP_CENTER,
-                    "New book returned successfully!")
-                .showNotification();
-            //            refreshTable();
-            returnManagementController.refreshTable();
-          }
+          confirmReturnCommand.execute();
         });
+  }
+
+  public void refreshTable(){
+    returnManagementController.refreshTable();
   }
 
   public void setupStrategyComboBoxListener() {
@@ -310,6 +310,10 @@ public class ReturnBookController {
               "Reader not found!")
           .showNotification();
     }
+  }
+
+  private void setupStaffLabel() {
+    addReturnBookPanel.setCurrentStaff(currentLibrarian.getFullName());
   }
 
   private void mappingTableData() {

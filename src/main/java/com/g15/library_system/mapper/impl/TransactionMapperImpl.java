@@ -42,8 +42,8 @@ public class TransactionMapperImpl implements TransactionMapper {
         .transactionType(transaction.getTransactionType())
         .returnStatus(transaction.getReturnStatus())
         .overdueFeeAmount(
-            transaction.getOverdueFee() != null
-                ? Double.valueOf(transaction.getOverdueFee().getPrice())
+            transaction.getOverdueFine() != null
+                ? Double.valueOf(transaction.getOverdueFine().getPrice())
                 : null)
         .build();
   }

@@ -17,7 +17,7 @@ public class TestFrame extends JFrame {
   public TestFrame() {
     this.setTitle("Library Management");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setSize(new Dimension(800, 750));
+    this.setSize(new Dimension(1200, 750));
     this.setLocationRelativeTo(null);
     this.setLocationRelativeTo(null);
     this.setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());

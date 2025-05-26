@@ -30,7 +30,7 @@ public class AddReturnBookPanel extends JPanel {
       lateFeeTxt,
       statusTxt;
   private JTextArea notesTxtArea;
-  private JLabel lblStaff, noDataLabel;
+  private JLabel currentStaff, noDataLabel;
   private LocalDate today = LocalDate.now();
 
   // data
@@ -158,8 +158,8 @@ public class AddReturnBookPanel extends JPanel {
         gbc.gridx = 0;
         this.add(new JLabel("Processed By:"), gbc);
         gbc.gridx = 1;
-        lblStaff = new JLabel("Nguyen Van A");
-        this.add(lblStaff, gbc);
+        currentStaff = new JLabel("Nguyen Van A");
+        this.add(currentStaff, gbc);
 
         gbc.gridy++;
         gbc.gridx = 0;
@@ -334,6 +334,10 @@ public class AddReturnBookPanel extends JPanel {
       statusTxt.setBackground(Style.YELLOW_STATUS_BACKGROUND_COLOR);
       statusTxt.setForeground(Style.YELLOW_STATUS_FOREGROUND_COLOR);
     }
+  }
+
+  public void setCurrentStaff(String staffName) {
+    currentStaff.setText(staffName);
   }
 
   // action listener

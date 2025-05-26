@@ -58,6 +58,7 @@ public class DetailPanel extends JPanel {
 
     lendDateChooser = new DateChooser();
     lendDateChooser.setTextField(lendDateTF);
+    lendDateChooser.getSelectedDate();
     lendDateChooser.addActionDateChooserListener(
         new DateChooserAdapter() {
           @Override

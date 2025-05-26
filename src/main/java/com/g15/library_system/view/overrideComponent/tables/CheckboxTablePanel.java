@@ -149,6 +149,7 @@ public class CheckboxTablePanel extends JPanel {
   public int[] getSelectedRows() {
     return table.getSelectedRows();
   }
+
   /** @return the indices of all rows that is checked in the table */
   public List<Integer> getCheckedRows() {
     List<Integer> checkedRows = new ArrayList<>();

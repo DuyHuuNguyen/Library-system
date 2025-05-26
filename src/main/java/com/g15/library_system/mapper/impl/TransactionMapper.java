@@ -83,7 +83,10 @@ public class TransactionMapper implements ITransactionMapper {
         .readerEmail(reader.getEmail())
         .returnDate(DateUtil.convertToLocalDate(transaction.getCreatedAt()))
         .books(transaction.getBooks())
-        .status(transaction.getTransactionType().getValue())
+        .status(
+                transaction.getOverdueFine() != null
+                        ? BookStatus.OVERDUE.getStatus()
+                        : BookStatus.RETURNED.getStatus())
         .totalFine(
             transaction.getOverdueFine() != null
                 ? String.valueOf(transaction.getOverdueFine().getPrice())

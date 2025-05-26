@@ -30,6 +30,7 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
     var librarian = this.librarianService.findByEmail(loginRequest.getEmail()).orElse(null);
     var isNotFoundLibrarian = (librarian == null);
     if (isNotFoundLibrarian) return false;
+    CacheData.addCurrentLibrarian(librarian);
     return librarian.isSamePassword(loginRequest.getPassword());
   }
 

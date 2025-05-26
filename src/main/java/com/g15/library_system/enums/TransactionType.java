@@ -9,4 +9,8 @@ public enum TransactionType {
   BORROW("Borrow"),
   RETURNED("Returned");
   private final String value;
+
+  public boolean isBorrow() {
+    return this == BORROW;
+  }
 }

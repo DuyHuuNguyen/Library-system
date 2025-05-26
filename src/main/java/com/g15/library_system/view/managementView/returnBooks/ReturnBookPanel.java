@@ -1,18 +1,12 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
-import com.g15.library_system.data.ReaderData;
-import com.g15.library_system.dto.returnBookDTOs.ReturnBookDTO;
-import com.g15.library_system.entity.Reader;
-import com.g15.library_system.mapper.ITransactionMapper;
-import com.g15.library_system.mapper.impl.TransactionMapper;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
-import java.util.ArrayList;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Set;
 import javax.swing.*;
 import lombok.Getter;
-import lombok.Setter;
 
 public class ReturnBookPanel extends JPanel {
   public static final String TABLE_PANEL = "tablePanel";
@@ -39,12 +33,7 @@ public class ReturnBookPanel extends JPanel {
   private String[] statuses = {"Returned", "Overdue"};
 
   // data
-  @Setter private Object[][] tableData;
-  //  private ReaderController readerController =
-  //      ApplicationContextProvider.getBean(ReaderController.class);
-  private ITransactionMapper transactionMapper = new TransactionMapper();
-  private List<Reader> readersData = ReaderData.getInstance().getReaders();
-  private List<ReturnBookDTO> returnBookDTOs = new ArrayList<>();
+   private Object[][] tableData;
 
   public ReturnBookPanel() {
     cardLayout = new CardLayout(10, 10);
@@ -80,9 +69,34 @@ public class ReturnBookPanel extends JPanel {
     }
 
     private void setAddBtListener() {
-      toolPn.setAddButtonListener(e -> showPanel("addReturnBookPanel"));
+      toolPn.setAddReturnBookBtListener(e -> showPanel("addReturnBookPanel"));
     }
   }
+
+  public String[] getColumnNames() {
+    String[] excelColNames = new String[columnNames.length - 1];
+    System.arraycopy(columnNames, 1, excelColNames, 0, columnNames.length - 1);
+    return excelColNames;
+  }
+
+public Object[][] getTableDataForExport() {
+  if (tableData == null || tableData.length == 0 || tableData[0].length <= 1)
+    return new Object[0][0];
+
+  List<Integer> checkedRow = tablePn.getCheckedRows();
+
+  Object[][] result = new Object[checkedRow.size()][tableData[0].length - 1];
+  int index = 0;
+  for (int i = 0; i < tableData.length; i++) {
+    if(checkedRow.contains(i)) {
+      System.arraycopy(tableData[i], 1, result[index], 0, tableData[i].length - 1);
+      index++;
+    }
+  }
+
+  return result;
+}
+
 
   public void setTableData(Object[][] tableData) {
     this.tableData = tableData;
@@ -94,5 +108,10 @@ public class ReturnBookPanel extends JPanel {
         e -> {
           showPanel(ReturnBookPanel.TABLE_PANEL);
         });
+  }
+
+  public void setExportBtListener(
+      ActionListener exportAction) {
+    toolPn.setExportBtListener(exportAction);
   }
 }

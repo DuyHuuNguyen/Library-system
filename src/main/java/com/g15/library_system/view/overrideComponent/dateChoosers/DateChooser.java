@@ -31,7 +31,6 @@ import javax.swing.text.PlainDocument;
 
 public class DateChooser extends JPanel {
   private final List<DateChooserListener> events = new ArrayList<>();
-
   private DateSelectable dateSelectable;
   private RDate selectedDate;
   private boolean closePopupAfterSelected = true;
@@ -41,8 +40,8 @@ public class DateChooser extends JPanel {
   private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
   private DateSelectionMode dateSelectionMode = DateSelectionMode.SINGLE_DATE_SELECTED;
   private JPopupMenu popup;
-  private JTextField textField;
-  private JButton labelCurrentDate;
+  private JTextField textField, searchField;
+  private JButton labelCurrentDate, calendarButton;
   private String betweenCharacter = " to ";
   private DateChooserRender dateChooserRender = new DefaultDateChooserRender();
   private JSpinner spMonth;
@@ -57,6 +56,7 @@ public class DateChooser extends JPanel {
   private boolean lightWeightPopupEnabled = true;
 
   private LookAndFeel oldThemes = UIManager.getLookAndFeel();
+
 
   public DateChooser() {
     init();
@@ -237,6 +237,54 @@ public class DateChooser extends JPanel {
     displayDate();
   }
 
+  //----i was here
+  public void setCalendarBtAction(JButton calendarButton, JTextField searchField) {
+    this.calendarButton = calendarButton;
+    this.searchField =searchField;
+    calendarButton.addActionListener(
+        (ActionEvent e) -> {
+          if (popup != null && popup.isVisible()) {
+            hidePopup();
+          } else {
+            showPopupButton();
+          }
+        });
+  }
+
+  public void showPopupButton() {
+    if (popup == null) {
+      popup = new JPopupMenu();
+      popup.putClientProperty(FlatClientProperties.STYLE, "" + "borderInsets:1,1,1,1");
+      popup.setLightWeightPopupEnabled(lightWeightPopupEnabled);
+      popup.add(this);
+      popup.addPopupMenuListener(
+              new PopupMenuListener() {
+                @Override
+                public void popupMenuWillBecomeVisible(PopupMenuEvent popupMenuEvent) {}
+
+                @Override
+                public void popupMenuWillBecomeInvisible(PopupMenuEvent popupMenuEvent) {
+                  for (Component component : panelDate.getComponents()) {
+                    if (component instanceof ButtonDate) {
+                      ((ButtonDate) component).clearHover();
+                    }
+                  }
+                }
+
+                @Override
+                public void popupMenuCanceled(PopupMenuEvent popupMenuEvent) {}
+              });
+    }
+
+    if (UIManager.getLookAndFeel() != oldThemes) {
+      // component in popup not update UI when change themes, so need to update when popup show
+      SwingUtilities.updateComponentTreeUI(popup);
+      oldThemes = UIManager.getLookAndFeel();
+    }
+    popup.show(calendarButton, 0, calendarButton.getHeight());
+  }
+
+
   public void showPopup() {
     if (popup == null) {
       popup = new JPopupMenu();
@@ -270,6 +318,9 @@ public class DateChooser extends JPanel {
     popup.show(textField, 0, textField.getHeight());
   }
 
+
+
+
   public void setLabelCurrentDayVisible(boolean show) {
     labelCurrentDate.setVisible(show);
   }
@@ -280,7 +331,7 @@ public class DateChooser extends JPanel {
     }
   }
 
-  private void closePopup() {
+  public void closePopup() {
     if ((popup != null && popup.isVisible()) && isClosePopupAfterSelected()) {
       popup.setVisible(false);
     }
@@ -571,6 +622,31 @@ public class DateChooser extends JPanel {
     }
   }
 
+  private void displayDate(JTextField searchField) {
+    if (searchField != null) {
+      if (dateSelectionMode == DateSelectionMode.SINGLE_DATE_SELECTED) {
+        if (isDateSelected()) {
+          searchField.setText(dateChooserRender.renderTextFieldDate(this, getSelectedDate()));
+        } else {
+          searchField.setText("");
+        }
+      } else {
+        DateBetween dateBetween = new DateBetween();
+        dateBetween.setFromDate(selectedDateBetween[0].toDate());
+        if (selectedCount == 2) {
+          dateBetween.setToDate(selectedDateBetween[1].toDate());
+          dateBetween.fixDate();
+        }
+        if (selectedCount != 0) {
+          searchField.setText(dateChooserRender.renderTextFieldDateBetween(this, dateBetween));
+        } else {
+          searchField.setText("");
+        }
+      }
+    }
+  }
+
+
   private int monthToIndex(String val) {
     for (int i = 0; i < months.length; i++) {
       if (val.equals(months[i])) {
@@ -627,10 +703,11 @@ public class DateChooser extends JPanel {
       addActionListener(
           (ActionEvent e) -> {
             if (isEnabled()) {
+
               if (dateSelectionMode == DateSelectionMode.SINGLE_DATE_SELECTED) {
                 selectedDate = date;
                 panelDate.repaint();
-                displayDate();
+                displayDate(searchField);
                 runEventDateChanged(new DateChooserAction(DateChooserAction.USER_SELECT));
                 closePopup();
               } else {

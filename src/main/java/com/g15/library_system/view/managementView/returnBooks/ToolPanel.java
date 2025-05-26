@@ -2,20 +2,29 @@ package com.g15.library_system.view.managementView.returnBooks;
 
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
+import com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.swing.*;
 
 public class ToolPanel extends JPanel {
   private CustomButton addBt, editBt, exportBt, refreshBt, cancelBt;
+  private JButton calenderBt;
   private Map<String, Runnable> actionMap = new HashMap<>();
   private TextFieldSearchOption searchField;
   private final String[] items = {"Add", "Edit", "Export", "Refresh"};
+  private DateChooser returnDateChooser;
+
 
   public ToolPanel() {
     this.setLayout(new BorderLayout(20, 20));
@@ -109,11 +118,50 @@ public class ToolPanel extends JPanel {
   }
 
   private JPanel createSearchPanel() {
-    JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+    JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+
+
+    DateChooser dueDateChooser = new com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser();
+    dueDateChooser.setDateSelectable(
+            date -> {
+              LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+              return localDate.isBefore(LocalDate.now()); // this disable past date
+            });
+
+
+
+
+
+
+    calenderBt = new JButton(new ImageIcon(getClass().getResource("/icons/searchOptionIcons/calendar.png")));
+    calenderBt.setPreferredSize(new Dimension(40, 40));
+    calenderBt.setBackground(Style.BLUE_MENU_BACKGROUND_COLOR);
+    calenderBt.setVisible(false);
+      calenderBt.addActionListener(e->{
+//        Date selectDate = dueDateChooser.getSelectedDate();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        String formattedDate = sdf.format(selectDate);
+//
+//        System.out.println("Selected Date: " + formattedDate);
+
+      });
+
+
     searchField = new TextFieldSearchOption();
-    searchField.setPreferredSize(new Dimension(380, 40));
+    searchField.setPreferredSize(new Dimension(400, 40));
     searchField.addEventOptionSelected(
-        (option, index) -> searchField.setHint("Search by " + option.getName() + "..."));
+        (option, index) -> {
+          searchField.setHint("Search by " + option.getName() + "...");
+          if ("Return Date".equals(option.getName())) {
+            calenderBt.setVisible(true);
+
+          } else {
+            calenderBt.setVisible(false);
+//            dateChooser.hidePopup();
+          }
+        });
+    dueDateChooser.setCalendarBtAction(calenderBt, searchField);
+
 
     //    txtSearch.popupMenu(
     //            name -> {
@@ -139,6 +187,7 @@ public class ToolPanel extends JPanel {
     searchField.addOption(
         new SearchOption("Staff", new ImageIcon(getClass().getResource("/icons/admin.png"))));
 
+    searchPanel.add(calenderBt);
     searchPanel.add(searchField);
     return searchPanel;
   }
@@ -147,12 +196,16 @@ public class ToolPanel extends JPanel {
     this.searchField.addActionListener(actionListener);
   }
 
-  public void setAddButtonListener(ActionListener actionListener) {
+  public void setAddReturnBookBtListener(ActionListener actionListener) {
     this.addBt.addActionListener(actionListener);
   }
 
-  public void setFreshButtonListener(ActionListener actionListener) {
+  public void setRefreshBtListener(ActionListener actionListener) {
     this.refreshBt.addActionListener(actionListener);
+  }
+
+  public void setExportBtListener(ActionListener actionListener) {
+    exportBt.addActionListener(actionListener);
   }
 
   public String getSearchTextLowerCase() {

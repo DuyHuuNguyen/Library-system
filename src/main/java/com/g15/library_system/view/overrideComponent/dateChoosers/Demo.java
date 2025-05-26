@@ -7,6 +7,7 @@ import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAction;
 import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateChooserAdapter;
 import java.awt.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -60,17 +61,17 @@ public class Demo extends JFrame {
 
     JButton cmd = new JButton("Selected Date");
     ch.setDateSelectionMode(DateChooser.DateSelectionMode.BETWEEN_DATE_SELECTED);
-    // ch.toDay();
-    //    cmd.addActionListener(
-    //        e -> {
-    //           SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-    //           DateBetween between = ch.getSelectedDateBetween();
-    //            System.out.println(df.format(between.getFromDate()) + " to " +
-    //           df.format(between.getToDate()));
-    //
-    //            System.out.println(df.format(ch.getSelectedDate()));
-    //          ch.setSelectedDateBetween(3, 3, 2022, 5, 7, 2022, true);
-    //        });
+     ch.toDay();
+        cmd.addActionListener(
+            e -> {
+               SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+               DateBetween between = ch.getSelectedDateBetween();
+                System.out.println(df.format(between.getFromDate()) + " to " +
+               df.format(between.getToDate()));
+
+                System.out.println(df.format(ch.getSelectedDate()));
+              ch.setSelectedDateBetween(3, 3, 2022, 5, 7, 2022, true);
+            });
     panel.add(cmd);
     JButton cmdMode = new JButton("Change theme");
     cmdMode.addActionListener(
