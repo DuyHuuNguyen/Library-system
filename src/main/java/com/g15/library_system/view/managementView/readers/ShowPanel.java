@@ -1,6 +1,5 @@
 package com.g15.library_system.view.managementView.readers;
 
-import com.g15.library_system.entity.Reader;
 import com.g15.library_system.view.Style;
 import java.awt.*;
 import javax.swing.*;

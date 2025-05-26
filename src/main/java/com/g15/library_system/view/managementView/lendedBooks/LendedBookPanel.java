@@ -61,8 +61,7 @@ public class LendedBookPanel extends JPanel implements TransactionObserver {
       add(formPn, FORM_PANEL);
       add(tablePn, TABLE_PANEL);
 
-      cardLayout.show(this,
-              TABLE_PANEL);
+      cardLayout.show(this, TABLE_PANEL);
     }
 
     public void showTablePanel() {
@@ -85,7 +84,7 @@ public class LendedBookPanel extends JPanel implements TransactionObserver {
 
       JPanel contentPanel = new JPanel();
       contentPanel.setLayout(new BorderLayout(10, 10));
-      
+
       JPanel rightSidePanel = new JPanel(new BorderLayout(0, 10));
       rightSidePanel.setOpaque(false);
 
@@ -164,6 +163,10 @@ public class LendedBookPanel extends JPanel implements TransactionObserver {
         transactionController.notifyBorrowTransaction(transaction);
       }
     }
+
+    public void updateBookQuantity() {
+      bookPn.updateBookQuantity();
+    }
   }
 
   private class ButtonPanel extends JPanel {
@@ -213,6 +216,7 @@ public class LendedBookPanel extends JPanel implements TransactionObserver {
             if (formPn.validateForm()) {
               Transaction transaction = formPn.createTransaction();
               transaction = transactionController.createTransaction(transaction);
+              formPn.updateBookQuantity();
               if (transaction != null) {
                 new ToastNotification(
                         JOptionPane.getFrameForComponent(this),

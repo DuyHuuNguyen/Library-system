@@ -6,10 +6,9 @@ import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.facade.TransactionFacade;
 import com.g15.library_system.service.EmailProducerService;
 import com.g15.library_system.service.TransactionService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +29,7 @@ public class TransactionFacadeImpl implements TransactionFacade {
   @Override
   public List<Transaction> getByType(TransactionType transactionType) {
     return this.transactionService.findAll().stream()
-            .filter(transaction -> transaction.hasSameType(transactionType))
-            .toList();
+        .filter(transaction -> transaction.hasSameType(transactionType))
+        .toList();
   }
-
 }
