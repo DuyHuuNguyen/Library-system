@@ -14,18 +14,23 @@ import com.g15.library_system.util.PathUtil;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.*;
 
+@Getter
+@Setter
 public class ButtonPanel extends JPanel {
-  public JButton saveBt;
-  public JButton editBt;
-  public JButton removeBt;
-  public JButton addBt;
-  public JButton cancelBt;
+  private JButton saveBt;
+  private JButton editBt;
+  private JButton removeBt;
+  private JButton addBt;
+  private JButton cancelBt;
   private ReaderController readerController =
       ApplicationContextProvider.getBean(ReaderController.class);
 
@@ -55,7 +60,7 @@ public class ButtonPanel extends JPanel {
 
     saveBt.addActionListener(
         e -> {
-          FormPanel formPn = readerPn.contentPn.showInforPn.formPn;
+          FormPanel formPn = readerPn.getContentPn().getShowInforPn().getFormPn();
           System.out.println(Long.valueOf(formPn.getMemberIdField().getText()));
           if (formPn.validateForm()) {
             Reader readerNeedRm =
@@ -90,7 +95,7 @@ public class ButtonPanel extends JPanel {
                                 DateTimeFormatter.ofPattern("dd-MM-yyyy"))))
                     .avatarKey(
                         PathUtil.convertFullPathToRelativePath(
-                            readerPn.contentPn.showInforPn.avtPn.getImageUrl()))
+                            readerPn.getContentPn().getShowInforPn().getAvtPn().getImageUrl()))
                     //                        .avatarKey("/images/Emma.jpg")
                     .phoneNumber(formPn.getPhoneField().getText())
                     .isSubscribe(true)
@@ -118,11 +123,11 @@ public class ButtonPanel extends JPanel {
             //            System.out.println(
             //                PathUtil.convertFullPathToRelativePath(
             //                    readerPn.contentPn.showInforPn.avtPn.getImageUrl()));
-            readerPn.contentPn.tablePn.refreshTable();
-            readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.VIEW);
+            readerPn.getContentPn().getTablePn().refreshTable();
+            readerPn.getContentPn().getShowInforPn().getBtnPn().setMode(ButtonPanelMode.VIEW);
             JOptionPane.showMessageDialog(this, "Saved!");
 
-            readerPn.toolPn.enableTextFields(readerPn.contentPn.showInforPn.formPn, false);
+            readerPn.getToolPn().enableTextFields(readerPn.getContentPn().getShowInforPn().getFormPn(), false);
           }
         });
 
@@ -144,8 +149,8 @@ public class ButtonPanel extends JPanel {
     editBt.addActionListener(
         e -> {
           // Add functionality here
-          readerPn.toolPn.enableTextFields(readerPn.contentPn.showInforPn.formPn, true);
-          readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.EDIT);
+          readerPn.getToolPn().enableTextFields(readerPn.getContentPn().getShowInforPn().getFormPn(), true);
+          readerPn.getContentPn().getShowInforPn().getBtnPn().setMode(ButtonPanelMode.EDIT);
         });
 
     // Remove button
@@ -165,11 +170,11 @@ public class ButtonPanel extends JPanel {
             .icon("/icons/deleteIcon.png", 12);
     removeBt.addActionListener(
         e -> {
-          FormPanel formPn = readerPn.contentPn.showInforPn.formPn;
+          FormPanel formPn = readerPn.getContentPn().getShowInforPn().getFormPn();
           Reader readerNeedRm =
               ReaderData.getInstance().findId(Long.valueOf(formPn.getMemberIdField().getText()));
           ReaderData.getInstance().remove(readerNeedRm);
-          readerPn.contentPn.tablePn.refreshTable();
+          readerPn.getContentPn().getTablePn().refreshTable();
 
           new ToastNotification(
                   JOptionPane.getFrameForComponent(this),
@@ -177,7 +182,7 @@ public class ButtonPanel extends JPanel {
                   ToastNotification.Location.BOTTOM_RIGHT,
                   "Remove successfully!!")
               .showNotification();
-          readerPn.toolPn.enableTextFields(formPn, false);
+          readerPn.getToolPn().enableTextFields(formPn, false);
         });
 
     // Add Button
@@ -199,7 +204,7 @@ public class ButtonPanel extends JPanel {
 
     addBt.addActionListener(
         e -> {
-          FormPanel formPn = readerPn.contentPn.showInforPn.formPn;
+          FormPanel formPn = readerPn.getContentPn().getShowInforPn().getFormPn();
           if (formPn.validateForm()) {
             //                          Boolean isCreated =
             //
@@ -225,7 +230,7 @@ public class ButtonPanel extends JPanel {
                                 DateTimeFormatter.ofPattern("dd-MM-yyyy"))))
                     .avatarKey(
                         PathUtil.convertFullPathToRelativePath(
-                            readerPn.contentPn.showInforPn.avtPn.getImageUrl()))
+                            readerPn.getContentPn().getShowInforPn().getAvtPn().getImageUrl()))
                     //                        .avatarKey("/images/Emma.jpg")
                     .phoneNumber(formPn.getPhoneField().getText())
                     .isSubscribe(true)
@@ -251,8 +256,8 @@ public class ButtonPanel extends JPanel {
             ReaderData.getInstance().add(reader);
             System.out.println(
                 PathUtil.convertFullPathToRelativePath(
-                    readerPn.contentPn.showInforPn.avtPn.getImageUrl()));
-            readerPn.contentPn.tablePn.refreshTable();
+                    readerPn.getContentPn().getShowInforPn().getAvtPn().getImageUrl()));
+            readerPn.getContentPn().getTablePn().refreshTable();
             // -------------------------------------------
             new ToastNotification(
                     JOptionPane.getFrameForComponent(this),
@@ -268,8 +273,8 @@ public class ButtonPanel extends JPanel {
 
             // ---------------------------------------------------------
 
-            readerPn.toolPn.enableTextFields(formPn, false);
-            readerPn.contentPn.showInforPn.formPn.getMemberIdField().setText(reader.getId() + "");
+            readerPn.getToolPn().enableTextFields(formPn, false);
+            readerPn.getContentPn().getShowInforPn().getFormPn().getMemberIdField().setText(reader.getId() + "");
             this.setMode(ButtonPanelMode.VIEW);
           }
         });

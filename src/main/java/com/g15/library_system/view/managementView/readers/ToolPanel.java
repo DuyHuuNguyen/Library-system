@@ -65,7 +65,7 @@ public class ToolPanel extends JPanel {
           if (keyword.isEmpty()) {
             //              JTable table = readerPn.contentPn.tablePn.getTablePanel().getTable();
             //              table.setModel(new DefaultTableModel(borrowData, columnNames));
-            readerPn.contentPn.tablePn.refreshTable();
+            readerPn.getContentPn().getTablePn().refreshTable();
             return;
           }
 
@@ -79,9 +79,9 @@ public class ToolPanel extends JPanel {
           }
           Object[][] filteredData = filtered.toArray(new Object[0][]);
           System.out.println(Arrays.deepToString(filteredData));
-          readerPn.contentPn.tablePn.getTablePanel().removeAllDataTable();
-          readerPn.contentPn.tablePn.memberData = filteredData;
-          readerPn.contentPn.tablePn.getTablePanel().addDataToTable(filteredData);
+          readerPn.getContentPn().getTablePn().getTablePanel().removeAllDataTable();
+          readerPn.getContentPn().getTablePn().setMemberData(filteredData);
+          readerPn.getContentPn().getTablePn().getTablePanel().addDataToTable(filteredData);
         });
 
     // ---------------------------------------------------------
@@ -104,7 +104,7 @@ public class ToolPanel extends JPanel {
     removeBt.setVisible(false);
     removeBt.addActionListener(
         e -> {
-          JTable table = readerPn.contentPn.tablePn.getTablePanel().getTable();
+          JTable table = readerPn.getContentPn().getTablePn().getTablePanel().getTable();
           DefaultTableModel model = (DefaultTableModel) table.getModel();
 
           // Duyệt ngược để tránh lỗi index khi xoá
@@ -121,7 +121,7 @@ public class ToolPanel extends JPanel {
           }
 
           // Xoá dòng khỏi bảng
-          readerPn.contentPn.tablePn.refreshTable();
+          readerPn.getContentPn().getTablePn().refreshTable();
         });
 
     actionBtPn.add(removeBt);
@@ -143,12 +143,12 @@ public class ToolPanel extends JPanel {
 
     addBt.addActionListener(
         e -> {
-          readerPn.contentPn.showInforPn.avtPn.setImageUrlRelative("/images/addImageAvatar.png");
-          readerPn.contentPn.showInforPn.avtPn.setSize(150, 150);
-          clearTextFields(readerPn.contentPn.showInforPn.formPn); // Xóa trắng
-          enableTextFields(readerPn.contentPn.showInforPn.formPn, true); // Cho phép nhập
-          readerPn.contentPn.showInforPn.btnPn.setMode(ButtonPanelMode.ADD);
-          readerPn.contentPn.borrowedPanel.setVisible(false);
+          readerPn.getContentPn().getShowInforPn().getAvtPn().setImageUrlRelative("/images/addImageAvatar.png");
+          readerPn.getContentPn().getShowInforPn().getAvtPn().setSize(150, 150);
+          clearTextFields(readerPn.getContentPn().getShowInforPn().getFormPn()); // Xóa trắng
+          enableTextFields(readerPn.getContentPn().getShowInforPn().getFormPn(), true); // Cho phép nhập
+          readerPn.getContentPn().getShowInforPn().getBtnPn().setMode(ButtonPanelMode.ADD);
+          readerPn.getContentPn().getShowInforPn().setVisible(false);
         });
     actionBtPn.add(addBt);
 

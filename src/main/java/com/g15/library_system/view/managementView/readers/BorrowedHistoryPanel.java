@@ -18,22 +18,26 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
+import lombok.Getter;
 import lombok.Setter;
 
+@Getter
+@Setter
 public class BorrowedHistoryPanel extends JPanel {
   private JTable table;
   private DefaultTableModel tableModel;
-  public CheckboxTablePanel tablePanel;
+  private CheckboxTablePanel tablePanel;
   // Book data
-  public Object[][] borrowedData;
-  public String[] columnNames;
-  @Setter private Reader reader;
-  Object[] months = {"All", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+  private Object[][] borrowedData;
+  private String[] columnNames;
+  private Reader reader;
+  private Object[] months = {"All", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
-  Object[] years = {"All", 2021, 2022, 2023, 2024, 2025};
+  private Object[] years = {"All", 2021, 2022, 2023, 2024, 2025};
 
-  JComboBox<Object> monthComboBox = new JComboBox<>(months);
-  JComboBox<Object> yearComboBox = new JComboBox<>(years);
+  private JComboBox<Object> monthComboBox = new JComboBox<>(months);
+  private JComboBox<Object> yearComboBox = new JComboBox<>(years);
 
   public BorrowedHistoryPanel() {
     setLayout(new BorderLayout());

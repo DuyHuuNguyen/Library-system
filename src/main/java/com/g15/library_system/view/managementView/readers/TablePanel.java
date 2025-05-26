@@ -14,15 +14,18 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class TablePanel extends JPanel {
   private JTable table;
   private DefaultTableModel tableModel;
-  @Getter public CheckboxTablePanel tablePanel;
+  private CheckboxTablePanel tablePanel;
   // Book data
-  @Getter public Object[][] memberData;
-  public List<Reader> readerList = ReaderData.getInstance().getReaders();
-  public String[] columnNames;
+  private Object[][] memberData;
+  private List<Reader> readerList = ReaderData.getInstance().getReaders();
+  private String[] columnNames;
 
   public TablePanel(ReaderPanel readerPn) {
     setLayout(new BorderLayout());
@@ -109,7 +112,7 @@ public class TablePanel extends JPanel {
                   selectedCount++;
                 }
               }
-              readerPn.toolPn.getRemoveBt().setVisible(selectedCount > 0);
+              readerPn.getToolPn().getRemoveBt().setVisible(selectedCount > 0);
             });
 
     // Thiết lập editor cho cột checkbox (ví dụ cột 0)

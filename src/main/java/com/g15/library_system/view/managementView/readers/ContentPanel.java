@@ -2,15 +2,20 @@ package com.g15.library_system.view.managementView.readers;
 
 import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 
+@Getter
+@Setter
 public class ContentPanel extends JPanel {
-  public TablePanel tablePn;
-  public ShowPanel showInforPn;
-  public BorrowedHistoryPanel borrowedPanel;
+  private TablePanel tablePn;
+  private ShowPanel showInforPn;
+  private BorrowedHistoryPanel borrowedPanel;
 
   public ContentPanel(ReaderPanel readerPn) {
     tablePn = new TablePanel(readerPn);
@@ -19,19 +24,19 @@ public class ContentPanel extends JPanel {
 
     setLayout(new GridLayout(1, 2, 5, 20));
 
-    CheckboxTablePanel table = tablePn.tablePanel;
+    CheckboxTablePanel table = tablePn.getTablePanel();
     table.setRowSelectionHandler(
         modelRow -> {
           // Viết hành động bạn muốn tại đây
           Map<String, Object> rowsData = new HashMap<>();
           int i = 1, j = 0;
-          if (tablePn.memberData[modelRow][0] instanceof Boolean) {
+          if (tablePn.getMemberData()[modelRow][0] instanceof Boolean) {
             j = i;
           } else {
             j = i - 1;
           }
-          while (i < tablePn.columnNames.length && j < tablePn.memberData[modelRow].length) {
-            rowsData.put(tablePn.columnNames[i], tablePn.memberData[modelRow][j]);
+          while (i < tablePn.getColumnNames().length && j < tablePn.getMemberData()[modelRow].length) {
+            rowsData.put(tablePn.getColumnNames()[i], tablePn.getMemberData()[modelRow][j]);
             i++;
             j++;
           }
@@ -44,17 +49,17 @@ public class ContentPanel extends JPanel {
           //              break;
           //            }
           //          }
-          showInforPn.avtPn.setImageUrlAbsolute(rowsData.get("Cover Image") + "");
+          showInforPn.getAvtPn().setImageUrlAbsolute(rowsData.get("Cover Image") + "");
           System.out.println(rowsData.get("Cover Image") + "");
-          showInforPn.avtPn.setSize(120, 120);
-          showInforPn.formPn.updateInfo(rowsData);
-          showInforPn.formPn.revalidate(); // Bắt buộc
-          showInforPn.formPn.repaint();
-          showInforPn.btnPn.setMode(ButtonPanelMode.VIEW);
-          readerPn.contentPn.borrowedPanel.setVisible(true);
-          readerPn.contentPn.borrowedPanel.setReader(
+          showInforPn.getAvtPn().setSize(120, 120);
+          showInforPn.getFormPn().updateInfo(rowsData);
+          showInforPn.getFormPn().revalidate(); // Bắt buộc
+          showInforPn.getFormPn().repaint();
+          showInforPn.getBtnPn().setMode(ButtonPanelMode.VIEW);
+          readerPn.getContentPn().borrowedPanel.setVisible(true);
+          readerPn.getContentPn().borrowedPanel.setReader(
               ReaderData.getInstance().findId(Long.valueOf(rowsData.get("ID") + "")));
-          readerPn.contentPn.borrowedPanel.refreshTable();
+          readerPn.getContentPn().borrowedPanel.refreshTable();
           // Ví dụ: mở form, bật checkbox, đổi trạng thái...
         });
 

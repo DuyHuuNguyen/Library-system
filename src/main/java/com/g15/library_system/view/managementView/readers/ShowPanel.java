@@ -1,15 +1,20 @@
 package com.g15.library_system.view.managementView.readers;
 
 import com.g15.library_system.view.Style;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+@Getter
+@Setter
 public class ShowPanel extends JPanel {
-  public AvatarPanel avtPn;
-  public ButtonPanel btnPn;
-  public FormPanel formPn;
+  private AvatarPanel avtPn;
+  private ButtonPanel btnPn;
+  private FormPanel formPn;
 
   public ShowPanel(String btn1, String btn2, ReaderPanel readerPn) {
     JPanel panel = new JPanel(new GridBagLayout());
