@@ -9,6 +9,6 @@ public interface EmailProducerService {
   void send(EmailNotificationNewBooksDTO emailNotificationNewBooksDTO);
 
   void send(TransactionContentDTO transaction);
-  
+
   <T extends EmailContent> void send(EmailMessageDTO<T> emailMessageDTO);
 }

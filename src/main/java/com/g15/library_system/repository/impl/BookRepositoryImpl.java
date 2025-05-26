@@ -41,4 +41,9 @@ public class BookRepositoryImpl implements BookRepository {
   public void save(Book newBook) {
     this.bookData.add(newBook);
   }
+
+  @Override
+  public void update(Book book) {
+    this.bookData.update(book);
+  }
 }

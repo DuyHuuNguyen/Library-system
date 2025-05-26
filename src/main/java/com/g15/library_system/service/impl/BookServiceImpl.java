@@ -44,4 +44,9 @@ public class BookServiceImpl implements BookService {
       this.save(book);
     }
   }
+
+  @Override
+  public void update(Book book) {
+    this.bookRepository.update(book);
+  }
 }
