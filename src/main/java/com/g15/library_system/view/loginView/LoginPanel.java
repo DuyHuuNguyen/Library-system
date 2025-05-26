@@ -2,6 +2,7 @@ package com.g15.library_system.view.loginView;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.g15.library_system.controller.LibrarianController;
+import com.g15.library_system.data.CacheData;
 import com.g15.library_system.dto.request.LoginRequest;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
@@ -51,6 +52,8 @@ public class LoginPanel extends JPanel {
             if (window != null) {
               window.dispose();
             }
+
+            System.out.println(CacheData.getCURRENT_LIBRARIAN());
             new MainFrame();
           } else {
             ToastNotification panel =

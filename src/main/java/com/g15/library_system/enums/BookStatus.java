@@ -8,14 +8,19 @@ import lombok.RequiredArgsConstructor;
 public enum BookStatus {
   AVAILABLE("available"),
   BORROWED("borrowed"),
-  DEMO("demo"),
   RETURNED("returned"),
   LOST("lost"),
   DAMAGED("damaged"),
-  OVERDUE("overdue");
+  OVERDUE("overdue"),
+  NULL("null");
   private final String status;
 
-  public boolean isDemo() {
-    return this == DEMO;
+  public static BookStatus get(String value) {
+    for (BookStatus status : BookStatus.values()) {
+      if (status.name().equalsIgnoreCase(value)) {
+        return status;
+      }
+    }
+    return BookStatus.NULL;
   }
 }

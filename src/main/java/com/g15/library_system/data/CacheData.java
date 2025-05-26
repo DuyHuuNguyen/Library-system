@@ -1,9 +1,10 @@
 package com.g15.library_system.data;
 
 import com.g15.library_system.entity.Librarian;
+import lombok.Getter;
 
 public class CacheData {
-  private static Librarian CURRENT_LIBRARIAN;
+  @Getter private static Librarian CURRENT_LIBRARIAN;
   private static String OTP;
   private static String EMAIL;
 

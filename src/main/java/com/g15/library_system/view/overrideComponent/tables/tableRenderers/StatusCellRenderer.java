@@ -1,5 +1,6 @@
 package com.g15.library_system.view.overrideComponent.tables.tableRenderers;
 
+import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.Status;
 import com.g15.library_system.view.Style;
 
@@ -20,28 +21,24 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
     Color bgColor = label.getBackground();
 
     if(value != null) {
-      Status status = Status.get(value.toString());
+      BookStatus status = BookStatus.get(value.toString());
       label.setHorizontalAlignment(SwingConstants.CENTER);
       switch (status) {
-        case Status.AVAILABLE , Status.RETURNED:
+        case BookStatus.AVAILABLE , BookStatus.RETURNED:
           fgColor = Style.GREEN_STATUS_FOREGROUND_COLOR;
           bgColor = Style.GREEN_STATUS_BACKGROUND_COLOR;
           break;
-        case Status.DAMAGED , Status.LOST:
+        case BookStatus.DAMAGED , BookStatus.LOST:
           fgColor = Style.RED_STATUS_FOREGROUND_COLOR;
           bgColor = Style.RED_STATUS_BACKGROUND_COLOR;
           break;
-        case Status.OVERDUE:
+        case BookStatus.OVERDUE:
           fgColor = Style.YELLOW_STATUS_FOREGROUND_COLOR;
           bgColor = Style.YELLOW_STATUS_BACKGROUND_COLOR;
           break;
-//      case Status.:
-//        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR; //waiting new status
-//        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
-//        break;
-        case Status.NULL:
-//        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
-//        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
+        case BookStatus.NULL:
+        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
+        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
           break;
       }
 

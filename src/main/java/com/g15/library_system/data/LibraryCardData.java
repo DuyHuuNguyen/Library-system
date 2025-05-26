@@ -50,10 +50,13 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .email("duynguyen@example.com")
                     .build())
             .expireAt(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000) // 1 năm sau
-            .transactions(
+            .borrowTransactions(
                 List.of(
                     Transaction.builder().id(101L).transactionType(TransactionType.BORROW).build(),
-                    Transaction.builder().id(102L).transactionType(TransactionType.RETURN).build()))
+                    Transaction.builder()
+                        .id(102L)
+                        .transactionType(TransactionType.RETURNED)
+                        .build()))
             .libraryCardStatus(LibraryCardStatus.ACTIVE)
             .build();
 
@@ -69,7 +72,7 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .email("alice.tran@example.com")
                     .build())
             .expireAt(System.currentTimeMillis() + 2 * 365L * 24 * 60 * 60 * 1000) // 2 năm sau
-            .transactions(
+            .borrowTransactions(
                 List.of(
                     Transaction.builder().id(103L).transactionType(TransactionType.BORROW).build()))
             .libraryCardStatus(LibraryCardStatus.SUSPENDED)
@@ -87,9 +90,12 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .email("bob.le@example.com")
                     .build())
             .expireAt(System.currentTimeMillis() + 3 * 365L * 24 * 60 * 60 * 1000) // 3 năm sau
-            .transactions(
+            .borrowTransactions(
                 List.of(
-                    Transaction.builder().id(104L).transactionType(TransactionType.RETURN).build()))
+                    Transaction.builder()
+                        .id(104L)
+                        .transactionType(TransactionType.RETURNED)
+                        .build()))
             .libraryCardStatus(LibraryCardStatus.ACTIVE)
             .build();
 
@@ -105,7 +111,7 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .email("charlie.pham@example.com")
                     .build())
             .expireAt(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000) // 1 năm sau
-            .transactions(
+            .borrowTransactions(
                 List.of(
                     Transaction.builder().id(105L).transactionType(TransactionType.BORROW).build()))
             .libraryCardStatus(LibraryCardStatus.EXPIRED)
@@ -123,7 +129,7 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .email("david.vu@example.com")
                     .build())
             .expireAt(System.currentTimeMillis() + 4 * 365L * 24 * 60 * 60 * 1000) // 4 năm sau
-            .transactions(List.of())
+            .borrowTransactions(List.of())
             .libraryCardStatus(LibraryCardStatus.ACTIVE)
             .build();
 
@@ -139,10 +145,13 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .email("emma.hoang@example.com")
                     .build())
             .expireAt(System.currentTimeMillis() + 5 * 365L * 24 * 60 * 60 * 1000) // 5 năm sau
-            .transactions(
+            .borrowTransactions(
                 List.of(
                     Transaction.builder().id(106L).transactionType(TransactionType.BORROW).build(),
-                    Transaction.builder().id(107L).transactionType(TransactionType.RETURN).build()))
+                    Transaction.builder()
+                        .id(107L)
+                        .transactionType(TransactionType.RETURNED)
+                        .build()))
             .libraryCardStatus(LibraryCardStatus.ACTIVE)
             .build();
 
@@ -158,7 +167,7 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .email("sophia.ly@example.com")
                     .build())
             .expireAt(System.currentTimeMillis() + 2 * 365L * 24 * 60 * 60 * 1000) // 2 năm sau
-            .transactions(
+            .borrowTransactions(
                 List.of(
                     Transaction.builder().id(108L).transactionType(TransactionType.BORROW).build()))
             .libraryCardStatus(LibraryCardStatus.SUSPENDED)
@@ -176,7 +185,7 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .email("james.vo@example.com")
                     .build())
             .expireAt(System.currentTimeMillis() + 3 * 365L * 24 * 60 * 60 * 1000) // 3 năm sau
-            .transactions(List.of())
+            .borrowTransactions(List.of())
             .libraryCardStatus(LibraryCardStatus.ACTIVE)
             .build();
 
@@ -207,9 +216,12 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .email("ethan.nguyen@example.com")
                     .build())
             .expireAt(System.currentTimeMillis() + 4 * 365L * 24 * 60 * 60 * 1000) // 4 năm sau
-            .transactions(
+            .borrowTransactions(
                 List.of(
-                    Transaction.builder().id(110L).transactionType(TransactionType.RETURN).build()))
+                    Transaction.builder()
+                        .id(110L)
+                        .transactionType(TransactionType.RETURNED)
+                        .build()))
             .libraryCardStatus(LibraryCardStatus.ACTIVE)
             .build();
 

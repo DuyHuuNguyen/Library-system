@@ -12,6 +12,7 @@ import com.g15.library_system.view.swingComponentGenerators.*;
 import java.awt.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -44,6 +45,11 @@ public class DetailPanel extends JPanel {
 
     dueDateChooser = new DateChooser();
     dueDateChooser.setSelectedDate(Date.valueOf(LocalDate.now().plusWeeks(1)));
+    dueDateChooser.setDateSelectable(
+        date -> {
+          LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          return !localDate.isBefore(LocalDate.now()); // this disable past date
+        });
     dueDateChooser.setTextField(dueDateTF);
 
     lendDateL = LabelGenerator.createRequireLabel("Lending Date");
@@ -52,6 +58,7 @@ public class DetailPanel extends JPanel {
 
     lendDateChooser = new DateChooser();
     lendDateChooser.setTextField(lendDateTF);
+    lendDateChooser.getSelectedDate();
     lendDateChooser.addActionDateChooserListener(
         new DateChooserAdapter() {
           @Override
@@ -63,6 +70,11 @@ public class DetailPanel extends JPanel {
 
             dueDateChooser.setSelectedDate(calendar.getTime());
           }
+        });
+    lendDateChooser.setDateSelectable(
+        date -> {
+          LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          return !localDate.isBefore(LocalDate.now()); // this disable past date
         });
 
     notificationL =

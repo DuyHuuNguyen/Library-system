@@ -8,7 +8,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
-  private NavigationPanel navigationPanel;
+  private final NavigationPanel navigationPanel;
   private final WorkspacePanel workspacePanel;
 
   public MainFrame() {
@@ -16,18 +16,12 @@ public class MainFrame extends JFrame {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int width = (int) screenSize.getWidth();
     int height = (int) screenSize.getHeight();
-    setSize(new Dimension(width, height - 40));
+    setSize(new Dimension(width + 10, height - 40));
     setResizable(true);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
     setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());
-    //    try {
-    //      UIManager.setLookAndFeel(new FlatLightLaf());
-    //      SwingUtilities.updateComponentTreeUI(this);
-    //    } catch (Exception e) {
-    //      e.printStackTrace();
-    //    }
 
     navigationPanel = new NavigationPanel();
     workspacePanel = new WorkspacePanel();
@@ -172,9 +166,5 @@ public class MainFrame extends JFrame {
               ? Style.BLUE_MENU_BUTTON_COLOR
               : new Color(0, 0, 0, 0));
     }
-  }
-
-  public static void main(String[] args) {
-    new MainFrame();
   }
 }

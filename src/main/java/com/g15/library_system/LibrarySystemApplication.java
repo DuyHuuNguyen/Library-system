@@ -25,6 +25,7 @@ public class LibrarySystemApplication {
     app.setHeadless(false);
     app.run(args);
     var login = new LoginFrame();
+
     login.setVisible(true);
   }
 }

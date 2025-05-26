@@ -29,7 +29,7 @@ public class TablePanel extends JPanel {
         new String[] {
           "",
           "ID",
-          "Cover Image",
+          "Avatar Image",
           "Name",
           "Reader Type",
           "User Status",
