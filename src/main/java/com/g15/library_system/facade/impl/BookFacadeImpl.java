@@ -115,9 +115,10 @@ public class BookFacadeImpl implements BookFacade {
 
   @Override
   public void updateBookQuantity(Map<Book, Integer> bookWithQuantity) {
-    bookWithQuantity.forEach((book, integer) -> {
-      book.updateQuantity(integer, UpdateMethod.SUBTRACT);
-      this.bookService.update(book);
-    });
+    bookWithQuantity.forEach(
+        (book, integer) -> {
+          book.updateQuantity(integer, UpdateMethod.SUBTRACT);
+          this.bookService.update(book);
+        });
   }
 }

@@ -57,7 +57,6 @@ public class DateChooser extends JPanel {
 
   private LookAndFeel oldThemes = UIManager.getLookAndFeel();
 
-
   public DateChooser() {
     init();
   }
@@ -237,10 +236,10 @@ public class DateChooser extends JPanel {
     displayDate();
   }
 
-  //----i was here
+  // ----i was here
   public void setCalendarBtAction(JButton calendarButton, JTextField searchField) {
     this.calendarButton = calendarButton;
-    this.searchField =searchField;
+    this.searchField = searchField;
     calendarButton.addActionListener(
         (ActionEvent e) -> {
           if (popup != null && popup.isVisible()) {
@@ -258,22 +257,22 @@ public class DateChooser extends JPanel {
       popup.setLightWeightPopupEnabled(lightWeightPopupEnabled);
       popup.add(this);
       popup.addPopupMenuListener(
-              new PopupMenuListener() {
-                @Override
-                public void popupMenuWillBecomeVisible(PopupMenuEvent popupMenuEvent) {}
+          new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent popupMenuEvent) {}
 
-                @Override
-                public void popupMenuWillBecomeInvisible(PopupMenuEvent popupMenuEvent) {
-                  for (Component component : panelDate.getComponents()) {
-                    if (component instanceof ButtonDate) {
-                      ((ButtonDate) component).clearHover();
-                    }
-                  }
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent popupMenuEvent) {
+              for (Component component : panelDate.getComponents()) {
+                if (component instanceof ButtonDate) {
+                  ((ButtonDate) component).clearHover();
                 }
+              }
+            }
 
-                @Override
-                public void popupMenuCanceled(PopupMenuEvent popupMenuEvent) {}
-              });
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent popupMenuEvent) {}
+          });
     }
 
     if (UIManager.getLookAndFeel() != oldThemes) {
@@ -283,7 +282,6 @@ public class DateChooser extends JPanel {
     }
     popup.show(calendarButton, 0, calendarButton.getHeight());
   }
-
 
   public void showPopup() {
     if (popup == null) {
@@ -317,9 +315,6 @@ public class DateChooser extends JPanel {
     }
     popup.show(textField, 0, textField.getHeight());
   }
-
-
-
 
   public void setLabelCurrentDayVisible(boolean show) {
     labelCurrentDate.setVisible(show);
@@ -645,7 +640,6 @@ public class DateChooser extends JPanel {
       }
     }
   }
-
 
   private int monthToIndex(String val) {
     for (int i = 0; i < months.length; i++) {

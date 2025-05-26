@@ -4,7 +4,6 @@ import com.g15.library_system.mapper.ITransactionMapper;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
 import com.g15.library_system.view.managementView.returnBooks.controllers.ReturnManagementController;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
-
 import javax.swing.*;
 
 public class RefreshCommand implements Command {
@@ -34,6 +33,6 @@ public class RefreshCommand implements Command {
             ToastNotification.Type.INFO,
             ToastNotification.Location.TOP_CENTER,
             "Refreshing....")
-            .showNotification();
+        .showNotification();
   }
 }

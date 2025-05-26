@@ -37,16 +37,16 @@ public class TransactionMapper implements ITransactionMapper {
 
   @Override
   public BorrowBookDTO toBorrowBookDTO(
-          Transaction transaction, Book book, int amount, BookStatus status) {
+      Transaction transaction, Book book, int amount, BookStatus status) {
     return BorrowBookDTO.builder()
-            .bookId(book.getId())
-            .firstCoverImage(new ImageIcon(getClass().getResource(book.getFirstImage())))
-            .bookTitle(book.getTitle())
-            .bookQuantity(amount)
-            .borrowDate(DateUtil.convertToLocalDate(transaction.getCreatedAt()))
-            .dueDate(DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()))
-            .status(status)
-            .build();
+        .bookId(book.getId())
+        .firstCoverImage(new ImageIcon(getClass().getResource(book.getFirstImage())))
+        .bookTitle(book.getTitle())
+        .bookQuantity(amount)
+        .borrowDate(DateUtil.convertToLocalDate(transaction.getCreatedAt()))
+        .dueDate(DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()))
+        .status(status)
+        .build();
   }
 
   @Override
@@ -55,20 +55,20 @@ public class TransactionMapper implements ITransactionMapper {
     for (int i = 0; i < data.length; i++) {
       var returnBookDTO = returnBookDTOs.get(i);
       data[i] =
-              new Object[] {
-                      returnBookDTO.getTransactionId(),
-                      returnBookDTO.getReaderFullName(),
-                      returnBookDTO.getReaderPhoneNumber(),
-                      returnBookDTO.getReaderEmail(),
-                      returnBookDTO.getReturnDate(),
-                      returnBookDTO.getBooks().entrySet().stream()
-                              .map(entry -> entry.getKey().getTitle() + " x" + entry.getValue())
-                              .collect(Collectors.joining(", ")),
-                      returnBookDTO.getStatus(),
-                      returnBookDTO.getTotalFine(),
-                      returnBookDTO.getStaffProcessed(),
-                      returnBookDTO.getNotes()
-              };
+          new Object[] {
+            returnBookDTO.getTransactionId(),
+            returnBookDTO.getReaderFullName(),
+            returnBookDTO.getReaderPhoneNumber(),
+            returnBookDTO.getReaderEmail(),
+            returnBookDTO.getReturnDate(),
+            returnBookDTO.getBooks().entrySet().stream()
+                .map(entry -> entry.getKey().getTitle() + " x" + entry.getValue())
+                .collect(Collectors.joining(", ")),
+            returnBookDTO.getStatus(),
+            returnBookDTO.getTotalFine(),
+            returnBookDTO.getStaffProcessed(),
+            returnBookDTO.getNotes()
+          };
     }
     return data;
   }
@@ -84,9 +84,9 @@ public class TransactionMapper implements ITransactionMapper {
         .returnDate(DateUtil.convertToLocalDate(transaction.getCreatedAt()))
         .books(transaction.getBooks())
         .status(
-                transaction.getOverdueFine() != null
-                        ? BookStatus.OVERDUE.getStatus()
-                        : BookStatus.RETURNED.getStatus())
+            transaction.getOverdueFine() != null
+                ? BookStatus.OVERDUE.getStatus()
+                : BookStatus.RETURNED.getStatus())
         .totalFine(
             transaction.getOverdueFine() != null
                 ? String.valueOf(transaction.getOverdueFine().getPrice())
@@ -96,6 +96,4 @@ public class TransactionMapper implements ITransactionMapper {
         .notes(transaction.getDescription())
         .build();
   }
-
-
 }

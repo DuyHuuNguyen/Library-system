@@ -6,15 +6,12 @@ import com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOption;
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.*;
 
 public class ToolPanel extends JPanel {
@@ -24,7 +21,6 @@ public class ToolPanel extends JPanel {
   private TextFieldSearchOption searchField;
   private final String[] items = {"Add", "Edit", "Export", "Refresh"};
   private DateChooser returnDateChooser;
-
 
   public ToolPanel() {
     this.setLayout(new BorderLayout(20, 20));
@@ -120,32 +116,28 @@ public class ToolPanel extends JPanel {
   private JPanel createSearchPanel() {
     JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
 
-
-    DateChooser dueDateChooser = new com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser();
+    DateChooser dueDateChooser =
+        new com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser();
     dueDateChooser.setDateSelectable(
-            date -> {
-              LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-              return localDate.isBefore(LocalDate.now()); // this disable past date
-            });
+        date -> {
+          LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          return localDate.isBefore(LocalDate.now()); // this disable past date
+        });
 
-
-
-
-
-
-    calenderBt = new JButton(new ImageIcon(getClass().getResource("/icons/searchOptionIcons/calendar.png")));
+    calenderBt =
+        new JButton(new ImageIcon(getClass().getResource("/icons/searchOptionIcons/calendar.png")));
     calenderBt.setPreferredSize(new Dimension(40, 40));
     calenderBt.setBackground(Style.BLUE_MENU_BACKGROUND_COLOR);
     calenderBt.setVisible(false);
-      calenderBt.addActionListener(e->{
-//        Date selectDate = dueDateChooser.getSelectedDate();
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        String formattedDate = sdf.format(selectDate);
-//
-//        System.out.println("Selected Date: " + formattedDate);
+    calenderBt.addActionListener(
+        e -> {
+          //        Date selectDate = dueDateChooser.getSelectedDate();
+          //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+          //        String formattedDate = sdf.format(selectDate);
+          //
+          //        System.out.println("Selected Date: " + formattedDate);
 
-      });
-
+        });
 
     searchField = new TextFieldSearchOption();
     searchField.setPreferredSize(new Dimension(400, 40));
@@ -157,11 +149,10 @@ public class ToolPanel extends JPanel {
 
           } else {
             calenderBt.setVisible(false);
-//            dateChooser.hidePopup();
+            //            dateChooser.hidePopup();
           }
         });
     dueDateChooser.setCalendarBtAction(calenderBt, searchField);
-
 
     //    txtSearch.popupMenu(
     //            name -> {

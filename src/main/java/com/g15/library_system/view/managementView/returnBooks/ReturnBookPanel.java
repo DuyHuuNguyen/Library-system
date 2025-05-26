@@ -33,7 +33,7 @@ public class ReturnBookPanel extends JPanel {
   private String[] statuses = {"Returned", "Overdue"};
 
   // data
-   private Object[][] tableData;
+  private Object[][] tableData;
 
   public ReturnBookPanel() {
     cardLayout = new CardLayout(10, 10);
@@ -79,24 +79,23 @@ public class ReturnBookPanel extends JPanel {
     return excelColNames;
   }
 
-public Object[][] getTableDataForExport() {
-  if (tableData == null || tableData.length == 0 || tableData[0].length <= 1)
-    return new Object[0][0];
+  public Object[][] getTableDataForExport() {
+    if (tableData == null || tableData.length == 0 || tableData[0].length <= 1)
+      return new Object[0][0];
 
-  List<Integer> checkedRow = tablePn.getCheckedRows();
+    List<Integer> checkedRow = tablePn.getCheckedRows();
 
-  Object[][] result = new Object[checkedRow.size()][tableData[0].length - 1];
-  int index = 0;
-  for (int i = 0; i < tableData.length; i++) {
-    if(checkedRow.contains(i)) {
-      System.arraycopy(tableData[i], 1, result[index], 0, tableData[i].length - 1);
-      index++;
+    Object[][] result = new Object[checkedRow.size()][tableData[0].length - 1];
+    int index = 0;
+    for (int i = 0; i < tableData.length; i++) {
+      if (checkedRow.contains(i)) {
+        System.arraycopy(tableData[i], 1, result[index], 0, tableData[i].length - 1);
+        index++;
+      }
     }
+
+    return result;
   }
-
-  return result;
-}
-
 
   public void setTableData(Object[][] tableData) {
     this.tableData = tableData;
@@ -110,8 +109,7 @@ public Object[][] getTableDataForExport() {
         });
   }
 
-  public void setExportBtListener(
-      ActionListener exportAction) {
+  public void setExportBtListener(ActionListener exportAction) {
     toolPn.setExportBtListener(exportAction);
   }
 }

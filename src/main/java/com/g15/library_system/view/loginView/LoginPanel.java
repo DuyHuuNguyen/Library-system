@@ -4,7 +4,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.g15.library_system.controller.LibrarianController;
 import com.g15.library_system.data.CacheData;
 import com.g15.library_system.dto.request.LoginRequest;
-import com.g15.library_system.entity.Librarian;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.managementView.MainFrame;

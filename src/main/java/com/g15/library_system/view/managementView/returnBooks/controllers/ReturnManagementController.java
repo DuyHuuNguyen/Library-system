@@ -13,11 +13,9 @@ import com.g15.library_system.view.managementView.returnBooks.TestFrame;
 import com.g15.library_system.view.managementView.returnBooks.ToolPanel;
 import com.g15.library_system.view.managementView.returnBooks.commands.ExportExcelCommand;
 import com.g15.library_system.view.managementView.returnBooks.commands.RefreshCommand;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 import lombok.Getter;
 
 public class ReturnManagementController {
@@ -38,7 +36,6 @@ public class ReturnManagementController {
   private List<Reader> readersData = ReaderData.getInstance().getReaders();
   @Getter private List<ReturnBookDTO> returnBookDTOs = new ArrayList<>();
 
-
   // command
   private ExportExcelCommand exportExcelCommand;
   private RefreshCommand refreshCommand;
@@ -55,7 +52,6 @@ public class ReturnManagementController {
     setupFreshBtAction();
     setupExportBtAction();
     setupSearchAction();
-
   }
 
   public void initTableData() {
@@ -80,83 +76,77 @@ public class ReturnManagementController {
 
   public Object[][] searchReturnBooks(String searchText, String searchOption) {
     List<ReturnBookDTO> filteredList =
-            returnBookDTOs.stream()
-                    .filter(
-                            dto -> {
-                              switch (searchOption) {
-                                case "Name":
-                                  return dto.getReaderFullName().toLowerCase().contains(searchText);
-                                case "Tel":
-                                  return dto.getReaderPhoneNumber().toLowerCase().contains(searchText);
-                                case "Email":
-                                  return dto.getReaderEmail().toLowerCase().contains(searchText);
-                                case "Return Date":
-                                  if (dto.getReturnDate() == null) return false;
+        returnBookDTOs.stream()
+            .filter(
+                dto -> {
+                  switch (searchOption) {
+                    case "Name":
+                      return dto.getReaderFullName().toLowerCase().contains(searchText);
+                    case "Tel":
+                      return dto.getReaderPhoneNumber().toLowerCase().contains(searchText);
+                    case "Email":
+                      return dto.getReaderEmail().toLowerCase().contains(searchText);
+                    case "Return Date":
+                      if (dto.getReturnDate() == null) return false;
 
-                                  LocalDate returnDate = dto.getReturnDate();
-                                  String day = String.valueOf(returnDate.getDayOfMonth());
-                                  String month = String.valueOf(returnDate.getMonthValue());
-                                  String year = String.valueOf(returnDate.getYear());
+                      LocalDate returnDate = dto.getReturnDate();
+                      String day = String.valueOf(returnDate.getDayOfMonth());
+                      String month = String.valueOf(returnDate.getMonthValue());
+                      String year = String.valueOf(returnDate.getYear());
 
-                                  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                                  String formattedDate = returnDate.format(formatter).toLowerCase();
+                      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                      String formattedDate = returnDate.format(formatter).toLowerCase();
 
-                                  return formattedDate.contains(searchText) ||
-                                          day.contains(searchText) ||
-                                          month.contains(searchText) ||
-                                          year.contains(searchText);
+                      return formattedDate.contains(searchText)
+                          || day.contains(searchText)
+                          || month.contains(searchText)
+                          || year.contains(searchText);
 
-                                case "Staff":
-                                  return dto.getStaffProcessed().toLowerCase().contains(searchText);
-                                default:
-                                  return false;
-                              }
-                            })
-                    .toList();
+                    case "Staff":
+                      return dto.getStaffProcessed().toLowerCase().contains(searchText);
+                    default:
+                      return false;
+                  }
+                })
+            .toList();
 
     return transactionMapper.toReturnBookTableData(filteredList);
   }
 
   public void setupSearchAction() {
     returnBookPanel
-            .getToolPn()
-            .setSearchTxtActionListener(
-                    e -> {
-                      String searchText = returnBookPanel.getToolPn().getSearchTextLowerCase();
-                      String selectedOption = returnBookPanel.getToolPn().getSelectedSearchOption();
+        .getToolPn()
+        .setSearchTxtActionListener(
+            e -> {
+              String searchText = returnBookPanel.getToolPn().getSearchTextLowerCase();
+              String selectedOption = returnBookPanel.getToolPn().getSelectedSearchOption();
 
-                      Object[][] resultData;
+              Object[][] resultData;
 
-                      if (searchText.isEmpty()) {
+              if (searchText.isEmpty()) {
 
-                        resultData = transactionMapper.toReturnBookTableData(returnBookDTOs);
-                      } else {
+                resultData = transactionMapper.toReturnBookTableData(returnBookDTOs);
+              } else {
 
-                        resultData = searchReturnBooks(searchText, selectedOption);
-                      }
+                resultData = searchReturnBooks(searchText, selectedOption);
+              }
 
-                      returnBookPanel.setTableData(resultData);
-                    });
+              returnBookPanel.setTableData(resultData);
+            });
   }
-
 
   public void refreshTable() {
     returnBookDTOs.clear();
     initTableData();
-    returnBookPanel.setTableData(
-            transactionMapper.toReturnBookTableData(returnBookDTOs));
+    returnBookPanel.setTableData(transactionMapper.toReturnBookTableData(returnBookDTOs));
     returnBookPanel.showPanel(ReturnBookPanel.TABLE_PANEL);
   }
 
   public void setupFreshBtAction() {
-    returnBookPanel
-        .getToolPn()
-        .setRefreshBtListener(
-            e -> this.refreshCommand.execute());
+    returnBookPanel.getToolPn().setRefreshBtListener(e -> this.refreshCommand.execute());
   }
 
-  public void setupExportBtAction(){
+  public void setupExportBtAction() {
     returnBookPanel.setExportBtListener(e -> exportExcelCommand.execute());
   }
-
 }

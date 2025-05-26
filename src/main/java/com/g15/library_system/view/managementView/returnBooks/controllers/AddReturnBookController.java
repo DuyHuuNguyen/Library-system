@@ -50,7 +50,7 @@ public class AddReturnBookController {
           new MaxFineLimitFactory(),
           new NoFineFactory());
 
-  //command
+  // command
   private ConfirmReturnCommand confirmReturnCommand;
   private CancelCommand cancelCommand;
 
@@ -60,8 +60,9 @@ public class AddReturnBookController {
     this.returnManagementController = returnManagementController;
     this.addReturnBookPanel = addReturnBookPanel;
 
-    this.confirmReturnCommand = new ConfirmReturnCommand(this,addReturnBookPanel);
-    this.cancelCommand = new CancelCommand(returnManagementController.getReturnBookPanel(),addReturnBookPanel);
+    this.confirmReturnCommand = new ConfirmReturnCommand(this, addReturnBookPanel);
+    this.cancelCommand =
+        new CancelCommand(returnManagementController.getReturnBookPanel(), addReturnBookPanel);
 
     setupCancelBtListener();
     setupConfirmBtListener();
@@ -110,7 +111,7 @@ public class AddReturnBookController {
                 new OverdueFine(
                     Double.parseDouble(addReturnBookPanel.getLateFeeText()),
                     FineStrategyFactory.createStrategy(addReturnBookPanel.getSelectedStrategy())))
-                .librarian(currentLibrarian)
+            .librarian(currentLibrarian)
             .description(addReturnBookPanel.getNotesText())
             .build();
 
@@ -241,7 +242,7 @@ public class AddReturnBookController {
         });
   }
 
-  public void refreshTable(){
+  public void refreshTable() {
     returnManagementController.refreshTable();
   }
 

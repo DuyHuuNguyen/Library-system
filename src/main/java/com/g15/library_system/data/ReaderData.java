@@ -121,18 +121,18 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 25)))
             .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 10)))
             .description("Returned")
-                .books(
-                        new TreeMap<>(
-                                Map.of(
-                                        books.stream()
-                                                .filter(b -> b.getTitle().equals("I Believe"))
-                                                .findFirst()
-                                                .orElseThrow(),
-                                        3)))
+            .books(
+                new TreeMap<>(
+                    Map.of(
+                        books.stream()
+                            .filter(b -> b.getTitle().equals("I Believe"))
+                            .findFirst()
+                            .orElseThrow(),
+                        3)))
             .overdueFine(
                 new OverdueFine(
                     1200, FineStrategyFactory.createStrategy(FineStrategyType.YEAR_BASED)))
-                .librarian(librarians.get(0))
+            .librarian(librarians.get(0))
             .build();
 
     libCard1.addBorrowTransaction(borrowTransaction1);
