@@ -9,6 +9,7 @@ import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.mapper.impl.BookMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.manageBooks.observer.ObserverNotifyNewBook;
 import com.g15.library_system.view.overrideComponent.OptionPaneInputFileExcel;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
@@ -23,7 +24,7 @@ import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ManageBookPanel extends JPanel {
+public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
   private static final Logger log = LoggerFactory.getLogger(ManageBookPanel.class);
   private JPanel panelContent;
 
@@ -114,7 +115,9 @@ public class ManageBookPanel extends JPanel {
 
     add(panelContent, BorderLayout.CENTER);
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    
     this.addNewBookPanel.addObserverNotifyNewBook(this.notifyNewBookPanel);
+    this.addNewBookPanel.addObserverNotifyNewBook(this);
   }
 
   private void removeAllDataTable() {
@@ -218,5 +221,10 @@ public class ManageBookPanel extends JPanel {
     } else {
       log.error("😒😒😒😒 error import file excel");
     }
+  }
+
+  @Override
+  public void notifyNewBook() {
+    this.loadDataTable();
   }
 }
