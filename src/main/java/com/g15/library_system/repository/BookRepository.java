@@ -10,4 +10,8 @@ public interface BookRepository {
   Optional<Book> findById(long id);
 
   void deleteById(long id);
+
+  Optional<Book> findByTitle(String title);
+
+  void save(Book newBook);
 }

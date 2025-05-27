@@ -95,14 +95,13 @@ public class CustomButtonBuilder extends CustomButton {
   }
 
   public CustomButtonBuilder icon(String path, int gap) {
-    ImageIcon iconButton = new ImageIcon(getClass().getResource(path));
-    Image image = iconButton.getImage();
-    Image resized =
-        image.getScaledInstance(
-            this.getPreferredSize().height - gap,
-            this.getPreferredSize().height - gap,
-            Image.SCALE_SMOOTH);
-    this.setIcon(new ImageIcon(resized));
+    this.setIcon(path, gap);
+    return this;
+  }
+
+  public CustomButtonBuilder title(String text) {
+    this.setToolTipText(text);
+    ToolTipManager.sharedInstance().setInitialDelay(0);
     return this;
   }
 }

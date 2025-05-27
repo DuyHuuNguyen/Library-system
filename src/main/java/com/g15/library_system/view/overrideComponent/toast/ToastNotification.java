@@ -7,11 +7,12 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-/* how to use: ToastNotification panel = new
- * ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.INFO,
- * ToastNotification.Location.TOP_CENTER, "Message info notification type");
- * panel.showNotification();
- */
+/*
+ how to use: ToastNotification panel = new
+ ToastNotification(JOptionPane.getFrameForComponent(this), ToastNotification.Type.INFO,
+ ToastNotification.Location.TOP_CENTER, "Message info notification type");
+ panel.showNotification();
+*/
 public class ToastNotification extends javax.swing.JComponent {
   private JDialog dialog;
   private Animator animator;

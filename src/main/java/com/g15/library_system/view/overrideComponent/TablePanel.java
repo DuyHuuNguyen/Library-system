@@ -8,14 +8,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 @Deprecated
-public class TablePanel extends Panel implements TableService {
-  private String[] columns;
+public class TablePanel extends RoundedShadowPanel implements TableService {
+  private final String[] columns;
   private Object[][] data;
-  private int height;
-  private int width;
-  private JTable table;
-  private DefaultTableModel model;
-  private JScrollPane scrollPane;
+  private final int height;
+  private final int width;
+  private final JTable table;
+  private final DefaultTableModel model;
+  private final JScrollPane scrollPane;
 
   public TablePanel(String[] columns, Object[][] data, int width, int height) {
     this.width = width;
@@ -151,7 +151,7 @@ public class TablePanel extends Panel implements TableService {
 
     Object[][] data = {
       {
-        !true,
+        false,
         "ASP-BO-06",
         "The Catcher in the Rye",
         "John Peter",
@@ -160,9 +160,9 @@ public class TablePanel extends Panel implements TableService {
         5,
         "Damaged"
       },
-      {!true, "ASP-BO-07", "The Alchemist", "Sara Jones", "Non-Fiction", "English", 10, "Lended"},
+      {false, "ASP-BO-07", "The Alchemist", "Sara Jones", "Non-Fiction", "English", 10, "Lended"},
       {
-        !true,
+        false,
         "ASP-BO-08",
         "A Brief History of Time",
         "Will Turner",
@@ -172,7 +172,7 @@ public class TablePanel extends Panel implements TableService {
         "Lended"
       },
       {
-        !true,
+        false,
         "ASP-BO-09",
         "The Diary of a Young",
         "Dwayne Smith",

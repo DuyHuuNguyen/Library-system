@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class MainFrame extends JFrame {
   private NavigationPanel navigationPanel;
-  private WorkspacePanel workspacePanel;
+  private final WorkspacePanel workspacePanel;
 
   public MainFrame() {
     setTitle("Library Management");
@@ -22,13 +22,13 @@ public class MainFrame extends JFrame {
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
     setIconImage(new ImageIcon("src/main/resources/icons/libraryIconLogo.png").getImage());
-    try {
-      UIManager.put("ComboBox.focus", UIManager.get("ComboBox.background"));
-      UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-      SwingUtilities.updateComponentTreeUI(this);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    //    try {
+    //      UIManager.setLookAndFeel(new FlatLightLaf());
+    //      SwingUtilities.updateComponentTreeUI(this);
+    //    } catch (Exception e) {
+    //      e.printStackTrace();
+    //    }
+
     navigationPanel = new NavigationPanel();
     workspacePanel = new WorkspacePanel();
     add(navigationPanel, BorderLayout.WEST);

@@ -5,7 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class MonthComboBoxGenerator {
-  private static String[] months = {
+  private static final String[] months = {
     "All",
     "January",
     "February",
@@ -26,7 +26,7 @@ public class MonthComboBoxGenerator {
     monthComboBox.setFont(Style.FONT_PLAIN_13);
     monthComboBox.setBorder(BorderFactory.createLineBorder(Style.MENU_BUTTON_COLOR, 2));
     monthComboBox.setFocusable(false);
-    monthComboBox.setPreferredSize(new Dimension(80, 25));
+    monthComboBox.setPreferredSize(new Dimension(100, 25));
     return monthComboBox;
   }
 }

@@ -1,131 +1,82 @@
 package com.g15.library_system.view.managementView.dashboard;
 
-import com.g15.library_system.view.Style;
+import com.g15.library_system.observers.TransactionObserver;
+import com.g15.library_system.view.managementView.dashboard.statistics.TransactionStatistics;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.swingComponentGenerators.JFreeChartGenerator;
-import com.g15.library_system.view.swingComponentGenerators.LabelGenerator;
-import com.g15.library_system.view.swingComponentGenerators.MonthComboBoxGenerator;
-import com.g15.library_system.view.swingComponentGenerators.YearComboBoxGenerator;
 import java.awt.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 
-public class LendingTrendsChartPanel extends RoundedShadowPanel {
+public class LendingTrendsChartPanel extends RoundedShadowPanel implements TransactionObserver {
+  private ChartPanel chartPanel;
+  private JFreeChart barChart;
+
   private JComboBox<Integer> yearComboBox;
   private JComboBox<String> monthComboBox;
-  private String[] months = {
-    "All",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  };
   private ArrayList<Integer> years = new ArrayList<>();
   private String selectedMonth;
   private Integer selectedYear;
-  private Map<String, Integer> lendingData;
+  private Map<String, Long> lendingData = new HashMap<>();
+  private DefaultCategoryDataset chartDataset;
 
   LendingTrendsChartPanel() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
-    setPreferredSize(new Dimension(730, 450));
-    setLayout(new BorderLayout());
+    this.setPreferredSize(new Dimension(730, 450));
+    this.setLayout(new BorderLayout());
 
-    JPanel titlePn = new JPanel(new GridLayout(1, 2));
-    titlePn.setBackground(Color.WHITE);
-    JLabel chartTitle =
-        LabelGenerator.createLabel(
-            "   Books Lending Trends", Style.FONT_BOLD_18, Color.BLACK, SwingConstants.LEFT);
+    // title panel
+    TitlePanel titlePn = new TitlePanel("Lending Trends");
+    yearComboBox = titlePn.getYearComboBox();
+    monthComboBox = titlePn.getMonthComboBox();
 
-    JPanel sortBarPn = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    sortBarPn.setBackground(Color.WHITE);
+    // chart panel
+    chartDataset = new DefaultCategoryDataset();
 
-    JLabel monthLabel =
-        LabelGenerator.createLabel("Month", Style.FONT_BOLD_16, Color.BLACK, SwingConstants.CENTER);
-
-    monthComboBox = MonthComboBoxGenerator.createMonthComboBox();
-    monthComboBox.addActionListener(
-        e -> {
-          //            selectedMonth = (String) monthComboBox.getSelectedItem();
-          //            selectedYear = (Integer) yearComboBox.getSelectedItem();
-          //            if(selectedMonth != null) {
-          //                updateData(selectedMonth,selectedYear);
-          //                if(selectedMonth.equals("All")) {
-          //                    CategoryAxis categoryAxis = revenuePlot.getDomainAxis();
-          //                    categoryAxis.setLabel("Months");
-          //                }else{
-          //                    CategoryAxis categoryAxis = revenuePlot.getDomainAxis();
-          //                    categoryAxis.setLabel("Days");
-          //                }
-          //
-          //                revenueChartPanel.repaint();
-          //            }
-        });
-
-    JLabel yearLabel =
-        LabelGenerator.createLabel("Year", Style.FONT_BOLD_16, Color.BLACK, SwingConstants.CENTER);
-    years.add(2025);
-    years.add(2024);
-    years.add(2023);
-
-    yearComboBox = YearComboBoxGenerator.createYearComboBox(2000);
-    yearComboBox.addActionListener(
-        e -> {
-          //                    selectedMonth = (String) monthComboBox.getSelectedItem();
-          //                    selectedYear = (Integer) yearComboBox.getSelectedItem();
-          //                    if (selectedYear != null) {
-          //                        updateData(selectedMonth,selectedYear);
-          //                        revenueChartPanel.repaint();
-          //                    }
-        });
-
-    //        updateData((String) monthComboBox.getSelectedItem(), LocalDate.now().getYear());
-    //
-    //        revenueChart = createChart(revenueData);
-    //        revenueChartPanel = new ChartPanel(revenueChart);
-
-    sortBarPn.add(monthLabel);
-    sortBarPn.add(monthComboBox);
-    sortBarPn.add(yearLabel);
-    sortBarPn.add(yearComboBox);
-    titlePn.add(chartTitle);
-    titlePn.add(sortBarPn);
-    add(titlePn, BorderLayout.NORTH);
-
-    ChartPanel chartPanel = new ChartPanel();
-    add(chartPanel, BorderLayout.CENTER);
-  }
-
-  public class ChartPanel extends JPanel {
-    ChartPanel() {
-      setLayout(new BorderLayout());
-      lendingData =
-          Map.ofEntries(
-              Map.entry("Jan", 120),
-              Map.entry("Feb", 135),
-              Map.entry("Mar", 128),
-              Map.entry("Apr", 142),
-              Map.entry("May", 155),
-              Map.entry("Jun", 148),
-              Map.entry("Jul", 160),
-              Map.entry("Aug", 500),
-              Map.entry("Sep", 165),
-              Map.entry("Oct", 178),
-              Map.entry("Nov", 185),
-              Map.entry("Dec", 192));
-      JPanel chart =
-          JFreeChartGenerator.createBarChart(
-              "", "Number of Months", "Number of Books borrowed", lendingData);
-
-      this.add(chart);
+    lendingData =
+        TransactionStatistics.aggregateLendingTrendData((int) yearComboBox.getSelectedItem());
+    if (lendingData != null && !lendingData.isEmpty()) {
+      for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
+        chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
+      }
     }
+
+    barChart =
+        JFreeChartGenerator.createBarChart(
+            "", "Number of Months", "Number of Books borrowed", chartDataset);
+
+    CategoryPlot plot = (CategoryPlot) barChart.getPlot();
+    NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+
+    rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+    BarRenderer renderer = (BarRenderer) plot.getRenderer();
+
+    NumberFormat integerFormat = NumberFormat.getIntegerInstance();
+
+    renderer.setDefaultItemLabelGenerator(
+        new StandardCategoryItemLabelGenerator("{2}", integerFormat));
+    renderer.setDefaultItemLabelsVisible(true);
+
+    chartPanel = new ChartPanel(barChart);
+    this.setLayout(new BorderLayout());
+    this.add(chartPanel, BorderLayout.CENTER);
+    this.add(titlePn, BorderLayout.NORTH);
   }
+
+  public void clearChartData() {
+    chartDataset.clear();
+  }
+
+  @Override
+  public void update() {}
 }

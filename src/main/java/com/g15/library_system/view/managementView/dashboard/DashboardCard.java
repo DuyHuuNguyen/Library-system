@@ -3,21 +3,21 @@ package com.g15.library_system.view.managementView.dashboard;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
-import com.g15.library_system.view.swingComponentGenerators.ButtonGenerator;
+import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentGenerators.LabelGenerator;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class DashboardCard extends RoundedPanel {
-  private String title;
-  private String amount;
+  private final String title;
+  private final String amount;
   private Font font;
-  private CustomButton viewButton;
-  private String iconPath;
-  private Color backgroundColor;
-  private Color borderColor;
-  private Color iconBackgroundColor = Color.white;
+  private final CustomButton viewButton;
+  private final String iconPath;
+  private final Color backgroundColor;
+  private final Color borderColor;
+  private final Color iconBackgroundColor = Color.white;
   private int radius;
 
   public DashboardCard(
@@ -59,21 +59,21 @@ public class DashboardCard extends RoundedPanel {
     numberLabel.setAlignmentX(CENTER_ALIGNMENT);
 
     viewButton =
-        ButtonGenerator.createCustomButton(
-            "View Details",
-            Style.FONT_SANSERIF_BOLD_16,
-            Color.BLACK,
-            Color.white,
-            Color.white.darker(),
-            Color.GRAY,
-            1,
-            10,
-            SwingConstants.CENTER,
-            new Dimension(150, 40));
+        CustomButtonBuilder.builder()
+            .text("View Details")
+            .font(Style.FONT_SANSERIF_BOLD_16)
+            .textColor(Color.BLACK)
+            .backgroundColor(Color.WHITE)
+            .hoverColor(Color.WHITE.darker())
+            .borderColor(Color.GRAY)
+            .thickness(2)
+            .radius(12)
+            .alignment(SwingConstants.CENTER)
+            .contentAreaFilled(false)
+            .preferredSize(new Dimension(150, 40));
 
+    //    viewButton.setFocusPainted(false);
     viewButton.setAlignmentX(CENTER_ALIGNMENT);
-    viewButton.setFocusPainted(false);
-
     add(iconPanel);
     add(Box.createVerticalStrut(10));
     add(titleLabel);

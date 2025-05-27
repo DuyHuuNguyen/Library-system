@@ -3,7 +3,6 @@ package com.g15.library_system.view;
 import java.awt.*;
 
 public class Style {
-
   // 13
   public static final Font FONT_BOLD_13 = new Font("Arial", Font.BOLD, 13);
   public static final Font FONT_PLAIN_13 = new Font("utf8", Font.PLAIN, 13);
@@ -16,6 +15,8 @@ public class Style {
   // 16
   public static final Font FONT_BOLD_16 = new Font("Arial", Font.BOLD, 16);
   public static final Font FONT_PLAIN_16 = new Font("Arial", Font.PLAIN, 16);
+  public static final Font FONT_SANSERIF_PLAIN_16 = new Font("SansSerif", Font.PLAIN, 16);
+  public static final Font FONT_SANSERIF_BOLD_16 = new Font("SansSerif", Font.BOLD, 16);
 
   // 18
   public static final Font FONT_PLAIN_18 = new Font("Arial", Font.PLAIN, 18);
@@ -46,10 +47,6 @@ public class Style {
   public static final Font FONT_TITLE_BOLD_45 = new Font("Arial", Font.BOLD, 45);
 
   public static final Color LIGHT_BLUE = new Color(201, 222, 232);
-  public static final Color LIGHT_GREEN = new Color(162, 236, 132);
-  public static final Color MEDIUM_BLUE = new Color(51, 153, 255);
-  public static final Color BACKGROUND_COLOR = new Color(48, 176, 199);
-  public static final Color MENU_BUTTON_COLOR_GREEN = new Color(122, 222, 122);
   public static final Color BUTTON_HOVER_COLOR = new Color(52, 152, 219);
   public static final Color BUTTON_COLOR = new Color(41, 128, 185);
 
@@ -59,12 +56,6 @@ public class Style {
 
   public static final Color LOGIN_FRAME_BACKGROUND_COLOR_BLUE = new Color(71, 143, 210);
   public static final Color CONFIRM_BUTTON_COLOR_GREEN = new Color(20, 133, 20);
-
-  public static final Color BUTTON_COLOR_HOVER = new Color(224, 255, 224);
-  public static final Color WHITE_BLUE_COLOR = new Color(240, 245, 244);
-  public static final Color ORANGE_COLOR = new Color(208, 93, 17);
-  public static final Color LIGHT_ORANGE_COLOR = new Color(224, 198, 181);
-
   public static final Color WORD_COLOR_WHITE = new Color(255, 255, 255);
   public static final Color WORD_COLOR_BLACK = new Color(0, 0, 0);
 
@@ -80,28 +71,38 @@ public class Style {
   public static final Color CHART_BACKGROUND_COLOR = new Color(240, 248, 255);
   public static final Color CHART_BAR_COLOR_ORANGE = new Color(253, 126, 20);
   public static final Color CHART_BAR_COLOR_YELLOW = new Color(255, 235, 59);
-
+  public static final Color YELLOW_DARKER = new Color(230, 165, 52);
   // Library system
 
   // Color
   public static final Color PURPLE_MAIN_THEME = new Color(107, 67, 196);
   public static final Color PURPLE_MAIN_THEME_DARKER = new Color(83, 45, 176);
-  public static final Color HOVER_WHITE_DARKER = new Color(220, 220, 220);
   public static final Color LOGOUT_RED = new Color(225, 76, 76);
 
   public static final Color LIGHT_YELLOW_2 = new Color(232, 227, 173);
   public static final Color LIGHT_GREEN_2 = new Color(195, 237, 175);
   public static final Color LIGHT_RED_2 = new Color(241, 179, 179);
-  public static final Color LIGHT_GREEN_HOVER = new Color(224, 255, 224);
   public static final Color LIGHT_BLUE_BACKGROUND = new Color(221, 228, 228);
   public static final Color LIGHT_WHITE_BACKGROUND = new Color(244, 244, 244);
 
   public static final Color BLUE_MENU_HOVER_COLOR = new Color(138, 166, 192);
   public static final Color BLUE_MENU_BUTTON_COLOR = new Color(113, 197, 219);
+  public static final Color GREEN_CONFIRM_BUTTON_COLOR = new Color(76, 175, 80);
   public static final Color BLUE_MENU_BACKGROUND_COLOR = new Color(23, 159, 219);
+  public static final Color BLUE_TEXT_COLOR = new Color(10, 114, 160);
 
-  // font
-  public static final Font FONT_SANSERIF_PLAIN_16 = new Font("SansSerif", Font.PLAIN, 16);
-  public static final Font FONT_SANSERIF_BOLD_16 = new Font("SansSerif", Font.BOLD, 16);
-  public static final Color YELLOW_DARKER = new Color(230, 165, 52);
+  // status color
+  public static final Color GREEN_STATUS_BACKGROUND_COLOR = new Color(200, 255, 220, 120);
+  public static final Color GREEN_STATUS_FOREGROUND_COLOR = new Color(0, 150, 90);
+  public static final Color YELLOW_STATUS_BACKGROUND_COLOR = new Color(255, 234, 190, 120);
+  public static final Color YELLOW_STATUS_FOREGROUND_COLOR = new Color(204, 120, 0);
+  public static final Color RED_STATUS_BACKGROUND_COLOR = new Color(255, 180, 180, 120);
+  public static final Color RED_STATUS_FOREGROUND_COLOR = new Color(200, 0, 0);
+  public static final Color PURPLE_STATUS_BACKGROUND_COLOR = new Color(245, 238, 255);
+  public static final Color PURPLE_STATUS_FOREGROUND_COLOR = new Color(138, 43, 226);
+
+  // table row color
+  public static final Color LIGHT_BLUE_TABLE_ROW_COLOR = new Color(230, 247, 255);
+
+  public static final Color BLUE_HEADER_TABLE_AND_BUTTON = new Color(0, 161, 228);
 }

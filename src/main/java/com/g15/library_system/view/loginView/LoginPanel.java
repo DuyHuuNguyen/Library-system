@@ -1,0 +1,98 @@
+package com.g15.library_system.view.loginView;
+
+import com.formdev.flatlaf.FlatClientProperties;
+import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.MainFrame;
+import com.g15.library_system.view.overrideComponent.RoundedPanel;
+import java.awt.*;
+import javax.swing.*;
+import net.miginfocom.swing.MigLayout;
+
+public class LoginPanel extends JPanel {
+  private JTextField txtUsername;
+  private JPasswordField txtPassword;
+  private JButton cmdLogin;
+  private LoginCardPanel loginCardPanel;
+
+  public LoginPanel(LoginCardPanel loginCardPanel) {
+    this.loginCardPanel = loginCardPanel;
+    init();
+  }
+
+  private void init() {
+    this.setLayout(new MigLayout("fill,insets 20", "[center]", "[center]"));
+    this.setOpaque(false);
+    txtUsername = new JTextField();
+    txtPassword = new JPasswordField();
+    cmdLogin = new JButton("Login");
+    cmdLogin.setPreferredSize(new Dimension(250, 35));
+    cmdLogin.setFont(Style.FONT_BOLD_15);
+    cmdLogin.setBackground(Style.BLUE_MENU_BACKGROUND_COLOR);
+    cmdLogin.setForeground(Color.WHITE);
+    cmdLogin.addActionListener(
+        e -> {
+          Window window = SwingUtilities.getWindowAncestor(cmdLogin);
+          if (window != null) {
+            window.dispose();
+          }
+          new MainFrame();
+        });
+
+    RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237, 230), null);
+    //    RoundedPanel panel = new RoundedPanel(20, new Color(113, 117, 115,150), null);
+    panel.setLayout(new MigLayout("wrap,fill,insets 35 45 30 45", "fill,250:280"));
+    panel.putClientProperty(
+        FlatClientProperties.STYLE,
+        ""
+            + "arc:20;"
+            + "[light]background:darken(@background,3%);"
+            + "[dark]background:lighten(@background,3%)");
+
+    txtUsername.putClientProperty(
+        FlatClientProperties.PLACEHOLDER_TEXT, "Enter your username or email");
+    txtUsername.setPreferredSize(new Dimension(250, 35));
+
+    txtPassword.putClientProperty(FlatClientProperties.STYLE, "" + "showRevealButton:true");
+    txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
+    txtPassword.setPreferredSize(new Dimension(250, 35));
+    txtPassword.addActionListener(e -> cmdLogin.doClick());
+
+    JLabel lbTitle = new JLabel("Welcome back!");
+    lbTitle.setForeground(Style.BLUE_MENU_BACKGROUND_COLOR);
+    JLabel description = new JLabel("Please sign in to access your account");
+    description.setForeground(Color.BLACK);
+    lbTitle.putClientProperty(FlatClientProperties.STYLE, "" + "font:bold +10");
+    //    description.putClientProperty(
+    //        FlatClientProperties.STYLE,
+    //        ""
+    //            + "[light]foreground:lighten(@foreground,30%);"
+    //            + "[dark]foreground:darken(@foreground,100%)");
+
+    panel.add(lbTitle);
+    panel.add(description);
+    panel.add(new JLabel("Username"), "gapy 8");
+    panel.add(txtUsername);
+    panel.add(new JLabel("Password"), "gapy 8");
+    panel.add(txtPassword);
+    panel.add(cmdLogin, "gapy 10");
+    panel.add(createForgotPasswdLabel(), "gapy 10");
+    add(panel);
+  }
+
+  private Component createForgotPasswdLabel() {
+    JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+    panel.setOpaque(false);
+    JButton cmdForgotPassword = new JButton("<html><a href=\"#\">Forgot your password?</a></html>");
+    cmdForgotPassword.putClientProperty(FlatClientProperties.STYLE, "border:3,3,3,3");
+    cmdForgotPassword.setContentAreaFilled(false);
+    cmdForgotPassword.setOpaque(false);
+    cmdForgotPassword.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    cmdForgotPassword.addActionListener(
+        e -> {
+          loginCardPanel.showPanel(LoginCardPanel.FORGOT);
+        });
+
+    panel.add(cmdForgotPassword);
+    return panel;
+  }
+}

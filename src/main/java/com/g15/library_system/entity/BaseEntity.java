@@ -12,21 +12,9 @@ public class BaseEntity {
 
   private Long id;
 
-  @Builder.Default boolean isActive = true;
+  @Builder.Default private boolean isActive = true;
 
   private Long createdAt;
-
-  private Long updatedAt;
-
-  //  protected void prePersist() {
-  //    isActive = true;
-  //    if (this.createdAt == null) createdAt = Instant.now().toEpochMilli();
-  //    if (this.updated_at == null) updated_at = Instant.now().toEpochMilli();
-  //  }
-  //
-  //  protected void preUpdate() {
-  //    this.updated_at = Instant.now().toEpochMilli();
-  //  }
 
   protected boolean hasSameBrandId(long id) {
     return this.id == id;
@@ -38,5 +26,9 @@ public class BaseEntity {
 
   public boolean hasSameId(Long id) {
     return this.id == id;
+  }
+
+  public boolean idContains(Long id) {
+    return this.id.toString().contains(id.toString());
   }
 }

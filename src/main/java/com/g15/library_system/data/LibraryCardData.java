@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
+@Deprecated
 public class LibraryCardData implements Data<LibraryCard> {
   private static final LibraryCardData INSTANCE = new LibraryCardData();
   private final List<LibraryCard> LibraryCards = new ArrayList<>();
@@ -41,7 +42,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(1L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(1L)
@@ -61,7 +61,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(2L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(2L)
@@ -80,7 +79,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(3L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(3L)
@@ -99,7 +97,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(4L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(4L)
@@ -107,7 +104,7 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .lastName("Pham")
                     .email("charlie.pham@example.com")
                     .build())
-            .expireAt(System.currentTimeMillis() + 1 * 365L * 24 * 60 * 60 * 1000) // 1 năm sau
+            .expireAt(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000) // 1 năm sau
             .transactions(
                 List.of(
                     Transaction.builder().id(105L).transactionType(TransactionType.BORROW).build()))
@@ -118,7 +115,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(5L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(5L)
@@ -135,7 +131,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(6L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(6L)
@@ -155,7 +150,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(7L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(7L)
@@ -174,7 +168,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(8L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(8L)
@@ -191,7 +184,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(9L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(9L)
@@ -199,7 +191,7 @@ public class LibraryCardData implements Data<LibraryCard> {
                     .lastName("Dang")
                     .email("isabella.dang@example.com")
                     .build())
-            .expireAt(System.currentTimeMillis() + 1 * 365L * 24 * 60 * 60 * 1000) // 1 năm sau
+            .expireAt(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000) // 1 năm sau
             .libraryCardStatus(LibraryCardStatus.EXPIRED)
             .build();
 
@@ -207,7 +199,6 @@ public class LibraryCardData implements Data<LibraryCard> {
         LibraryCard.builder()
             .id(10L)
             .createdAt(System.currentTimeMillis())
-            .updatedAt(System.currentTimeMillis())
             .owner(
                 Reader.builder()
                     .id(10L)

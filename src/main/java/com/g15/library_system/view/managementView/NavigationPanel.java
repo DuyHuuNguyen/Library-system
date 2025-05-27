@@ -1,7 +1,6 @@
 package com.g15.library_system.view.managementView;
 
 import com.g15.library_system.view.Style;
-import com.g15.library_system.view.overrideComponent.CircularImage;
 import com.g15.library_system.view.overrideComponent.CustomButton;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
@@ -10,7 +9,6 @@ import javax.swing.*;
 
 public class NavigationPanel extends JPanel {
   private JLabel role, name, credit;
-  private CircularImage avatar;
   public CustomButton dashBoardBt,
       manageBookBt,
       lendedBookBt,
@@ -37,10 +35,10 @@ public class NavigationPanel extends JPanel {
 
     appLogo =
         CustomButtonBuilder.builder()
-            .text("  FIT NLU")
+            .text("FIT Library")
             .font(Style.FONT_BOLD_25)
-            .textColor(Color.WHITE)
-            .backgroundColor(new Color(0, 0, 0, 0))
+            .textColor(Style.BLUE_TEXT_COLOR)
+            .backgroundColor(Color.WHITE)
             .hoverColor(null)
             .radius(10)
             .alignment(SwingConstants.CENTER)
@@ -48,14 +46,14 @@ public class NavigationPanel extends JPanel {
             .opaque(false)
             .darkerWhenPress(false)
             .contentAreaFilled(false)
-            .preferredSize(new Dimension(220, 60));
-    //            .icon("src/main/java/com/g15/library_system/view/icons/library1.png", 20);
+            .preferredSize(new Dimension(220, 65))
+            .icon("/images/fit_nlu_logo.jpg", 15);
     add(appLogo, gbc);
     gbc.gridy++;
 
     JSeparator separatorTop = new JSeparator(SwingConstants.HORIZONTAL);
-    separatorTop.setPreferredSize(new Dimension(220, 1));
-    separatorTop.setBackground(Color.WHITE);
+    separatorTop.setPreferredSize(new Dimension(220, 2));
+    separatorTop.setForeground(Color.WHITE);
     gbc.insets = new Insets(5, 10, 5, 10);
     add(separatorTop, gbc);
     gbc.gridy++;
@@ -146,8 +144,8 @@ public class NavigationPanel extends JPanel {
     gbc.gridy++;
 
     JSeparator separatorMid = new JSeparator(SwingConstants.HORIZONTAL);
-    separatorMid.setPreferredSize(new Dimension(220, 1));
-    separatorMid.setBackground(Color.WHITE);
+    separatorMid.setPreferredSize(new Dimension(220, 2));
+    separatorMid.setForeground(Color.WHITE);
     add(separatorMid, gbc);
     gbc.gridy++;
 
@@ -186,8 +184,8 @@ public class NavigationPanel extends JPanel {
     gbc.gridy++;
 
     JSeparator separatorBot = new JSeparator(SwingConstants.HORIZONTAL);
-    separatorBot.setPreferredSize(new Dimension(220, 1));
-    separatorBot.setBackground(Color.WHITE);
+    separatorBot.setPreferredSize(new Dimension(220, 2));
+    separatorBot.setForeground(Color.WHITE);
     add(separatorBot, gbc);
     gbc.gridy++;
 
@@ -258,8 +256,9 @@ public class NavigationPanel extends JPanel {
     int height = getHeight();
 
     GradientPaint gp =
-        new GradientPaint(0, 0, new Color(23, 159, 219), 0, height, new Color(11, 24, 63)); // blue
-    //    GradientPaint gp = new GradientPaint(0, 0,new  Color(75, 107, 220), 0, height, new
+        new GradientPaint(
+            0, 0, Style.BLUE_MENU_BACKGROUND_COLOR, 0, height, new Color(11, 24, 63)); // blue
+    //        GradientPaint gp = new GradientPaint(0, 0,new  Color(75, 107, 220), 0, height, new
     // Color(164, 115, 186));
     g2d.setPaint(gp);
     g2d.fillRect(0, 0, width, height);

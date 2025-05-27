@@ -3,14 +3,17 @@ package com.g15.library_system.data;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
+import com.g15.library_system.observers.BookObserver;
+import com.g15.library_system.observers.BookSubject;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class BookData implements Data<Book> {
+public class BookData implements Data<Book>, BookSubject {
   private static final BookData INSTANCE = new BookData();
   private final List<Book> books = new ArrayList<>();
+  private List<BookObserver> observers = new ArrayList<>();
 
   private BookData() {
     this.initializeData();
@@ -19,6 +22,7 @@ public class BookData implements Data<Book> {
   @Override
   public void add(Book b) {
     this.books.add(b);
+    notifyObservers();
   }
 
   @Override
@@ -40,7 +44,6 @@ public class BookData implements Data<Book> {
             Book.builder()
                 .id(1L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("J.K. Rowling")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("Harry Potter and the Sorcerer's Stone")
@@ -49,11 +52,12 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.FANTASY)
                 .currentQuantity(10)
                 .totalQuantity(100)
+                .images(
+                    new ArrayList<>(List.of("/images/Harry Potter and the Sorcerer's Stone.png")))
                 .build(),
             Book.builder()
                 .id(2L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("George Orwell")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("1984")
@@ -62,11 +66,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.DYSTOPIAN)
                 .currentQuantity(8)
                 .totalQuantity(50)
+                .images(new ArrayList<>(List.of("/images/Secker & Warburg.png")))
                 .build(),
             Book.builder()
                 .id(3L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Harper Lee")
                 .bookStatus(BookStatus.BORROWED)
                 .title("To Kill a Mockingbird")
@@ -75,11 +79,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.FICTION)
                 .currentQuantity(2)
                 .totalQuantity(30)
+                .images(new ArrayList<>(List.of("/images/To Kill a Mockingbird.png")))
                 .build(),
             Book.builder()
                 .id(4L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("F. Scott Fitzgerald")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("The Great Gatsby")
@@ -88,11 +92,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.CLASSIC)
                 .currentQuantity(5)
                 .totalQuantity(25)
+                .images(new ArrayList<>(List.of("/images/The Great Gatsby.png")))
                 .build(),
             Book.builder()
                 .id(5L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("J.R.R. Tolkien")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("The Hobbit")
@@ -101,11 +105,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.FANTASY)
                 .currentQuantity(7)
                 .totalQuantity(35)
+                .images(new ArrayList<>(List.of("/images/The Hobbit.png")))
                 .build(),
             Book.builder()
                 .id(6L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Leo Tolstoy")
                 .bookStatus(BookStatus.BORROWED)
                 .title("War and Peace")
@@ -114,11 +118,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.HISTORICAL)
                 .currentQuantity(1)
                 .totalQuantity(20)
+                .images(new ArrayList<>(List.of("/images/War and peace.png")))
                 .build(),
             Book.builder()
                 .id(7L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Gabriel García Márquez")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("One Hundred Years of Solitude")
@@ -127,11 +131,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.MAGICAL_REALISM)
                 .currentQuantity(6)
                 .totalQuantity(30)
+                .images(new ArrayList<>(List.of("/images/One Hundred Years of Solitude.png")))
                 .build(),
             Book.builder()
                 .id(8L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Mark Twain")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("The Adventures of Huckleberry Finn")
@@ -140,11 +144,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.ADVENTURE)
                 .currentQuantity(4)
                 .totalQuantity(25)
+                .images(new ArrayList<>(List.of("/images/The Adventures of Huckleberry Finn.png")))
                 .build(),
             Book.builder()
                 .id(9L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Jane Austen")
                 .bookStatus(BookStatus.BORROWED)
                 .title("Pride and Prejudice")
@@ -153,11 +157,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.ROMANCE)
                 .currentQuantity(3)
                 .totalQuantity(15)
+                .images(new ArrayList<>(List.of("/images/Pride and Prejudice.png")))
                 .build(),
             Book.builder()
                 .id(10L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Homer")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("The Odyssey")
@@ -166,11 +170,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.EPIC)
                 .currentQuantity(9)
                 .totalQuantity(40)
+                .images(new ArrayList<>(List.of("/images/The Odyssey.jpg")))
                 .build(),
             Book.builder()
                 .id(11L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Charles Dickens")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("Great Expectations")
@@ -179,11 +183,16 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.CLASSIC)
                 .currentQuantity(6)
                 .totalQuantity(25)
+                .images(
+                    new ArrayList<>(
+                        List.of(
+                            "/images/greatExpectations/image1.jpg",
+                            "/images/greatExpectations/image2.jpg",
+                            "/images/greatExpectations/image3.jpg")))
                 .build(),
             Book.builder()
                 .id(12L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Fyodor Dostoevsky")
                 .bookStatus(BookStatus.BORROWED)
                 .title("Crime and Punishment")
@@ -192,11 +201,16 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.PHILOSOPHICAL)
                 .currentQuantity(2)
                 .totalQuantity(18)
+                .images(
+                    new ArrayList<>(
+                        List.of(
+                            "/images/crimeAndPunishment/image1.jpg",
+                            "/images/crimeAndPunishment/image2.jpg",
+                            "/images/crimeAndPunishment/image3.jpg")))
                 .build(),
             Book.builder()
                 .id(13L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Herman Melville")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("Moby-Dick")
@@ -205,11 +219,16 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.ADVENTURE)
                 .currentQuantity(5)
                 .totalQuantity(22)
+                .images(
+                    new ArrayList<>(
+                        List.of(
+                            "/images/mobyDick/image1.jpg",
+                            "/images/mobyDick/image2.jpg",
+                            "/images/mobyDick/image3.jpg")))
                 .build(),
             Book.builder()
                 .id(14L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("George R.R. Martin")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("A Game of Thrones")
@@ -218,11 +237,15 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.FANTASY)
                 .currentQuantity(10)
                 .totalQuantity(50)
+                .images(
+                    new ArrayList<>(
+                        List.of(
+                            "/images/aGameOfThrones/image1.jpg",
+                            "/images/aGameOfThrones/image2.jpg")))
                 .build(),
             Book.builder()
                 .id(15L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Arthur Conan Doyle")
                 .bookStatus(BookStatus.BORROWED)
                 .title("The Adventures of Sherlock Holmes")
@@ -231,11 +254,15 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.MYSTERY)
                 .currentQuantity(3)
                 .totalQuantity(20)
+                .images(
+                    new ArrayList<>(
+                        List.of(
+                            "/images/theAdventuresOfSherlockHolmes/image1.jpg",
+                            "/images/theAdventuresOfSherlockHolmes/image2.jpg")))
                 .build(),
             Book.builder()
                 .id(16L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Mary Shelley")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("Frankenstein")
@@ -244,11 +271,14 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.HORROR)
                 .currentQuantity(7)
                 .totalQuantity(30)
+                .images(
+                    new ArrayList<>(
+                        List.of(
+                            "/images/frankenstein/image1.jpg", "/images/frankenstein/image2.jpg")))
                 .build(),
             Book.builder()
                 .id(17L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("J.D. Salinger")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("The Catcher in the Rye")
@@ -257,11 +287,15 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.FICTION)
                 .currentQuantity(6)
                 .totalQuantity(28)
+                .images(
+                    new ArrayList<>(
+                        List.of(
+                            "/images/theCatcherInTheRye/image1.jpg",
+                            "/images/theCatcherInTheRye/image2.jpg")))
                 .build(),
             Book.builder()
                 .id(18L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Virginia Woolf")
                 .bookStatus(BookStatus.BORROWED)
                 .title("To the Lighthouse")
@@ -270,11 +304,11 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.MODERNIST)
                 .currentQuantity(2)
                 .totalQuantity(12)
+                .images(new ArrayList<>(List.of("/images/toTheLighthouse/image1.jpg")))
                 .build(),
             Book.builder()
                 .id(19L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Ernest Hemingway")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("The Old Man and the Sea")
@@ -283,11 +317,15 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.FICTION)
                 .currentQuantity(9)
                 .totalQuantity(35)
+                .images(
+                    new ArrayList<>(
+                        List.of(
+                            "/images/theOldManAndTheSea/image1.jpg",
+                            "/images/theOldManAndTheSea/image2.jpg")))
                 .build(),
             Book.builder()
                 .id(20L)
                 .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
                 .author("Dante Alighieri")
                 .bookStatus(BookStatus.AVAILABLE)
                 .title("The Divine Comedy")
@@ -296,8 +334,31 @@ public class BookData implements Data<Book> {
                 .genreType(GenreType.EPIC)
                 .currentQuantity(8)
                 .totalQuantity(30)
+                .images(new ArrayList<>(List.of("/images/theDivineComedy/image1.jpg")))
                 .build());
-
     books.addAll(bookInt);
+  }
+
+  // observer
+  @Override
+  public void registerObserver(BookObserver o) {
+    observers.add(o);
+  }
+
+  @Override
+  public void removeObserver(BookObserver o) {
+    observers.remove(o);
+  }
+
+  @Override
+  public void notifyObservers() {
+    for (BookObserver o : observers) {
+      o.update();
+    }
+  }
+
+  @Override
+  public String toString() {
+    return "BookData{" + "books=" + books + '}';
   }
 }

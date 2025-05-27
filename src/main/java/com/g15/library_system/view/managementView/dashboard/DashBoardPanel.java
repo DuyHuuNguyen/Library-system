@@ -50,7 +50,7 @@ public class DashBoardPanel extends JPanel {
           LabelBuilder.builder()
               .text("<html><span style='color:black;'>Welcome, </span>" + userName + "!</html>")
               .font(Style.FONT_BOLD_30)
-              .textColor(new Color(11, 124, 172))
+              .textColor(Style.BLUE_TEXT_COLOR)
               .preferredSize(new Dimension(400, 50))
               .horizontal(SwingConstants.LEFT);
       gbc.gridx = 0;
@@ -89,7 +89,7 @@ public class DashBoardPanel extends JPanel {
   }
 
   public class ContentPanel extends JPanel {
-    private LenderChartPanel lenderChartPanel;
+    private ReaderSignupTrendsChart lenderChartPanel;
     private ReaderTypesChartPanel readerTypesChartPanel;
     private BookAvailabilityChartPanel bookAvailabilityChartPanel;
     private LendingTrendsChartPanel lendingTrendsChartPanel;
@@ -133,7 +133,7 @@ public class DashBoardPanel extends JPanel {
       gbc.gridx = 1;
       gbc.gridy = 2;
       gbc.gridwidth = 2;
-      lenderChartPanel = new LenderChartPanel();
+      lenderChartPanel = new ReaderSignupTrendsChart();
       add(lenderChartPanel, gbc);
       // ========== ROW 4 ===========
       // Visitors Chart
