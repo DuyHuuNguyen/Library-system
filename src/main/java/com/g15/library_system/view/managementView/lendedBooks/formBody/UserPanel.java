@@ -1,6 +1,7 @@
 package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
 import com.g15.library_system.controller.ReaderController;
+import com.g15.library_system.data.CacheData;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.provider.ApplicationContextProvider;
@@ -118,6 +119,7 @@ public class UserPanel extends JPanel {
 
   public void accept(Transaction transaction) {
     transaction.setLibraryCard(reader.getLibraryCard());
+    transaction.setLibrarian(CacheData.getCURRENT_LIBRARIAN());
   }
 
   public void isValidate() {

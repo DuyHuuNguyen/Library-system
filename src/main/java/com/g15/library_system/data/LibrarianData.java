@@ -20,25 +20,25 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
   }
 
   @Override
-  public void add(Librarian librarian) {
+  public synchronized void add(Librarian librarian) {
     this.librarians.add(librarian);
     notifyObservers();
   }
 
   @Override
-  public void add(List<Librarian> t) {
+  public synchronized void add(List<Librarian> t) {
     this.librarians.addAll(t);
     notifyObservers();
   }
 
   @Override
-  public void remove(Librarian librarian) {
+  public synchronized void remove(Librarian librarian) {
     this.librarians.remove(librarian);
     notifyObservers();
   }
 
   @Override
-  public void remove(int index) {
+  public synchronized void remove(int index) {
     this.librarians.remove(index);
     notifyObservers();
   }
@@ -89,17 +89,17 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
   }
 
   @Override
-  public void registerObserver(LibrarianObserver o) {
+  public synchronized void registerObserver(LibrarianObserver o) {
     this.observers.add(o);
   }
 
   @Override
-  public void removeObserver(LibrarianObserver o) {
+  public synchronized void removeObserver(LibrarianObserver o) {
     this.observers.remove(o);
   }
 
   @Override
-  public void notifyObservers() {
+  public synchronized void notifyObservers() {
     for (LibrarianObserver observer : observers) {
       observer.updateLibrarianData();
     }

@@ -24,42 +24,42 @@ public class TransactionData implements Data<Transaction>, TransactionSubject {
   }
 
   @Override
-  public void registerObserver(TransactionObserver o) {
+  public synchronized void registerObserver(TransactionObserver o) {
     this.observers.add(o);
   }
 
   @Override
-  public void removeObserver(TransactionObserver o) {
+  public synchronized void removeObserver(TransactionObserver o) {
     this.observers.remove(o);
   }
 
   @Override
-  public void notifyObservers() {
+  public synchronized void notifyObservers() {
     for (TransactionObserver observer : observers) {
       observer.updateTransactionData();
     }
   }
 
   @Override
-  public void add(Transaction transaction) {
+  public synchronized void add(Transaction transaction) {
     this.transactions.add(transaction);
     notifyObservers();
   }
 
   @Override
-  public void add(List<Transaction> t) {
+  public synchronized void add(List<Transaction> t) {
     this.transactions.addAll(t);
     notifyObservers();
   }
 
   @Override
-  public void remove(Transaction transaction) {
+  public synchronized void remove(Transaction transaction) {
     this.transactions.remove(transaction);
     notifyObservers();
   }
 
   @Override
-  public void remove(int index) {
+  public synchronized void remove(int index) {
     try {
       this.transactions.remove(index);
       notifyObservers();

@@ -24,32 +24,32 @@ public class BookData implements Data<Book>, BookSubject {
   }
 
   @Override
-  public void add(Book book) {
+  public synchronized void add(Book book) {
     log.error("is add {}", this.books.add(book));
     notifyObservers();
   }
 
   @Override
-  public void add(List<Book> books) {
+  public synchronized void add(List<Book> books) {
     this.books.addAll(books);
     notifyObservers();
   }
 
   @Override
-  public void remove(Book book) {
+  public synchronized void remove(Book book) {
     this.books.remove(book);
     notifyObservers();
   }
 
   @Override
-  public void remove(int index) {
+  public synchronized void remove(int index) {
     if (index >= 0 && index < books.size()) {
       this.books.remove(index);
       notifyObservers();
     }
   }
 
-  public void update(Book book) {
+  public synchronized void update(Book book) {
     for (int i = 0; i < this.books.size(); i++) {
       Book existingBook = this.books.get(i);
       if (existingBook.hasSameId(book.getId())) {
@@ -402,17 +402,17 @@ public class BookData implements Data<Book>, BookSubject {
 
   // observer
   @Override
-  public void registerObserver(BookObserver o) {
+  public synchronized void registerObserver(BookObserver o) {
     observers.add(o);
   }
 
   @Override
-  public void removeObserver(BookObserver o) {
+  public synchronized void removeObserver(BookObserver o) {
     observers.remove(o);
   }
 
   @Override
-  public void notifyObservers() {
+  public synchronized void notifyObservers() {
     for (BookObserver o : observers) {
       o.updateBookData();
     }

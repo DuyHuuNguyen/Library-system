@@ -296,6 +296,7 @@ public class BookPanel extends JPanel {
     buttonPanel.showButton(ButtonPanel.ButtonState.ADD_BOOK);
     addBookPanel.cancel();
     tablePanel.cancel();
+    bookWithQuantity.clear();
   }
 
   public void accept(Transaction transaction) {
