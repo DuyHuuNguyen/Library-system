@@ -50,11 +50,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-devtools</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--			<optional>true</optional>-->
+<!--		</dependency>-->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+			<groupId>com.twelvemonkeys.imageio</groupId>
+			<artifactId>imageio-core</artifactId>
+			<version>3.9.4</version>
 		</dependency>
 
 		<dependency>
@@ -92,6 +97,17 @@
 			<version>5.2.3</version>
 		</dependency>
 
+		<dependency>
+			<groupId>net.java.timingframework</groupId>
+			<artifactId>timingframework-swing</artifactId>
+			<version>7.3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>timingframework</artifactId>
+			<version>0.55</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.jfree</groupId>
@@ -119,12 +135,6 @@
 			<groupId>com.miglayout</groupId>
 			<artifactId>miglayout-swing</artifactId>
 			<version>11.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.lgooddatepicker</groupId>
-			<artifactId>LGoodDatePicker</artifactId>
-			<version>11.2.1</version>
 		</dependency>
 
 

@@ -1,6 +1,7 @@
 package com.g15.library_system.mapper.impl;
 
 import com.g15.library_system.dto.BookExcelDTO;
+import com.g15.library_system.dto.ImportExcelBookDTO;
 import com.g15.library_system.dto.TitleAndFirstImageBookDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
@@ -72,9 +73,11 @@ public class BookMapperImpl implements BookMapper {
       Book book = entry.getKey();
       data[i] =
           new Object[] {
-            false,
+            //            false,
             book.getTitle(),
             book.getAuthor(),
+            book.getPublisher(),
+            book.getPublishYear(),
             book.getGenreType().toString(),
             entry.getValue().toString()
           };
@@ -141,6 +144,19 @@ public class BookMapperImpl implements BookMapper {
     return TitleAndFirstImageBookDTO.builder()
         .title(response.getTitle())
         .firstImage(response.firstImage)
+        .build();
+  }
+
+  @Override
+  public Book toBook(ImportExcelBookDTO importExcelBookDTO) {
+    return Book.builder()
+        .title(importExcelBookDTO.getTitle())
+        .author(importExcelBookDTO.getAuthor())
+        .publisher(importExcelBookDTO.getPublisher())
+        .publishYear(Integer.parseInt(importExcelBookDTO.getPublishYear()))
+        .genreType(Enum.valueOf(GenreType.class, importExcelBookDTO.getGenreType()))
+        .currentQuantity(Integer.parseInt(importExcelBookDTO.getTotalQuantity()))
+        .totalQuantity(Integer.parseInt(importExcelBookDTO.getTotalQuantity()))
         .build();
   }
 }

@@ -1,5 +1,6 @@
 package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
+import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.SwitchButton;
 import com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser;
@@ -11,6 +12,7 @@ import com.g15.library_system.view.swingComponentGenerators.*;
 import java.awt.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -43,6 +45,11 @@ public class DetailPanel extends JPanel {
 
     dueDateChooser = new DateChooser();
     dueDateChooser.setSelectedDate(Date.valueOf(LocalDate.now().plusWeeks(1)));
+    dueDateChooser.setDateSelectable(
+        date -> {
+          LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          return !localDate.isBefore(LocalDate.now()); // this disable past date
+        });
     dueDateChooser.setTextField(dueDateTF);
 
     lendDateL = LabelGenerator.createRequireLabel("Lending Date");
@@ -51,6 +58,7 @@ public class DetailPanel extends JPanel {
 
     lendDateChooser = new DateChooser();
     lendDateChooser.setTextField(lendDateTF);
+    lendDateChooser.getSelectedDate();
     lendDateChooser.addActionDateChooserListener(
         new DateChooserAdapter() {
           @Override
@@ -63,6 +71,11 @@ public class DetailPanel extends JPanel {
             dueDateChooser.setSelectedDate(calendar.getTime());
           }
         });
+    lendDateChooser.setDateSelectable(
+        date -> {
+          LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          return !localDate.isBefore(LocalDate.now()); // this disable past date
+        });
 
     notificationL =
         LabelBuilder.builder()
@@ -70,6 +83,7 @@ public class DetailPanel extends JPanel {
             .font(Style.FONT_PLAIN_13)
             .horizontal(SwingConstants.LEFT);
     notificationSB = new SwitchButton();
+    notificationSB.doClick();
 
     gbc.gridy++;
     add(lendDateL, gbc);
@@ -92,7 +106,16 @@ public class DetailPanel extends JPanel {
   }
 
   public void cancel() {
-    if (notificationSB.isSelected()) notificationSB.doClick();
+    if (!notificationSB.isSelected()) notificationSB.doClick();
     lendDateChooser.toDay();
+  }
+
+  public void accept(Transaction transaction) {
+    transaction.setCreatedAt(this.lendDateChooser.getSelectedDate().getTime());
+    transaction.setExpectedReturnAt(this.dueDateChooser.getSelectedDate().getTime());
+  }
+
+  public boolean enableNotification() {
+    return this.notificationSB.isSelected();
   }
 }

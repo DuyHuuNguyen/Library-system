@@ -9,7 +9,6 @@ import com.g15.library_system.view.overrideComponent.searchFieldOption.SearchOpt
 import com.g15.library_system.view.overrideComponent.searchFieldOption.TextFieldSearchOption;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ToolPanel extends JPanel {
   private final Dimension DIMENSION_BUTTON = new Dimension();
   private CustomButton addBt, notificationBt, reloadBt, exportBt, importBt, gotoTableBt, modifyBt;
-  private Map<String, Runnable> actionMap = new HashMap<>();
 
   private CardLayout cardLayout;
   private JPanel panelContent;
@@ -87,7 +85,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -107,7 +105,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -124,7 +122,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -142,7 +140,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -152,6 +150,7 @@ public class ToolPanel extends JPanel {
     importBt.addActionListener(
         e -> {
           // code here
+          this.mapApi.get(ApiKey.IMPORT_EXCEL).run();
         });
     reloadBt =
         CustomButtonBuilder.builder()
@@ -160,7 +159,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -169,7 +168,6 @@ public class ToolPanel extends JPanel {
             .icon("/icons/reload.png", 10);
     reloadBt.addActionListener(
         e -> {
-          // code here
           mapApi.get(ApiKey.RELOAD).run();
         });
     addBt =
@@ -180,7 +178,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)
@@ -189,7 +187,10 @@ public class ToolPanel extends JPanel {
             .icon("/icons/addIcon.png", 10);
 
     addBt.addActionListener(
-        e -> this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_ADD_NEW_BOOK));
+        e -> {
+          //            System.out.println("panel add ");
+          this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_ADD_NEW_BOOK);
+        });
     actionBtPn.add(addBt);
 
     notificationBt =
@@ -200,7 +201,7 @@ public class ToolPanel extends JPanel {
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
-            .radius(1)
+            .radius(10)
             .alignment(SwingConstants.LEFT)
             .drawBorder(false)
             .opaque(false)

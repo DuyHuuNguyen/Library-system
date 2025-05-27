@@ -9,6 +9,7 @@ import com.g15.library_system.view.managementView.myAccount.MyAccountPanel;
 import com.g15.library_system.view.managementView.overdueBooks.OverdueBookMainPanel;
 import com.g15.library_system.view.managementView.readers.ReaderPanel;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
+import com.g15.library_system.view.managementView.returnBooks.controllers.ReturnManagementController;
 import com.g15.library_system.view.managementView.setting.SettingPanel;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -50,6 +51,9 @@ public class WorkspacePanel extends JPanel {
     add(myAccountPanel, NavigationType.MY_ACCOUNT.getCardName());
 
     showPanel(NavigationType.DASHBOARD);
+
+    ReturnManagementController returnManagementController =
+        new ReturnManagementController(returnBookPanel);
   }
 
   public void showPanel(NavigationType navigationType) {
@@ -68,12 +72,12 @@ public class WorkspacePanel extends JPanel {
     this.dashBoardPanel.setReturnedBooksCardButtonListener(listener);
   }
 
-  public void setAvailableBooksCardButtonListener(ActionListener listener) {
-    this.dashBoardPanel.setAvailableBooksCardButtonListener(listener);
+  public void setReadersCardButtonListener(ActionListener listener) {
+    this.dashBoardPanel.setReadersCardButtonListener(listener);
   }
 
-  public void setTotalUsersCardButtonListener(ActionListener listener) {
-    this.dashBoardPanel.setTotalUsersCardButtonListener(listener);
+  public void setLibrariansCardButtonListener(ActionListener listener) {
+    this.dashBoardPanel.setLibrariansCardButtonListener(listener);
   }
 
   public void setOverdueBooksCardButtonListener(ActionListener listener) {

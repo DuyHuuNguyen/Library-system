@@ -2,6 +2,9 @@ package com.g15.library_system.view.managementView.lendedBooks.formBody;
 
 import com.g15.library_system.controller.BookController;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.entity.Transaction;
+import com.g15.library_system.enums.TransactionType;
+import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.CustomButton;
@@ -12,6 +15,7 @@ import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import com.g15.library_system.view.swingComponentGenerators.*;
 import java.awt.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.AncestorEvent;
@@ -27,6 +31,7 @@ public class BookPanel extends JPanel {
 
   private final BookController bookController =
       ApplicationContextProvider.getBean(BookController.class);
+  private final BookMapper bookMapper = ApplicationContextProvider.getBean(BookMapper.class);
 
   private class ButtonPanel extends JPanel {
     private CustomButton addBookBtn, backBtn, summitBtn;
@@ -54,6 +59,7 @@ public class BookPanel extends JPanel {
 
     public ButtonPanel() {
       setLayout(new FlowLayout(FlowLayout.LEFT));
+      setOpaque(false);
       addBookBtn =
           CustomButtonBuilder.builder()
               .text("Add Book")
@@ -127,10 +133,12 @@ public class BookPanel extends JPanel {
 
     public TablePanel() {
       setLayout(new BorderLayout());
+      setOpaque(false);
+      String[] columnNames = {
+        "", "Title", "Author", "Publisher", "Public Year", "GenreType", "Quantity"
+      };
 
-      String[] columnNames = {"", "Title", "Author", "GenreType", "Quantity"};
-
-      Object[][] tableData = bookController.toBookDataWithQuantity(bookWithQuantity);
+      Object[][] tableData = bookMapper.toBookDataWithQuantity(bookWithQuantity);
 
       bookTable = new CheckboxTablePanel(columnNames, tableData);
       add(bookTable, BorderLayout.CENTER);
@@ -146,7 +154,7 @@ public class BookPanel extends JPanel {
         bookWithQuantity.put(entry.getKey(), value);
       }
       bookTable.removeAllDataTable();
-      bookTable.addDataToTable(bookController.toBookDataWithQuantity(bookWithQuantity));
+      bookTable.addDataToTable(bookMapper.toBookDataWithQuantity(bookWithQuantity));
     }
   }
 
@@ -160,8 +168,10 @@ public class BookPanel extends JPanel {
 
     public AddBookPanel() {
       setLayout(new BorderLayout());
+      setOpaque(false);
 
       JPanel formPanel = new JPanel(new GridBagLayout());
+      formPanel.setOpaque(false);
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.fill = GridBagConstraints.HORIZONTAL;
       gbc.insets = new Insets(5, 5, 5, 5);
@@ -191,8 +201,10 @@ public class BookPanel extends JPanel {
       formPanel.add(titleTF, gbc);
 
       bookCardHolder = new JPanel();
+      bookCardHolder.setBackground(Color.WHITE);
       bookCardHolder.setLayout(new BoxLayout(bookCardHolder, BoxLayout.Y_AXIS));
       scrollPane = new JScrollPane(bookCardHolder);
+      scrollPane.setBackground(Color.WHITE);
       scrollPane.setPreferredSize(new Dimension(600, 250));
       scrollPane.setBorder(BorderFactory.createTitledBorder("Selected Books"));
 
@@ -264,8 +276,10 @@ public class BookPanel extends JPanel {
 
   private void init() {
     setLayout(new BorderLayout());
-    cardLayout = new CardLayout(10, 10);
+    cardLayout = new CardLayout(0, 0);
     cardPanel = new JPanel(cardLayout);
+    cardPanel.setPreferredSize(new Dimension(500, 650));
+    cardPanel.setOpaque(false);
 
     addBookPanel = new AddBookPanel();
     buttonPanel = new ButtonPanel();
@@ -282,5 +296,26 @@ public class BookPanel extends JPanel {
     buttonPanel.showButton(ButtonPanel.ButtonState.ADD_BOOK);
     addBookPanel.cancel();
     tablePanel.cancel();
+    bookWithQuantity.clear();
+  }
+
+  public void accept(Transaction transaction) {
+    transaction.setBooks(bookWithQuantity);
+    transaction.setDescription(
+        TransactionType.BORROW
+            + ": "
+            + bookWithQuantity.entrySet().stream()
+                .map(entry -> entry.getKey().getTitle() + " quantity: " + entry.getValue())
+                .collect(Collectors.joining(", ")));
+  }
+
+  public void isValidate() {
+    if (bookWithQuantity.isEmpty()) {
+      throw new IllegalArgumentException("Empty book!!");
+    }
+  }
+
+  public void updateBookQuantity() {
+    bookController.updateBookQuantity(bookWithQuantity);
   }
 }

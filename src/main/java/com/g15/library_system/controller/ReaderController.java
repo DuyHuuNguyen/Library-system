@@ -31,4 +31,8 @@ public class ReaderController {
   public String[] getAllEmailAcceptNotifyNewBook() {
     return this.readerFacade.getAllEmailAcceptNotifyNewBook();
   }
+
+  public void sendEmailAddMemberSuccessful(String email) {
+    readerFacade.sendEmailAddMemberSuccessful(email);
+  }
 }

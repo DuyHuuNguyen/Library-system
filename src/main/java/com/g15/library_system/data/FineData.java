@@ -1,52 +1,56 @@
 package com.g15.library_system.data;
 
-import com.g15.library_system.entity.OverdueFee;
-import com.g15.library_system.enums.FineStatus;
+import com.g15.library_system.entity.OverdueFine;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class FineData implements Data<OverdueFee> {
+public class FineData implements Data<OverdueFine> {
   private static final FineData INSTANCE = new FineData();
-  private final List<OverdueFee> overdueFees = new ArrayList<>();
+  private final List<OverdueFine> overdueFines = new ArrayList<>();
 
   private FineData() {
     this.initializeData();
   }
 
   @Override
-  public void add(OverdueFee b) {
-    this.overdueFees.add(b);
+  public synchronized void add(OverdueFine b) {
+    this.overdueFines.add(b);
   }
 
   @Override
-  public void add(List<OverdueFee> t) {}
+  public synchronized void add(List<OverdueFine> t) {
+    this.overdueFines.addAll(t);
+  }
 
   @Override
-  public void remove(OverdueFee OverdueFee) {}
+  public synchronized void remove(OverdueFine overdueFine) {
+    this.overdueFines.remove(overdueFine);
+  }
 
   @Override
-  public void remove(int index) {}
+  public synchronized void remove(int index) {
+    if (index >= 0 && index < overdueFines.size()) {
+        this.overdueFines.remove(index);
+    }
+  }
 
   public static FineData getInstance() {
     return INSTANCE;
   }
 
   private void initializeData() {
-    List<OverdueFee> overdueFeeInt =
+    List<OverdueFine> overdueFineInt =
         List.of(
-            OverdueFee.builder().id(1L).price(0.2f).fineStatus(FineStatus.RETURN).build(),
-            OverdueFee.builder().id(2L).price(0.3f).fineStatus(FineStatus.RETURN).build(),
-            OverdueFee.builder().id(3L).price(0.4f).fineStatus(FineStatus.RETURN).build(),
-            OverdueFee.builder().id(4L).price(0.5f).fineStatus(FineStatus.RETURN).build(),
-            OverdueFee.builder().id(5L).price(0.6f).fineStatus(FineStatus.RETURN).build(),
-            OverdueFee.builder().id(6L).price(0.7f).fineStatus(FineStatus.RETURN).build(),
-            OverdueFee.builder().id(7L).price(0.8f).fineStatus(FineStatus.RETURN).build(),
-            OverdueFee.builder().id(8L).price(0.9f).fineStatus(FineStatus.RETURN).build(),
-            OverdueFee.builder().id(9L).price(1.0f).fineStatus(FineStatus.RETURN).build(),
-            OverdueFee.builder().id(10L).price(1.1f).fineStatus(FineStatus.RETURN).build());
+            OverdueFine.builder().price(3500).build(),
+            OverdueFine.builder().price(3500).build(),
+            OverdueFine.builder().price(3500).build(),
+            OverdueFine.builder().price(3500).build(),
+            OverdueFine.builder().price(3500).build(),
+            OverdueFine.builder().price(3500).build(),
+            OverdueFine.builder().price(3500).build());
 
-    overdueFees.addAll(overdueFeeInt);
+    overdueFines.addAll(overdueFineInt);
   }
 }

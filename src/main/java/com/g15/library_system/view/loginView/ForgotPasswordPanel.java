@@ -1,6 +1,10 @@
 package com.g15.library_system.view.loginView;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.g15.library_system.controller.LibrarianController;
+import com.g15.library_system.dto.request.SendOTPRequest;
+import com.g15.library_system.provider.ApplicationContextProvider;
+import com.g15.library_system.verifier.EmailVerifier;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
 import java.awt.*;
@@ -12,11 +16,14 @@ public class ForgotPasswordPanel extends JPanel {
   private JButton sendCodeBt, backBt;
   private LoginCardPanel loginCardPanel;
 
+  private LibrarianController librarianController =
+      ApplicationContextProvider.getBean(LibrarianController.class);
+
   public ForgotPasswordPanel(LoginCardPanel loginCardPanel) {
     this.setOpaque(false);
     this.setLayout(new MigLayout("fill,insets 20", "[center]", "[center]"));
     this.loginCardPanel = loginCardPanel;
-    RoundedPanel panel = new RoundedPanel(20, Color.WHITE, null);
+    RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237, 230), null);
     panel.setLayout(new MigLayout("wrap,fill,insets 35 45 30 45", "fill,250:280"));
     panel.putClientProperty(
         FlatClientProperties.STYLE,
@@ -33,6 +40,7 @@ public class ForgotPasswordPanel extends JPanel {
     emailField.setPreferredSize(new Dimension(250, 35));
     emailField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email");
     emailField.addActionListener(e -> sendCodeBt.doClick());
+    emailField.setInputVerifier(new EmailVerifier());
 
     sendCodeBt = new JButton("Send Code");
     sendCodeBt.setPreferredSize(new Dimension(250, 35));
@@ -41,6 +49,8 @@ public class ForgotPasswordPanel extends JPanel {
     sendCodeBt.setForeground(Color.WHITE);
     sendCodeBt.addActionListener(
         e -> {
+          var sendOTPRequest = SendOTPRequest.builder().email(emailField.getText()).build();
+          librarianController.sendOTP(sendOTPRequest);
           loginCardPanel.clearOTPField();
           loginCardPanel.showPanel(LoginCardPanel.VERIFY);
         });

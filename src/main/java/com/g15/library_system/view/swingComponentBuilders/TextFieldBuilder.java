@@ -243,4 +243,9 @@ public class TextFieldBuilder extends JTextField {
     this.setHorizontalAlignment(alignment);
     return this;
   }
+
+  public TextFieldBuilder addInputVerifier(InputVerifier inputVerifier) {
+    this.setInputVerifier(inputVerifier);
+    return this;
+  }
 }

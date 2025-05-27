@@ -14,6 +14,9 @@ public class Reader extends User {
   @Builder.Default private Boolean isSubscribe = false;
 
   public void addLibraryCard(LibraryCard libraryCard) {
+    if (this.libraryCard != null) {
+      throw new IllegalStateException("This Reader already has a LibraryCard assigned.");
+    }
     this.libraryCard = libraryCard;
     this.libraryCard.addOwner(this);
   }
@@ -40,5 +43,17 @@ public class Reader extends User {
 
   public boolean idContains(Long readerId) {
     return super.idContains(readerId);
+  }
+
+  public int getTotalReturnedBooks() {
+    return libraryCard.getTotalReturnedBooks();
+  }
+
+  public int getTotalBorrowedBooks() {
+    return libraryCard.getTotalBorrowedBooks();
+  }
+
+  public int getTotalOverdueBooks() {
+    return libraryCard.getTotalOverdueBooks();
   }
 }

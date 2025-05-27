@@ -1,6 +1,7 @@
 package com.g15.library_system.mapper;
 
 import com.g15.library_system.dto.BookExcelDTO;
+import com.g15.library_system.dto.ImportExcelBookDTO;
 import com.g15.library_system.dto.TitleAndFirstImageBookDTO;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
@@ -26,4 +27,6 @@ public interface BookMapper {
   Object[][] toDataNotifyBookTable(List<NotifyBookResponse> responses);
 
   TitleAndFirstImageBookDTO toTitleAndFirstImageBookDTO(NotifyBookResponse response);
+
+  Book toBook(ImportExcelBookDTO importExcelBookDTO);
 }

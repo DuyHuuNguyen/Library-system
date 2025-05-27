@@ -1,32 +1,60 @@
 package com.g15.library_system.view.managementView.lendedBooks;
 
+import com.g15.library_system.controller.TransactionController;
+import com.g15.library_system.dto.TransactionContentDTO;
+import com.g15.library_system.entity.Transaction;
+import com.g15.library_system.enums.TransactionType;
+import com.g15.library_system.mapper.TransactionMapper;
+import com.g15.library_system.mapper.impl.TransactionMapperImpl;
+import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.managementView.lendedBooks.formBody.*;
 import com.g15.library_system.view.overrideComponent.RoundedPanel;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
+import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
 
-public class LendedBookPanel extends JPanel {
+public class LendedBookPanel extends JPanel{
   private FormPanel formPn;
   private ButtonPanel buttonPn;
+  private TablePanel tablePn;
+  private CardLayout cardLayout;
+  private ContainerPn containerPn;
+
+  private TransactionController transactionController =
+      ApplicationContextProvider.getBean(TransactionController.class);
+
+  private TransactionMapper transactionMapper =
+      ApplicationContextProvider.getBean(TransactionMapperImpl.class);
 
   public LendedBookPanel() {
-    setLayout(new FlowLayout(FlowLayout.CENTER));
-    ContainerPn containerPn = new ContainerPn();
-    containerPn.setPreferredSize(new Dimension(1200, 750));
-    add(containerPn);
+    setLayout(new BorderLayout());
+    cardLayout = new CardLayout();
+    containerPn = new ContainerPn();
+    add(containerPn, BorderLayout.CENTER);
   }
 
   private class ContainerPn extends RoundedPanel {
-    ContainerPn() {
+    private final String FORM_PANEL = "form";
+    private final String TABLE_PANEL = "table";
+
+    public ContainerPn() {
       super(10, Color.WHITE, null);
-      setLayout(new BorderLayout());
+      setLayout(cardLayout);
+
       formPn = new FormPanel();
-      buttonPn = new ButtonPanel();
-      add(formPn, BorderLayout.CENTER);
-      add(buttonPn, BorderLayout.SOUTH);
+      tablePn = new TablePanel(cardLayout, this);
+
+      add(formPn, FORM_PANEL);
+      add(tablePn, TABLE_PANEL);
+
+      cardLayout.show(this, TABLE_PANEL);
+    }
+
+    public void showTablePanel() {
+      cardLayout.show(this, TABLE_PANEL);
     }
   }
 
@@ -36,28 +64,56 @@ public class LendedBookPanel extends JPanel {
     private DetailPanel detailPn;
 
     public FormPanel() {
-      setLayout(new BorderLayout(0, 0));
+      setLayout(new BorderLayout(10, 10));
 
       userPn = new UserPanel();
       bookPn = new BookPanel();
       detailPn = new DetailPanel();
+      buttonPn = new ButtonPanel();
+
+      JPanel contentPanel = new JPanel();
+      contentPanel.setLayout(new BorderLayout(10, 10));
+
+      JPanel rightSidePanel = new JPanel(new BorderLayout(0, 10));
+      rightSidePanel.setOpaque(false);
+
+      RoundedShadowPanel bookContainer = new RoundedShadowPanel();
+      bookContainer.setOpaque(false);
+      bookContainer.add(bookPn, BorderLayout.NORTH);
+      rightSidePanel.add(bookContainer, BorderLayout.CENTER);
 
       RoundedShadowPanel leftPanel = new RoundedShadowPanel();
-      setLayout(new BorderLayout(10, 10));
       leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
       leftPanel.setOpaque(false);
+
       leftPanel.add(Box.createVerticalStrut(10));
       leftPanel.add(userPn);
+
       leftPanel.add(Box.createVerticalStrut(10));
       leftPanel.add(detailPn);
+
+      JSeparator separator = new JSeparator(JSeparator.HORIZONTAL);
+      separator.setForeground(new Color(200, 200, 200));
+      separator.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+      leftPanel.add(separator);
+
+      JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+      buttonWrapper.setOpaque(false);
+      buttonWrapper.add(buttonPn);
+      buttonWrapper.setAlignmentX(Component.CENTER_ALIGNMENT);
+      buttonWrapper.setMaximumSize(new Dimension(Short.MAX_VALUE, 60));
+
+      leftPanel.add(buttonWrapper);
+      leftPanel.add(Box.createVerticalStrut(10));
+
       Dimension halfSize = new Dimension(400, 0);
       leftPanel.setPreferredSize(halfSize);
-      add(leftPanel, BorderLayout.WEST);
 
-      RoundedShadowPanel rightPanel = new RoundedShadowPanel();
-      rightPanel.setOpaque(false);
-      rightPanel.add(bookPn, BorderLayout.NORTH);
-      add(rightPanel, BorderLayout.CENTER);
+      contentPanel.add(leftPanel, BorderLayout.WEST);
+      contentPanel.add(rightSidePanel, BorderLayout.CENTER);
+
+      add(contentPanel, BorderLayout.CENTER);
     }
 
     private void cancel() {
@@ -65,11 +121,47 @@ public class LendedBookPanel extends JPanel {
       bookPn.cancel();
       detailPn.cancel();
     }
+
+    public Transaction createTransaction() {
+      Transaction transaction =
+          Transaction.builder().transactionType(TransactionType.BORROW).build();
+      userPn.accept(transaction);
+      bookPn.accept(transaction);
+      detailPn.accept(transaction);
+      return transaction;
+    }
+
+    public boolean validateForm() {
+      try {
+        userPn.isValidate();
+        bookPn.isValidate();
+        return true;
+      } catch (IllegalArgumentException e) {
+        new ToastNotification(
+                JOptionPane.getFrameForComponent(this),
+                ToastNotification.Type.WARNING,
+                ToastNotification.Location.TOP_CENTER,
+                e.getMessage())
+            .showNotification();
+        return false;
+      }
+    }
+
+    public void sendEmail(TransactionContentDTO transaction) {
+      if (detailPn.enableNotification()) {
+        transactionController.notifyBorrowTransaction(transaction);
+      }
+    }
+
+    public void updateBookQuantity() {
+      bookPn.updateBookQuantity();
+    }
   }
 
   private class ButtonPanel extends JPanel {
     public ButtonPanel() {
       setLayout(new FlowLayout(FlowLayout.CENTER));
+      setOpaque(false);
       JButton cancelButton =
           CustomButtonBuilder.builder()
               .text("Cancel")
@@ -79,7 +171,7 @@ public class LendedBookPanel extends JPanel {
               .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
               .radius(6)
               .alignment(SwingConstants.CENTER)
-              .drawBorder(false)
+              .borderColor(Style.BLUE_MENU_BACKGROUND_COLOR)
               .preferredSize(new Dimension(120, 40));
       cancelButton.addActionListener(
           e -> {
@@ -93,6 +185,7 @@ public class LendedBookPanel extends JPanel {
 
             if (option == JOptionPane.YES_OPTION) {
               formPn.cancel();
+              containerPn.showTablePanel();
             }
           });
 
@@ -107,7 +200,25 @@ public class LendedBookPanel extends JPanel {
               .alignment(SwingConstants.LEFT)
               .drawBorder(false)
               .preferredSize(new Dimension(120, 40));
-      lendButton.addActionListener(e -> {});
+      lendButton.addActionListener(
+          e -> {
+            if (formPn.validateForm()) {
+              Transaction transaction = formPn.createTransaction();
+              transaction = transactionController.createTransaction(transaction);
+              formPn.updateBookQuantity();
+              if (transaction != null) {
+                new ToastNotification(
+                        JOptionPane.getFrameForComponent(this),
+                        ToastNotification.Type.SUCCESS,
+                        ToastNotification.Location.BOTTOM_RIGHT,
+                        "Borrow successfully!!")
+                    .showNotification();
+                containerPn.showTablePanel();
+                formPn.cancel();
+                formPn.sendEmail(transactionMapper.convertToContentDTO(transaction));
+              }
+            }
+          });
       add(cancelButton);
       add(lendButton);
     }

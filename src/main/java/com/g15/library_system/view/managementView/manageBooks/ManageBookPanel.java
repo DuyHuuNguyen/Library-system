@@ -1,6 +1,7 @@
 package com.g15.library_system.view.managementView.manageBooks;
 
 import com.g15.library_system.controller.BookController;
+import com.g15.library_system.dto.request.ImportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.enums.ApiKey;
@@ -8,10 +9,13 @@ import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.mapper.impl.BookMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.manageBooks.observer.ObserverNotifyNewBook;
 import com.g15.library_system.view.overrideComponent.OptionPaneInputFileExcel;
+import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
@@ -20,7 +24,7 @@ import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ManageBookPanel extends JPanel {
+public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
   private static final Logger log = LoggerFactory.getLogger(ManageBookPanel.class);
   private JPanel panelContent;
 
@@ -38,8 +42,8 @@ public class ManageBookPanel extends JPanel {
   };
   private Object[][] data;
 
-  private JPanel bookFormAndDropImagesPanel;
-  private UpsertBookPanel bookFormPanel;
+  //  private JPanel bookFormAndDropImagesPanel;
+  //  private UpsertBookPanel bookFormPanel;
 
   private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
   private BookMapper bookMapper = ApplicationContextProvider.getBean(BookMapperImpl.class);
@@ -58,10 +62,13 @@ public class ManageBookPanel extends JPanel {
           ApiKey.SEARCH,
           () -> this.findByTextOfTextFieldSearchOptionUpDataToTable(),
           ApiKey.EXPORT_EXCEL,
-          () -> this.exportExcel());
+          () -> this.exportExcel(),
+          ApiKey.IMPORT_EXCEL,
+          () -> this.importExcel());
 
-  private UpsertBookPanel addNewBookPanel;
-  private UpsertBookPanel modifyBookPanel;
+  private AddNewBookPanel addNewBookPanel;
+  private ModifyBookPanel modifyBookPanel;
+  private NotifyNewBookPanel notifyNewBookPanel;
 
   private CardLayout cardLayout;
 
@@ -81,31 +88,36 @@ public class ManageBookPanel extends JPanel {
     this.toolPanel = new ToolPanel(cardLayout, panelContent, mapAPIs);
     this.add(toolPanel, BorderLayout.NORTH);
 
-    this.panelContent.setBackground(Color.GREEN);
+    this.panelContent.setBackground(Color.WHITE);
 
     this.initData();
 
     this.checkboxTablePanel = new CheckboxTablePanel(columns, data);
     this.panelContent.add(checkboxTablePanel, CONSTRAINT_TABLE_BOOK);
 
-    this.bookFormAndDropImagesPanel = new JPanel(new BorderLayout());
-    this.bookFormAndDropImagesPanel.setBackground(Color.PINK);
-    this.bookFormPanel = new UpsertBookPanel(1000, 500);
+    RoundedShadowPanel roundedShadowPanelForAddNewBook = new RoundedShadowPanel();
+    this.addNewBookPanel = new AddNewBookPanel(500, 500);
+    roundedShadowPanelForAddNewBook.add(this.addNewBookPanel);
+    roundedShadowPanelForAddNewBook.setPreferredSize(new Dimension(700, 650));
+    roundedShadowPanelForAddNewBook.setBackground(Style.BLUE_HEADER_TABLE_AND_BUTTON);
 
-    this.bookFormAndDropImagesPanel.add(bookFormPanel, BorderLayout.CENTER);
+    this.panelContent.add(roundedShadowPanelForAddNewBook, CONSTRAINT_ADD_NEW_BOOK);
 
-    this.panelContent.add(bookFormAndDropImagesPanel, CONSTRAINT_ADD_NEW_BOOK);
+    this.notifyNewBookPanel = new NotifyNewBookPanel();
+    this.panelContent.add(notifyNewBookPanel, CONSTRAINT_NOTIFY);
 
-    this.addNewBookPanel = new UpsertBookPanel(1000, 500);
-    this.panelContent.add(this.addNewBookPanel, CONSTRAINT_MODIFY_BOOK);
+    RoundedShadowPanel roundedShadowPanelForModifyBook = new RoundedShadowPanel();
+    this.modifyBookPanel = new ModifyBookPanel(700, 650);
+    roundedShadowPanelForModifyBook.add(modifyBookPanel);
+    roundedShadowPanelForModifyBook.setPreferredSize(new Dimension(700, 650));
 
-    this.panelContent.add(new NotifyNewBookPanel(), CONSTRAINT_NOTIFY);
-
-    this.modifyBookPanel = new UpsertBookPanel(100, 500);
-    this.panelContent.add(modifyBookPanel, CONSTRAINT_MODIFY_BOOK);
+    this.panelContent.add(roundedShadowPanelForModifyBook, CONSTRAINT_MODIFY_BOOK);
 
     add(panelContent, BorderLayout.CENTER);
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+
+    this.addNewBookPanel.addObserverNotifyNewBook(this.notifyNewBookPanel);
+    this.addNewBookPanel.addObserverNotifyNewBook(this);
   }
 
   private void removeAllDataTable() {
@@ -128,15 +140,20 @@ public class ManageBookPanel extends JPanel {
   }
 
   private void findBookModifySelected() {
-    var data = this.checkboxTablePanel.getSelectedRowData();
-    this.bookModify = this.bookController.findByTitle(data[1].toString());
-    this.modifyBookPanel.addData(bookModify);
-    log.info("selected book {}", bookModify.toString());
+    try {
+      var data = this.checkboxTablePanel.getSelectedRowData();
+      this.bookModify = this.bookController.findByTitle(data[1].toString());
+      this.modifyBookPanel.addOldBook(bookModify.get());
+      log.info("selected book {}", bookModify.toString());
+    } catch (NullPointerException e) {
+      log.error("You do not select row | In manager book feature modify book");
+    }
   }
 
   private void addNewBook() {
     var newBook = this.addNewBookPanel.getNewBook();
-    this.bookController.addNewBook(newBook.get());
+    this.bookController.addNewBook(newBook);
+    this.loadDataTable();
   }
 
   private void findByTextOfTextFieldSearchOptionUpDataToTable() {
@@ -180,5 +197,34 @@ public class ManageBookPanel extends JPanel {
             .books(this.bookController.getAll())
             .build();
     this.bookController.exportExcel(exportExcelRequest);
+  }
+
+  public void importExcel() {
+    JFileChooser fileChooser = new JFileChooser();
+    int option = fileChooser.showOpenDialog(this);
+
+    if (option == JFileChooser.APPROVE_OPTION) {
+      File selectedFile = fileChooser.getSelectedFile();
+      String path = selectedFile.getAbsolutePath();
+
+      ToastNotification panel =
+          new ToastNotification(
+              JOptionPane.getFrameForComponent(this),
+              ToastNotification.Type.INFO,
+              ToastNotification.Location.TOP_CENTER,
+              "File name : " + selectedFile.getName());
+      panel.showNotification();
+
+      log.info("Url import excel {}", selectedFile.getName());
+      this.bookController.importExcel(ImportExcelRequest.builder().url(path).build());
+
+    } else {
+      log.error("😒😒😒😒 error import file excel");
+    }
+  }
+
+  @Override
+  public void notifyNewBook() {
+    this.loadDataTable();
   }
 }

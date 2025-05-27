@@ -1,18 +1,23 @@
 package com.g15.library_system.view.managementView.manageBooks;
 
 import com.g15.library_system.controller.BookController;
+import com.g15.library_system.dto.ChangeInfoBookDTO;
 import com.g15.library_system.entity.Book;
+import com.g15.library_system.enums.ApiKey;
 import com.g15.library_system.enums.GenreType;
 import com.g15.library_system.provider.ApplicationContextProvider;
+import com.g15.library_system.verifier.NumberVerifier;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
-import com.g15.library_system.view.swingComponentGenerators.TextFieldGenerator;
+import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import java.awt.*;
+import java.util.Map;
 import java.util.Optional;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 
+@Deprecated
 @Slf4j
 public class UpsertBookPanel extends JPanel {
   private JTextField txtBookTitle;
@@ -22,22 +27,28 @@ public class UpsertBookPanel extends JPanel {
   private JTextField txtPublisherYear;
   private JTextField txtGenre;
 
-  private ImageDropPanel featurePanel;
+  private ImageDropPanel dropImagePanel;
+  private Boolean isModify;
 
   private Optional<Book> book;
   private BookController bookController = ApplicationContextProvider.getBean(BookController.class);
+  private Map<ApiKey, Runnable> mapApi;
+
   private int width;
   private int height;
 
-  public UpsertBookPanel(int width, int height) {
+  public UpsertBookPanel(int width, int height, boolean isModify, Map<ApiKey, Runnable> mapApi) {
+    this.mapApi = mapApi;
     this.width = width;
     this.height = height;
+    this.isModify = isModify;
     this.initPanel();
   }
 
   public UpsertBookPanel() {}
 
-  public UpsertBookPanel(int width, int height, Optional<Book> book) {
+  public UpsertBookPanel(int width, int height, Optional<Book> book, Map<ApiKey, Runnable> mapApi) {
+    this.mapApi = mapApi;
     this.book = book;
     this.width = width;
     this.height = height;
@@ -54,7 +65,7 @@ public class UpsertBookPanel extends JPanel {
     txtPublisherYear.setText(this.book.get().getPublishYear() + "");
     txtGenre.setText(this.book.get().getGenreType() + "");
 
-    this.featurePanel.loadImagesFromUrls(this.book.get().getImages());
+    this.dropImagePanel.loadImagesFromUrls(this.book.get().getImages());
   }
 
   public Optional<Book> getNewBook() {
@@ -66,7 +77,7 @@ public class UpsertBookPanel extends JPanel {
               .author(txtAuthor.getText())
               .publisher(txtPublisher.getText())
               .publishYear(Integer.parseInt(txtPublisherYear.getText()))
-              .images(this.featurePanel.getImageUrls())
+              .images(this.dropImagePanel.getImageUrls())
               .currentQuantity(Integer.parseInt(this.txtQuantity.getText()))
               .genreType(GenreType.find(this.txtGenre.getText()))
               .build();
@@ -86,47 +97,36 @@ public class UpsertBookPanel extends JPanel {
     bookInfoPanel.setBorder(BorderFactory.createTitledBorder("Book Information"));
 
     txtBookTitle =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder().font(Style.FONT_PLAIN_13).preferredSize(new Dimension(300, 25));
     txtQuantity =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .addInputVerifier(new NumberVerifier());
+    ;
+
     txtAuthor =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .popupMenu(name -> bookController.supportSearch(name), null);
+
     txtPublisher =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .popupMenu(name -> bookController.supportSearch(name), null);
     txtPublisherYear =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .addInputVerifier(new NumberVerifier());
+
     txtGenre =
-        TextFieldGenerator.createTextField(
-            "",
-            Style.FONT_PLAIN_13,
-            Style.WORD_COLOR_BLACK,
-            Style.BLUE_HEADER_TABLE_AND_BUTTON,
-            new Dimension(200, 25));
+        TextFieldBuilder.builder()
+            .font(Style.FONT_PLAIN_13)
+            .preferredSize(new Dimension(300, 25))
+            .popupMenu(name -> GenreType.findByName(name), null);
 
     var panelTitle = createFieldPanel("Book Title *", txtBookTitle);
     panelTitle.setBackground(Style.LIGHT_WHITE_BACKGROUND);
@@ -154,11 +154,11 @@ public class UpsertBookPanel extends JPanel {
     bookInfoPanel.add(panelYear);
     bookInfoPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-    this.featurePanel = new ImageDropPanel(300, 300);
+    this.dropImagePanel = new ImageDropPanel(300, 300);
 
-    featurePanel.setBorder(BorderFactory.createTitledBorder("Features"));
-    featurePanel.setPreferredSize(new Dimension(800, 200));
-    featurePanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    dropImagePanel.setBorder(BorderFactory.createTitledBorder("Drop Image"));
+    dropImagePanel.setPreferredSize(new Dimension(800, 200));
+    dropImagePanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     JButton btnCancel = CustomButtonBuilder.builder().text("cancel");
@@ -177,8 +177,15 @@ public class UpsertBookPanel extends JPanel {
 
     btnAddBook.addActionListener(
         e -> {
+          log.error("is modify {}", isModify);
+
           var book = this.getNewBook();
-          this.bookController.addNewBook(book.get());
+          if (isModify) {
+            // modification
+
+            this.changeInfoBook();
+
+          } else this.bookController.addNewBook(book.get());
           this.clearDataInPanel();
 
           ToastNotification notification =
@@ -188,6 +195,7 @@ public class UpsertBookPanel extends JPanel {
                   ToastNotification.Location.TOP_CENTER,
                   "Add book successful");
           notification.showNotification();
+          this.clearDataInPanel();
         });
 
     buttonPanel.add(btnCancel);
@@ -195,11 +203,28 @@ public class UpsertBookPanel extends JPanel {
     buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
     panel.add(bookInfoPanel, BorderLayout.NORTH);
-    panel.add(featurePanel, BorderLayout.CENTER);
+    panel.add(dropImagePanel, BorderLayout.CENTER);
     panel.add(buttonPanel, BorderLayout.SOUTH);
     panel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
     add(panel);
     setVisible(true);
+  }
+
+  private void changeInfoBook() {
+
+    var changeInfoBookDTO =
+        ChangeInfoBookDTO.builder()
+            .title(this.txtBookTitle.getText())
+            .totalQuantity(Integer.parseInt(this.txtQuantity.getText()))
+            .author(txtAuthor.getText())
+            .publisher(txtPublisher.getText())
+            .publishYear(Integer.parseInt(txtPublisherYear.getText()))
+            //            .images(this.dropImagePanel.getImageUrls())
+            .currentQuantity(Integer.parseInt(this.txtQuantity.getText()))
+            .genreType(GenreType.find(this.txtGenre.getText()))
+            .build();
+    log.info("change {}", changeInfoBookDTO);
+    this.book.get().changeInfo(changeInfoBookDTO);
   }
 
   private JPanel createFieldPanel(String label, JTextField textField) {
@@ -218,10 +243,11 @@ public class UpsertBookPanel extends JPanel {
     txtPublisher.setText("");
     txtPublisherYear.setText("");
     txtGenre.setText("");
-    featurePanel.clearALlImages();
+    dropImagePanel.clearALlImages();
   }
 
   public void addData(Optional<Book> bookModify) {
+    this.book = bookModify;
     this.txtBookTitle.setText(bookModify.get().getTitle());
     txtQuantity.setText(String.valueOf(bookModify.get().getTotalQuantity()));
     txtAuthor.setText(bookModify.get().getAuthor());
@@ -229,6 +255,33 @@ public class UpsertBookPanel extends JPanel {
     txtPublisherYear.setText(bookModify.get().getPublishYear() + "");
     txtGenre.setText(bookModify.get().getGenreType() + "");
 
-    this.featurePanel.loadImagesFromUrls(bookModify.get().getImages());
+    this.dropImagePanel.loadImagesFromUrls(bookModify.get().getImages());
+    this.dropImagePanel.addAllImages(bookModify.get().getImages());
+  }
+
+  public void addNewBook() {
+    log.error("url {}", dropImagePanel.getImageUrls());
+    var images = dropImagePanel.getImageUrls();
+    var book =
+        Book.builder()
+            .title(this.txtBookTitle.getText())
+            .currentQuantity(Integer.parseInt(this.txtQuantity.getText()))
+            .totalQuantity(Integer.parseInt(this.txtQuantity.getText()))
+            .publisher(this.txtPublisher.getText())
+            .publishYear(Integer.parseInt(this.txtPublisherYear.getText()))
+            .genreType(GenreType.valueOf(txtGenre.getText()))
+            .images(images)
+            .build();
+    log.info("new book {}", book);
+    this.bookController.addNewBook(book);
+
+    ToastNotification panel =
+        new ToastNotification(
+            JOptionPane.getFrameForComponent(this),
+            ToastNotification.Type.INFO,
+            ToastNotification.Location.TOP_CENTER,
+            "Add successful");
+    panel.showNotification();
+    this.mapApi.get(ApiKey.RELOAD).run();
   }
 }

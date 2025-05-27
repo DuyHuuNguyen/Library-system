@@ -30,7 +30,7 @@ public class NavigationPanel extends JPanel {
     gbc.gridx = 0;
     gbc.gridy = 0;
     gbc.insets = new Insets(10, 10, 15, 10);
-    gbc.anchor = GridBagConstraints.WEST;
+    gbc.anchor = GridBagConstraints.NORTH;
     gbc.fill = GridBagConstraints.NONE;
 
     appLogo =
@@ -138,10 +138,11 @@ public class NavigationPanel extends JPanel {
             .drawBorder(false)
             .opaque(false)
             .contentAreaFilled(false)
+            .visible(false)
             .preferredSize(new Dimension(220, 40))
             .icon("/icons/assignment_late.png", 20);
-    add(overdueBookBt, gbc);
-    gbc.gridy++;
+    //    add(overdueBookBt, gbc);
+    //    gbc.gridy++;
 
     JSeparator separatorMid = new JSeparator(SwingConstants.HORIZONTAL);
     separatorMid.setPreferredSize(new Dimension(220, 2));
@@ -218,9 +219,12 @@ public class NavigationPanel extends JPanel {
             .drawBorder(false)
             .opaque(false)
             .contentAreaFilled(false)
+            .visible(true)
             .preferredSize(new Dimension(220, 40))
             .icon("/icons/settingsIcon.png", 20);
-    add(settingBt, gbc);
+
+    //    add(settingBt, gbc);
+    add(Box.createVerticalStrut(150), gbc);
     gbc.gridy++;
 
     logoutBt =
@@ -240,7 +244,7 @@ public class NavigationPanel extends JPanel {
 
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int height = (int) screenSize.getHeight();
-    int buttonHeight = 50 + 75 + 50 * 9 + 5 + 50;
+    int buttonHeight = 50 + 75 + 50 * 9 + 5 + 50 + 40 + 40;
     int logoutHeight = 40 + 45;
     gbc.insets = new Insets(height - (buttonHeight + logoutHeight), 10, 5, 10);
     add(logoutBt, gbc);

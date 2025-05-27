@@ -2,6 +2,7 @@ package com.g15.library_system.facade;
 
 import com.g15.library_system.dto.EmailNotificationNewBooksDTO;
 import com.g15.library_system.dto.request.ExportExcelRequest;
+import com.g15.library_system.dto.request.ImportExcelRequest;
 import com.g15.library_system.dto.response.BookResponse;
 import com.g15.library_system.dto.response.NotifyBookResponse;
 import com.g15.library_system.entity.Book;
@@ -22,8 +23,6 @@ public interface BookFacade {
 
   List<BookResponse> findByTextOfTextFieldSearchOption(String text);
 
-  Object[][] toBookDataWithQuantity(Map<Book, Integer> books);
-
   void exportExcel(List<Book> books, String nameFile, String headerFile);
 
   List<Book> getAll();
@@ -33,4 +32,10 @@ public interface BookFacade {
   void exportExcel(ExportExcelRequest request);
 
   void sendEmailNotificationNewBook(EmailNotificationNewBooksDTO emailNotificationNewBooksDTO);
+
+  void importExcel(ImportExcelRequest importExcelRequest);
+
+  void markAnnouncedBook();
+
+  void updateBookQuantity(Map<Book, Integer> bookWithQuantity);
 }
