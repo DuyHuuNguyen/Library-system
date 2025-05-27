@@ -249,8 +249,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 20)))
-                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 20)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 20)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 6, 2)))
                 .description("borrow The Hobbit")
                 .build(),
             Transaction.builder()
