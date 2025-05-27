@@ -13,4 +13,8 @@ public class ReaderIdGenerator {
     String result = yearStr + countStr;
     return Long.parseLong(result);
   }
+
+  public static void main(String[] args) {
+    System.out.println(ReaderIdGenerator.generateId());
+  }
 }

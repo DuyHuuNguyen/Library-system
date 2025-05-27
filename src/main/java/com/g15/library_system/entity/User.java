@@ -26,6 +26,8 @@ public class User extends BaseEntity implements Observer {
 
   protected String address;
 
+  //  protected List<Book>
+
   public String getFullName() {
     return this.lastName.concat(" " + firstName);
   }

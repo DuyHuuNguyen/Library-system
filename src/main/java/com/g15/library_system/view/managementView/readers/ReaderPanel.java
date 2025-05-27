@@ -1,5 +1,8 @@
 package com.g15.library_system.view.managementView.readers;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -74,10 +77,12 @@ import javax.swing.*;
 //
 // }
 
+@Getter
+@Setter
 public class ReaderPanel extends JPanel {
-  public ContentPanel contentPn = new ContentPanel(this);
-  public ToolPanel toolPn = new ToolPanel(this);
-  public FooterPanel footerPn = new FooterPanel();
+  private ContentPanel contentPn = new ContentPanel(this);
+  private ToolPanel toolPn = new ToolPanel(this);
+  private FooterPanel footerPn = new FooterPanel();
 
   public ReaderPanel() {
     setLayout(new BorderLayout());

@@ -19,6 +19,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   private static final ReaderData INSTANCE = new ReaderData();
   // observers
   private List<ReaderObserver> observers = new ArrayList<>();
+  private PriorityQueue<Long> availableIds = new PriorityQueue<>();
 
   private final List<Librarian> librarians = LibrarianData.getInstance().getLibrarians();
   private final List<Book> books = BookData.getInstance().getBooks();
@@ -34,6 +35,17 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
 
   @Override
   public void add(Reader reader) {
+    // Gán ID nếu chưa có
+    if (reader.getId() == null || reader.getId() == 0) {
+      if (!availableIds.isEmpty()) {
+        reader.setId(availableIds.poll()); // Dùng ID bị xoá trước đó
+      } else {
+        reader.setId(ReaderIdGenerator.generateId());
+      }
+    }
+    if (availableIds.contains(reader.getId())) {
+      availableIds.poll();
+    }
     this.readers.add(reader);
     notifyObservers();
   }
@@ -45,8 +57,9 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   }
 
   @Override
-  public void remove(Reader Reader) {
-    this.readers.remove(Reader);
+  public void remove(Reader reader) {
+    this.readers.remove(reader);
+    availableIds.add(reader.getId());
     notifyObservers();
   }
 
@@ -82,7 +95,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("123 Main St")
             .dateOfBirth(978307200000L) // 2001-01-01
             .createdAt(1746988800000L) // 2025-05-11
-            .avatarKey("avatar1")
+            .avatarKey("/images/John_Doe.png")
             .phoneNumber("123456789")
             .isSubscribe(true)
             .readerType(
@@ -152,7 +165,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("456 Oak Ave, Apt 2B")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 21)))
             .dateOfBirth(1009843200000L) // 2002-01-01
-            .avatarKey("avatar2")
+            .avatarKey("/images/Emma.jpg")
             .phoneNumber("234567890")
             .isSubscribe(true)
             .readerType(
@@ -220,7 +233,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("789 Pine Rd, Suite 301")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2023, 9, 30)))
             .dateOfBirth(1041379200000L) // 2003-01-01
-            .avatarKey("avatar3")
+            .avatarKey("/images/John_Doe.png")
             .phoneNumber("345678901")
             .readerType(
                 LecturerReaderType.builder()
@@ -281,7 +294,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("321 Elm St, PH5")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 9)))
             .dateOfBirth(1072915200000L) // 2004-01-01
-            .avatarKey("avatar4")
+            .avatarKey("/images/John_Doe.png")
             .phoneNumber("456789012")
             .readerType(
                 LecturerReaderType.builder()
@@ -372,7 +385,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("654 Maple Dr, Unit 12")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 3, 1)))
             .dateOfBirth(1104537600000L) // 2005-01-01
-            .avatarKey("avatar5")
+            .avatarKey("/images/John_Doe.png")
             .phoneNumber("567890123")
             .isSubscribe(true)
             .readerType(
@@ -419,7 +432,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("987 Cedar Ln, Floor 3")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 9)))
             .dateOfBirth(1136073600000L) // 2006-01-01
-            .avatarKey("avatar6")
+            .avatarKey("/images/John_Doe.png")
             .phoneNumber("678901234")
             .isSubscribe(true)
             .readerType(
@@ -485,7 +498,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("147 Birch Ave, Room 7B")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 9)))
             .dateOfBirth(1167609600000L) // 2007-01-01
-            .avatarKey("avatar7")
+            .avatarKey("/images/John_Doe.png")
             .phoneNumber("789012345")
             .readerType(
                 StudentReaderType.builder()
@@ -554,7 +567,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("258 Walnut St, Apt 4C")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 15)))
             .dateOfBirth(1199145600000L) // 2008-01-01
-            .avatarKey("avatar8")
+            .avatarKey("/images/John_Doe.png")
             .phoneNumber("890123456")
             .readerType(
                 StudentReaderType.builder()
@@ -603,8 +616,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("369 Cherry Rd, Suite 15")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 3, 21)))
             .dateOfBirth(1230768000000L) // 2009-01-01
-            .avatarKey("avatar9")
-            .phoneNumber("0901234567")
+            .avatarKey("/images/John_Doe.png")
+            .phoneNumber("901234567")
             .readerType(
                 StudentReaderType.builder()
                     .faculty("Artificial Intelligence")
@@ -713,7 +726,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .address("741 Ash Ct, PH3")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 2)))
             .dateOfBirth(1262304000000L) // 2010-01-01
-            .avatarKey("avatar10")
+            .avatarKey("/images/John_Doe.png")
             .phoneNumber("012345678")
             .readerType(
                 StudentReaderType.builder()
@@ -756,25 +769,6 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                 .transactionType(TransactionType.BORROW)
                 .librarian(librarians.get(0))
                 .books(
-                    new TreeMap<>(
-                        Map.of(
-                            books.stream()
-                                .filter(b -> b.getTitle().equals("I Believe"))
-                                .findFirst()
-                                .orElseThrow(),
-                            1)))
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 20)))
-                    .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 27)))
-                .description("Returned")
-                .build());
-
-
-    libCard10.addBorrowTransactions(transactions10);
-    libCard10.addReturnTransaction(Transaction.builder()
-            .id(TransactionIdGenerator.generateId())
-            .transactionType(TransactionType.RETURNED)
-            .librarian(librarians.get(0))
-            .books(
                     new TreeMap<>(
                             Map.of(
                                     books.stream()
@@ -825,7 +819,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                       .address("101 Maple Street")
                       .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 10)))
                       .dateOfBirth(1104537600000L) // 2005-01-01
-                      .avatarKey("avatar1")
+                      .avatarKey("/images/John_Doe.png")
                       .phoneNumber("0901111111")
                       .readerType(
                               StudentReaderType.builder()
@@ -852,7 +846,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                       .address("202 Oak Avenue")
                       .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 15)))
                       .dateOfBirth(1072915200000L) // 2004-01-01
-                      .avatarKey("avatar2")
+                      .avatarKey("/images/John_Doe.png")
                       .phoneNumber("0902222222")
                       .readerType(
                               StudentReaderType.builder()
@@ -879,7 +873,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                       .address("303 Pine Blvd")
                       .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 15)))
                       .dateOfBirth(1136073600000L) // 2006-01-01
-                      .avatarKey("avatar3")
+                      .avatarKey("/images/John_Doe.png")
                       .phoneNumber("0903333333")
                       .readerType(
                               StudentReaderType.builder()
@@ -906,7 +900,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                       .address("404 Birch Lane")
                       .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 8)))
                       .dateOfBirth(1167609600000L) // 2007-01-01
-                      .avatarKey("avatar4")
+                      .avatarKey("/images/John_Doe.png")
                       .phoneNumber("0904444444")
                       .readerType(
                               StudentReaderType.builder()
@@ -933,7 +927,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                       .address("505 Cedar Street")
                       .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 10)))
                       .dateOfBirth(1199145600000L) // 2008-01-01
-                      .avatarKey("avatar5")
+                      .avatarKey("/images/John_Doe.png")
                       .phoneNumber("0905555555")
                       .readerType(
                               StudentReaderType.builder()
@@ -960,7 +954,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                       .address("606 Spruce Rd")
                       .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 25)))
                       .dateOfBirth(1230768000000L) // 2009-01-01
-                      .avatarKey("avatar6")
+                      .avatarKey("/images/John_Doe.png")
                       .phoneNumber("0906666666")
                       .readerType(
                               StudentReaderType.builder()
@@ -987,7 +981,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                       .address("707 Willow Way")
                       .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 1)))
                       .dateOfBirth(1104537600000L) // 2005-01-01
-                      .avatarKey("avatar7")
+                      .avatarKey("/images/John_Doe.png")
                       .phoneNumber("0907777777")
                       .readerType(
                               StudentReaderType.builder()
@@ -1014,7 +1008,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                       .address("808 Elm Circle")
                       .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 20)))
                       .dateOfBirth(1072915200000L) // 2004-01-01
-                      .avatarKey("avatar8")
+                      .avatarKey("/images/John_Doe.png")
                       .phoneNumber("0908888888")
                       .readerType(
                               StudentReaderType.builder()
@@ -1059,5 +1053,12 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
     for (ReaderObserver observer : observers) {
       observer.updateReaderData();
     }
+  }
+
+  public Reader findId(Long id) {
+    return readers.stream()
+            .filter(r -> r.getId().equals(id))
+            .findFirst()
+            .orElse(null);
   }
 }
