@@ -66,6 +66,8 @@ The Library Management System manages books, users, and borrowing/returning proc
 
 ### Dashboard
 ![Dashboard](src/main/resources/readmeImages/dashboard.jpg)
+- **Dashboard Charts**
+  ![Dashboard Chart](src/main/resources/readmeImages/dashboard_chart.jpeg)
 ### Book Management
 ###### 1. Table show data
 ![Book Management](src/main/resources/readmeImages/manager-book-table.png)
@@ -76,13 +78,33 @@ The Library Management System manages books, users, and borrowing/returning proc
 ###### 4. Import excel
 ![](src/main/resources/readmeImages/import-excel.png)
 ### Borrowed Books
-![Borrowed Books](src/main/resources/readmeImages/lended_books.jpg)
+![Borrowed Books](src/main/resources/readmeImages/lended_books.jpeg)
+- **Borrow Book Transaction Email**
+   ![Borrow Book Transaction Email](src/main/resources/readmeImages/lended_book_transaction.jpeg)
+- **Borrow Book Table**
+    ![Borrow Book Table](src/main/resources/readmeImages/lended_book_table.jpeg)
 ### Return Processing
 ![Return Processing](src/main/resources/readmeImages/return_books.jpg)
+- **Return Book Table**
+  ![Return Book Table](src/main/resources/readmeImages/return_books_table.jpeg)
 
-## Workflow
-
-1. Login → 2. Book Search → 3. Checkout → 4. Return → 5. Administration
+### Administrator Workflow
+1. **Admin Login** - Access the system with administrator credentials
+2. **Dashboard** - View system statistics and analytics
+3. **Book Management**
+    - Add, edit, and delete books in the collection
+    - Update inventory and track availability
+4. **Lending Process**
+    - Process book checkout requests
+    - Record borrower information
+    - Set due dates
+5. **Return Processing**
+    - Record returned books
+    - Calculate and process late fees if applicable
+    - Update book availability status
+6. **User Administration**
+    - Manage user accounts and permissions
+    - View borrowing history
 
 ## License
 
