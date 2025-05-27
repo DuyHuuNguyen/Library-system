@@ -116,4 +116,8 @@ public class Book extends BaseEntity implements Comparable<Book> {
     }
 
   }
+
+  public boolean isAvailable() {
+    return this.currentQuantity > 0;
+  }
 }

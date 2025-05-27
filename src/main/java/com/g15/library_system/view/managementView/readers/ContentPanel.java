@@ -1,15 +1,20 @@
 package com.g15.library_system.view.managementView.readers;
 
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ContentPanel extends JPanel {
-  public TablePanel tablePn;
-  public ShowPanel showInforPn;
-  public BorrowedHistoryPanel borrowedPanel;
+  private TablePanel tablePn;
+  private ShowPanel showInforPn;
+  private BorrowedHistoryPanel borrowedPanel;
 
   public ContentPanel(ReaderPanel readerPn) {
     tablePn = new TablePanel(readerPn);
@@ -18,23 +23,45 @@ public class ContentPanel extends JPanel {
 
     setLayout(new GridLayout(1, 2, 5, 20));
 
-    CheckboxTablePanel table = tablePn.tablePanel;
+    CheckboxTablePanel table = tablePn.getTablePanel();
     table.setRowSelectionHandler(
         modelRow -> {
           // Viết hành động bạn muốn tại đây
           Map<String, Object> rowsData = new HashMap<>();
-          for (int i = 1; i < tablePn.columnNames.length; i++) {
-            for (int j = i - 1; j < tablePn.memberData[modelRow].length; j++) {
-              rowsData.put(tablePn.columnNames[i], tablePn.memberData[modelRow][j]);
-              break;
-            }
+          int i = 1, j = 0;
+          if (tablePn.getMemberData()[modelRow][0] instanceof Boolean) {
+            j = i;
+          } else {
+            j = i - 1;
           }
-
-          showInforPn.formPn.updateInfo(rowsData);
-          showInforPn.formPn.revalidate(); // Bắt buộc
-          showInforPn.formPn.repaint();
-          showInforPn.btnPn.setMode(ButtonPanelMode.VIEW);
-          readerPn.contentPn.borrowedPanel.setVisible(true);
+          while (i < tablePn.getColumnNames().length
+              && j < tablePn.getMemberData()[modelRow].length) {
+            rowsData.put(tablePn.getColumnNames()[i], tablePn.getMemberData()[modelRow][j]);
+            i++;
+            j++;
+          }
+          //          for (; i < ; i++) {
+          //            for (; j < tablePn.memberData[modelRow].length; j++) {
+          //                if (tablePn.memberData[modelRow][j] instanceof Boolean) {
+          //
+          //                }
+          //
+          //              break;
+          //            }
+          //          }
+          showInforPn.getAvtPn().setImageUrlAbsolute(rowsData.get("Cover Image") + "");
+          System.out.println(rowsData.get("Cover Image") + "");
+          showInforPn.getAvtPn().setSize(120, 120);
+          showInforPn.getFormPn().updateInfo(rowsData);
+          showInforPn.getFormPn().revalidate(); // Bắt buộc
+          showInforPn.getFormPn().repaint();
+          showInforPn.getBtnPn().setMode(ButtonPanelMode.VIEW);
+          readerPn.getContentPn().borrowedPanel.setVisible(true);
+          readerPn
+              .getContentPn()
+              .borrowedPanel
+              .setReader(ReaderData.getInstance().findId(Long.valueOf(rowsData.get("ID") + "")));
+          readerPn.getContentPn().borrowedPanel.refreshTable();
           // Ví dụ: mở form, bật checkbox, đổi trạng thái...
         });
 

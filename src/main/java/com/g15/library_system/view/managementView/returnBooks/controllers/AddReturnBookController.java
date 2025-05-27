@@ -30,7 +30,6 @@ public class AddReturnBookController {
 
   private IReturnTransactionMapper transactionMapper = new ReturnTransactionMapper();
   private Librarian currentLibrarian = CacheData.getCURRENT_LIBRARIAN();
-  private List<Book> books = BookData.getInstance().getBooks();
 
   // controller
   private ReaderController readerController =
@@ -56,7 +55,6 @@ public class AddReturnBookController {
   private ConfirmReturnCommand confirmReturnCommand;
   private CancelCommand cancelCommand;
 
-  //constructor
   public AddReturnBookController(
       ReturnManagementController returnManagementController,
       AddReturnBookPanel addReturnBookPanel) {
@@ -155,7 +153,6 @@ public class AddReturnBookController {
       Map<Book, Integer> currentReturn) {
     Map<Book, Integer> totalReturned = new HashMap<>();
 
-
     for (Transaction returnTx : returnTransactions) {
       for (Map.Entry<Book, Integer> entry : returnTx.getBooks().entrySet()) {
         Book book = entry.getKey();
@@ -166,14 +163,12 @@ public class AddReturnBookController {
       }
     }
 
-
     for (Map.Entry<Book, Integer> entry : currentReturn.entrySet()) {
       Book book = entry.getKey();
       if (borrowTx.getBooks().containsKey(book)) {
         totalReturned.merge(book, entry.getValue(), Integer::sum);
       }
     }
-
 
     for (Map.Entry<Book, Integer> entry : borrowTx.getBooks().entrySet()) {
       Book book = entry.getKey();
@@ -349,7 +344,7 @@ public class AddReturnBookController {
           Integer quantity = entry.getValue();
           BookStatus status =
               DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()).isAfter(today)
-                  ? BookStatus.ON_TIME
+                  ? BookStatus.RETURNED
                   : BookStatus.OVERDUE;
 
           borrowBookDTOs.add(

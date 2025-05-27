@@ -139,7 +139,6 @@ public class ToolPanel extends JPanel {
             calenderBt.setVisible(true);
           } else {
             calenderBt.setVisible(false);
-
           }
         });
     dueDateChooser.setCalendarBtAction(calenderBt, searchField);

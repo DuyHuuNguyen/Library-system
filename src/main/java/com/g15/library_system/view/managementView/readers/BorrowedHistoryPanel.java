@@ -1,44 +1,42 @@
 package com.g15.library_system.view.managementView.readers;
 
+import com.g15.library_system.data.ReaderData;
+import com.g15.library_system.entity.Reader;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import com.g15.library_system.view.overrideComponent.tables.tableRenderers.CustomCheckBoxEditor;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class BorrowedHistoryPanel extends JPanel {
   private JTable table;
   private DefaultTableModel tableModel;
-  public CheckboxTablePanel tablePanel;
+  private CheckboxTablePanel tablePanel;
   // Book data
-  public Object[][] borrowedData;
-  public String[] columnNames;
-  String[] months = {
-    "All",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  };
+  private Object[][] borrowedData;
+  private String[] columnNames;
+  private Reader reader;
+  private Object[] months = {"All", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
-  String[] years = {"All", "2021", "2022", "2023", "2024", "2025"};
+  private Object[] years = {"All", 2021, 2022, 2023, 2024, 2025};
 
-  JComboBox<String> monthComboBox = new JComboBox<>(months);
-  JComboBox<String> yearComboBox = new JComboBox<>(years);
+  private JComboBox<Object> monthComboBox = new JComboBox<>(months);
+  private JComboBox<Object> yearComboBox = new JComboBox<>(years);
 
   public BorrowedHistoryPanel() {
     setLayout(new BorderLayout());
@@ -47,17 +45,27 @@ public class BorrowedHistoryPanel extends JPanel {
     setPreferredSize(new Dimension(this.getWidth(), 210));
     setVisible(false);
 
-    columnNames = new String[] {"", "BookID", "Name", "Status"};
-    borrowedData =
-        new Object[][] {
-          {"#11111", "The false in our star", "overdue"},
-          {"#11112", "The Science", "returned"},
-          {"#11113", "A Moon", "returned"}
-        };
+    columnNames =
+        new String[] {"", "BookID", "Name", "Quantity", "Create At", "Expected Return At"};
 
-    tablePanel = new CheckboxTablePanel(Arrays.copyOfRange(columnNames, 0, 4), borrowedData);
-    tablePanel.setEditableColumns(Set.of(4));
+    reader = ReaderData.getInstance().findId(250001L);
+    borrowedData = ReaderMapper.getCurrentBorrowedBooksAsTable(reader);
+
+    tablePanel = new CheckboxTablePanel(Arrays.copyOfRange(columnNames, 0, 6), borrowedData);
+    //    tablePanel.setEditableColumns(Set.of(4));
     //            tablePanel.setStatusEditable(true);
+
+    // Căn giữa data giữa các ô trong bảng
+    // ------------------------------------------------------------------
+    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+    centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+    JTable table = tablePanel.getTable(); // Giả sử bạn đã có JTable
+
+    for (int i = 1; i < table.getColumnCount(); i++) {
+      table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+    }
+    // ------------------------------------------------------------------
 
     // Column checkbox giả định là cột 0
     TableColumn checkboxColumn = tablePanel.getTable().getColumnModel().getColumn(0);
@@ -91,6 +99,69 @@ public class BorrowedHistoryPanel extends JPanel {
     filterPanel.add(yearComboBox);
 
     add(filterPanel, BorderLayout.NORTH);
+
+    // Xử lí sự kiện lọc tháng và năm được chọn
+    // ------------------------------------------------------------------
+    ActionListener filterListener = e -> filterByMonthYear();
+
+    monthComboBox.addActionListener(filterListener);
+    yearComboBox.addActionListener(filterListener);
+    // ------------------------------------------------------------------
+  }
+
+  private void filterByMonthYear() {
+    Object selectedMonth = monthComboBox.getSelectedItem();
+    Object selectedYear = yearComboBox.getSelectedItem();
+
+    boolean allMonths = selectedMonth instanceof String && selectedMonth.equals("All");
+    boolean allYears = selectedYear instanceof String && selectedYear.equals("All");
+
+    List<Object[]> filteredRows = new ArrayList<>();
+
+    for (Object[] row : borrowedData) {
+      try {
+        //        System.out.println("row[3] = " + row[4] + ", type = " + row[4].getClass());
+        LocalDate createdDate =
+            LocalDate.parse((String) row[4], DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        boolean matchesMonth = allMonths || createdDate.getMonthValue() == (Integer) selectedMonth;
+        boolean matchesYear = allYears || createdDate.getYear() == (Integer) selectedYear;
+
+        if (matchesMonth && matchesYear) {
+          filteredRows.add(row);
+        }
+      } catch (Exception ex) {
+        ex.printStackTrace(); // hoặc bỏ qua dòng bị lỗi
+      }
+    }
+
+    // Cập nhật JTable
+    Object[][] filteredData = filteredRows.toArray(new Object[0][0]);
+    this.refreshFilterTable(filteredData);
+  }
+
+  public void refreshTable() {
+    //    DefaultTableModel model = (DefaultTableModel) tablePanel.getTable().getModel();
+
+    // Lấy danh sách sách mượn từ reader mới truyền vào
+    borrowedData = ReaderMapper.getCurrentBorrowedBooksAsTable(reader);
+
+    System.out.println(Arrays.deepToString(borrowedData));
+
+    // Xoá tất cả các dòng cũ
+    tablePanel.removeAllDataTable();
+
+    tablePanel.addDataToTable(borrowedData);
+
+    //    System.out.println(Arrays.deepToString(tablePanel.getTableData()));
+
+  }
+
+  public void refreshFilterTable(Object[][] filteredData) {
+    // Xoá tất cả các dòng cũ
+    tablePanel.removeAllDataTable();
+
+    // Thêm lại
+    tablePanel.addDataToTable(filteredData);
   }
 
   public TitledBorder createTitleLineBorder(String title) {

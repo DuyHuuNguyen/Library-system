@@ -12,13 +12,12 @@ import com.g15.library_system.service.EmailProducerService;
 import com.g15.library_system.service.LibrarianService;
 import com.g15.library_system.util.RandomizationHelper;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
+import java.awt.*;
 import javax.swing.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.awt.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +50,7 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
     if (isNotFoundLibrarian) {
       ToastNotification panel =
           new ToastNotification(
-                  frame,
+              frame,
               ToastNotification.Type.WARNING,
               ToastNotification.Location.CENTER,
               "Email not found");
