@@ -33,8 +33,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   }
 
   @Override
-  public void add(Reader reader) {
-    // Gán ID nếu chưa có
+  public synchronized void add(Reader reader) {
     if (reader.getId() == null || reader.getId() == 0) {
       if (!availableIds.isEmpty()) {
         reader.setId(availableIds.poll()); // Dùng ID bị xoá trước đó
@@ -50,20 +49,20 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   }
 
   @Override
-  public void add(List<Reader> readers) {
+  public synchronized void add(List<Reader> readers) {
     this.readers.addAll(readers);
     notifyObservers();
   }
 
   @Override
-  public void remove(Reader reader) {
+  public synchronized void remove(Reader reader) {
     this.readers.remove(reader);
     availableIds.add(reader.getId());
     notifyObservers();
   }
 
   @Override
-  public void remove(int index) {
+  public synchronized void remove(int index) {
     if (index >= 0 && index < readers.size()) {
       this.readers.remove(index);
       notifyObservers();
@@ -1039,17 +1038,17 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
 
   // observer methods for sign up trends chart
   @Override
-  public void registerObserver(ReaderObserver o) {
+  public synchronized void registerObserver(ReaderObserver o) {
     this.observers.add(o);
   }
 
   @Override
-  public void removeObserver(ReaderObserver o) {
+  public synchronized void removeObserver(ReaderObserver o) {
     this.observers.remove(o);
   }
 
   @Override
-  public void notifyObservers() {
+  public synchronized void notifyObservers() {
     for (ReaderObserver observer : observers) {
       observer.updateReaderData();
     }

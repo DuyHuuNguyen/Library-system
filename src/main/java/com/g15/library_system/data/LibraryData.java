@@ -28,16 +28,16 @@ public class LibraryData implements Data<Library> {
   }
 
   @Override
-  public void add(Library b) {}
+  public synchronized void add(Library b) {}
 
   @Override
-  public void add(List<Library> t) {}
+  public synchronized void add(List<Library> t) {}
 
   @Override
-  public void remove(Library Library) {}
+  public synchronized void remove(Library Library) {}
 
   @Override
-  public void remove(int index) {}
+  public synchronized void remove(int index) {}
 
   public static LibraryData getInstance() {
     return INSTANCE;
