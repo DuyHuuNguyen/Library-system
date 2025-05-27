@@ -22,6 +22,11 @@ The Library Management System manages books, users, and borrowing/returning proc
 - **Backend**: Java Core + Spring framework
 - **Frontend**: Swing
 - **Messaging**: RabbitMQ for notifications
+## 🐰 RabbitMQ workflow
+
+![](src/main/resources/readmeImages/exchanges-topic-fanout-direct.png)
+
+
 
 ## 👨‍💻 Development Team
 
@@ -62,7 +67,14 @@ The Library Management System manages books, users, and borrowing/returning proc
 ### Dashboard
 ![Dashboard](src/main/resources/readmeImages/dashboard.jpg)
 ### Book Management
-![Book Management](src/main/resources/readmeImages/manage_book.jpg)
+###### 1. Table show data
+![Book Management](src/main/resources/readmeImages/manager-book-table.png)
+###### 2. Notification new book
+![Notification](src/main/resources/readmeImages/notification-new-book.png)
+###### 3. Export excel
+![Export excel](src/main/resources/readmeImages/export-excel.png)
+###### 4. Import excel
+![](src/main/resources/readmeImages/import-excel.png)
 ### Borrowed Books
 ![Borrowed Books](src/main/resources/readmeImages/lended_books.jpg)
 ### Return Processing
