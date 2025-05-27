@@ -53,22 +53,23 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
 
   public void initPanel() {
     this.setBorder(BorderFactory.createTitledBorder("Add new book"));
-    this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    this.setBackground(Color.WHITE);
     this.setPreferredSize(new Dimension(width, height));
     setLayout(new BorderLayout());
 
     JPanel mainPanel = new JPanel(new GridLayout(1, 1, 10, 10)); // Chỉ còn một phần
-    mainPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    mainPanel.setBackground(Color.WHITE);
     mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
     JPanel bookInfoPanel = new JPanel();
 
-    bookInfoPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    bookInfoPanel.setBackground(Color.WHITE);
 
     GroupLayout layout = new GroupLayout(bookInfoPanel);
     bookInfoPanel.setLayout(layout);
     layout.setAutoCreateGaps(true);
     layout.setAutoCreateContainerGaps(true);
+
 
     Dimension textFieldSize = new Dimension(200, 20);
 
@@ -112,7 +113,20 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
     JLabel lblQuantity = new JLabel("Quantity");
     JLabel lblPublisherYear = new JLabel("Publish Year");
 
-    chooserFileBtn = CustomButtonBuilder.builder().text("Choose File");
+    chooserFileBtn = CustomButtonBuilder.builder()
+            .text("Chooser file")
+            .title("Chooser file")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Color.WHITE)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
+            .radius(10)
+            .alignment(SwingConstants.LEFT)
+            .icon("/icons/executionIcon.png",10)
+            .drawBorder(false)
+            .opaque(false)
+            .contentAreaFilled(false)
+            .preferredSize(new Dimension(110, 30));
     fileChooser = new JFileChooser();
 
     imagePanel = new DisplayImagePanel(200, 200);
@@ -205,7 +219,19 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
 
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
-    JButton btnCancel = CustomButtonBuilder.builder().text("Cancel");
+    JButton btnCancel = CustomButtonBuilder.builder()
+            .text("Cancel")
+            .title("Cancel")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Color.WHITE)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
+            .radius(10)
+            .alignment(SwingConstants.CENTER)
+            .drawBorder(false)
+            .opaque(false)
+            .contentAreaFilled(false)
+            .preferredSize(new Dimension(110, 30));
     btnCancel.addActionListener(
         e -> {
           this.clearDataInPanel();
@@ -218,7 +244,18 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
           notification.showNotification();
         });
 
-    JButton btnAddBook = CustomButtonBuilder.builder().text("Add");
+    JButton btnAddBook = CustomButtonBuilder.builder().text("Add")
+            .title("Add")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Color.WHITE)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
+            .radius(10)
+            .alignment(SwingConstants.CENTER)
+            .drawBorder(false)
+            .opaque(false)
+            .contentAreaFilled(false)
+            .preferredSize(new Dimension(110, 30));
     btnAddBook.addActionListener(
         e -> {
           if (txtBookTitle.getText().trim().isBlank()
