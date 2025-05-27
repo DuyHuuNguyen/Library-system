@@ -35,12 +35,16 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
   public synchronized void remove(Librarian librarian) {
     this.librarians.remove(librarian);
     notifyObservers();
+    librarians.remove(librarian);
   }
 
   @Override
   public synchronized void remove(int index) {
     this.librarians.remove(index);
     notifyObservers();
+    if (index >= 0 && index < librarians.size()) {
+      librarians.remove(index);
+    }
   }
 
   public static LibrarianData getInstance() {
@@ -83,6 +87,8 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
                 .dateOfBirth(3487562934876L)
                 .avatarKey("avatar2")
                 .phoneNumber("0987654321")
+                .avatarKey("avatar3")
+                .phoneNumber("987654321")
                 .build());
 
     this.librarians.addAll(Librarians);
