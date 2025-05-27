@@ -51,7 +51,10 @@ public class DashBoardPanel extends JPanel {
       //              SwingConstants.LEFT);
       JLabel greeting =
           LabelBuilder.builder()
-              .text("<html><span style='color:black;'>Welcome, </span>" + librarian.getFirstName() + "!</html>")
+              .text(
+                  "<html><span style='color:black;'>Welcome, </span>"
+                      + librarian.getFirstName()
+                      + "!</html>")
               .font(Style.FONT_BOLD_30)
               .textColor(Style.BLUE_TEXT_COLOR)
               .preferredSize(new Dimension(400, 50))
@@ -176,7 +179,7 @@ public class DashBoardPanel extends JPanel {
     this.quickAccessPanel.setLibrariansCardButtonListener(listener);
   }
 
-  public void setOverdueBooksCardButtonListener(ActionListener listener) {
-    this.quickAccessPanel.setOverdueBooksCardButtonListener(listener);
+  public void setMyAccountCardButtonListener(ActionListener listener) {
+    this.quickAccessPanel.setMyAccountCardButtonListener(listener);
   }
 }

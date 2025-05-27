@@ -49,6 +49,7 @@ public class DateChooser extends JPanel {
   private JPanel panelHeader;
   private JPanel panelTitle;
   private JPanel panelDate;
+  private boolean isSetDateForSearchField = false;
 
   private String[] months = getListMonth();
   private String[] days = getListDay();
@@ -281,6 +282,10 @@ public class DateChooser extends JPanel {
       oldThemes = UIManager.getLookAndFeel();
     }
     popup.show(calendarButton, 0, calendarButton.getHeight());
+  }
+
+  public void isSetDateForSearchField(boolean isSetDateForSearchField) {
+    this.isSetDateForSearchField = isSetDateForSearchField;
   }
 
   public void showPopup() {
@@ -701,7 +706,11 @@ public class DateChooser extends JPanel {
               if (dateSelectionMode == DateSelectionMode.SINGLE_DATE_SELECTED) {
                 selectedDate = date;
                 panelDate.repaint();
-                displayDate(searchField);
+                if(isSetDateForSearchField){
+                  displayDate(searchField);
+                }else{
+                  displayDate();
+                }
                 runEventDateChanged(new DateChooserAction(DateChooserAction.USER_SELECT));
                 closePopup();
               } else {

@@ -9,16 +9,22 @@ import com.g15.library_system.dto.request.SendOTPRequest;
 import com.g15.library_system.dto.request.VerifyOTPRequest;
 import com.g15.library_system.facade.LibrarianFacade;
 import com.g15.library_system.service.EmailProducerService;
+
+import com.g15.library_system.entity.Librarian;
+import com.g15.library_system.facade.LibrarianFacade;
+import com.g15.library_system.mapper.LibrarianMapper;
 import com.g15.library_system.service.LibrarianService;
 import com.g15.library_system.util.RandomizationHelper;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
+import java.awt.*;
 import javax.swing.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +32,8 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
   private static final Logger log = LoggerFactory.getLogger(LibrarianFacadeImpl.class);
   private final LibrarianService librarianService;
   private final EmailProducerService emailProducerService;
+
+  private final LibrarianMapper librarianMapper;
 
   @Override
   public boolean login(LoginRequest loginRequest) {
@@ -51,7 +59,7 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
     if (isNotFoundLibrarian) {
       ToastNotification panel =
           new ToastNotification(
-                  frame,
+              frame,
               ToastNotification.Type.WARNING,
               ToastNotification.Location.CENTER,
               "Email not found");
@@ -101,4 +109,28 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
   public boolean verifyOTP(VerifyOTPRequest verifyOTPRequest) {
     return CacheData.getOTP().equals(verifyOTPRequest.getOtp());
   }
+
+  @Override
+  public List<Librarian> findAll() {
+    return this.librarianService.findAll().stream().map(this.librarianMapper::toLibrarian).toList();
+  }
+
+  @Override
+  public Optional<Librarian> findByName(String name) {
+    return librarianService.findByName(name);
+  }
+
+  @Override
+  public void add(Librarian newLibrarian) {
+    this.librarianService.save(newLibrarian);
+  }
+
+  @Override
+  public List<Librarian> findByTextOfTextFieldSearchOption(String text) {
+    return this.librarianService.findAll().stream()
+            .filter(librarian -> librarian.isSameInfo(text))
+            .map(librarian -> this.librarianMapper.toLibrarian(librarian))
+            .toList();
+  }
+
 }

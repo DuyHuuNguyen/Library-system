@@ -122,6 +122,13 @@ public class ToolPanel extends JPanel {
 
           // Xoá dòng khỏi bảng
           readerPn.getContentPn().getTablePn().refreshTable();
+
+            new ToastNotification(
+                    JOptionPane.getFrameForComponent(this),
+                    ToastNotification.Type.SUCCESS,
+                    ToastNotification.Location.BOTTOM_RIGHT,
+                    "Remove successfully!!")
+                    .showNotification();
         });
 
     actionBtPn.add(removeBt);
@@ -143,10 +150,15 @@ public class ToolPanel extends JPanel {
 
     addBt.addActionListener(
         e -> {
-          readerPn.getContentPn().getShowInforPn().getAvtPn().setImageUrlRelative("/images/addImageAvatar.png");
+          readerPn
+              .getContentPn()
+              .getShowInforPn()
+              .getAvtPn()
+              .setImageUrlRelative("/images/addImageAvatar.png");
           readerPn.getContentPn().getShowInforPn().getAvtPn().setSize(150, 150);
           clearTextFields(readerPn.getContentPn().getShowInforPn().getFormPn()); // Xóa trắng
-          enableTextFields(readerPn.getContentPn().getShowInforPn().getFormPn(), true); // Cho phép nhập
+          enableTextFields(
+              readerPn.getContentPn().getShowInforPn().getFormPn(), true); // Cho phép nhập
           readerPn.getContentPn().getShowInforPn().getBtnPn().setMode(ButtonPanelMode.ADD);
           readerPn.getContentPn().getShowInforPn().setVisible(true);
         });
@@ -260,7 +272,7 @@ public class ToolPanel extends JPanel {
           panel.getReaderTypeJcb().setVisible(editable);
         }
         if (comp == panel.getBirthDateField()) {
-          panel.getBirthDateField().setEnabled(editable);
+            panel.getBirthDateField().setEnabled(editable);
         }
         if (comp == panel.getMembershipDateField()) {
           panel

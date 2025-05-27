@@ -30,7 +30,7 @@ public class VerificationCodePanel extends JPanel {
     setOpaque(false);
     setLayout(new MigLayout("fill,insets 20", "[center]", "[center]"));
     this.loginCardPanel = loginCardPanel;
-      RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237, 230), null);
+    RoundedPanel panel = new RoundedPanel(20, new Color(230, 239, 237, 230), null);
     panel.setLayout(new MigLayout("wrap,fill,insets 35 45 30 45", "fill,250:280"));
     panel.putClientProperty(
         FlatClientProperties.STYLE,

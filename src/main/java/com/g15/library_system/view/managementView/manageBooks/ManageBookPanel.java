@@ -9,6 +9,7 @@ import com.g15.library_system.mapper.BookMapper;
 import com.g15.library_system.mapper.impl.BookMapperImpl;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.manageBooks.observer.ObserverNotifyNewBook;
 import com.g15.library_system.view.overrideComponent.OptionPaneInputFileExcel;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
@@ -23,7 +24,7 @@ import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ManageBookPanel extends JPanel {
+public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
   private static final Logger log = LoggerFactory.getLogger(ManageBookPanel.class);
   private JPanel panelContent;
 
@@ -95,11 +96,10 @@ public class ManageBookPanel extends JPanel {
     this.panelContent.add(checkboxTablePanel, CONSTRAINT_TABLE_BOOK);
 
     RoundedShadowPanel roundedShadowPanelForAddNewBook = new RoundedShadowPanel();
-    this.addNewBookPanel = new AddNewBookPanel(700, 650);
+    this.addNewBookPanel = new AddNewBookPanel(500, 500);
     roundedShadowPanelForAddNewBook.add(this.addNewBookPanel);
-    roundedShadowPanelForAddNewBook.add(Box.createVerticalStrut(50));
     roundedShadowPanelForAddNewBook.setPreferredSize(new Dimension(700, 650));
-    roundedShadowPanelForAddNewBook.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    roundedShadowPanelForAddNewBook.setBackground(Style.BLUE_HEADER_TABLE_AND_BUTTON);
 
     this.panelContent.add(roundedShadowPanelForAddNewBook, CONSTRAINT_ADD_NEW_BOOK);
 
@@ -109,14 +109,15 @@ public class ManageBookPanel extends JPanel {
     RoundedShadowPanel roundedShadowPanelForModifyBook = new RoundedShadowPanel();
     this.modifyBookPanel = new ModifyBookPanel(700, 650);
     roundedShadowPanelForModifyBook.add(modifyBookPanel);
-    roundedShadowPanelForModifyBook.add(Box.createVerticalStrut(50));
     roundedShadowPanelForModifyBook.setPreferredSize(new Dimension(700, 650));
 
     this.panelContent.add(roundedShadowPanelForModifyBook, CONSTRAINT_MODIFY_BOOK);
 
     add(panelContent, BorderLayout.CENTER);
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+
     this.addNewBookPanel.addObserverNotifyNewBook(this.notifyNewBookPanel);
+    this.addNewBookPanel.addObserverNotifyNewBook(this);
   }
 
   private void removeAllDataTable() {
@@ -220,5 +221,10 @@ public class ManageBookPanel extends JPanel {
     } else {
       log.error("😒😒😒😒 error import file excel");
     }
+  }
+
+  @Override
+  public void notifyNewBook() {
+    this.loadDataTable();
   }
 }

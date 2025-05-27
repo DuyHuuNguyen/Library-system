@@ -2,13 +2,12 @@ package com.g15.library_system.view.managementView.readers;
 
 import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -35,7 +34,8 @@ public class ContentPanel extends JPanel {
           } else {
             j = i - 1;
           }
-          while (i < tablePn.getColumnNames().length && j < tablePn.getMemberData()[modelRow].length) {
+          while (i < tablePn.getColumnNames().length
+              && j < tablePn.getMemberData()[modelRow].length) {
             rowsData.put(tablePn.getColumnNames()[i], tablePn.getMemberData()[modelRow][j]);
             i++;
             j++;
@@ -57,8 +57,10 @@ public class ContentPanel extends JPanel {
           showInforPn.getFormPn().repaint();
           showInforPn.getBtnPn().setMode(ButtonPanelMode.VIEW);
           readerPn.getContentPn().borrowedPanel.setVisible(true);
-          readerPn.getContentPn().borrowedPanel.setReader(
-              ReaderData.getInstance().findId(Long.valueOf(rowsData.get("ID") + "")));
+          readerPn
+              .getContentPn()
+              .borrowedPanel
+              .setReader(ReaderData.getInstance().findId(Long.valueOf(rowsData.get("ID") + "")));
           readerPn.getContentPn().borrowedPanel.refreshTable();
           // Ví dụ: mở form, bật checkbox, đổi trạng thái...
         });

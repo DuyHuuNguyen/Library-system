@@ -116,9 +116,10 @@ public class ToolPanel extends JPanel {
   private JPanel createSearchPanel() {
     JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
 
-    DateChooser dueDateChooser =
+    DateChooser returnDateChooser =
         new com.g15.library_system.view.overrideComponent.dateChoosers.DateChooser();
-    dueDateChooser.setDateSelectable(
+    returnDateChooser.isSetDateForSearchField(true);
+    returnDateChooser.setDateSelectable(
         date -> {
           LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
           return localDate.isBefore(LocalDate.now());
@@ -139,10 +140,9 @@ public class ToolPanel extends JPanel {
             calenderBt.setVisible(true);
           } else {
             calenderBt.setVisible(false);
-
           }
         });
-    dueDateChooser.setCalendarBtAction(calenderBt, searchField);
+    returnDateChooser.setCalendarBtAction(calenderBt, searchField);
 
     //    txtSearch.popupMenu(
     //            name -> {

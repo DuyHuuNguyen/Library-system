@@ -188,6 +188,7 @@ public class ToolPanel extends JPanel {
 
     addBt.addActionListener(
         e -> {
+          //            System.out.println("panel add ");
           this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_ADD_NEW_BOOK);
         });
     actionBtPn.add(addBt);
@@ -219,7 +220,6 @@ public class ToolPanel extends JPanel {
     actionBtPn.add(importBt);
     actionBtPn.add(exportBt);
     actionBtPn.add(gotoTableBt);
-    actionBtPn.setBorder(BorderFactory.createTitledBorder("hehe"));
 
     add(leftPanel, BorderLayout.EAST);
     add(actionBtPn, BorderLayout.WEST);

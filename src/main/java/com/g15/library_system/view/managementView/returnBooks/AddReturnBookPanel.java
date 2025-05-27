@@ -37,7 +37,7 @@ public class AddReturnBookPanel extends JPanel {
   private String[] columnNames = {
     "", "Book ID", "Cover Image", "Book Title", "Quantity", "Borrow Date", "Due Date", "Status"
   };
-  private String[] statuses = {"Returned", "Overdue", "Lost"};
+  private String[] statuses = {"On time", "Overdue", "Lost"};
   private Object[][] bookBorrowData = new Object[][] {};
 
   public AddReturnBookPanel() {

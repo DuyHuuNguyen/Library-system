@@ -8,10 +8,18 @@ import com.g15.library_system.view.overrideComponent.dateChoosers.listener.DateC
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.TextFieldBuilder;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Map;
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.DocumentFilter;
+
 import lombok.Getter;
 
 @Getter
@@ -107,7 +115,30 @@ public class FormPanel extends JPanel {
     add(birthDateLabel, labelConstraints);
 
     birthDateField = createTF();
+    // Ngăn bàn phím không cho gõ thủ công
+    birthDateField.addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyTyped(KeyEvent e) {
+        e.consume(); // Chặn tất cả ký tự nhập vào
+      }
+
+      @Override
+      public void keyPressed(KeyEvent e) {
+        e.consume(); // Chặn luôn khi nhấn phím
+      }
+
+      @Override
+      public void keyReleased(KeyEvent e) {
+        e.consume(); // Chặn khi thả phím
+      }
+    });
+
     dateOfBirthChooser = new DateChooser();
+    dateOfBirthChooser.setDateSelectable(
+            date -> {
+              LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+              return localDate.isBefore(LocalDate.now()); // this disable past date
+            });
     dateOfBirthChooser.addActionDateChooserListener(
         new DateChooserAdapter() {
           @Override
@@ -116,7 +147,7 @@ public class FormPanel extends JPanel {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.DAY_OF_MONTH, 7);
-//                            dateOfBirthChooser.setSelectedDate(calendar.getTime());
+//            dateOfBirthChooser.setSelectedDate(calendar.getTime());
           }
         });
     dateOfBirthChooser.setTextField(birthDateField);

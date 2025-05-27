@@ -23,7 +23,7 @@ public class TablePanel extends RoundedPanel implements TransactionObserver {
   private final TransactionMapper transactionMapper =
       ApplicationContextProvider.getBean(TransactionMapperImpl.class);
   private List<Transaction> transactions;
-  private final JButton addNewButton;
+  private final JButton addNewButton, refreshButton;
 
   public TablePanel(CardLayout cardLayout, JPanel parentPanel) {
     super(10, Color.WHITE, null);
@@ -45,10 +45,6 @@ public class TablePanel extends RoundedPanel implements TransactionObserver {
     headerPanel.setOpaque(false);
     headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    JLabel titleLabel = new JLabel("Lended Books");
-    titleLabel.setFont(Style.FONT_SANSERIF_BOLD_16);
-    headerPanel.add(titleLabel, BorderLayout.WEST);
-
     addNewButton =
         CustomButtonBuilder.builder()
             .text("Lend New Book")
@@ -65,10 +61,24 @@ public class TablePanel extends RoundedPanel implements TransactionObserver {
           cardLayout.show(parentPanel, "form");
         });
 
-    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    refreshButton =
+            CustomButtonBuilder.builder()
+            .text("Refresh")
+            .font(Style.FONT_SANS_SERIF_PLAIN_15)
+            .textColor(Color.WHITE)
+            .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
+            .hoverColor(Style.BLUE_MENU_HOVER_COLOR.darker())
+            .radius(6)
+            .drawBorder(false)
+            .preferredSize(new Dimension(150, 40));
+
+    refreshButton.addActionListener(e -> updateTransactionData());
+
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     buttonPanel.setOpaque(false);
     buttonPanel.add(addNewButton);
-    headerPanel.add(buttonPanel, BorderLayout.EAST);
+    buttonPanel.add(refreshButton);
+    headerPanel.add(buttonPanel, BorderLayout.WEST);
 
     add(headerPanel, BorderLayout.NORTH);
 
