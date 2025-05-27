@@ -28,7 +28,6 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   private final List<Transaction> borrowTransactions = new ArrayList<>();
   private final List<Transaction> returnTransactions = new ArrayList<>();
 
-
   private ReaderData() {
     this.initializeData();
   }
@@ -127,7 +126,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                         3)))
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 2)))
             .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 9)))
-                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 10)))
+            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 10)))
             .description("Borrowed")
             .build();
 
@@ -324,10 +323,10 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                         1)))
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 28)))
             .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 28)))
-                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 28)))
-                .overdueFine(
-                        new OverdueFine(
-                                100000, FineStrategyFactory.createStrategy(FineStrategyType.YEAR_BASED)))
+            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 28)))
+            .overdueFine(
+                new OverdueFine(
+                    100000, FineStrategyFactory.createStrategy(FineStrategyType.YEAR_BASED)))
             .description("Borrowed 'The Catcher in the Rye'")
             .build();
 
@@ -601,8 +600,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 28)))
             .description("Borrowed 'War and Peace'")
             .overdueFine(
-                        new OverdueFine(
-                                1600, FineStrategyFactory.createStrategy(FineStrategyType.DAILY_FINE)))
+                new OverdueFine(
+                    1600, FineStrategyFactory.createStrategy(FineStrategyType.DAILY_FINE)))
             .build();
     libCard8.addReturnTransaction(transactions8);
     ava.addLibraryCard(libCard8);
@@ -672,46 +671,46 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                 .description("Borrowed 'To Kill a Mockingbird'")
                 .build());
     var returnTrans9 =
-            List.of(
-                    Transaction.builder()
-                            .id(TransactionIdGenerator.generateId())
-                            .transactionType(TransactionType.RETURNED)
-                            .librarian(librarians.get(0))
-                            .books(
-                                    new TreeMap<>(
-                                            Map.of(
-                                                    books.stream()
-                                                            .filter(b -> b.getTitle().equals("The Divine Comedy"))
-                                                            .findFirst()
-                                                            .orElseThrow(),
-                                                    1)))
-                            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 26)))
-                            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 26)))
-                            .description("Returned 'The Divine Comedy'")
-                            .overdueFine(
-                                    new OverdueFine(
-                                            18000, FineStrategyFactory.createStrategy(FineStrategyType.DAILY_FINE)))
-                            .build(),
-                    Transaction.builder()
-                            .id(TransactionIdGenerator.generateId())
-                            .transactionType(TransactionType.RETURNED)
-                            .librarian(librarians.get(0))
-                            .books(
-                                    new TreeMap<>(
-                                            Map.of(
-                                                    books.stream()
-                                                            .filter(
-                                                                    b -> b.getTitle().equals("The Adventures of Sherlock Holmes"))
-                                                            .findFirst()
-                                                            .orElseThrow(),
-                                                    1)))
-                            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 28)))
-                            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 28)))
-                            .description("Returned 'The Adventures of Sherlock Holmes'")
-                            .overdueFine(
-                                    new OverdueFine(
-                                            18000, FineStrategyFactory.createStrategy(FineStrategyType.DAILY_FINE)))
-                            .build());
+        List.of(
+            Transaction.builder()
+                .id(TransactionIdGenerator.generateId())
+                .transactionType(TransactionType.RETURNED)
+                .librarian(librarians.get(0))
+                .books(
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("The Divine Comedy"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 26)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 26)))
+                .description("Returned 'The Divine Comedy'")
+                .overdueFine(
+                    new OverdueFine(
+                        18000, FineStrategyFactory.createStrategy(FineStrategyType.DAILY_FINE)))
+                .build(),
+            Transaction.builder()
+                .id(TransactionIdGenerator.generateId())
+                .transactionType(TransactionType.RETURNED)
+                .librarian(librarians.get(0))
+                .books(
+                    new TreeMap<>(
+                        Map.of(
+                            books.stream()
+                                .filter(
+                                    b -> b.getTitle().equals("The Adventures of Sherlock Holmes"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 28)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 28)))
+                .description("Returned 'The Adventures of Sherlock Holmes'")
+                .overdueFine(
+                    new OverdueFine(
+                        18000, FineStrategyFactory.createStrategy(FineStrategyType.DAILY_FINE)))
+                .build());
 
     libCard9.addReturnTransactions(returnTrans9);
     libCard9.addBorrowTransactions(borrowTrans9);
@@ -770,16 +769,16 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                 .librarian(librarians.get(0))
                 .books(
                     new TreeMap<>(
-                            Map.of(
-                                    books.stream()
-                                            .filter(b -> b.getTitle().equals("I Believe"))
-                                            .findFirst()
-                                            .orElseThrow(),
-                                    1)))
-            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 27)))
-            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 27)))
-            .description("Returned")
-            .build());
+                        Map.of(
+                            books.stream()
+                                .filter(b -> b.getTitle().equals("I Believe"))
+                                .findFirst()
+                                .orElseThrow(),
+                            1)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 27)))
+                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 27)))
+                .description("Returned")
+                .build());
     isabella.addLibraryCard(libCard10);
 
     readers.add(james);
@@ -795,235 +794,236 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
 
     for (Reader reader : readers) {
       LibraryCard card = reader.getLibraryCard();
-        for (Transaction borrowTran : card.getBorrowTransactions()) {
-          if (!borrowTransactions.contains(borrowTran) && borrowTran.getTransactionType() == TransactionType.BORROW) {
-            borrowTransactions.add(borrowTran);
-          }
+      for (Transaction borrowTran : card.getBorrowTransactions()) {
+        if (!borrowTransactions.contains(borrowTran)
+            && borrowTran.getTransactionType() == TransactionType.BORROW) {
+          borrowTransactions.add(borrowTran);
         }
-        for (Transaction returnTran : card.getReturnTransactions()) {
-          if (!returnTransactions.contains(returnTran) && returnTran.getTransactionType() == TransactionType.RETURNED) {
-            returnTransactions.add(returnTran);
-          }
+      }
+      for (Transaction returnTran : card.getReturnTransactions()) {
+        if (!returnTransactions.contains(returnTran)
+            && returnTran.getTransactionType() == TransactionType.RETURNED) {
+          returnTransactions.add(returnTran);
         }
-
+      }
     }
 
-    //new readers
+    // new readers
     {
       var reader1 =
-              Reader.builder()
-                      .id(ReaderIdGenerator.generateId())
-                      .email("emma.jameson@gmail.com")
-                      .firstName("Emma")
-                      .lastName("Jameson")
-                      .address("101 Maple Street")
-                      .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 10)))
-                      .dateOfBirth(1104537600000L) // 2005-01-01
-                      .avatarKey("/images/John_Doe.png")
-                      .phoneNumber("0901111111")
-                      .readerType(
-                              StudentReaderType.builder()
-                                      .faculty("Computer Science")
-                                      .enrollmentYear(2022)
-                                      .studentID("CS2022001")
-                                      .build())
-                      .build();
+          Reader.builder()
+              .id(ReaderIdGenerator.generateId())
+              .email("emma.jameson@gmail.com")
+              .firstName("Emma")
+              .lastName("Jameson")
+              .address("101 Maple Street")
+              .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 10)))
+              .dateOfBirth(1104537600000L) // 2005-01-01
+              .avatarKey("/images/John_Doe.png")
+              .phoneNumber("0901111111")
+              .readerType(
+                  StudentReaderType.builder()
+                      .faculty("Computer Science")
+                      .enrollmentYear(2022)
+                      .studentID("CS2022001")
+                      .build())
+              .build();
       var libCard11 =
-              LibraryCard.builder()
-                      .id(11L)
-                      .createdAt(System.currentTimeMillis())
-                      .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
-                      .libraryCardStatus(LibraryCardStatus.ACTIVE)
-                      .build();
+          LibraryCard.builder()
+              .id(11L)
+              .createdAt(System.currentTimeMillis())
+              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
+              .libraryCardStatus(LibraryCardStatus.ACTIVE)
+              .build();
       reader1.addLibraryCard(libCard11);
 
       var reader2 =
-              Reader.builder()
-                      .id(ReaderIdGenerator.generateId())
-                      .email("liam.nguyen@gmail.com")
-                      .firstName("Liam")
-                      .lastName("Nguyen")
-                      .address("202 Oak Avenue")
-                      .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 15)))
-                      .dateOfBirth(1072915200000L) // 2004-01-01
-                      .avatarKey("/images/John_Doe.png")
-                      .phoneNumber("0902222222")
-                      .readerType(
-                              StudentReaderType.builder()
-                                      .faculty("Information Systems")
-                                      .enrollmentYear(2020)
-                                      .studentID("IS2020002")
-                                      .build())
-                      .build();
+          Reader.builder()
+              .id(ReaderIdGenerator.generateId())
+              .email("liam.nguyen@gmail.com")
+              .firstName("Liam")
+              .lastName("Nguyen")
+              .address("202 Oak Avenue")
+              .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 15)))
+              .dateOfBirth(1072915200000L) // 2004-01-01
+              .avatarKey("/images/John_Doe.png")
+              .phoneNumber("0902222222")
+              .readerType(
+                  StudentReaderType.builder()
+                      .faculty("Information Systems")
+                      .enrollmentYear(2020)
+                      .studentID("IS2020002")
+                      .build())
+              .build();
       var libCard12 =
-              LibraryCard.builder()
-                      .id(12L)
-                      .createdAt(System.currentTimeMillis())
-                      .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
-                      .libraryCardStatus(LibraryCardStatus.ACTIVE)
-                      .build();
+          LibraryCard.builder()
+              .id(12L)
+              .createdAt(System.currentTimeMillis())
+              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
+              .libraryCardStatus(LibraryCardStatus.ACTIVE)
+              .build();
       reader2.addLibraryCard(libCard12);
 
       var reader3 =
-              Reader.builder()
-                      .id(ReaderIdGenerator.generateId())
-                      .email("sophia.tran@gmail.com")
-                      .firstName("Sophia")
-                      .lastName("Tran")
-                      .address("303 Pine Blvd")
-                      .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 15)))
-                      .dateOfBirth(1136073600000L) // 2006-01-01
-                      .avatarKey("/images/John_Doe.png")
-                      .phoneNumber("0903333333")
-                      .readerType(
-                              StudentReaderType.builder()
-                                      .faculty("Software Engineering")
-                                      .enrollmentYear(2023)
-                                      .studentID("SE2023003")
-                                      .build())
-                      .build();
+          Reader.builder()
+              .id(ReaderIdGenerator.generateId())
+              .email("sophia.tran@gmail.com")
+              .firstName("Sophia")
+              .lastName("Tran")
+              .address("303 Pine Blvd")
+              .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 15)))
+              .dateOfBirth(1136073600000L) // 2006-01-01
+              .avatarKey("/images/John_Doe.png")
+              .phoneNumber("0903333333")
+              .readerType(
+                  StudentReaderType.builder()
+                      .faculty("Software Engineering")
+                      .enrollmentYear(2023)
+                      .studentID("SE2023003")
+                      .build())
+              .build();
       var libCard13 =
-              LibraryCard.builder()
-                      .id(13L)
-                      .createdAt(System.currentTimeMillis())
-                      .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
-                      .libraryCardStatus(LibraryCardStatus.ACTIVE)
-                      .build();
+          LibraryCard.builder()
+              .id(13L)
+              .createdAt(System.currentTimeMillis())
+              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
+              .libraryCardStatus(LibraryCardStatus.ACTIVE)
+              .build();
       reader3.addLibraryCard(libCard13);
 
       var reader4 =
-              Reader.builder()
-                      .id(ReaderIdGenerator.generateId())
-                      .email("noah.pham@gmail.com")
-                      .firstName("Noah")
-                      .lastName("Pham")
-                      .address("404 Birch Lane")
-                      .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 8)))
-                      .dateOfBirth(1167609600000L) // 2007-01-01
-                      .avatarKey("/images/John_Doe.png")
-                      .phoneNumber("0904444444")
-                      .readerType(
-                              StudentReaderType.builder()
-                                      .faculty("Cybersecurity")
-                                      .enrollmentYear(2021)
-                                      .studentID("CS2021004")
-                                      .build())
-                      .build();
+          Reader.builder()
+              .id(ReaderIdGenerator.generateId())
+              .email("noah.pham@gmail.com")
+              .firstName("Noah")
+              .lastName("Pham")
+              .address("404 Birch Lane")
+              .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 8)))
+              .dateOfBirth(1167609600000L) // 2007-01-01
+              .avatarKey("/images/John_Doe.png")
+              .phoneNumber("0904444444")
+              .readerType(
+                  StudentReaderType.builder()
+                      .faculty("Cybersecurity")
+                      .enrollmentYear(2021)
+                      .studentID("CS2021004")
+                      .build())
+              .build();
       var libCard14 =
-              LibraryCard.builder()
-                      .id(14L)
-                      .createdAt(System.currentTimeMillis())
-                      .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
-                      .libraryCardStatus(LibraryCardStatus.ACTIVE)
-                      .build();
+          LibraryCard.builder()
+              .id(14L)
+              .createdAt(System.currentTimeMillis())
+              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
+              .libraryCardStatus(LibraryCardStatus.ACTIVE)
+              .build();
       reader4.addLibraryCard(libCard14);
 
       var reader5 =
-              Reader.builder()
-                      .id(ReaderIdGenerator.generateId())
-                      .email("ava.hoang@gmail.com")
-                      .firstName("Ava")
-                      .lastName("Hoang")
-                      .address("505 Cedar Street")
-                      .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 10)))
-                      .dateOfBirth(1199145600000L) // 2008-01-01
-                      .avatarKey("/images/John_Doe.png")
-                      .phoneNumber("0905555555")
-                      .readerType(
-                              StudentReaderType.builder()
-                                      .faculty("Artificial Intelligence")
-                                      .enrollmentYear(2024)
-                                      .studentID("AI2024005")
-                                      .build())
-                      .build();
+          Reader.builder()
+              .id(ReaderIdGenerator.generateId())
+              .email("ava.hoang@gmail.com")
+              .firstName("Ava")
+              .lastName("Hoang")
+              .address("505 Cedar Street")
+              .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 10)))
+              .dateOfBirth(1199145600000L) // 2008-01-01
+              .avatarKey("/images/John_Doe.png")
+              .phoneNumber("0905555555")
+              .readerType(
+                  StudentReaderType.builder()
+                      .faculty("Artificial Intelligence")
+                      .enrollmentYear(2024)
+                      .studentID("AI2024005")
+                      .build())
+              .build();
       var libCard15 =
-              LibraryCard.builder()
-                      .id(15L)
-                      .createdAt(System.currentTimeMillis())
-                      .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
-                      .libraryCardStatus(LibraryCardStatus.ACTIVE)
-                      .build();
+          LibraryCard.builder()
+              .id(15L)
+              .createdAt(System.currentTimeMillis())
+              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
+              .libraryCardStatus(LibraryCardStatus.ACTIVE)
+              .build();
       reader5.addLibraryCard(libCard15);
 
       var reader6 =
-              Reader.builder()
-                      .id(ReaderIdGenerator.generateId())
-                      .email("oliver.do@gmail.com")
-                      .firstName("Oliver")
-                      .lastName("Do")
-                      .address("606 Spruce Rd")
-                      .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 25)))
-                      .dateOfBirth(1230768000000L) // 2009-01-01
-                      .avatarKey("/images/John_Doe.png")
-                      .phoneNumber("0906666666")
-                      .readerType(
-                              StudentReaderType.builder()
-                                      .faculty("Data Science")
-                                      .enrollmentYear(2023)
-                                      .studentID("DS2023006")
-                                      .build())
-                      .build();
+          Reader.builder()
+              .id(ReaderIdGenerator.generateId())
+              .email("oliver.do@gmail.com")
+              .firstName("Oliver")
+              .lastName("Do")
+              .address("606 Spruce Rd")
+              .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 25)))
+              .dateOfBirth(1230768000000L) // 2009-01-01
+              .avatarKey("/images/John_Doe.png")
+              .phoneNumber("0906666666")
+              .readerType(
+                  StudentReaderType.builder()
+                      .faculty("Data Science")
+                      .enrollmentYear(2023)
+                      .studentID("DS2023006")
+                      .build())
+              .build();
       var libCard16 =
-              LibraryCard.builder()
-                      .id(16L)
-                      .createdAt(System.currentTimeMillis())
-                      .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
-                      .libraryCardStatus(LibraryCardStatus.ACTIVE)
-                      .build();
+          LibraryCard.builder()
+              .id(16L)
+              .createdAt(System.currentTimeMillis())
+              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
+              .libraryCardStatus(LibraryCardStatus.ACTIVE)
+              .build();
       reader6.addLibraryCard(libCard16);
 
       var reader7 =
-              Reader.builder()
-                      .id(ReaderIdGenerator.generateId())
-                      .email("mia.vu@gmail.com")
-                      .firstName("Mia")
-                      .lastName("Vu")
-                      .address("707 Willow Way")
-                      .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 1)))
-                      .dateOfBirth(1104537600000L) // 2005-01-01
-                      .avatarKey("/images/John_Doe.png")
-                      .phoneNumber("0907777777")
-                      .readerType(
-                              StudentReaderType.builder()
-                                      .faculty("Information Technology")
-                                      .enrollmentYear(2022)
-                                      .studentID("IT2022007")
-                                      .build())
-                      .build();
+          Reader.builder()
+              .id(ReaderIdGenerator.generateId())
+              .email("mia.vu@gmail.com")
+              .firstName("Mia")
+              .lastName("Vu")
+              .address("707 Willow Way")
+              .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 1)))
+              .dateOfBirth(1104537600000L) // 2005-01-01
+              .avatarKey("/images/John_Doe.png")
+              .phoneNumber("0907777777")
+              .readerType(
+                  StudentReaderType.builder()
+                      .faculty("Information Technology")
+                      .enrollmentYear(2022)
+                      .studentID("IT2022007")
+                      .build())
+              .build();
       var libCard17 =
-              LibraryCard.builder()
-                      .id(17L)
-                      .createdAt(System.currentTimeMillis())
-                      .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
-                      .libraryCardStatus(LibraryCardStatus.ACTIVE)
-                      .build();
+          LibraryCard.builder()
+              .id(17L)
+              .createdAt(System.currentTimeMillis())
+              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
+              .libraryCardStatus(LibraryCardStatus.ACTIVE)
+              .build();
       reader7.addLibraryCard(libCard17);
 
       var reader8 =
-              Reader.builder()
-                      .id(ReaderIdGenerator.generateId())
-                      .email("ethan.le@gmail.com")
-                      .firstName("Ethan")
-                      .lastName("Le")
-                      .address("808 Elm Circle")
-                      .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 20)))
-                      .dateOfBirth(1072915200000L) // 2004-01-01
-                      .avatarKey("/images/John_Doe.png")
-                      .phoneNumber("0908888888")
-                      .readerType(
-                              StudentReaderType.builder()
-                                      .faculty("Networking")
-                                      .enrollmentYear(2020)
-                                      .studentID("NW2020008")
-                                      .build())
-                      .build();
+          Reader.builder()
+              .id(ReaderIdGenerator.generateId())
+              .email("ethan.le@gmail.com")
+              .firstName("Ethan")
+              .lastName("Le")
+              .address("808 Elm Circle")
+              .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 20)))
+              .dateOfBirth(1072915200000L) // 2004-01-01
+              .avatarKey("/images/John_Doe.png")
+              .phoneNumber("0908888888")
+              .readerType(
+                  StudentReaderType.builder()
+                      .faculty("Networking")
+                      .enrollmentYear(2020)
+                      .studentID("NW2020008")
+                      .build())
+              .build();
       var libCard18 =
-              LibraryCard.builder()
-                      .id(18L)
-                      .createdAt(System.currentTimeMillis())
-                      .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
-                      .libraryCardStatus(LibraryCardStatus.ACTIVE)
-                      .build();
+          LibraryCard.builder()
+              .id(18L)
+              .createdAt(System.currentTimeMillis())
+              .expireAt(System.currentTimeMillis() + 60L * 24 * 60 * 60 * 1000)
+              .libraryCardStatus(LibraryCardStatus.ACTIVE)
+              .build();
       reader8.addLibraryCard(libCard18);
 
       readers.add(reader1);
@@ -1056,9 +1056,6 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   }
 
   public Reader findId(Long id) {
-    return readers.stream()
-            .filter(r -> r.getId().equals(id))
-            .findFirst()
-            .orElse(null);
+    return readers.stream().filter(r -> r.getId().equals(id)).findFirst().orElse(null);
   }
 }

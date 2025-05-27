@@ -10,7 +10,6 @@ import com.g15.library_system.view.swingComponentGenerators.JFreeChartGenerator;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;

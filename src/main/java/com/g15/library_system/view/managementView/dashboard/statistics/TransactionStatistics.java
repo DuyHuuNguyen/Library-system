@@ -1,10 +1,8 @@
 package com.g15.library_system.view.managementView.dashboard.statistics;
 
 import com.g15.library_system.data.ReaderData;
-import com.g15.library_system.enums.ReturnStatus;
 import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.util.DateUtil;
-
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -16,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TransactionStatistics {
 
-//Late Book return chart
+  // Late Book return chart
   public Map<String, Long> aggregateLateReturnTrend(int year) {
     return ReaderData.getInstance().getReturnTransactions().stream()
         .filter(
@@ -42,7 +40,7 @@ public class TransactionStatistics {
         .filter(
             trans ->
                 trans.getActualReturnAt() != null
-                        && trans.getOverdueFine() != null
+                    && trans.getOverdueFine() != null
                     && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year
                     && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth()
                         == monthConverted)
@@ -52,8 +50,7 @@ public class TransactionStatistics {
                 date -> date.format(formatter), TreeMap::new, Collectors.counting()));
   }
 
-
-//borrow Overview Chart-------------------------------------------
+  // borrow Overview Chart-------------------------------------------
   public Map<String, Long> countReturnStatusDistribution(int year) {
     return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(tran -> tran.getTransactionType() == TransactionType.BORROW)
@@ -75,8 +72,7 @@ public class TransactionStatistics {
                 tran -> tran.getReturnStatus().getValue(), Collectors.counting()));
   }
 
-
-//Book borrow by genre chart---------------------------------------------
+  // Book borrow by genre chart---------------------------------------------
   public Map<String, Map<String, Long>> aggregateGenreBorrowData(int year) {
     return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(

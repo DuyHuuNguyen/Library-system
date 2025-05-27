@@ -39,7 +39,7 @@ public class DashboardCard extends RoundedPanel {
 
     this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-//    this.setPreferredSize(new Dimension(180, 210));
+    //    this.setPreferredSize(new Dimension(180, 210));
 
     RoundedPanel iconPanel = new RoundedPanel(12, iconBackgroundColor, borderColor);
     iconPanel.setPreferredSize(new Dimension(50, 50));

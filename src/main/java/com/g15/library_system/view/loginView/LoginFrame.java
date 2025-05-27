@@ -1,8 +1,5 @@
 package com.g15.library_system.view.loginView;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.*;
 import javax.swing.*;
 
