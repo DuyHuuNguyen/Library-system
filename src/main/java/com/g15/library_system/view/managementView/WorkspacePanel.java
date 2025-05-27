@@ -80,7 +80,7 @@ public class WorkspacePanel extends JPanel {
     this.dashBoardPanel.setLibrariansCardButtonListener(listener);
   }
 
-  public void setOverdueBooksCardButtonListener(ActionListener listener) {
-    this.dashBoardPanel.setOverdueBooksCardButtonListener(listener);
+  public void setMyAccountCardButtonListener(ActionListener listener) {
+    this.dashBoardPanel.setMyAccountCardButtonListener(listener);
   }
 }
