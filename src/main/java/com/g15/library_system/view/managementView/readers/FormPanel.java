@@ -108,7 +108,6 @@ public class FormPanel extends JPanel {
 
     birthDateField = createTF();
     dateOfBirthChooser = new DateChooser();
-    dateOfBirthChooser.setTextField(birthDateField);
     dateOfBirthChooser.addActionDateChooserListener(
         new DateChooserAdapter() {
           @Override
@@ -117,9 +116,10 @@ public class FormPanel extends JPanel {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.DAY_OF_MONTH, 7);
-            //                dueDateChooser.setSelectedDate(calendar.getTime());
+//                            dateOfBirthChooser.setSelectedDate(calendar.getTime());
           }
         });
+    dateOfBirthChooser.setTextField(birthDateField);
     fieldConstraints.gridy = 3;
 
     add(birthDateField, fieldConstraints);
@@ -221,17 +221,6 @@ public class FormPanel extends JPanel {
     fieldConstraints.gridy = 9;
     add(totalFineField, fieldConstraints);
 
-    //    memberIdField.setText("U001");
-    //    nameField.setText("John Doe");
-    //    birthDateField.setText("1/1/2000");
-    //    phoneField.setText("0123456");
-    //    emailField.setText("john.doe@example.com");
-    //    addressField.setText("Linh Trung, Thu Duc, Tp.HCM");
-    //    readerTypeField.setText("Student");
-
-    // Reset date to current
-    //    membershipDateField.setText("1/1/2025");
-    //    totalFineField.setText(5 + "");
   }
 
   public void setMemberIdField(JTextField memberIdField) {
@@ -260,33 +249,6 @@ public class FormPanel extends JPanel {
 
   public void setMembershipDateField(JTextField membershipDateField) {
     this.membershipDateField = membershipDateField;
-  }
-
-  // Method to reset all fields
-  public void resetFields() {
-    memberIdField.setText("");
-    fullNameField.setText("");
-    //    lastNameField.setText("");
-    //    firstNameField.setText("");
-    birthDateField.setText("");
-    phoneField.setText("");
-    emailField.setText("");
-    addressField.setText("");
-    //    readerTypeField.setText("");
-
-    // Reset date to current
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    membershipDateField.setText("");
-    totalFineField.setText(5 + "");
-
-    //            "U001",
-    //            "John Doe",
-    //            "1/1/2000",
-    //            "0123456",
-    //            "john.doe@example.com",
-    //            "Linh Trung, Thu Duc, Tp.HCM",
-    //            "Student",
-    //            5
   }
 
   public JTextField createTF() {
@@ -330,19 +292,6 @@ public class FormPanel extends JPanel {
   }
 
   public void isValidate() {
-    //    if (memberIdField.getText().trim().isEmpty()) {
-    //      membershipDateField.requestFocusInWindow();
-    //      throw new IllegalArgumentException("MemberID is empty!");
-    //    }
-    //    if (lastNameField.getText().trim().isEmpty()) {
-    //      lastNameField.requestFocusInWindow();
-    //      throw new IllegalArgumentException("Last Name is empty!");
-    //    }
-    //    if (firstNameField.getText().trim().isEmpty()) {
-    //      firstNameField.requestFocusInWindow();
-    //      throw new IllegalArgumentException("First Name is empty!");
-    //    }
-
     if (fullNameField.getText().trim().isEmpty()) {
       fullNameField.requestFocusInWindow();
       throw new IllegalArgumentException("Full Name is empty!");
