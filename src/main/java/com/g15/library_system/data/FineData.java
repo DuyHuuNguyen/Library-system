@@ -15,18 +15,26 @@ public class FineData implements Data<OverdueFine> {
   }
 
   @Override
-  public void add(OverdueFine b) {
+  public synchronized void add(OverdueFine b) {
     this.overdueFines.add(b);
   }
 
   @Override
-  public void add(List<OverdueFine> t) {}
+  public synchronized void add(List<OverdueFine> t) {
+    this.overdueFines.addAll(t);
+  }
 
   @Override
-  public void remove(OverdueFine OverdueFine) {}
+  public synchronized void remove(OverdueFine overdueFine) {
+    this.overdueFines.remove(overdueFine);
+  }
 
   @Override
-  public void remove(int index) {}
+  public synchronized void remove(int index) {
+    if (index >= 0 && index < overdueFines.size()) {
+        this.overdueFines.remove(index);
+    }
+  }
 
   public static FineData getInstance() {
     return INSTANCE;
