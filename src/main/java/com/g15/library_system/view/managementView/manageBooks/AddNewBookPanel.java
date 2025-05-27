@@ -129,7 +129,7 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
             .preferredSize(new Dimension(110, 30));
     fileChooser = new JFileChooser();
 
-    imagePanel = new DisplayImagePanel(200, 200);
+    imagePanel = new DisplayImagePanel(90, 90);
     imagePanel.setBorder(BorderFactory.createTitledBorder("Image Preview"));
     imagePanel.setBackground(Color.WHITE);
 
@@ -218,7 +218,7 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
     mainPanel.add(bookInfoPanel);
 
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    buttonPanel.setBackground(Color.WHITE);
     JButton btnCancel = CustomButtonBuilder.builder()
             .text("Cancel")
             .title("Cancel")
@@ -282,7 +282,6 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
 
     buttonPanel.add(btnCancel);
     buttonPanel.add(btnAddBook);
-    buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
     add(mainPanel, BorderLayout.CENTER);
     add(buttonPanel, BorderLayout.SOUTH);

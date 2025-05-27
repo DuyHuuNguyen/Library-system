@@ -215,6 +215,7 @@ public class ModifyBookPanel extends JPanel {
     mainPanel.add(bookInfoPanel);
 
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    buttonPanel.setBackground(Color.WHITE);
     JButton btnCancel = CustomButtonBuilder.builder()
             .text("Cancel")
             .title("Cancel")
@@ -279,11 +280,12 @@ public class ModifyBookPanel extends JPanel {
 
     buttonPanel.add(btnCancel);
     buttonPanel.add(btnAddBook);
-    buttonPanel.setBackground(Color.WHITE);
+    this.setSizeBookImage(90,  90);
 
     add(mainPanel, BorderLayout.CENTER);
     add(buttonPanel, BorderLayout.SOUTH);
     setVisible(true);
+
   }
 
   public void clearDataInPanel() {
