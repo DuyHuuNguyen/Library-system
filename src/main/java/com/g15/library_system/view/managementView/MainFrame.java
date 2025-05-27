@@ -115,10 +115,10 @@ public class MainFrame extends JFrame {
           setHover(NavigationType.RETURN_BOOKS);
         });
 
-    workspacePanel.setOverdueBooksCardButtonListener(
+    workspacePanel.setMyAccountCardButtonListener(
         e -> {
-          workspacePanel.showPanel(NavigationType.RETURN_BOOKS);
-          setHover(NavigationType.RETURN_BOOKS);
+          workspacePanel.showPanel(NavigationType.MY_ACCOUNT);
+          setHover(NavigationType.MY_ACCOUNT);
         });
 
     workspacePanel.setReadersCardButtonListener(
