@@ -117,8 +117,7 @@ public class AddReturnBookController {
 
     readerFound.getLibraryCard().addReturnTransaction(returnTransaction);
 
-
-    //check borrowTransaction -> set actualReturnAt
+    // check borrowTransaction -> set actualReturnAt
     for (Transaction borrowTx : readerFound.getLibraryCard().getBorrowTransactions()) {
       if (isAllBooksReturned(
           borrowTx, readerFound.getLibraryCard().getReturnTransactions(), returningBooks)) {
@@ -135,7 +134,6 @@ public class AddReturnBookController {
       Map<Book, Integer> currentReturn) {
     Map<Book, Integer> totalReturned = new HashMap<>();
 
-
     for (Transaction returnTx : returnTransactions) {
       for (Map.Entry<Book, Integer> entry : returnTx.getBooks().entrySet()) {
         Book book = entry.getKey();
@@ -146,14 +144,12 @@ public class AddReturnBookController {
       }
     }
 
-
     for (Map.Entry<Book, Integer> entry : currentReturn.entrySet()) {
       Book book = entry.getKey();
       if (borrowTx.getBooks().containsKey(book)) {
         totalReturned.merge(book, entry.getValue(), Integer::sum);
       }
     }
-
 
     for (Map.Entry<Book, Integer> entry : borrowTx.getBooks().entrySet()) {
       Book book = entry.getKey();

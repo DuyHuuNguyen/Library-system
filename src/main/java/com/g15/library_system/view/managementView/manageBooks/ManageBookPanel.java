@@ -95,11 +95,10 @@ public class ManageBookPanel extends JPanel {
     this.panelContent.add(checkboxTablePanel, CONSTRAINT_TABLE_BOOK);
 
     RoundedShadowPanel roundedShadowPanelForAddNewBook = new RoundedShadowPanel();
-    this.addNewBookPanel = new AddNewBookPanel(700, 650);
+    this.addNewBookPanel = new AddNewBookPanel(500, 500);
     roundedShadowPanelForAddNewBook.add(this.addNewBookPanel);
-    roundedShadowPanelForAddNewBook.add(Box.createVerticalStrut(50));
     roundedShadowPanelForAddNewBook.setPreferredSize(new Dimension(700, 650));
-    roundedShadowPanelForAddNewBook.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    roundedShadowPanelForAddNewBook.setBackground(Style.BLUE_HEADER_TABLE_AND_BUTTON);
 
     this.panelContent.add(roundedShadowPanelForAddNewBook, CONSTRAINT_ADD_NEW_BOOK);
 
@@ -109,7 +108,6 @@ public class ManageBookPanel extends JPanel {
     RoundedShadowPanel roundedShadowPanelForModifyBook = new RoundedShadowPanel();
     this.modifyBookPanel = new ModifyBookPanel(700, 650);
     roundedShadowPanelForModifyBook.add(modifyBookPanel);
-    roundedShadowPanelForModifyBook.add(Box.createVerticalStrut(50));
     roundedShadowPanelForModifyBook.setPreferredSize(new Dimension(700, 650));
 
     this.panelContent.add(roundedShadowPanelForModifyBook, CONSTRAINT_MODIFY_BOOK);

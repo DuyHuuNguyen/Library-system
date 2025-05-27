@@ -143,10 +143,15 @@ public class ToolPanel extends JPanel {
 
     addBt.addActionListener(
         e -> {
-          readerPn.getContentPn().getShowInforPn().getAvtPn().setImageUrlRelative("/images/addImageAvatar.png");
+          readerPn
+              .getContentPn()
+              .getShowInforPn()
+              .getAvtPn()
+              .setImageUrlRelative("/images/addImageAvatar.png");
           readerPn.getContentPn().getShowInforPn().getAvtPn().setSize(150, 150);
           clearTextFields(readerPn.getContentPn().getShowInforPn().getFormPn()); // Xóa trắng
-          enableTextFields(readerPn.getContentPn().getShowInforPn().getFormPn(), true); // Cho phép nhập
+          enableTextFields(
+              readerPn.getContentPn().getShowInforPn().getFormPn(), true); // Cho phép nhập
           readerPn.getContentPn().getShowInforPn().getBtnPn().setMode(ButtonPanelMode.ADD);
           readerPn.getContentPn().getShowInforPn().setVisible(false);
         });

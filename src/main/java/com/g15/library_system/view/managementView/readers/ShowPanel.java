@@ -1,13 +1,12 @@
 package com.g15.library_system.view.managementView.readers;
 
 import com.g15.library_system.view.Style;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

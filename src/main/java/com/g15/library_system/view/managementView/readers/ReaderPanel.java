@@ -1,10 +1,9 @@
 package com.g15.library_system.view.managementView.readers;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.awt.*;
 import javax.swing.*;
+import lombok.Getter;
+import lombok.Setter;
 
 // public class ReaderPanel extends JPanel {
 //  private ToolPanel toolPn;

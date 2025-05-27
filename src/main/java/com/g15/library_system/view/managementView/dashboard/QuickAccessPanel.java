@@ -33,10 +33,10 @@ public class QuickAccessPanel extends RoundedShadowPanel
             "/icons/totalBook2.png",
             "Total Books",
             String.valueOf(totalBooks),
-//            new Color(255, 238, 215), //old color
-//            new Color(255, 160, 0),
-//            new Color(170, 105, 0));
-    new Color(255, 245, 200),
+            //            new Color(255, 238, 215), //old color
+            //            new Color(255, 160, 0),
+            //            new Color(170, 105, 0));
+            new Color(255, 245, 200),
             new Color(255, 204, 0),
             new Color(145, 117, 17));
 
@@ -47,8 +47,7 @@ public class QuickAccessPanel extends RoundedShadowPanel
             "/icons/lendBook.png",
             "Lended Books",
             String.valueOf(lendedBooks),
-
-    new Color(235, 235, 255),
+            new Color(235, 235, 255),
             new Color(130, 130, 250),
             new Color(90, 90, 180));
 
@@ -58,8 +57,7 @@ public class QuickAccessPanel extends RoundedShadowPanel
             "/icons/returnedBook.png",
             "Returned Books",
             String.valueOf(returnedBooks),
-
-    new Color(230, 255, 255),
+            new Color(230, 255, 255),
             new Color(70, 200, 200),
             new Color(40, 140, 140));
 
@@ -101,7 +99,7 @@ public class QuickAccessPanel extends RoundedShadowPanel
     this.add(totalBooksCard);
     this.add(lendedBooksCard);
     this.add(returnedBookCard);
-//    this.add(overdueBooksCard);
+    //    this.add(overdueBooksCard);
     this.add(readersCard);
     this.add(librariansCard);
   }

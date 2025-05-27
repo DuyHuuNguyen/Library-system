@@ -278,7 +278,7 @@ public class BookPanel extends JPanel {
     setLayout(new BorderLayout());
     cardLayout = new CardLayout(0, 0);
     cardPanel = new JPanel(cardLayout);
-    cardPanel.setPreferredSize(new Dimension(500,650));
+    cardPanel.setPreferredSize(new Dimension(500, 650));
     cardPanel.setOpaque(false);
 
     addBookPanel = new AddBookPanel();

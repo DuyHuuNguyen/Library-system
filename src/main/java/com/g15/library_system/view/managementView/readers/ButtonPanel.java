@@ -14,14 +14,13 @@ import com.g15.library_system.util.PathUtil;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -66,7 +65,8 @@ public class ButtonPanel extends JPanel {
             Reader readerNeedRm =
                 ReaderData.getInstance().findId(Long.valueOf(formPn.getMemberIdField().getText()));
 
-            List<Transaction> transactionsList = readerNeedRm.getLibraryCard().getBorrowTransactions();
+            List<Transaction> transactionsList =
+                readerNeedRm.getLibraryCard().getBorrowTransactions();
 
             if (readerNeedRm != null) {
               ReaderData.getInstance().remove(readerNeedRm);
@@ -124,7 +124,9 @@ public class ButtonPanel extends JPanel {
             readerPn.getContentPn().getShowInforPn().getBtnPn().setMode(ButtonPanelMode.VIEW);
             JOptionPane.showMessageDialog(this, "Saved!");
 
-            readerPn.getToolPn().enableTextFields(readerPn.getContentPn().getShowInforPn().getFormPn(), false);
+            readerPn
+                .getToolPn()
+                .enableTextFields(readerPn.getContentPn().getShowInforPn().getFormPn(), false);
           }
         });
 
@@ -146,7 +148,9 @@ public class ButtonPanel extends JPanel {
     editBt.addActionListener(
         e -> {
           // Add functionality here
-          readerPn.getToolPn().enableTextFields(readerPn.getContentPn().getShowInforPn().getFormPn(), true);
+          readerPn
+              .getToolPn()
+              .enableTextFields(readerPn.getContentPn().getShowInforPn().getFormPn(), true);
           readerPn.getContentPn().getShowInforPn().getBtnPn().setMode(ButtonPanelMode.EDIT);
         });
 
@@ -266,7 +270,12 @@ public class ButtonPanel extends JPanel {
             // ---------------------------------------------------------
 
             readerPn.getToolPn().enableTextFields(formPn, false);
-            readerPn.getContentPn().getShowInforPn().getFormPn().getMemberIdField().setText(reader.getId() + "");
+            readerPn
+                .getContentPn()
+                .getShowInforPn()
+                .getFormPn()
+                .getMemberIdField()
+                .setText(reader.getId() + "");
             this.setMode(ButtonPanelMode.VIEW);
           }
         });
