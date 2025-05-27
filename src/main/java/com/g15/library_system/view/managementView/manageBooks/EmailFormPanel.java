@@ -14,7 +14,6 @@ public class EmailFormPanel extends RoundedShadowPanel {
   private JTextField subjectField;
   private JPanel body;
   private JTextArea contentEmail;
-  //  private ImageDropPanel imageDropPanel;
   private JScrollPane bodyScroll;
   private JButton sendButton, reloadBtn;
 
@@ -34,6 +33,7 @@ public class EmailFormPanel extends RoundedShadowPanel {
 
     JLabel bodyLabel = new JLabel("Message:");
     this.body = new JPanel(new MigLayout("insets 5, wrap 1", "[grow, fill]", "[]10[]"));
+    this.body.setBackground(Color.WHITE);
 
     //    this.imageDropPanel = new ImageDropPanel(300, 300);
 
@@ -46,6 +46,7 @@ public class EmailFormPanel extends RoundedShadowPanel {
     //    this.body.add(imageDropPanel, "center, growx");
 
     this.bodyScroll = new JScrollPane(body);
+    this.bodyScroll.setBackground(Style.LIGHT_WHITE_BACKGROUND);
     this.bodyScroll.setPreferredSize(new Dimension(400, 800));
 
     this.sendButton =
@@ -73,6 +74,7 @@ public class EmailFormPanel extends RoundedShadowPanel {
 
     // Đặt hai nút vào một JPanel để chúng nằm sát nhau
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+    buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
     buttonPanel.setOpaque(false);
     buttonPanel.add(reloadBtn);
     buttonPanel.add(sendButton);
