@@ -10,18 +10,30 @@ import javax.swing.*;
 public class UserProfilePanel extends RoundedShadowPanel {
   private CircularImageLabel avatarLabel;
   private JLabel nameLabel, jobLabel, addressLabel;
-  private JButton editButton, saveButton, uploadImageButton;
+  private JButton editButton, saveButton, uploadImageButton, cancelButton;
   private JPanel infoPanel, buttonPanel;
   private boolean isEditing = false;
   private String avatarPath;
   private Map<String, String> personalData;
   private Map<String, String> addressData;
+  private JTextField nameField, jobField, addressField;
+  private PersonalInfoPanel personalInfoPanel;
+  private AddressPanel addressPanel;
+  private Runnable saveCallback;
 
   public UserProfilePanel(
-      String avatarPath, Map<String, String> personalData, Map<String, String> addressData) {
+      String avatarPath,
+      Map<String, String> personalData,
+      Map<String, String> addressData,
+      PersonalInfoPanel personalInfoPanel,
+      AddressPanel addressPanel,
+      Runnable saveCallback) { // Thêm tham số Runnable
     this.avatarPath = avatarPath;
     this.addressData = addressData;
     this.personalData = personalData;
+    this.personalInfoPanel = personalInfoPanel;
+    this.addressPanel = addressPanel;
+    this.saveCallback = saveCallback;
     this.setLayout(new BorderLayout(20, 20));
     this.setBorder(BorderFactory.createEmptyBorder(20, 40, 30, 20));
     this.setBackground(Color.WHITE);
@@ -103,22 +115,37 @@ public class UserProfilePanel extends RoundedShadowPanel {
     saveButton.setForeground(Color.WHITE);
     saveButton.addActionListener(e -> saveChanges());
 
+    cancelButton = new JButton("Cancel");
+    cancelButton.setBackground(new Color(255, 255, 255)); // Đỏ nhạt
+    cancelButton.setForeground(Color.BLACK);
+    cancelButton.addActionListener(e -> cancelEdit());
+
     buttonPanel.add(uploadImageButton);
+    buttonPanel.add(cancelButton);
     buttonPanel.add(saveButton);
+
+    String fullName = nameLabel.getText();
+    String[] parts = fullName.split(" ", 2);
+    String firstName = parts.length > 0 ? parts[0] : "";
+    String lastName = parts.length > 1 ? parts[1] : "";
+
+    nameField = new JTextField(firstName + " " + lastName);
+    jobField = new JTextField(jobLabel.getText());
+    addressField = new JTextField(addressLabel.getText());
 
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.insets = new Insets(5, 0, 5, 5);
     gbc.anchor = GridBagConstraints.WEST;
     gbc.gridx = 1;
     gbc.gridy = 0;
-
     gbc.weightx = 1;
     gbc.fill = GridBagConstraints.HORIZONTAL;
-    infoPanel.add(nameLabel, gbc);
+
+    infoPanel.add(nameField, gbc);
     gbc.gridy++;
-    infoPanel.add(jobLabel, gbc);
+    infoPanel.add(jobField, gbc);
     gbc.gridy++;
-    infoPanel.add(addressLabel, gbc);
+    infoPanel.add(addressField, gbc);
 
     revalidate();
     repaint();
@@ -135,8 +162,55 @@ public class UserProfilePanel extends RoundedShadowPanel {
     }
   }
 
+  private void cancelEdit() {
+    isEditing = false;
+    buildViewMode();
+    editButton.setVisible(true);
+  }
+
   private void saveChanges() {
+    // Cập nhật thông tin cá nhân
+    String[] names = nameField.getText().trim().split(" ", 2);
+    String firstName = names.length > 0 ? names[0] : "";
+    String lastName = names.length > 1 ? names[1] : "";
+
+    personalData.put("First Name", firstName);
+    personalData.put("Last Name", lastName);
+    personalData.put("Job", jobField.getText().trim());
+
+    // Cập nhật thông tin địa chỉ
+    String[] addressParts = addressField.getText().trim().split(",", 3);
+    String address = addressParts.length > 0 ? addressParts[0].trim() : "";
+    String city = addressParts.length > 1 ? addressParts[1].trim() : "";
+    String country = addressParts.length > 2 ? addressParts[2].trim() : "";
+
+    addressData.put("Address", address);
+    addressData.put("City", city);
+    addressData.put("Country", country);
+
+    // Cập nhật lại label hiển thị
+    nameLabel.setText(personalData.get("First Name") + " " + personalData.get("Last Name"));
+    jobLabel.setText(personalData.get("Job"));
+    addressLabel.setText(
+        addressData.get("Address")
+            + ", "
+            + addressData.get("City")
+            + ", "
+            + addressData.get("Country"));
+
+    // Quay lại chế độ xem
     toggleEditMode();
+    // Cập nhật lại các panel liên quan
+    if (personalInfoPanel != null) {
+      personalInfoPanel.refreshView();
+    }
+    if (addressPanel != null) {
+      addressPanel.refreshView();
+    }
+    // Kích hoạt callback để MyAccountPanel lưu và làm mới toàn bộ
+    if (saveCallback != null) {
+      saveCallback.run();
+    }
   }
 
   private void uploadAvatar() {
@@ -148,8 +222,10 @@ public class UserProfilePanel extends RoundedShadowPanel {
     }
   }
 
-  public void updateProfileData(Map<String, String> personalData) {
-    // TODO
+  // Cập nhật phương thức này để nhận cả addressData
+  public void updateProfileData(Map<String, String> personalData, Map<String, String> addressData) {
+    this.personalData = personalData; // Cập nhật tham chiếu
+    this.addressData = addressData; // Cập nhật tham chiếu
     nameLabel.setText(personalData.get("First Name") + " " + personalData.get("Last Name"));
     jobLabel.setText(personalData.get("Job"));
     addressLabel.setText(
@@ -158,5 +234,7 @@ public class UserProfilePanel extends RoundedShadowPanel {
             + addressData.get("City")
             + ", "
             + addressData.get("Country"));
+    revalidate();
+    repaint();
   }
 }
