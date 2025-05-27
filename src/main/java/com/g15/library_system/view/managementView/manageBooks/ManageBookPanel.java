@@ -115,7 +115,7 @@ public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
 
     add(panelContent, BorderLayout.CENTER);
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
-    
+
     this.addNewBookPanel.addObserverNotifyNewBook(this.notifyNewBookPanel);
     this.addNewBookPanel.addObserverNotifyNewBook(this);
   }

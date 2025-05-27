@@ -17,9 +17,11 @@ public class AddressPanel extends RoundedShadowPanel {
   private final JPanel infoPanel;
   private final JButton editButton;
   private boolean isEditing = false;
+  private Runnable saveCallback;
 
-  public AddressPanel(Map<String, String> addressData) {
+  public AddressPanel(Map<String, String> addressData, Runnable saveCallback) {
     this.addressData = addressData;
+    this.saveCallback = saveCallback;
     this.setLayout(new BorderLayout());
     this.setBackground(UIManager.getColor("Panel.background"));
 
@@ -142,9 +144,16 @@ public class AddressPanel extends RoundedShadowPanel {
       addressData.put(entry.getKey(), entry.getValue().getText());
     }
     toggleEditMode();
+    if (saveCallback != null) { // Gọi callback sau khi lưu
+      saveCallback.run();
+    }
   }
 
   private void cancelEdit() {
     toggleEditMode();
+  }
+
+  public void refreshView() {
+    buildViewMode();
   }
 }
