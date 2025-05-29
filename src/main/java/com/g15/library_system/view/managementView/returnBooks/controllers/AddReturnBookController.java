@@ -30,7 +30,7 @@ public class AddReturnBookController {
 
   private IReturnTransactionMapper transactionMapper = new ReturnTransactionMapper();
   private Librarian currentLibrarian = CacheData.getCURRENT_LIBRARIAN();
-  private List<Book> books = BookData.getInstance().getBooks();
+  private Set<Book> books = BookData.getInstance().getBooks();
 
   // controller
   private ReaderController readerController =

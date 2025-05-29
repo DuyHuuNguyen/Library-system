@@ -147,7 +147,7 @@ public class VerificationCodePanel extends JPanel {
     verifyBt.addActionListener(
         e -> {
           var verifyOTPRequest = VerifyOTPRequest.builder().otp(this.getOTPField()).build();
-          log.info("ccc {}", verifyOTPRequest);
+          log.info(" {}", verifyOTPRequest);
 
           var isVerifyOTP = this.librarianController.verifyOTP(verifyOTPRequest);
           log.debug("verify otp {}", isVerifyOTP);

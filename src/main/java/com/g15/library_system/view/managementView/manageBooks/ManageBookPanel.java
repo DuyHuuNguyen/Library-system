@@ -238,7 +238,7 @@ public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
       this.bookController.importExcel(ImportExcelRequest.builder().url(path).build());
 
     } else {
-      log.error("😒😒😒😒 error import file excel");
+      log.error("error import file excel");
     }
   }
 

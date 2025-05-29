@@ -22,7 +22,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   private PriorityQueue<Long> availableIds = new PriorityQueue<>();
 
   private final List<Librarian> librarians = LibrarianData.getInstance().getLibrarians();
-  private final List<Book> books = BookData.getInstance().getBooks();
+  private final Set<Book> books = BookData.getInstance().getBooks();
 
   private final List<Reader> readers = new ArrayList<>();
   private final List<Transaction> borrowTransactions = new ArrayList<>();
