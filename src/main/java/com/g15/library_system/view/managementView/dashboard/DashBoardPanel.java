@@ -179,7 +179,7 @@ public class DashBoardPanel extends JPanel {
     this.quickAccessPanel.setLibrariansCardButtonListener(listener);
   }
 
-  public void setOverdueBooksCardButtonListener(ActionListener listener) {
-    this.quickAccessPanel.setOverdueBooksCardButtonListener(listener);
+  public void setMyAccountCardButtonListener(ActionListener listener) {
+    this.quickAccessPanel.setMyAccountCardButtonListener(listener);
   }
 }

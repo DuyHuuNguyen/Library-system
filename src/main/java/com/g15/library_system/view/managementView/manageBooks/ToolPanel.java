@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ToolPanel extends JPanel {
-  private final Dimension DIMENSION_BUTTON = new Dimension();
   private CustomButton addBt, notificationBt, reloadBt, exportBt, importBt, gotoTableBt, modifyBt;
 
   private CardLayout cardLayout;
@@ -45,7 +44,6 @@ public class ToolPanel extends JPanel {
     txtSearch.addEventOptionSelected(
         (option, index) -> {
           txtSearch.setHint("Search by " + option.getName() + "...");
-          //          mapApi.get(ApiKey.SEARCH).run();
         });
 
     txtSearch.addActionListener(e -> mapApi.get(ApiKey.SEARCH).run());
@@ -80,7 +78,7 @@ public class ToolPanel extends JPanel {
     modifyBt =
         CustomButtonBuilder.builder()
             .text("Modify")
-            .title("Mo")
+            .title("Modify")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)
             .backgroundColor(Style.BLUE_MENU_BACKGROUND_COLOR)
@@ -91,7 +89,7 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(110, 30))
-            .icon("/icons/table.png", 10);
+            .icon("/icons/edit.png", 10);
     modifyBt.addActionListener(
         e -> {
           this.mapApi.get(ApiKey.SELECTED_TABLE).run();
@@ -111,7 +109,7 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(110, 30))
-            .icon("/icons/table.png", 10);
+            .icon("/icons/table_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png", 10);
     gotoTableBt.addActionListener(
         e -> this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_TABLE_BOOK));
 
@@ -128,7 +126,7 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(100, 30))
-            .icon("/icons/import-export.png", 10);
+            .icon("/icons/publish_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png", 10);
     exportBt.addActionListener(
         e -> {
           this.mapApi.get(ApiKey.EXPORT_EXCEL).run();
@@ -146,10 +144,9 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(100, 30))
-            .icon("/icons/file-import.png", 10);
+            .icon("/icons/download_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png", 10);
     importBt.addActionListener(
         e -> {
-          // code here
           this.mapApi.get(ApiKey.IMPORT_EXCEL).run();
         });
     reloadBt =
@@ -165,7 +162,7 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(110, 30))
-            .icon("/icons/reload.png", 10);
+            .icon("/icons/refresh.png", 10);
     reloadBt.addActionListener(
         e -> {
           mapApi.get(ApiKey.RELOAD).run();
@@ -188,7 +185,6 @@ public class ToolPanel extends JPanel {
 
     addBt.addActionListener(
         e -> {
-          //            System.out.println("panel add ");
           this.cardLayout.show(panelContent, ManageBookPanel.CONSTRAINT_ADD_NEW_BOOK);
         });
     actionBtPn.add(addBt);
@@ -207,7 +203,7 @@ public class ToolPanel extends JPanel {
             .opaque(false)
             .contentAreaFilled(false)
             .preferredSize(new Dimension(129, 30))
-            .icon("/icons/notification.png", 12);
+            .icon("/icons/searchOptionIcons/mail.png", 12);
     notificationBt.addActionListener(
         e -> {
           log.info(" run action ");

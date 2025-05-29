@@ -260,8 +260,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 20)))
-                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 20)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 20)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 6, 2)))
                 .description("borrow The Hobbit")
                 .build(),
             Transaction.builder()
@@ -342,8 +342,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                             .findFirst()
                             .orElseThrow(),
                         1)))
-            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 25)))
-            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 2)))
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 10)))
             .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 10)))
             .description("Borrowed 'I Believe'")
             .build();
@@ -514,7 +513,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .build();
     Transaction returnTransactionEthan =
         Transaction.builder()
-            .id(ReaderIdGenerator.generateId())
+            .id(TransactionIdGenerator.generateId())
             .transactionType(TransactionType.RETURNED)
             .librarian(librarians.get(0))
             .books(
@@ -526,7 +525,6 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                             .orElseThrow(),
                         1)))
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 10)))
-            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 20)))
             .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 18)))
             .description("Returned 'Moby Dick'")
             .overdueFine(
