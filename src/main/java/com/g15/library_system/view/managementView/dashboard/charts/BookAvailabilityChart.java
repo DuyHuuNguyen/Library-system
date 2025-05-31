@@ -35,27 +35,33 @@ public class BookAvailabilityChart extends RoundedShadowPanel
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setLayout(new BorderLayout());
     this.setPreferredSize(new Dimension(500, 450));
+    initTitlePanel();
+    registerObservers();
+    initChart();
+  }
+
+  private void initTitlePanel() {
+    TitlePanel titlePanel = new TitlePanel("Book Availability");
+    this.selectedMonth = titlePanel.getSelectedMonth();
+    this.selectedYear = titlePanel.getSelectedYear();
+    titlePanel.addObserver(this);
+    this.add(titlePanel, BorderLayout.NORTH);
+  }
+
+  private void registerObservers() {
     BookData.getInstance().registerObserver(this);
+  }
 
-    // title
-    TitlePanel titlePn = new TitlePanel("Book Availability");
-    this.selectedMonth = titlePn.getSelectedMonth();
-    this.selectedYear = titlePn.getSelectedYear();
-
-    // chart
+  private void initChart() {
     chartDataset = new DefaultPieDataset();
-    bookAvailabilityData = bookStatistics.aggregateBookAvailabilityData();
+    bookAvailabilityData = bookStatistics.aggregateBookAvailabilityData(selectedYear);
     for (Map.Entry<String, Long> entry : bookAvailabilityData.entrySet()) {
       chartDataset.setValue(entry.getKey(), entry.getValue());
     }
 
     pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
-
     chartPanel = new ChartPanel(pieChart);
     this.add(chartPanel, BorderLayout.CENTER);
-
-    titlePn.addObserver(this);
-    this.add(titlePn, BorderLayout.NORTH);
   }
 
   private boolean hasData() {

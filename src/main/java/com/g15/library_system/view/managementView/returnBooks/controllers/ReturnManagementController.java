@@ -10,6 +10,7 @@ import com.g15.library_system.mapper.IReturnTransactionMapper;
 import com.g15.library_system.mapper.impl.ReturnTransactionMapper;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
 import com.g15.library_system.view.managementView.returnBooks.ToolPanel;
+import com.g15.library_system.view.managementView.returnBooks.commands.Command;
 import com.g15.library_system.view.managementView.returnBooks.commands.ExportExcelCommand;
 import com.g15.library_system.view.managementView.returnBooks.commands.RefreshCommand;
 import java.time.LocalDate;
@@ -34,8 +35,8 @@ public class ReturnManagementController implements IReturnController{
   @Getter private List<ReturnBookDTO> returnBookDTOs = new ArrayList<>();
 
   // command
-  private ExportExcelCommand exportExcelCommand;
-  private RefreshCommand refreshCommand;
+  private Command exportExcelCommand;
+  private Command refreshCommand;
 
   public ReturnManagementController(ReturnBookPanel returnBookPanel) {
     this.returnBookPanel = returnBookPanel;

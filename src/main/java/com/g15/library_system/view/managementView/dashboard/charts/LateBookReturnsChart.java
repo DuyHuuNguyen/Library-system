@@ -28,85 +28,67 @@ public class LateBookReturnsChart extends RoundedShadowPanel
 
   public LateBookReturnsChart() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
-    this.setPreferredSize(new Dimension(730, 450));
-    this.setLayout(new BorderLayout());
-    ReaderData.getInstance().registerObserver(this); // important to update the chart*
-    // title panel
-    TitlePanel titlePn = new TitlePanel("Late Book Returns Over Time");
-    this.selectedYear = titlePn.getSelectedYear();
-    this.selectedMonth = titlePn.getSelectedMonth();
+    setPreferredSize(new Dimension(730, 450));
+    setLayout(new BorderLayout());
 
-    // chart panel
+    ReaderData.getInstance().registerObserver(this);
+
+    TitlePanel titlePanel = new TitlePanel("Late Book Returns Over Time");
+    selectedYear = titlePanel.getSelectedYear();
+    selectedMonth = titlePanel.getSelectedMonth();
+
     chartDataset = new DefaultCategoryDataset();
-
-    lendingData = transactionStatistics.aggregateLateReturnTrend(selectedYear);
-    if (lendingData != null && !lendingData.isEmpty()) {
-      for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
-        chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
-      }
-    }
-
-    barChart =
-        JFreeChartGenerator.createLineChart("", "Months", "Number of Late Returns", chartDataset);
+    updateChartData();
 
     chartPanel = new ChartPanel(barChart);
-    titlePn.addObserver(this);
-    this.add(chartPanel, BorderLayout.CENTER);
-    this.add(titlePn, BorderLayout.NORTH);
+    titlePanel.addObserver(this);
+    add(chartPanel, BorderLayout.CENTER);
+    add(titlePanel, BorderLayout.NORTH);
   }
 
-  public void clearChartData() {
+  private void updateChartData() {
+    if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
+      lendingData = transactionStatistics.aggregateLateReturnTrend(selectedYear);
+      updateDataset("Months");
+    } else {
+      lendingData = transactionStatistics.aggregateLateReturnTrend(selectedMonth, selectedYear);
+      updateDataset("Days");
+    }
+  }
+
+  private void updateDataset(String categoryAxisLabel) {
     chartDataset.clear();
-  }
-
-  private void showMonthlyStatistics(int year) {
-    lendingData = transactionStatistics.aggregateLateReturnTrend(year);
-    clearChartData();
-
     if (lendingData != null && !lendingData.isEmpty()) {
-      for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
-        chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
-      }
-      renderChart("Months");
+      lendingData.forEach((key, value) -> chartDataset.setValue(value, "Books", key));
     }
-  }
-
-  private void showDailyStatistics(String month, int year) {
-    lendingData = transactionStatistics.aggregateLateReturnTrend(month, year);
-    clearChartData();
-
-    if (lendingData != null && !lendingData.isEmpty()) {
-      for (Map.Entry<String, Long> entry : lendingData.entrySet()) {
-        chartDataset.setValue(entry.getValue(), "Books", entry.getKey());
-      }
-    }
-    renderChart("Days");
+    renderChart(categoryAxisLabel);
   }
 
   private void renderChart(String categoryAxisLabel) {
-    barChart =
-        JFreeChartGenerator.createLineChart(
+    if(chartPanel != null) {
+      remove(chartPanel);
+    }
+
+    barChart = JFreeChartGenerator.createLineChart(
             "", categoryAxisLabel, "Number of Late Returns", chartDataset);
-    this.remove(chartPanel);
+
     chartPanel = new ChartPanel(barChart);
-    this.add(chartPanel, BorderLayout.CENTER);
-    this.revalidate();
-    this.repaint();
+    add(chartPanel, BorderLayout.CENTER);
+    revalidate();
+    repaint();
   }
 
   @Override
   public void updateBasedOnComboBox(String month, int year) {
     selectedMonth = month;
     selectedYear = year;
-    if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
-      showMonthlyStatistics(selectedYear);
-    } else {
-      showDailyStatistics(selectedMonth, selectedYear);
-    }
+    updateChartData();
   }
 
   @Override
   public void updateReaderData() {
-    updateBasedOnComboBox(selectedMonth, selectedYear);
+    SwingUtilities.invokeLater(() -> {
+      updateChartData();
+    });
   }
 }

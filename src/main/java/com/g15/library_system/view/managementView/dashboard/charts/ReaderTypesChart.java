@@ -27,43 +27,58 @@ public class ReaderTypesChart extends RoundedShadowPanel implements ReaderObserv
 
   public ReaderTypesChart() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
-    this.setLayout(new BorderLayout());
     this.setPreferredSize(new Dimension(500, 450));
+    this.setLayout(new BorderLayout());
+    initTitlePanel();
+    registerObservers();
+    initChart();
+  }
+
+  private void initTitlePanel() {
+    TitlePanel titlePanel = new TitlePanel("Reader Types");
+    this.selectedYear = titlePanel.getSelectedYear();
+    this.selectedMonth = titlePanel.getSelectedMonth();
+    titlePanel.addObserver(this);
+    this.add(titlePanel, BorderLayout.NORTH);
+  }
+
+  private void registerObservers() {
     ReaderData.getInstance().registerObserver(this);
+  }
 
-    // title panel
-    TitlePanel titlePn = new TitlePanel("Reader Types");
-    this.selectedYear = titlePn.getSelectedYear();
-    this.selectedMonth = titlePn.getSelectedMonth();
-    // chart panel
-    this.chartDataset = new DefaultPieDataset();
+  private void initChart() {
+    chartDataset = new DefaultPieDataset();
+    updateChartData(selectedYear);
 
-    this.readerTypeData = readerStatistics.aggregateReaderTypeData(selectedYear);
-    if (hasData()) {
-      for (Map.Entry<String, Long> entry : readerTypeData.entrySet()) {
-        chartDataset.setValue(entry.getKey(), entry.getValue());
-      }
-    }
-
-    this.pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
-
-    this.chartPanel = new ChartPanel(pieChart);
-    titlePn.addObserver(this);
+    pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
+    chartPanel = new ChartPanel(pieChart);
     this.add(chartPanel, BorderLayout.CENTER);
-    this.add(titlePn, BorderLayout.NORTH);
   }
 
-  private boolean hasData() {
-    return readerTypeData != null && !readerTypeData.isEmpty();
+  private void clearChartData() {
+    chartDataset.clear();
   }
 
-  public void clearChartData() {
-    this.chartDataset.clear();
-  }
-
-  private void showMonthlyStatistics(int year) {
-    this.readerTypeData = readerStatistics.aggregateReaderTypeData(year);
+  private void updateChart() {
     clearChartData();
+    if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
+      updateChartData(selectedYear);
+    } else {
+      updateChartData(selectedMonth, selectedYear);
+    }
+  }
+
+  private void updateChartData(int year) {
+    readerTypeData = readerStatistics.aggregateReaderTypeData(year);
+    updateDataset();
+  }
+
+  private void updateChartData(String month, int year) {
+    readerTypeData = readerStatistics.aggregateReaderTypeData(month, year);
+    updateDataset();
+  }
+
+  private void updateDataset() {
     if (hasData()) {
       for (Map.Entry<String, Long> entry : readerTypeData.entrySet()) {
         chartDataset.setValue(entry.getKey(), entry.getValue());
@@ -72,40 +87,34 @@ public class ReaderTypesChart extends RoundedShadowPanel implements ReaderObserv
     }
   }
 
-  private void showDailyStatistics(String month, int year) {
-    this.readerTypeData = readerStatistics.aggregateReaderTypeData(month, year);
-    clearChartData();
-
-    if (hasData()) {
-      for (Map.Entry<String, Long> entry : readerTypeData.entrySet()) {
-        chartDataset.setValue(entry.getKey(), entry.getValue());
-      }
-    }
-    renderChart();
+  private boolean hasData() {
+    return readerTypeData != null && !readerTypeData.isEmpty();
   }
 
   private void renderChart() {
-    this.pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
-    this.remove(chartPanel);
-    this.chartPanel = new ChartPanel(pieChart);
+    if (chartPanel != null) {
+      this.remove(chartPanel);
+    }
+
+    pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
+    chartPanel = new ChartPanel(pieChart);
     this.add(chartPanel, BorderLayout.CENTER);
     this.revalidate();
     this.repaint();
   }
 
   @Override
-  public void updateReaderData() {
-    updateBasedOnComboBox(selectedMonth, selectedYear);
-  }
-
-  @Override
   public void updateBasedOnComboBox(String month, int year) {
     this.selectedMonth = month;
     this.selectedYear = year;
-    if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
-      showMonthlyStatistics(selectedYear);
-    } else {
-      showDailyStatistics(selectedMonth, selectedYear);
-    }
+    this.updateChart();
+  }
+
+  @Override
+  public void updateReaderData() {
+    System.out.println("Reader data updated.");
+    SwingUtilities.invokeLater(() -> {
+      this.updateChart();
+    });
   }
 }

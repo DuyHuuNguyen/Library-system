@@ -146,16 +146,16 @@ public class DashBoardPanel extends JPanel {
       borrowsByGenreChart = new BorrowsByGenreChart();
       this.add(borrowsByGenreChart, gbc);
       // ========== ROW 4 ===========
-      gbc.gridx = 0;
-      gbc.gridy++;
-      gbc.gridwidth = 2;
-      lendingTrendsChart = new LateBookReturnsChart();
-      this.add(lendingTrendsChart, gbc);
-
-      gbc.gridx = 2;
-      gbc.gridwidth = 1;
-      readerTypesChart = new ReaderTypesChart();
-      this.add(readerTypesChart, gbc);
+//      gbc.gridx = 0;
+//      gbc.gridy++;
+//      gbc.gridwidth = 2;
+//      lendingTrendsChart = new LateBookReturnsChart();
+//      this.add(lendingTrendsChart, gbc);
+//
+//      gbc.gridx = 2;
+//      gbc.gridwidth = 1;
+//      readerTypesChart = new ReaderTypesChart();
+//      this.add(readerTypesChart, gbc);
     }
   }
 
