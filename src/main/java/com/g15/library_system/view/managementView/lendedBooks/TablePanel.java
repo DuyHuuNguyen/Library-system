@@ -62,7 +62,7 @@ public class TablePanel extends RoundedPanel implements TransactionObserver {
         });
 
     refreshButton =
-            CustomButtonBuilder.builder()
+        CustomButtonBuilder.builder()
             .text("Refresh")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)

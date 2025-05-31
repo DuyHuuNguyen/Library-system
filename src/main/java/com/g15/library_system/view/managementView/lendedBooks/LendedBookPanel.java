@@ -16,7 +16,7 @@ import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
 
-public class LendedBookPanel extends JPanel{
+public class LendedBookPanel extends JPanel {
   private FormPanel formPn;
   private ButtonPanel buttonPn;
   private TablePanel tablePn;

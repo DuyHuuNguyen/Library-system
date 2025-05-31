@@ -706,9 +706,9 @@ public class DateChooser extends JPanel {
               if (dateSelectionMode == DateSelectionMode.SINGLE_DATE_SELECTED) {
                 selectedDate = date;
                 panelDate.repaint();
-                if(isSetDateForSearchField){
+                if (isSetDateForSearchField) {
                   displayDate(searchField);
-                }else{
+                } else {
                   displayDate();
                 }
                 runEventDateChanged(new DateChooserAction(DateChooserAction.USER_SELECT));

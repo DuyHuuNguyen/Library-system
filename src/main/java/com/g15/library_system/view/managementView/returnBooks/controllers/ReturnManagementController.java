@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import lombok.Getter;
 
-public class ReturnManagementController {
+public class ReturnManagementController implements IReturnController{
   // view
   @Getter private ReturnBookPanel returnBookPanel;
   private ToolPanel toolPn;
@@ -26,7 +26,6 @@ public class ReturnManagementController {
   private AddReturnBookController returnBookController;
 
   // temp var
-  private Reader readerFound;
   private List<Transaction> borrowTransactions = new ArrayList<>();
   private Map<Book, Integer> borrowingBooks = new HashMap<>();
 
@@ -42,9 +41,9 @@ public class ReturnManagementController {
     this.returnBookPanel = returnBookPanel;
     this.toolPn = returnBookPanel.getToolPn();
     this.returnBookController =
-        new AddReturnBookController(this, returnBookPanel.getAddReturnBookPanel());
+        new AddReturnBookController(this,returnBookPanel, returnBookPanel.getAddReturnBookPanel());
     initTableData();
-    this.refreshCommand = new RefreshCommand(this, returnBookPanel, transactionMapper);
+    this.refreshCommand = new RefreshCommand(this, returnBookPanel);
     this.exportExcelCommand = new ExportExcelCommand(returnBookPanel);
 
     setupFreshBtAction();
@@ -52,6 +51,7 @@ public class ReturnManagementController {
     setupSearchAction();
   }
 
+  @Override
   public void initTableData() {
     for (Reader reader : readersData) {
       try {
@@ -71,6 +71,17 @@ public class ReturnManagementController {
     }
     returnBookPanel.setTableData(transactionMapper.toReturnBookTableData(returnBookDTOs));
   }
+
+  @Override
+  public void refreshTable() {
+    returnBookDTOs.clear();
+    initTableData();
+    returnBookPanel.setTableData(transactionMapper.toReturnBookTableData(returnBookDTOs));
+    returnBookPanel.showPanel(ReturnBookPanel.TABLE_PANEL);
+  }
+
+
+
 
   public Object[][] searchReturnBooks(String searchText, String searchOption) {
     List<ReturnBookDTO> filteredList =
@@ -131,13 +142,6 @@ public class ReturnManagementController {
 
               returnBookPanel.setTableData(resultData);
             });
-  }
-
-  public void refreshTable() {
-    returnBookDTOs.clear();
-    initTableData();
-    returnBookPanel.setTableData(transactionMapper.toReturnBookTableData(returnBookDTOs));
-    returnBookPanel.showPanel(ReturnBookPanel.TABLE_PANEL);
   }
 
   public void setupFreshBtAction() {
