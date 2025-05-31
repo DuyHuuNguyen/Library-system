@@ -32,7 +32,7 @@ public class FineData implements Data<OverdueFine> {
   @Override
   public synchronized void remove(int index) {
     if (index >= 0 && index < overdueFines.size()) {
-        this.overdueFines.remove(index);
+      this.overdueFines.remove(index);
     }
   }
 

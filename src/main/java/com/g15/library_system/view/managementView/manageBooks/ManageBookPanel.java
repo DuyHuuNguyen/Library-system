@@ -24,7 +24,7 @@ import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
+public class ManageBookPanel extends JPanel implements ObserverNotifyNewBook {
   private static final Logger log = LoggerFactory.getLogger(ManageBookPanel.class);
   private JPanel panelContent;
 

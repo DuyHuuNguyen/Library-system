@@ -1,5 +1,6 @@
 package com.g15.library_system.entity;
 
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.enums.LibraryCardStatus;
 import com.g15.library_system.enums.TransactionType;
 import java.util.ArrayList;

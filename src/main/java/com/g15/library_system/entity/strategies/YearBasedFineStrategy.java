@@ -25,7 +25,7 @@ public class YearBasedFineStrategy implements OverdueFineStrategy {
     double totalFine = 0.0;
 
     for (Map.Entry<Book, Integer> entry : transaction.getBooks().entrySet()) {
-      Book book = entry.getKey();
+      Book book = entry.getKey(); // book borrow
       int quantity = entry.getValue();
 
       int publicationYear = book.getPublishYear();

@@ -10,6 +10,7 @@ import com.g15.library_system.mapper.IReturnTransactionMapper;
 import com.g15.library_system.mapper.impl.ReturnTransactionMapper;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
 import com.g15.library_system.view.managementView.returnBooks.ToolPanel;
+import com.g15.library_system.view.managementView.returnBooks.commands.Command;
 import com.g15.library_system.view.managementView.returnBooks.commands.ExportExcelCommand;
 import com.g15.library_system.view.managementView.returnBooks.commands.RefreshCommand;
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import lombok.Getter;
 
-public class ReturnManagementController {
+public class ReturnManagementController implements IReturnController{
   // view
   @Getter private ReturnBookPanel returnBookPanel;
   private ToolPanel toolPn;
@@ -26,7 +27,6 @@ public class ReturnManagementController {
   private AddReturnBookController returnBookController;
 
   // temp var
-  private Reader readerFound;
   private List<Transaction> borrowTransactions = new ArrayList<>();
   private Map<Book, Integer> borrowingBooks = new HashMap<>();
 
@@ -35,16 +35,16 @@ public class ReturnManagementController {
   @Getter private List<ReturnBookDTO> returnBookDTOs = new ArrayList<>();
 
   // command
-  private ExportExcelCommand exportExcelCommand;
-  private RefreshCommand refreshCommand;
+  private Command exportExcelCommand;
+  private Command refreshCommand;
 
   public ReturnManagementController(ReturnBookPanel returnBookPanel) {
     this.returnBookPanel = returnBookPanel;
     this.toolPn = returnBookPanel.getToolPn();
     this.returnBookController =
-        new AddReturnBookController(this, returnBookPanel.getAddReturnBookPanel());
+        new AddReturnBookController(this,returnBookPanel, returnBookPanel.getAddReturnBookPanel());
     initTableData();
-    this.refreshCommand = new RefreshCommand(this, returnBookPanel, transactionMapper);
+    this.refreshCommand = new RefreshCommand(this, returnBookPanel);
     this.exportExcelCommand = new ExportExcelCommand(returnBookPanel);
 
     setupFreshBtAction();
@@ -52,6 +52,7 @@ public class ReturnManagementController {
     setupSearchAction();
   }
 
+  @Override
   public void initTableData() {
     for (Reader reader : readersData) {
       try {
@@ -71,6 +72,17 @@ public class ReturnManagementController {
     }
     returnBookPanel.setTableData(transactionMapper.toReturnBookTableData(returnBookDTOs));
   }
+
+  @Override
+  public void refreshTable() {
+    returnBookDTOs.clear();
+    initTableData();
+    returnBookPanel.setTableData(transactionMapper.toReturnBookTableData(returnBookDTOs));
+    returnBookPanel.showPanel(ReturnBookPanel.TABLE_PANEL);
+  }
+
+
+
 
   public Object[][] searchReturnBooks(String searchText, String searchOption) {
     List<ReturnBookDTO> filteredList =
@@ -131,13 +143,6 @@ public class ReturnManagementController {
 
               returnBookPanel.setTableData(resultData);
             });
-  }
-
-  public void refreshTable() {
-    returnBookDTOs.clear();
-    initTableData();
-    returnBookPanel.setTableData(transactionMapper.toReturnBookTableData(returnBookDTOs));
-    returnBookPanel.showPanel(ReturnBookPanel.TABLE_PANEL);
   }
 
   public void setupFreshBtAction() {

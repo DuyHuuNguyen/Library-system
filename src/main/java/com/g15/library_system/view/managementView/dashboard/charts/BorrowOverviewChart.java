@@ -1,7 +1,9 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
 import com.g15.library_system.data.BookData;
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.observers.BookObserver;
+import com.g15.library_system.observers.ReaderObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
 import com.g15.library_system.view.managementView.dashboard.statistics.TransactionStatistics;
@@ -14,8 +16,10 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
+import javax.swing.*;
+
 public class BorrowOverviewChart extends RoundedShadowPanel
-    implements BookObserver, FilterObserver {
+    implements ReaderObserver, FilterObserver {
   private ChartPanel chartPanel;
   private JFreeChart pieChart;
   private String selectedMonth;
@@ -27,85 +31,86 @@ public class BorrowOverviewChart extends RoundedShadowPanel
 
   public BorrowOverviewChart() {
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
-    this.setLayout(new BorderLayout());
     this.setPreferredSize(new Dimension(500, 450));
-    BookData.getInstance().registerObserver(this);
-
-    // title panel
-    TitlePanel titlePn = new TitlePanel("Borrow Overview");
-    this.selectedYear = titlePn.getSelectedYear();
-    this.selectedMonth = titlePn.getSelectedMonth();
-    // chart panel
-    this.chartDataset = new DefaultPieDataset();
-
-    this.returnOverviewData = transactionStatistics.countReturnStatusDistribution(selectedYear);
-    if (hasData()) {
-      for (Map.Entry<String, Long> entry : returnOverviewData.entrySet()) {
-        chartDataset.setValue(entry.getKey(), entry.getValue());
-      }
-    }
-
-    this.pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
-
-    this.chartPanel = new ChartPanel(pieChart);
-    titlePn.addObserver(this);
-    this.add(chartPanel, BorderLayout.CENTER);
-    this.add(titlePn, BorderLayout.NORTH);
+    this.setLayout(new BorderLayout());
+    initTitlePanel();
+    registerObservers();
+    initChart();
   }
 
-  private boolean hasData() {
-    return returnOverviewData != null && !returnOverviewData.isEmpty();
+  private void initTitlePanel() {
+    TitlePanel titlePanel = new TitlePanel("Borrow Overview");
+    this.selectedYear = titlePanel.getSelectedYear();
+    this.selectedMonth = titlePanel.getSelectedMonth();
+    titlePanel.addObserver(this);
+    this.add(titlePanel, BorderLayout.NORTH);
+  }
+
+  private void registerObservers() {
+    ReaderData.getInstance().registerObserver(this);
+  }
+
+  private void initChart() {
+    chartDataset = new DefaultPieDataset();
+    updateChartDataByMonth(selectedYear);
+
+    pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
+    chartPanel = new ChartPanel(pieChart);
+    this.add(chartPanel, BorderLayout.CENTER);
   }
 
   public void clearChartData() {
-    this.chartDataset.clear();
+    chartDataset.clear();
   }
 
-  private void showMonthlyStatistics(int year) {
-    this.returnOverviewData = transactionStatistics.countReturnStatusDistribution(year);
+  private void updateChart() {
     clearChartData();
-    if (hasData()) {
-      for (Map.Entry<String, Long> entry : returnOverviewData.entrySet()) {
-        chartDataset.setValue(entry.getKey(), entry.getValue());
-      }
+    if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
+      updateChartDataByMonth(selectedYear);
+    } else {
+      updateChartDataByDay(selectedMonth, selectedYear);
+    }
+  }
+
+  private void updateChartDataByMonth(int year) {
+    updateChartData(transactionStatistics.countReturnStatusDistribution(year));
+  }
+
+  private void updateChartDataByDay(String month, int year) {
+    updateChartData(transactionStatistics.countReturnStatusDistribution(month, year));
+  }
+
+  private void updateChartData(Map<String, Long> data) {
+    if (data != null && !data.isEmpty()) {
+      data.forEach((label, value) -> chartDataset.setValue(label, value));
       renderChart();
     }
   }
 
-  private void showDailyStatistics(String month, int year) {
-    this.returnOverviewData = transactionStatistics.countReturnStatusDistribution(month, year);
-    clearChartData();
-
-    if (hasData()) {
-      for (Map.Entry<String, Long> entry : returnOverviewData.entrySet()) {
-        chartDataset.setValue(entry.getKey(), entry.getValue());
-      }
-    }
-    renderChart();
-  }
-
   private void renderChart() {
-    this.pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
-    this.remove(chartPanel);
-    this.chartPanel = new ChartPanel(pieChart);
+    if (chartPanel != null) {
+      this.remove(chartPanel);
+    }
+
+    pieChart = JFreeChartGenerator.createPieChart("", chartDataset);
+    chartPanel = new ChartPanel(pieChart);
     this.add(chartPanel, BorderLayout.CENTER);
-    this.revalidate();
-    this.repaint();
+    revalidate();
+    repaint();
   }
 
   @Override
   public void updateBasedOnComboBox(String month, int year) {
     this.selectedMonth = month;
     this.selectedYear = year;
-    if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
-      showMonthlyStatistics(selectedYear);
-    } else {
-      showDailyStatistics(selectedMonth, selectedYear);
-    }
+    updateChart();
   }
 
   @Override
-  public void updateBookData() {
-    updateBasedOnComboBox(selectedMonth, selectedYear);
+  public void updateReaderData() {
+    SwingUtilities.invokeLater(() -> {
+//      System.out.println("BorrowOverviewChart: updateReaderData called");
+      updateChart();
+    });
   }
 }

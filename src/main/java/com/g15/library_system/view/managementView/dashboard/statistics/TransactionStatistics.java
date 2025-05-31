@@ -1,6 +1,7 @@
 package com.g15.library_system.view.managementView.dashboard.statistics;
 
 import com.g15.library_system.data.ReaderData;
+import com.g15.library_system.data.TransactionData;
 import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.util.DateUtil;
 import java.time.Month;
@@ -74,7 +75,7 @@ public class TransactionStatistics {
 
   // Book borrow by genre chart---------------------------------------------
   public Map<String, Map<String, Long>> aggregateGenreBorrowData(int year) {
-    return ReaderData.getInstance().getBorrowTransactions().stream()
+    return TransactionData.getInstance().getTransactions().stream()
         .filter(
             trans ->
                 trans.getTransactionType() == TransactionType.BORROW
@@ -109,7 +110,7 @@ public class TransactionStatistics {
   public Map<String, Map<String, Long>> aggregateGenreBorrowData(String selectedMonth, int year) {
     Month targetMonth = Month.valueOf(selectedMonth.toUpperCase());
 
-    return ReaderData.getInstance().getBorrowTransactions().stream()
+    return TransactionData.getInstance().getTransactions().stream()
         .filter(
             trans ->
                 trans.getTransactionType() == TransactionType.BORROW

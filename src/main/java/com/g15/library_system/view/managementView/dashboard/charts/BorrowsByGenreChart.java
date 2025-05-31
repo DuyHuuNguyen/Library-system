@@ -1,7 +1,9 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
 import com.g15.library_system.data.ReaderData;
+import com.g15.library_system.data.TransactionData;
 import com.g15.library_system.observers.ReaderObserver;
+import com.g15.library_system.observers.TransactionObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
 import com.g15.library_system.view.managementView.dashboard.statistics.TransactionStatistics;
@@ -17,7 +19,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class BorrowsByGenreChart extends RoundedShadowPanel
-    implements FilterObserver, ReaderObserver {
+    implements FilterObserver, TransactionObserver {
   private ChartPanel chartPanel;
   private JFreeChart stackedBarChart;
 
@@ -33,102 +35,104 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
     super(20, Color.WHITE, new Color(0, 0, 0, 30), 5, 4);
     this.setPreferredSize(new Dimension(730, 450));
     this.setLayout(new BorderLayout());
-    ReaderData.getInstance().registerObserver(this);
+    initTitlePanel();
+    registerObservers();
+    initChart();
+  }
 
-    // title panel
-    TitlePanel titlePn = new TitlePanel("Book Borrows By Genre");
-    this.selectedYear = titlePn.getSelectedYear();
-    this.selectedMonth = titlePn.getSelectedMonth();
+  private void initTitlePanel() {
+    TitlePanel titlePanel = new TitlePanel("Book Borrows By Genre");
+    this.selectedYear = titlePanel.getSelectedYear();
+    this.selectedMonth = titlePanel.getSelectedMonth();
+    titlePanel.addObserver(this);
+    this.add(titlePanel, BorderLayout.NORTH);
+  }
 
-    // chart panel
+  private void registerObservers() {
+    TransactionData.getInstance().registerObserver(this);
+  }
+
+  private void initChart() {
     chartDataset = new DefaultCategoryDataset();
+    updateChartDataByMonth(selectedYear);
 
-    borrowingData = transactionStatistics.aggregateGenreBorrowData(selectedYear);
-
-    if (borrowingData != null && !borrowingData.isEmpty()) {
-      for (Map.Entry<String, Map<String, Long>> monthEntry : borrowingData.entrySet()) {
-        String month = monthEntry.getKey();
-        Map<String, Long> genreCounts = monthEntry.getValue();
-
-        for (Map.Entry<String, Long> genreEntry : genreCounts.entrySet()) {
-          chartDataset.setValue(genreEntry.getValue(), genreEntry.getKey(), month);
-        }
-      }
-    }
-
-    stackedBarChart =
-        JFreeChartGenerator.createStackedBarChart("", "Months", "Books borrowed", chartDataset);
+    stackedBarChart = JFreeChartGenerator.createStackedBarChart(
+            "", "Months", "Books borrowed", chartDataset);
 
     chartPanel = new ChartPanel(stackedBarChart);
     this.add(chartPanel, BorderLayout.CENTER);
-
-    titlePn.addObserver(this); // add observer
-    this.add(titlePn, BorderLayout.NORTH);
   }
 
   public void clearChartData() {
     chartDataset.clear();
   }
 
-  private void showMonthlyStatistics(int year) {
-    borrowingData = transactionStatistics.aggregateGenreBorrowData(year);
+  private void updateChart() {
     clearChartData();
-
-    if (borrowingData != null && !borrowingData.isEmpty()) {
-      for (Map.Entry<String, Map<String, Long>> monthEntry : borrowingData.entrySet()) {
-        String month = monthEntry.getKey();
-        Map<String, Long> genreCounts = monthEntry.getValue();
-
-        for (Map.Entry<String, Long> genreEntry : genreCounts.entrySet()) {
-          chartDataset.setValue(genreEntry.getValue(), genreEntry.getKey(), month);
-        }
-      }
-      renderChart("Months");
+    if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
+      updateChartDataByMonth(selectedYear);
+    } else {
+      updateChartDataByDay(selectedMonth, selectedYear);
     }
   }
 
-  private void showDailyStatistics(String month, int year) {
-    borrowingData = transactionStatistics.aggregateGenreBorrowData(month, year);
-    clearChartData();
+  private void updateChartDataByMonth(int year) {
+    updateChartData(transactionStatistics.aggregateGenreBorrowData(year), "Months");
+  }
 
-    if (borrowingData != null && !borrowingData.isEmpty()) {
-      for (Map.Entry<String, Map<String, Long>> dayEntry : borrowingData.entrySet()) {
-        String day = dayEntry.getKey();
-        Map<String, Long> genreCounts = dayEntry.getValue();
+  private void updateChartDataByDay(String month, int year) {
+    updateChartData(transactionStatistics.aggregateGenreBorrowData(month, year), "Days");
+  }
+
+  private void updateChartData(Map<String, Map<String, Long>> data, String categoryAxisLabel) {
+    if (data != null && !data.isEmpty()) {
+      for (Map.Entry<String, Map<String, Long>> entry : data.entrySet()) {
+        String timeLabel = entry.getKey();
+        Map<String, Long> genreCounts = entry.getValue();
 
         for (Map.Entry<String, Long> genreEntry : genreCounts.entrySet()) {
-          chartDataset.setValue(genreEntry.getValue(), genreEntry.getKey(), day);
+          chartDataset.setValue(genreEntry.getValue(), genreEntry.getKey(), timeLabel);
         }
       }
+      renderChart(categoryAxisLabel);
     }
-    //    System.out.println(borrowingData);
-    renderChart("Days");
   }
 
   private void renderChart(String categoryAxisLabel) {
+    if (chartPanel != null) {
+      this.remove(chartPanel);
+    }
+
     stackedBarChart =
         JFreeChartGenerator.createStackedBarChart(
             "", categoryAxisLabel, "Number of Books borrowed", chartDataset);
-    this.remove(chartPanel);
+
     chartPanel = new ChartPanel(stackedBarChart);
     this.add(chartPanel, BorderLayout.CENTER);
     this.revalidate();
     this.repaint();
   }
 
-  @Override
-  public void updateReaderData() {
-    updateBasedOnComboBox(selectedMonth, selectedYear);
-  }
 
   @Override
   public void updateBasedOnComboBox(String month, int year) {
-    selectedMonth = month;
-    selectedYear = year;
-    if (selectedMonth == null || selectedMonth.equalsIgnoreCase("All")) {
-      showMonthlyStatistics(selectedYear);
-    } else {
-      showDailyStatistics(selectedMonth, selectedYear);
-    }
+    this.selectedMonth = month;
+    this.selectedYear = year;
+    updateChart();
+  }
+
+  @Override
+  public void updateTransactionData() {
+    System.out.println("updated lending.==================================================");
+    SwingUtilities.invokeLater(() -> {
+
+      transactionStatistics = new TransactionStatistics();
+
+      clearChartData();
+      updateChart();
+
+      revalidate();
+      repaint();
+    });
   }
 }
