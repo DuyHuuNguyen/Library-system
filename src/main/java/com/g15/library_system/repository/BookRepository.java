@@ -3,6 +3,7 @@ package com.g15.library_system.repository;
 import com.g15.library_system.entity.Book;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface BookRepository {
   List<Book> findAll();
