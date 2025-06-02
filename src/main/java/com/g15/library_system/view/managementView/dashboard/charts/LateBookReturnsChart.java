@@ -65,11 +65,12 @@ public class LateBookReturnsChart extends RoundedShadowPanel
   }
 
   private void renderChart(String categoryAxisLabel) {
-    if(chartPanel != null) {
+    if (chartPanel != null) {
       remove(chartPanel);
     }
 
-    barChart = JFreeChartGenerator.createLineChart(
+    barChart =
+        JFreeChartGenerator.createLineChart(
             "", categoryAxisLabel, "Number of Late Returns", chartDataset);
 
     chartPanel = new ChartPanel(barChart);
@@ -87,8 +88,9 @@ public class LateBookReturnsChart extends RoundedShadowPanel
 
   @Override
   public void updateReaderData() {
-    SwingUtilities.invokeLater(() -> {
-      updateChartData();
-    });
+    SwingUtilities.invokeLater(
+        () -> {
+          updateChartData();
+        });
   }
 }

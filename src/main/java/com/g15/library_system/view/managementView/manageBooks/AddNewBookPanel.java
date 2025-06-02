@@ -70,7 +70,6 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
     layout.setAutoCreateGaps(true);
     layout.setAutoCreateContainerGaps(true);
 
-
     Dimension textFieldSize = new Dimension(200, 20);
 
     txtBookTitle =
@@ -113,7 +112,8 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
     JLabel lblQuantity = new JLabel("Quantity");
     JLabel lblPublisherYear = new JLabel("Publish Year");
 
-    chooserFileBtn = CustomButtonBuilder.builder()
+    chooserFileBtn =
+        CustomButtonBuilder.builder()
             .text("Chooser file")
             .title("Chooser file")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
@@ -122,7 +122,7 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
             .hoverColor(Style.BLUE_MENU_BACKGROUND_COLOR.darker())
             .radius(10)
             .alignment(SwingConstants.LEFT)
-            .icon("/icons/executionIcon.png",10)
+            .icon("/icons/executionIcon.png", 10)
             .drawBorder(false)
             .opaque(false)
             .contentAreaFilled(false)
@@ -219,7 +219,8 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
 
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     buttonPanel.setBackground(Color.WHITE);
-    JButton btnCancel = CustomButtonBuilder.builder()
+    JButton btnCancel =
+        CustomButtonBuilder.builder()
             .text("Cancel")
             .title("Cancel")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
@@ -244,7 +245,9 @@ public class AddNewBookPanel extends JPanel implements SubjectNotifyNewBook {
           notification.showNotification();
         });
 
-    JButton btnAddBook = CustomButtonBuilder.builder().text("Add")
+    JButton btnAddBook =
+        CustomButtonBuilder.builder()
+            .text("Add")
             .title("Add")
             .font(Style.FONT_SANS_SERIF_PLAIN_15)
             .textColor(Color.WHITE)

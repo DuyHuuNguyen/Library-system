@@ -1,9 +1,9 @@
 package com.g15.library_system.view.managementView.returnBooks.factories;
 
-import com.g15.library_system.entity.strategies.FineStrategyType;
-import com.g15.library_system.entity.strategies.OverdueFineStrategy;
-import com.g15.library_system.entity.strategies.YearBasedFineStrategy;
-import com.g15.library_system.entity.strategies.tiers.YearFineTier;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
+import com.g15.library_system.view.managementView.returnBooks.strategies.OverdueFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.YearBasedFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.tiers.YearFineTier;
 import java.util.List;
 
 public class YearBasedFineFactory implements IFineStrategyFactory {

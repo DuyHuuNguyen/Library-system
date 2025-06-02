@@ -1,7 +1,7 @@
 package com.g15.library_system.view.managementView.returnBooks.factories.simpleFactory;
 
-import com.g15.library_system.entity.strategies.*;
-import com.g15.library_system.entity.strategies.tiers.YearFineTier;
+import com.g15.library_system.view.managementView.returnBooks.strategies.*;
+import com.g15.library_system.view.managementView.returnBooks.strategies.tiers.YearFineTier;
 
 import java.util.List;
 

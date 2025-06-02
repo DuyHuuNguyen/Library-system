@@ -159,11 +159,11 @@ public class ManageBookPanel extends JPanel implements ObserverNotifyNewBook {
       log.info("selected book {}", bookModify.toString());
     } catch (NullPointerException e) {
       ToastNotification panel =
-              new ToastNotification(
-                      JOptionPane.getFrameForComponent(this),
-                      ToastNotification.Type.WARNING,
-                      ToastNotification.Location.TOP_CENTER,
-                      "Please select book to modify");
+          new ToastNotification(
+              JOptionPane.getFrameForComponent(this),
+              ToastNotification.Type.WARNING,
+              ToastNotification.Location.TOP_CENTER,
+              "Please select book to modify");
       panel.showNotification();
       log.error("You do not select row | In manager book feature modify book");
     }

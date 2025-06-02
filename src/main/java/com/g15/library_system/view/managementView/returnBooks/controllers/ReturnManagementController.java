@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import lombok.Getter;
 
-public class ReturnManagementController implements IReturnController{
+public class ReturnManagementController implements IReturnController {
   // view
   @Getter private ReturnBookPanel returnBookPanel;
   private ToolPanel toolPn;
@@ -42,7 +42,7 @@ public class ReturnManagementController implements IReturnController{
     this.returnBookPanel = returnBookPanel;
     this.toolPn = returnBookPanel.getToolPn();
     this.returnBookController =
-        new AddReturnBookController(this,returnBookPanel, returnBookPanel.getAddReturnBookPanel());
+        new AddReturnBookController(this, returnBookPanel, returnBookPanel.getAddReturnBookPanel());
     initTableData();
     this.refreshCommand = new RefreshCommand(this, returnBookPanel);
     this.exportExcelCommand = new ExportExcelCommand(returnBookPanel);
@@ -80,9 +80,6 @@ public class ReturnManagementController implements IReturnController{
     returnBookPanel.setTableData(transactionMapper.toReturnBookTableData(returnBookDTOs));
     returnBookPanel.showPanel(ReturnBookPanel.TABLE_PANEL);
   }
-
-
-
 
   public Object[][] searchReturnBooks(String searchText, String searchOption) {
     List<ReturnBookDTO> filteredList =

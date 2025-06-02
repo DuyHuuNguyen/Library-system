@@ -1,8 +1,8 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
 import com.g15.library_system.entity.Reader;
-import com.g15.library_system.entity.strategies.FineStrategyType;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import com.g15.library_system.view.swingComponentBuilders.ButtonBuilder;
@@ -35,7 +35,16 @@ public class AddReturnBookPanel extends JPanel {
 
   // data
   private String[] columnNames = {
-    "", "Book ID", "Cover Image", "Book Title", "Quantity", "Borrow Date", "Due Date", "Status"
+    "",
+    "Borrow ID",
+    "Book ID",
+    "Cover Image",
+    "Book Title",
+    "Quantity",
+    "Borrow Date",
+    "Due Date",
+    "Return Quantity",
+    "Status"
   };
   private String[] statuses = {"On time", "Overdue", "Lost"};
   private Object[][] bookBorrowData = new Object[][] {};
@@ -214,7 +223,7 @@ public class AddReturnBookPanel extends JPanel {
       noDataPn.setVisible(false);
 
       borrowBookTablePanel = new CheckboxTablePanel(columnNames, bookBorrowData);
-      borrowBookTablePanel.setAlwaysEditableColumns(Set.of(7));
+      borrowBookTablePanel.setAlwaysEditableColumns(Set.of(8, 9));
       borrowBookTablePanel.setStatuses(statuses);
 
       this.add(noDataPn);
@@ -249,7 +258,7 @@ public class AddReturnBookPanel extends JPanel {
 
   // validate textField and table
   public boolean isSearchFieldEmpty(Reader readerFound) {
-    if (searchReaderTxt.getText().isEmpty()) {
+    if (searchReaderTxt.getText().isEmpty() && readerIdTxt.getText().isEmpty()) {
       JOptionPane.showMessageDialog(
           this, "Please enter a reader ID", "Error", JOptionPane.ERROR_MESSAGE);
       return true;
@@ -399,5 +408,6 @@ public class AddReturnBookPanel extends JPanel {
 
   public void clearTableData() {
     borrowBookTablePanel.removeAllDataTable();
+    borrowBookTablePanel.clearHeaderCheckboxSelection();
   }
 }

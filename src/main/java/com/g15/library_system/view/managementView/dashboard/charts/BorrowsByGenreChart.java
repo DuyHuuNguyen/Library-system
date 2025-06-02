@@ -1,8 +1,6 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
-import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.data.TransactionData;
-import com.g15.library_system.observers.ReaderObserver;
 import com.g15.library_system.observers.TransactionObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
@@ -56,8 +54,8 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
     chartDataset = new DefaultCategoryDataset();
     updateChartDataByMonth(selectedYear);
 
-    stackedBarChart = JFreeChartGenerator.createStackedBarChart(
-            "", "Months", "Books borrowed", chartDataset);
+    stackedBarChart =
+        JFreeChartGenerator.createStackedBarChart("", "Months", "Books borrowed", chartDataset);
 
     chartPanel = new ChartPanel(stackedBarChart);
     this.add(chartPanel, BorderLayout.CENTER);
@@ -113,7 +111,6 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
     this.repaint();
   }
 
-
   @Override
   public void updateBasedOnComboBox(String month, int year) {
     this.selectedMonth = month;
@@ -124,15 +121,15 @@ public class BorrowsByGenreChart extends RoundedShadowPanel
   @Override
   public void updateTransactionData() {
     System.out.println("updated lending.==================================================");
-    SwingUtilities.invokeLater(() -> {
+    SwingUtilities.invokeLater(
+        () -> {
+          transactionStatistics = new TransactionStatistics();
 
-      transactionStatistics = new TransactionStatistics();
+          clearChartData();
+          updateChart();
 
-      clearChartData();
-      updateChart();
-
-      revalidate();
-      repaint();
-    });
+          revalidate();
+          repaint();
+        });
   }
 }

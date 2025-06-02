@@ -17,15 +17,16 @@ public class TopChoicesPanel extends RoundedShadowPanel implements FilterObserve
   private JPanel booksPanel;
   private BookStatistics bookStatistics = new BookStatistics();
   private Map<Book, Long> bookData;
+  private int thisYear = LocalDate.now().getYear();
 
   public TopChoicesPanel() {
     this.setBackground(Color.WHITE);
     this.setLayout(new BorderLayout());
 
-    bookData = bookStatistics.getMostBorrowedBooks(6, 2024);
+    bookData = bookStatistics.getMostBorrowedBooks(6, thisYear);
 
     TitlePanel titlePn = new TitlePanel("Top Choices");
-    titlePn.getYearComboBox().setSelectedItem(2024);
+    titlePn.getYearComboBox().setSelectedItem(thisYear);
 
     booksPanel = new JPanel();
     booksPanel.setOpaque(false);
