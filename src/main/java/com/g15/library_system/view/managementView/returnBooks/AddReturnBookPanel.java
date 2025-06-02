@@ -1,8 +1,8 @@
 package com.g15.library_system.view.managementView.returnBooks;
 
 import com.g15.library_system.entity.Reader;
-import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
 import com.g15.library_system.view.Style;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
 import com.g15.library_system.view.overrideComponent.RoundedShadowPanel;
 import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import com.g15.library_system.view.swingComponentBuilders.ButtonBuilder;
@@ -35,7 +35,16 @@ public class AddReturnBookPanel extends JPanel {
 
   // data
   private String[] columnNames = {
-    "","Borrow ID", "Book ID", "Cover Image", "Book Title", "Quantity", "Borrow Date", "Due Date","Return Quantity", "Status"
+    "",
+    "Borrow ID",
+    "Book ID",
+    "Cover Image",
+    "Book Title",
+    "Quantity",
+    "Borrow Date",
+    "Due Date",
+    "Return Quantity",
+    "Status"
   };
   private String[] statuses = {"On time", "Overdue", "Lost"};
   private Object[][] bookBorrowData = new Object[][] {};
@@ -214,7 +223,7 @@ public class AddReturnBookPanel extends JPanel {
       noDataPn.setVisible(false);
 
       borrowBookTablePanel = new CheckboxTablePanel(columnNames, bookBorrowData);
-      borrowBookTablePanel.setAlwaysEditableColumns(Set.of(8,9));
+      borrowBookTablePanel.setAlwaysEditableColumns(Set.of(8, 9));
       borrowBookTablePanel.setStatuses(statuses);
 
       this.add(noDataPn);

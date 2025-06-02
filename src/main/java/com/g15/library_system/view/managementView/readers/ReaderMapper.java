@@ -48,10 +48,10 @@ public class ReaderMapper {
     // Số lượng sách đang mượn (giả sử 0 nếu chưa có dữ liệu)
     try {
       reader.getLibraryCard().getReturnTransactions().stream()
-              .filter(transaction -> transaction.getTransactionType() == TransactionType.RETURNED)
-              .forEach(
-                      transaction ->
-                              returnBookDTOs = transactionMapper.toReturnBookDTO(reader, transaction));
+          .filter(transaction -> transaction.getTransactionType() == TransactionType.RETURNED)
+          .forEach(
+              transaction ->
+                  returnBookDTOs = transactionMapper.toReturnBookDTO(reader, transaction));
 
     } catch (NullPointerException e) {
       System.out.println("Reader " + reader.getId() + " doesn't have library card data");
@@ -87,7 +87,7 @@ public class ReaderMapper {
           reader.getEmail(),
           reader.getAddress(),
           createdStr,
-            returnBookDTOs.getTotalFine()
+          returnBookDTOs.getTotalFine()
         };
   }
 

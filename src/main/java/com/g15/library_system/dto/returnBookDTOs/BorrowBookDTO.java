@@ -20,6 +20,6 @@ public class BorrowBookDTO {
   private int bookQuantity;
   private LocalDate borrowDate;
   private LocalDate dueDate;
-    private int returnQuantity;
+  private int returnQuantity;
   private BookStatus status;
 }

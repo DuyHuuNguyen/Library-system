@@ -1,6 +1,5 @@
 package com.g15.library_system.entity;
 
-import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.enums.LibraryCardStatus;
 import com.g15.library_system.enums.TransactionType;
 import java.util.ArrayList;
@@ -72,7 +71,6 @@ public class LibraryCard extends BaseEntity {
         .sum();
   }
 
-
   public Map<Book, Integer> getUnreturnedBooks() {
     Map<Book, Integer> totalBorrowed = new HashMap<>();
     Map<Book, Integer> totalReturned = new HashMap<>();
@@ -85,13 +83,11 @@ public class LibraryCard extends BaseEntity {
       }
     }
 
-
     for (Transaction retun : returnTransactions) {
       for (Map.Entry<Book, Integer> entry : retun.getBooks().entrySet()) {
         totalReturned.merge(entry.getKey(), entry.getValue(), Integer::sum);
       }
     }
-
 
     Map<Book, Integer> unreturnedBooks = new HashMap<>();
 
@@ -108,7 +104,6 @@ public class LibraryCard extends BaseEntity {
 
     return unreturnedBooks;
   }
-
 
   //  public int getTotalBooks() {
   //    return borrowTransactions.stream()

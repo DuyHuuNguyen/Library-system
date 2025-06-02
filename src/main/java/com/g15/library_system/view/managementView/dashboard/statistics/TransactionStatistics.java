@@ -107,19 +107,19 @@ public class TransactionStatistics {
   // Late Book return chart
   public Map<String, Long> aggregateLateReturnTrend(int year) {
     return ReaderData.getInstance().getReturnTransactions().stream()
-            .filter(
-                    trans ->
-                            trans.getActualReturnAt() != null
-                                    && trans.getOverdueFine() != null
-                                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year)
-            .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth())
-            .collect(
-                    Collectors.groupingBy(
-                            month -> month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
-                            () ->
-                                    new TreeMap<>(
-                                            Comparator.comparingInt(m -> Month.valueOf(m.toUpperCase()).getValue())),
-                            Collectors.counting()));
+        .filter(
+            trans ->
+                trans.getActualReturnAt() != null
+                    && trans.getOverdueFine() != null
+                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year)
+        .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth())
+        .collect(
+            Collectors.groupingBy(
+                month -> month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                () ->
+                    new TreeMap<>(
+                        Comparator.comparingInt(m -> Month.valueOf(m.toUpperCase()).getValue())),
+                Collectors.counting()));
   }
 
   public Map<String, Long> aggregateLateReturnTrend(String selectedMonth, int year) {
@@ -127,16 +127,16 @@ public class TransactionStatistics {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
 
     return ReaderData.getInstance().getReturnTransactions().stream()
-            .filter(
-                    trans ->
-                            trans.getActualReturnAt() != null
-                                    && trans.getOverdueFine() != null
-                                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year
-                                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth()
-                                    == monthConverted)
-            .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()))
-            .collect(
-                    Collectors.groupingBy(
-                            date -> date.format(formatter), TreeMap::new, Collectors.counting()));
+        .filter(
+            trans ->
+                trans.getActualReturnAt() != null
+                    && trans.getOverdueFine() != null
+                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year
+                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth()
+                        == monthConverted)
+        .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()))
+        .collect(
+            Collectors.groupingBy(
+                date -> date.format(formatter), TreeMap::new, Collectors.counting()));
   }
 }

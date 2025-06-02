@@ -113,8 +113,9 @@ public class ReaderTypesChart extends RoundedShadowPanel implements ReaderObserv
   @Override
   public void updateReaderData() {
     System.out.println("Reader data updated.");
-    SwingUtilities.invokeLater(() -> {
-      this.updateChart();
-    });
+    SwingUtilities.invokeLater(
+        () -> {
+          this.updateChart();
+        });
   }
 }

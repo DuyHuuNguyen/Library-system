@@ -17,7 +17,7 @@ public class TopChoicesPanel extends RoundedShadowPanel implements FilterObserve
   private JPanel booksPanel;
   private BookStatistics bookStatistics = new BookStatistics();
   private Map<Book, Long> bookData;
-  private int thisYear =LocalDate.now().getYear();
+  private int thisYear = LocalDate.now().getYear();
 
   public TopChoicesPanel() {
     this.setBackground(Color.WHITE);

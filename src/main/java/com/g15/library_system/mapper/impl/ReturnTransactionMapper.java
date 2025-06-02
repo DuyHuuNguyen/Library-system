@@ -41,14 +41,14 @@ public class ReturnTransactionMapper implements IReturnTransactionMapper {
   public BorrowBookDTO toBorrowBookDTO(
       Transaction transaction, Book book, int amount, BookStatus status) {
     return BorrowBookDTO.builder()
-            .transId(transaction.getId())
+        .transId(transaction.getId())
         .bookId(book.getId())
         .firstCoverImage(new ImageIcon(getClass().getResource(book.getFirstImage())))
         .bookTitle(book.getTitle())
         .bookQuantity(amount)
         .borrowDate(DateUtil.convertToLocalDate(transaction.getCreatedAt()))
         .dueDate(DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()))
-            .returnQuantity(amount)
+        .returnQuantity(amount)
         .status(status)
         .build();
   }

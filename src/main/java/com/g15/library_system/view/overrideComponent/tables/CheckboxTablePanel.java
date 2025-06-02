@@ -285,17 +285,18 @@ public class CheckboxTablePanel extends JPanel {
     }
   }
 
-  private void setupReturnQuantityCol(){
+  private void setupReturnQuantityCol() {
     JComboBox<String> returnQuantityCbb = new JComboBox<>(statuses);
     returnQuantityCbb.setEditable(false);
 
     int quantityColumnIndex = Arrays.asList(columnNames).indexOf("Quantity");
     int returnQuantityColIndex = Arrays.asList(columnNames).indexOf("Return Quantity");
-    if( returnQuantityColIndex >= 0) {
+    if (returnQuantityColIndex >= 0) {
       columnModel.getColumn(returnQuantityColIndex).setPreferredWidth(40);
-      columnModel.getColumn(returnQuantityColIndex).setCellEditor(new QuantityComboBoxEditor(table, quantityColumnIndex));
+      columnModel
+          .getColumn(returnQuantityColIndex)
+          .setCellEditor(new QuantityComboBoxEditor(table, quantityColumnIndex));
     }
-
   }
 
   private JScrollPane createScrollPane(JTable table) {

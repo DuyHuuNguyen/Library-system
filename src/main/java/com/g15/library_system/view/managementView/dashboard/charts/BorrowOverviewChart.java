@@ -1,8 +1,6 @@
 package com.g15.library_system.view.managementView.dashboard.charts;
 
-import com.g15.library_system.data.BookData;
 import com.g15.library_system.data.ReaderData;
-import com.g15.library_system.observers.BookObserver;
 import com.g15.library_system.observers.ReaderObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.FilterObserver;
 import com.g15.library_system.view.managementView.dashboard.chartObserver.TitlePanel;
@@ -12,11 +10,10 @@ import com.g15.library_system.view.swingComponentGenerators.JFreeChartGenerator;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.*;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
-
-import javax.swing.*;
 
 public class BorrowOverviewChart extends RoundedShadowPanel
     implements ReaderObserver, FilterObserver {
@@ -108,9 +105,10 @@ public class BorrowOverviewChart extends RoundedShadowPanel
 
   @Override
   public void updateReaderData() {
-    SwingUtilities.invokeLater(() -> {
-//      System.out.println("BorrowOverviewChart: updateReaderData called");
-      updateChart();
-    });
+    SwingUtilities.invokeLater(
+        () -> {
+          //      System.out.println("BorrowOverviewChart: updateReaderData called");
+          updateChart();
+        });
   }
 }

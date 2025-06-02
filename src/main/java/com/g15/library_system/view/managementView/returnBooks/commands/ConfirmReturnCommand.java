@@ -1,7 +1,6 @@
 package com.g15.library_system.view.managementView.returnBooks.commands;
 
 import com.g15.library_system.view.managementView.returnBooks.AddReturnBookPanel;
-import com.g15.library_system.view.managementView.returnBooks.controllers.AddReturnBookController;
 import com.g15.library_system.view.managementView.returnBooks.controllers.IAddReturnController;
 import com.g15.library_system.view.managementView.returnBooks.controllers.IReturnController;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
@@ -13,9 +12,9 @@ public class ConfirmReturnCommand implements Command {
   private AddReturnBookPanel addReturnBookPanel;
 
   public ConfirmReturnCommand(
-          IAddReturnController returnBookController,
+      IAddReturnController returnBookController,
       IReturnController returnController,
-              AddReturnBookPanel addReturnBookPanel) {
+      AddReturnBookPanel addReturnBookPanel) {
     this.addReturnBookController = returnBookController;
     this.returnController = returnController;
     this.addReturnBookPanel = addReturnBookPanel;

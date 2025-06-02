@@ -1,7 +1,6 @@
 package com.g15.library_system.data;
 
 import com.g15.library_system.entity.*;
-import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
 import com.g15.library_system.enums.LibraryCardStatus;
 import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.observers.ReaderObserver;
@@ -10,6 +9,7 @@ import com.g15.library_system.util.DateUtil;
 import com.g15.library_system.util.ReaderIdGenerator;
 import com.g15.library_system.util.TransactionIdGenerator;
 import com.g15.library_system.view.managementView.returnBooks.factories.simpleFactory.FineStrategyFactory;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
 import java.time.LocalDate;
 import java.util.*;
 import lombok.Getter;
@@ -216,7 +216,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                             1)))
                 .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 10)))
                 .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 20)))
-//                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 5)))
+                //                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024,
+                // 10, 5)))
                 .description("Borrowed 'Pride and Prejudice'")
                 .build());
     libCard2.addBorrowTransactions(transactions2);
