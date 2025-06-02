@@ -83,7 +83,8 @@ public class CheckboxTablePanel extends JPanel {
     setupStatusColumn();
     setupBooksNameColumnRenderer();
     setupBookCoverImageRenderer();
-    setupQuantityColumn(45);
+    setupQuantityColumn(40);
+    setupReturnQuantityCol();
     resizeNotesColumn(265);
     this.add(createScrollPane(table), BorderLayout.CENTER);
 
@@ -284,6 +285,19 @@ public class CheckboxTablePanel extends JPanel {
     }
   }
 
+  private void setupReturnQuantityCol(){
+    JComboBox<String> returnQuantityCbb = new JComboBox<>(statuses);
+    returnQuantityCbb.setEditable(false);
+
+    int quantityColumnIndex = Arrays.asList(columnNames).indexOf("Quantity");
+    int returnQuantityColIndex = Arrays.asList(columnNames).indexOf("Return Quantity");
+    if( returnQuantityColIndex >= 0) {
+      columnModel.getColumn(returnQuantityColIndex).setPreferredWidth(40);
+      columnModel.getColumn(returnQuantityColIndex).setCellEditor(new QuantityComboBoxEditor(table, quantityColumnIndex));
+    }
+
+  }
+
   private JScrollPane createScrollPane(JTable table) {
     JScrollPane scrollPane = new JScrollPane(table);
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -314,22 +328,9 @@ public class CheckboxTablePanel extends JPanel {
     }
   }
 
-  // action for edit button
-  public Runnable getActionForEditingTable(CustomButton editButton, CustomButton cancelButton) {
-    return () -> {
-      if (!isEditMode) {
-        enterEditMode(editButton);
-        editButton.setToolTipText("Save changes");
-        cancelButton.setEnabled(true);
-        cancelButton.setVisible(true);
-      } else {
-        editButton.setToolTipText("Edit return information");
-        cancelButton.setVisible(false);
-        cancelButton.setEnabled(false);
-        saveEdits(editButton);
-      }
-      table.repaint();
-    };
+  public void clearHeaderCheckboxSelection() {
+    isSelectAll = false;
+    table.getTableHeader().repaint();
   }
 
   private void enterEditMode(CustomButton editButton) {

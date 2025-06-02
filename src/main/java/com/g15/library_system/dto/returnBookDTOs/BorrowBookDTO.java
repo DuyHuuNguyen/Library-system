@@ -13,11 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BorrowBookDTO {
+  private Long transId;
   private Long bookId;
   private ImageIcon firstCoverImage;
   private String bookTitle;
   private int bookQuantity;
   private LocalDate borrowDate;
   private LocalDate dueDate;
+    private int returnQuantity;
   private BookStatus status;
 }

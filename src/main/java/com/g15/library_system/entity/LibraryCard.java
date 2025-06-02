@@ -72,39 +72,43 @@ public class LibraryCard extends BaseEntity {
         .sum();
   }
 
+
   public Map<Book, Integer> getUnreturnedBooks() {
-    Map<Book, Integer> borrowCount = new HashMap<>();
-    Map<Book, Integer> returnCount = new HashMap<>();
+    Map<Book, Integer> totalBorrowed = new HashMap<>();
+    Map<Book, Integer> totalReturned = new HashMap<>();
 
-    for (Transaction t : borrowTransactions) {
-      if (t.getTransactionType() == TransactionType.BORROW && t.getBooks() != null) {
-        for (Map.Entry<Book, Integer> entry : t.getBooks().entrySet()) {
-          borrowCount.merge(entry.getKey(), entry.getValue(), Integer::sum);
+    for (Transaction borrow : borrowTransactions) {
+      if (borrow.getActualReturnAt() == null) {
+        for (Map.Entry<Book, Integer> entry : borrow.getBooks().entrySet()) {
+          totalBorrowed.merge(entry.getKey(), entry.getValue(), Integer::sum);
         }
       }
     }
 
-    for (Transaction t : returnTransactions) {
-      if (t.getTransactionType() == TransactionType.RETURNED && t.getBooks() != null) {
-        for (Map.Entry<Book, Integer> entry : t.getBooks().entrySet()) {
-          returnCount.merge(entry.getKey(), entry.getValue(), Integer::sum);
-        }
+
+    for (Transaction retun : returnTransactions) {
+      for (Map.Entry<Book, Integer> entry : retun.getBooks().entrySet()) {
+        totalReturned.merge(entry.getKey(), entry.getValue(), Integer::sum);
       }
     }
 
-    Map<Book, Integer> unreturned = new HashMap<>();
-    for (Map.Entry<Book, Integer> entry : borrowCount.entrySet()) {
+
+    Map<Book, Integer> unreturnedBooks = new HashMap<>();
+
+    for (Map.Entry<Book, Integer> entry : totalBorrowed.entrySet()) {
       Book book = entry.getKey();
       int borrowed = entry.getValue();
-      int returned = returnCount.getOrDefault(book, 0);
+      int returned = totalReturned.getOrDefault(book, 0);
+
       int remaining = borrowed - returned;
       if (remaining > 0) {
-        unreturned.put(book, remaining);
+        unreturnedBooks.put(book, remaining);
       }
     }
 
-    return unreturned;
+    return unreturnedBooks;
   }
+
 
   //  public int getTotalBooks() {
   //    return borrowTransactions.stream()

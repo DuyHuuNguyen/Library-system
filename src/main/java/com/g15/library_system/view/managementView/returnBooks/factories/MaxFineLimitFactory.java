@@ -1,8 +1,8 @@
 package com.g15.library_system.view.managementView.returnBooks.factories;
 
-import com.g15.library_system.entity.strategies.FineStrategyType;
-import com.g15.library_system.entity.strategies.MaxFineStrategy;
-import com.g15.library_system.entity.strategies.OverdueFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
+import com.g15.library_system.view.managementView.returnBooks.strategies.MaxFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.OverdueFineStrategy;
 
 public class MaxFineLimitFactory implements IFineStrategyFactory {
 

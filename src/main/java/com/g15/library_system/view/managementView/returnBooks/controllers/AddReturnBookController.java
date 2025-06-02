@@ -6,8 +6,8 @@ import com.g15.library_system.data.CacheData;
 import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.dto.returnBookDTOs.BorrowBookDTO;
 import com.g15.library_system.entity.*;
-import com.g15.library_system.entity.strategies.FineStrategyType;
-import com.g15.library_system.entity.strategies.OverdueFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
+import com.g15.library_system.view.managementView.returnBooks.strategies.OverdueFineStrategy;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.mapper.IReturnTransactionMapper;
@@ -27,7 +27,7 @@ import java.time.LocalDate;
 import java.util.*;
 import javax.swing.*;
 
-public class AddReturnBookController {
+public class AddReturnBookController implements IAddReturnController {
   private AddReturnBookPanel addReturnBookPanel;
   private ReturnBookPanel returnBookPanel;
   private IReturnController returnManagementController;
@@ -35,7 +35,7 @@ public class AddReturnBookController {
   private IReturnTransactionMapper transactionMapper = new ReturnTransactionMapper();
   private Librarian currentLibrarian = CacheData.getCURRENT_LIBRARIAN();
   private Set<Book> books = BookData.getInstance().getBooks();
-
+  private LocalDate today = LocalDate.now();
   // controller
   private ReaderController readerController =
       ApplicationContextProvider.getBean(ReaderController.class);
@@ -43,8 +43,6 @@ public class AddReturnBookController {
   // temp data
   private Reader readerFound;
   private List<Transaction> borrowTransactions = new ArrayList<>();
-  private Map<Book, Integer> borrowingBooks = new HashMap<>();
-  private LocalDate today = LocalDate.now();
 
   // strategy factory
   private Map<FineStrategyType, IFineStrategyFactory> factories =
@@ -80,15 +78,17 @@ public class AddReturnBookController {
 
 
   //process return book
+  @Override
   public void processReturnTransaction() {
     Map<Book, Integer> returningBooks = new HashMap<>();
     Map<Book, Integer> lostBooks = new HashMap<>();
+    List<Object[]> selectedRowsData = addReturnBookPanel.getSelectedRowsData();
 
-    // save books selected for return
-    for (var rowData : addReturnBookPanel.getSelectedRowsData()) {
-      Long bookId = (Long) rowData[0];
-      int quantity = Integer.parseInt(rowData[3].toString());
-      BookStatus status = BookStatus.get((String) rowData[6]);
+
+    for (var rowData : selectedRowsData) {
+      Long bookId = (Long) rowData[1];
+      int quantity = Integer.parseInt(rowData[7].toString());
+      BookStatus status = BookStatus.get((String) rowData[8]);
 
       Book book = findBookInTransaction(bookId).orElseThrow();
 
@@ -98,6 +98,7 @@ public class AddReturnBookController {
       } else {
         returningBooks.merge(book, quantity, Integer::sum);
       }
+
     }
 
     Transaction returnTransaction =
@@ -118,16 +119,15 @@ public class AddReturnBookController {
 
     readerFound.getLibraryCard().addReturnTransaction(returnTransaction);
 
-    // update quantity of books in Data
     updateBookCurrentQuantity(returningBooks);
 
-    // check borrowTransaction -> set actualReturnAt
-    updateBorrowTransaction(returningBooks);
+    updateBorrowTransaction(selectedRowsData);
 
-    System.out.println(returnTransaction);
+//    System.out.println(returnTransaction);
     ReaderData.getInstance().notifyObservers();
   }
 
+  @Override
   public boolean validateDataAndProcessReturn() {
     if (addReturnBookPanel.isSearchFieldEmpty(readerFound)) {
       return false;
@@ -143,7 +143,6 @@ public class AddReturnBookController {
     if (result == JOptionPane.YES_OPTION) {
       try {
         this.processReturnTransaction();
-
         addReturnBookPanel.clearFormAndTableData();
         return true;
       } catch (Exception e) {
@@ -153,51 +152,6 @@ public class AddReturnBookController {
     }
 
     return false;
-  }
-
-  private boolean isAllBooksReturned(
-      Transaction borrowTrans,
-      List<Transaction> returnTransactions,
-      Map<Book, Integer> currentReturn) {
-
-    Map<Book, Integer> totalReturned = new HashMap<>();
-
-    for (Transaction returnTx : returnTransactions) {
-      for (Map.Entry<Book, Integer> entry : returnTx.getBooks().entrySet()) {
-        Book book = entry.getKey();
-        int qty = entry.getValue();
-        if (borrowTrans.getBooks().containsKey(book)) {
-          totalReturned.merge(book, qty, Integer::sum);
-        }
-      }
-    }
-
-    for (Map.Entry<Book, Integer> entry : currentReturn.entrySet()) {
-      Book book = entry.getKey();
-      if (borrowTrans.getBooks().containsKey(book)) {
-        totalReturned.merge(book, entry.getValue(), Integer::sum);
-      }
-    }
-
-    for (Map.Entry<Book, Integer> entry : borrowTrans.getBooks().entrySet()) {
-      Book book = entry.getKey();
-      int borrowedQty = entry.getValue();
-      int returnedQty = totalReturned.getOrDefault(book, 0);
-
-      if (returnedQty < borrowedQty) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-
-  private Optional<Book> findBookInTransaction(Long bookId) {
-    return borrowTransactions.stream()
-        .flatMap(tx -> tx.getBooks().keySet().stream())
-        .filter(book -> book.getId().equals(bookId))
-        .findFirst();
   }
 
   private void updateBookCurrentQuantity(Map<Book, Integer> returningBooks) {
@@ -213,13 +167,55 @@ public class AddReturnBookController {
     }
   }
 
-  private void updateBorrowTransaction(Map<Book, Integer> returningBooks) {
-    for (Transaction borrowTrans : readerFound.getLibraryCard().getBorrowTransactions()) {
-      if (isAllBooksReturned(
-          borrowTrans, readerFound.getLibraryCard().getReturnTransactions(), returningBooks)) {
-        borrowTrans.setActualReturnAt(DateUtil.convertToEpochMilli(today));
+  private void updateBorrowTransaction(List<Object[]> returningBooksData) {
+    Map<Long, List<Object[]>> groupedByTransactionId = new HashMap<>();
+
+    for (Object[] rowData : returningBooksData) {
+      Long transactionId = Long.parseLong(rowData[0].toString());
+      groupedByTransactionId.computeIfAbsent(transactionId, k -> new ArrayList<>()).add(rowData);
+    }
+
+    for (Map.Entry<Long, List<Object[]>> transactionGroup : groupedByTransactionId.entrySet()) {
+      Long transactionId = transactionGroup.getKey();
+      List<Object[]> booksForThisTransaction = transactionGroup.getValue();
+
+      Transaction matchingBorrowTrans = borrowTransactions
+              .stream()
+              .filter(trans -> trans.getId().equals(transactionId) && trans.getActualReturnAt() == null)
+              .findFirst()
+              .orElse(null);
+
+      if (matchingBorrowTrans != null) {
+        boolean allBooksReturned = true;
+
+        for (Map.Entry<Book, Integer> borrowedEntry : matchingBorrowTrans.getBooks().entrySet()) {
+          Book book = borrowedEntry.getKey();
+          int borrowedQty = borrowedEntry.getValue();
+
+          int totalReturnQty = booksForThisTransaction.stream()
+                  .filter(rowData -> book.getId().equals(Long.parseLong(rowData[1].toString())))
+                  .mapToInt(rowData -> Integer.parseInt(rowData[7].toString()))
+                  .sum();
+
+          if (totalReturnQty < borrowedQty) {
+            allBooksReturned = false;
+            break;
+          }
+        }
+
+        if (allBooksReturned) {
+
+          matchingBorrowTrans.setActualReturnAt(DateUtil.convertToEpochMilli(today));
+        }
       }
     }
+  }
+
+  private Optional<Book> findBookInTransaction(Long bookId) {
+    return borrowTransactions.stream()
+        .flatMap(tx -> tx.getBooks().keySet().stream())
+        .filter(book -> book.getId().equals(bookId))
+        .findFirst();
   }
 
   private void mappingTableData() {
@@ -230,16 +226,16 @@ public class AddReturnBookController {
       for (Map.Entry<Book, Integer> entry : transaction.getBooks().entrySet()) {
         Book book = entry.getKey();
 
-        if (unreturnedBooks.containsKey(book)) {
-          Integer quantity = entry.getValue();
+        if (unreturnedBooks.containsKey(book) ) {
+          Integer remainingQuantity = unreturnedBooks.get(book);
+
           BookStatus status =
                   DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()).isAfter(today)
                           ? BookStatus.RETURNED
                           : BookStatus.OVERDUE;
 
           borrowBookDTOs.add(
-                  transactionMapper.toBorrowBookDTO(transaction, book, quantity, status));
-          borrowingBooks.put(book, borrowingBooks.getOrDefault(book, 0) + quantity);
+                  transactionMapper.toBorrowBookDTO(transaction, book, remainingQuantity, status));
         }
       }
     }
@@ -247,8 +243,6 @@ public class AddReturnBookController {
     Object[][] bookBorrowData = transactionMapper.toBorrowBookTableData(borrowBookDTOs);
     addReturnBookPanel.setNewBorrowDataForTable(bookBorrowData);
   }
-
-
 
 
   // setup all components action listeners in view
@@ -301,7 +295,6 @@ public class AddReturnBookController {
       readerFound = reader;
 
       borrowTransactions.clear();
-      borrowingBooks.clear();
       List<Transaction> allTrans = reader.getLibraryCard().getBorrowTransactions();
       borrowTransactions.addAll(
           allTrans.stream()
@@ -311,7 +304,7 @@ public class AddReturnBookController {
                           && tran.getActualReturnAt() == null)
               .toList());
 
-      mappingTableData();
+      this.mappingTableData();
 
       addReturnBookPanel.setReaderFields(
           String.valueOf(reader.getId()),
@@ -321,6 +314,8 @@ public class AddReturnBookController {
 
       String status =
           borrowTransactions.stream()
+                  .filter(
+                      tran -> tran.getActualReturnAt() == null)
                   .anyMatch(
                       tran ->
                           DateUtil.convertToLocalDate(tran.getExpectedReturnAt()).isBefore(today))

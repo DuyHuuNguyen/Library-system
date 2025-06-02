@@ -1,8 +1,8 @@
-package com.g15.library_system.entity.strategies;
+package com.g15.library_system.view.managementView.returnBooks.strategies;
 
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.entity.Transaction;
-import com.g15.library_system.entity.strategies.tiers.YearFineTier;
+import com.g15.library_system.view.managementView.returnBooks.strategies.tiers.YearFineTier;
 import com.g15.library_system.util.DateUtil;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,8 +25,7 @@ public class YearBasedFineStrategy implements OverdueFineStrategy {
     double totalFine = 0.0;
 
     for (Map.Entry<Book, Integer> entry : transaction.getBooks().entrySet()) {
-      Book book = entry.getKey(); // book borrow
-      int quantity = entry.getValue();
+      Book book = entry.getKey();
 
       int publicationYear = book.getPublishYear();
       int bookAge = currentYear - publicationYear;
@@ -38,7 +37,7 @@ public class YearBasedFineStrategy implements OverdueFineStrategy {
               .findFirst()
               .orElse(0.0);
 
-      totalFine += finePerDay * quantity * daysLate;
+      totalFine += finePerDay * daysLate;
     }
 
     return totalFine;

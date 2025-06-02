@@ -15,42 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TransactionStatistics {
 
-  // Late Book return chart
-  public Map<String, Long> aggregateLateReturnTrend(int year) {
-    return ReaderData.getInstance().getReturnTransactions().stream()
-        .filter(
-            trans ->
-                trans.getActualReturnAt() != null
-                    && trans.getOverdueFine() != null
-                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year)
-        .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth())
-        .collect(
-            Collectors.groupingBy(
-                month -> month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
-                () ->
-                    new TreeMap<>(
-                        Comparator.comparingInt(m -> Month.valueOf(m.toUpperCase()).getValue())),
-                Collectors.counting()));
-  }
-
-  public Map<String, Long> aggregateLateReturnTrend(String selectedMonth, int year) {
-    Month monthConverted = Month.valueOf(selectedMonth.toUpperCase());
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
-
-    return ReaderData.getInstance().getReturnTransactions().stream()
-        .filter(
-            trans ->
-                trans.getActualReturnAt() != null
-                    && trans.getOverdueFine() != null
-                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year
-                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth()
-                        == monthConverted)
-        .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()))
-        .collect(
-            Collectors.groupingBy(
-                date -> date.format(formatter), TreeMap::new, Collectors.counting()));
-  }
-
   // borrow Overview Chart-------------------------------------------
   public Map<String, Long> countReturnStatusDistribution(int year) {
     return ReaderData.getInstance().getBorrowTransactions().stream()
@@ -138,5 +102,41 @@ public class TransactionStatistics {
                 Collectors.groupingBy(
                     e -> e.getValue().getKey(),
                     Collectors.summingLong(e -> e.getValue().getValue()))));
+  }
+
+  // Late Book return chart
+  public Map<String, Long> aggregateLateReturnTrend(int year) {
+    return ReaderData.getInstance().getReturnTransactions().stream()
+            .filter(
+                    trans ->
+                            trans.getActualReturnAt() != null
+                                    && trans.getOverdueFine() != null
+                                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year)
+            .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth())
+            .collect(
+                    Collectors.groupingBy(
+                            month -> month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                            () ->
+                                    new TreeMap<>(
+                                            Comparator.comparingInt(m -> Month.valueOf(m.toUpperCase()).getValue())),
+                            Collectors.counting()));
+  }
+
+  public Map<String, Long> aggregateLateReturnTrend(String selectedMonth, int year) {
+    Month monthConverted = Month.valueOf(selectedMonth.toUpperCase());
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
+
+    return ReaderData.getInstance().getReturnTransactions().stream()
+            .filter(
+                    trans ->
+                            trans.getActualReturnAt() != null
+                                    && trans.getOverdueFine() != null
+                                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getYear() == year
+                                    && DateUtil.convertToLocalDate(trans.getActualReturnAt()).getMonth()
+                                    == monthConverted)
+            .map(trans -> DateUtil.convertToLocalDate(trans.getActualReturnAt()))
+            .collect(
+                    Collectors.groupingBy(
+                            date -> date.format(formatter), TreeMap::new, Collectors.counting()));
   }
 }
