@@ -6,5 +6,5 @@ import com.g15.library_system.view.managementView.returnBooks.strategies.Overdue
 public interface IFineStrategyFactory {
   FineStrategyType getStrategyType();
 
-  OverdueFineStrategy createStrategy(FineStrategyType type);
+  OverdueFineStrategy createStrategy();
 }

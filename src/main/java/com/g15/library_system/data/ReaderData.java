@@ -146,7 +146,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                         3)))
             .overdueFine(
                 new OverdueFine(
-                    1200, FineStrategyFactory.createStrategy(FineStrategyType.YEAR_BASED)))
+                    1200, FineStrategyFactory.createStrategy(FineStrategyType.BOOK_AGE)))
             .librarian(librarians.get(0))
             .build();
 
@@ -362,7 +362,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .description("Returned 'The Odyssey'")
             .overdueFine(
                 new OverdueFine(
-                    6500, FineStrategyFactory.createStrategy(FineStrategyType.YEAR_BASED)))
+                    6500, FineStrategyFactory.createStrategy(FineStrategyType.BOOK_AGE)))
             .build();
     libCard4.addBorrowTransaction(borrowTransaction);
     libCard4.addReturnTransaction(returnTransaction2);
@@ -409,9 +409,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                             .findFirst()
                             .orElseThrow(),
                         1)))
-            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 10)))
-            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 10)))
-            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 5)))
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 10)))
+            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 20)))
             .description("Borrowed 'Moby-Dick'")
             .build();
     libCard5.addBorrowTransaction(transactions5);

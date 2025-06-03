@@ -70,11 +70,11 @@ public class BorrowOverviewChart extends RoundedShadowPanel
   }
 
   private void updateChartDataByMonth(int year) {
-    updateChartData(transactionStatistics.countReturnStatusDistribution(year));
+    updateChartData(transactionStatistics.countBorrowStatusDistribution(year));
   }
 
   private void updateChartDataByDay(String month, int year) {
-    updateChartData(transactionStatistics.countReturnStatusDistribution(month, year));
+    updateChartData(transactionStatistics.countBorrowStatusDistribution(month, year));
   }
 
   private void updateChartData(Map<String, Long> data) {
@@ -107,7 +107,6 @@ public class BorrowOverviewChart extends RoundedShadowPanel
   public void updateReaderData() {
     SwingUtilities.invokeLater(
         () -> {
-          //      System.out.println("BorrowOverviewChart: updateReaderData called");
           updateChart();
         });
   }

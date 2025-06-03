@@ -5,7 +5,7 @@ import com.g15.library_system.view.managementView.returnBooks.controllers.IRetur
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import javax.swing.*;
 
-public class RefreshCommand implements Command {
+public class RefreshCommand implements ICommand {
   private final IReturnController returnManagementController;
   private final ReturnBookPanel returnBookPanel;
 

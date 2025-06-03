@@ -12,7 +12,7 @@ public class MaxFineLimitFactory implements IFineStrategyFactory {
   }
 
   @Override
-  public OverdueFineStrategy createStrategy(FineStrategyType type) {
+  public OverdueFineStrategy createStrategy() {
     return new MaxFineStrategy(2000, 100000);
   }
 }

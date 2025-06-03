@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum FineStrategyType {
   DAILY_FINE("Daily fine"),
   PER_BOOK("Per book"),
-  YEAR_BASED("Year based"),
+  BOOK_AGE("Book age"),
   MAX_FINE("Max fine"),
   NO_FINE("No fine");
   private final String values;
