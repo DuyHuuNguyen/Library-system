@@ -12,7 +12,7 @@ public class PerBookFineFactory implements IFineStrategyFactory {
   }
 
   @Override
-  public OverdueFineStrategy createStrategy(FineStrategyType type) {
+  public OverdueFineStrategy createStrategy() {
     return new PerBookFineStrategy(1000);
   }
 }

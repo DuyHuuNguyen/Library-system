@@ -3,7 +3,7 @@ package com.g15.library_system.view.managementView.returnBooks.commands;
 import com.g15.library_system.view.managementView.returnBooks.AddReturnBookPanel;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
 
-public class CancelCommand implements Command {
+public class CancelCommand implements ICommand {
   private ReturnBookPanel returnBookPanel;
   private AddReturnBookPanel addReturnBookPanel;
 

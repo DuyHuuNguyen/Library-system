@@ -331,6 +331,10 @@ public class AddReturnBookPanel extends JPanel {
     }
   }
 
+  public String getStatusFieldText() {
+    return statusTxt.getText().trim();
+  }
+
   public void setStatusFieldText(String status) {
     statusTxt.setText(status);
     if (status.equals("On due date")) {

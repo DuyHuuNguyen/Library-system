@@ -16,10 +16,9 @@ import com.g15.library_system.util.TransactionIdGenerator;
 import com.g15.library_system.view.managementView.returnBooks.AddReturnBookPanel;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
 import com.g15.library_system.view.managementView.returnBooks.commands.CancelCommand;
-import com.g15.library_system.view.managementView.returnBooks.commands.Command;
 import com.g15.library_system.view.managementView.returnBooks.commands.ConfirmReturnCommand;
+import com.g15.library_system.view.managementView.returnBooks.commands.ReturnBookInvoker;
 import com.g15.library_system.view.managementView.returnBooks.factories.*;
-import com.g15.library_system.view.managementView.returnBooks.factories.simpleFactory.FineStrategyFactory;
 import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
 import com.g15.library_system.view.managementView.returnBooks.strategies.OverdueFineStrategy;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
@@ -47,15 +46,14 @@ public class AddReturnBookController implements IAddReturnController {
   // strategy factory
   private Map<FineStrategyType, IFineStrategyFactory> factories =
       Map.of(
-          FineStrategyType.YEAR_BASED, new YearBasedFineFactory(),
+          FineStrategyType.BOOK_AGE, new YearBasedFineFactory(),
           FineStrategyType.DAILY_FINE, new FixedDailyFineFactory(),
           FineStrategyType.PER_BOOK, new PerBookFineFactory(),
           FineStrategyType.MAX_FINE, new MaxFineLimitFactory(),
           FineStrategyType.NO_FINE, new NoFineFactory());
 
   // command
-  private Command confirmReturnCommand;
-  private Command cancelCommand;
+  private ReturnBookInvoker returnBookInvoker;
 
   public AddReturnBookController(
       IReturnController returnManagementController,
@@ -64,9 +62,8 @@ public class AddReturnBookController implements IAddReturnController {
     this.returnManagementController = returnManagementController;
     this.addReturnBookPanel = addReturnBookPanel;
     this.returnBookPanel = returnBookPanel;
-    this.confirmReturnCommand =
-        new ConfirmReturnCommand(this, returnManagementController, addReturnBookPanel);
-    this.cancelCommand = new CancelCommand(returnBookPanel, addReturnBookPanel);
+
+    this.returnBookInvoker = new ReturnBookInvoker();
 
     setupCancelBtListener();
     setupConfirmBtListener();
@@ -98,6 +95,8 @@ public class AddReturnBookController implements IAddReturnController {
       }
     }
 
+    FineStrategyType selectedStrategy = addReturnBookPanel.getSelectedStrategy();
+
     Transaction returnTransaction =
         Transaction.builder()
             .id(TransactionIdGenerator.generateId())
@@ -107,9 +106,11 @@ public class AddReturnBookController implements IAddReturnController {
             .createdAt(DateUtil.convertToEpochMilli(today))
             .actualReturnAt(DateUtil.convertToEpochMilli(today))
             .overdueFine(
-                new OverdueFine(
-                    Double.parseDouble(addReturnBookPanel.getLateFeeText()),
-                    FineStrategyFactory.createStrategy(addReturnBookPanel.getSelectedStrategy())))
+                addReturnBookPanel.getStatusFieldText().equals("Overdue")
+                    ? new OverdueFine(
+                        Double.parseDouble(addReturnBookPanel.getLateFeeText()),
+                        factories.get(selectedStrategy).createStrategy())
+                    : null)
             .librarian(currentLibrarian)
             .description(addReturnBookPanel.getNotesText())
             .build();
@@ -249,8 +250,7 @@ public class AddReturnBookController implements IAddReturnController {
     FineStrategyType selectedStrategy = addReturnBookPanel.getSelectedStrategy();
 
     if (selectedStrategy != null) {
-      OverdueFineStrategy overdueFineStrategy =
-          factories.get(selectedStrategy).createStrategy(selectedStrategy);
+      OverdueFineStrategy overdueFineStrategy = factories.get(selectedStrategy).createStrategy();
 
       for (Transaction transaction : borrowTransactions) {
         LocalDate expectedReturnDate =
@@ -338,14 +338,17 @@ public class AddReturnBookController implements IAddReturnController {
   public void setupCancelBtListener() {
     addReturnBookPanel.setCancelBtListener(
         e -> {
-          cancelCommand.execute();
+          this.returnBookInvoker.setCommand(new CancelCommand(returnBookPanel, addReturnBookPanel));
+          this.returnBookInvoker.executeCommand();
         });
   }
 
   public void setupConfirmBtListener() {
     addReturnBookPanel.setConfirmBtListener(
         e -> {
-          confirmReturnCommand.execute();
+          this.returnBookInvoker.setCommand(
+              new ConfirmReturnCommand(this, returnManagementController, addReturnBookPanel));
+          this.returnBookInvoker.executeCommand();
         });
   }
 }

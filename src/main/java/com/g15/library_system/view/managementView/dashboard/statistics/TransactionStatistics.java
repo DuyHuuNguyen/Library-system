@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class TransactionStatistics {
 
   // borrow Overview Chart-------------------------------------------
-  public Map<String, Long> countReturnStatusDistribution(int year) {
+  public Map<String, Long> countBorrowStatusDistribution(int year) {
     return ReaderData.getInstance().getBorrowTransactions().stream()
         .filter(tran -> tran.getTransactionType() == TransactionType.BORROW)
         .filter(tran -> tran.getCreatedYear().orElse(-1) == year)
@@ -25,7 +25,7 @@ public class TransactionStatistics {
                 trans -> trans.getReturnStatus().getValue(), Collectors.counting()));
   }
 
-  public Map<String, Long> countReturnStatusDistribution(String selectedMonth, int year) {
+  public Map<String, Long> countBorrowStatusDistribution(String selectedMonth, int year) {
     Month targetMonth = Month.valueOf(selectedMonth.toUpperCase());
 
     return ReaderData.getInstance().getBorrowTransactions().stream()

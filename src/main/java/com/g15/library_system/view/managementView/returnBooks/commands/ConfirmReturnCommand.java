@@ -6,7 +6,7 @@ import com.g15.library_system.view.managementView.returnBooks.controllers.IRetur
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import javax.swing.*;
 
-public class ConfirmReturnCommand implements Command {
+public class ConfirmReturnCommand implements ICommand {
   private IAddReturnController addReturnBookController;
   private IReturnController returnController;
   private AddReturnBookPanel addReturnBookPanel;

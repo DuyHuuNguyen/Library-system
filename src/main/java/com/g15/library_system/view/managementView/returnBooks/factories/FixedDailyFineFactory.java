@@ -12,7 +12,7 @@ public class FixedDailyFineFactory implements IFineStrategyFactory {
   }
 
   @Override
-  public OverdueFineStrategy createStrategy(FineStrategyType type) {
+  public OverdueFineStrategy createStrategy() {
     return new FixedDailyFineStrategy(2000);
   }
 }

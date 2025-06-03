@@ -10,9 +10,9 @@ import com.g15.library_system.mapper.IReturnTransactionMapper;
 import com.g15.library_system.mapper.impl.ReturnTransactionMapper;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
 import com.g15.library_system.view.managementView.returnBooks.ToolPanel;
-import com.g15.library_system.view.managementView.returnBooks.commands.Command;
 import com.g15.library_system.view.managementView.returnBooks.commands.ExportExcelCommand;
 import com.g15.library_system.view.managementView.returnBooks.commands.RefreshCommand;
+import com.g15.library_system.view.managementView.returnBooks.commands.ReturnBookInvoker;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -35,8 +35,7 @@ public class ReturnManagementController implements IReturnController {
   @Getter private List<ReturnBookDTO> returnBookDTOs = new ArrayList<>();
 
   // command
-  private Command exportExcelCommand;
-  private Command refreshCommand;
+  private ReturnBookInvoker returnBookInvoker;
 
   public ReturnManagementController(ReturnBookPanel returnBookPanel) {
     this.returnBookPanel = returnBookPanel;
@@ -44,8 +43,8 @@ public class ReturnManagementController implements IReturnController {
     this.returnBookController =
         new AddReturnBookController(this, returnBookPanel, returnBookPanel.getAddReturnBookPanel());
     initTableData();
-    this.refreshCommand = new RefreshCommand(this, returnBookPanel);
-    this.exportExcelCommand = new ExportExcelCommand(returnBookPanel);
+
+    this.returnBookInvoker = new ReturnBookInvoker();
 
     setupFreshBtAction();
     setupExportBtAction();
@@ -143,10 +142,20 @@ public class ReturnManagementController implements IReturnController {
   }
 
   public void setupFreshBtAction() {
-    returnBookPanel.getToolPn().setRefreshBtListener(e -> this.refreshCommand.execute());
+    returnBookPanel
+        .getToolPn()
+        .setRefreshBtListener(
+            e -> {
+              this.returnBookInvoker.setCommand(new RefreshCommand(this, returnBookPanel));
+              this.returnBookInvoker.executeCommand();
+            });
   }
 
   public void setupExportBtAction() {
-    returnBookPanel.setExportBtListener(e -> exportExcelCommand.execute());
+    returnBookPanel.setExportBtListener(
+        e -> {
+          this.returnBookInvoker.setCommand(new ExportExcelCommand(returnBookPanel));
+          this.returnBookInvoker.executeCommand();
+        });
   }
 }
