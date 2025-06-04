@@ -35,7 +35,6 @@ public class EmailFormPanel extends RoundedShadowPanel {
     this.body = new JPanel(new MigLayout("insets 5, wrap 1", "[grow, fill]", "[]10[]"));
     this.body.setBackground(Color.WHITE);
 
-    //    this.imageDropPanel = new ImageDropPanel(300, 300);
 
     this.contentEmail = new JTextArea();
     this.contentEmail.setRows(15);
@@ -43,7 +42,6 @@ public class EmailFormPanel extends RoundedShadowPanel {
     this.contentEmail.setWrapStyleWord(true);
 
     this.body.add(contentEmail, "growx");
-    //    this.body.add(imageDropPanel, "center, growx");
 
     this.bodyScroll = new JScrollPane(body);
     this.bodyScroll.setBackground(Style.LIGHT_WHITE_BACKGROUND);
@@ -54,7 +52,13 @@ public class EmailFormPanel extends RoundedShadowPanel {
             .text("Send")
             .backgroundColor(Style.BLUE_HEADER_TABLE_AND_BUTTON)
             .preferredSize(new Dimension(120, 35));
-    this.sendButton.addActionListener(e -> this.mapApi.get(ApiKey.SEND_EMAIL).run());
+    this.sendButton.addActionListener(
+        e -> {
+          var option =
+              JOptionPane.showConfirmDialog(
+                  this, "confirm content", "Notification", JOptionPane.YES_NO_OPTION);
+          if (option == JOptionPane.YES_OPTION) this.mapApi.get(ApiKey.SEND_EMAIL).run();
+        });
 
     this.reloadBtn =
         CustomButtonBuilder.builder()
@@ -72,7 +76,6 @@ public class EmailFormPanel extends RoundedShadowPanel {
     this.add(bodyLabel, "top");
     this.add(bodyScroll, "growx, growy, height 250::600");
 
-    // Đặt hai nút vào một JPanel để chúng nằm sát nhau
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
     buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
     buttonPanel.setOpaque(false);
@@ -90,7 +93,6 @@ public class EmailFormPanel extends RoundedShadowPanel {
       this.toField.setText("");
       return;
     }
-    ;
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < emails.length; i++) {
       sb.append(emails[i]);
@@ -100,16 +102,10 @@ public class EmailFormPanel extends RoundedShadowPanel {
     this.toField.setText(sb.toString());
   }
 
-  //  public void loadImages(java.util.List<String> images) {
-  //    this.imageDropPanel.loadImagesFromUrls(images);
-  //  }
 
   public void loadContent(String content, String subject) {
     this.subjectField.setText(subject);
     this.contentEmail.setText(content);
   }
 
-  //  public void removeAllImages() {
-  //    this.imageDropPanel.clearALlImages();
-  //  }
 }
