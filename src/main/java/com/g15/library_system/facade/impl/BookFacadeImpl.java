@@ -36,7 +36,7 @@ public class BookFacadeImpl implements BookFacade {
   @Override
   public List<String> searchTitleContains(String title) {
     return bookService.findAll().stream()
-        .filter(book -> book.titleContains(title))
+        .filter(book -> book.titleContains(title) && book.isAvailable())
         .map(Book::getTitle)
         .toList();
   }

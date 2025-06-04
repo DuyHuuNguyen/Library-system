@@ -4,7 +4,6 @@ import com.g15.library_system.view.overrideComponent.tables.CheckboxTablePanel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Set;
 import javax.swing.*;
 import lombok.Getter;
 
@@ -30,7 +29,7 @@ public class ReturnBookPanel extends JPanel {
     "Processed By",
     "Notes"
   };
-  private String[] statuses = {"Returned", "Overdue"};
+  private String[] statuses = {"return", "overdue"};
 
   // data
   private Object[][] tableData;
@@ -63,7 +62,6 @@ public class ReturnBookPanel extends JPanel {
       setLayout(new BorderLayout());
 
       tablePn = new CheckboxTablePanel(columnNames, tableData);
-      tablePn.setEditableColumns(Set.of(5, 7, 8, 9, 10));
       tablePn.setStatuses(statuses);
       this.add(tablePn, BorderLayout.CENTER);
     }

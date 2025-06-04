@@ -1,13 +1,11 @@
 package com.g15.library_system.view.managementView.lendedBooks;
 
 import com.g15.library_system.controller.TransactionController;
-import com.g15.library_system.data.TransactionData;
 import com.g15.library_system.dto.TransactionContentDTO;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.mapper.TransactionMapper;
 import com.g15.library_system.mapper.impl.TransactionMapperImpl;
-import com.g15.library_system.observers.TransactionObserver;
 import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.view.Style;
 import com.g15.library_system.view.managementView.lendedBooks.formBody.*;
@@ -18,7 +16,7 @@ import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import java.awt.*;
 import javax.swing.*;
 
-public class LendedBookPanel extends JPanel implements TransactionObserver {
+public class LendedBookPanel extends JPanel {
   private FormPanel formPn;
   private ButtonPanel buttonPn;
   private TablePanel tablePn;
@@ -36,15 +34,6 @@ public class LendedBookPanel extends JPanel implements TransactionObserver {
     cardLayout = new CardLayout();
     containerPn = new ContainerPn();
     add(containerPn, BorderLayout.CENTER);
-
-    TransactionData.getInstance().registerObserver(this);
-  }
-
-  @Override
-  public void updateTransactionData() {
-    if (tablePn != null) {
-      tablePn.updateTransactionData();
-    }
   }
 
   private class ContainerPn extends RoundedPanel {

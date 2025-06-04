@@ -24,7 +24,7 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
       BookStatus status = BookStatus.get(value.toString());
       label.setHorizontalAlignment(SwingConstants.CENTER);
       switch (status) {
-        case BookStatus.AVAILABLE , BookStatus.RETURNED:
+        case BookStatus.AVAILABLE , BookStatus.RETURNED, BookStatus.ON_TIME:
           fgColor = Style.GREEN_STATUS_FOREGROUND_COLOR;
           bgColor = Style.GREEN_STATUS_BACKGROUND_COLOR;
           break;
@@ -37,8 +37,10 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
           bgColor = Style.YELLOW_STATUS_BACKGROUND_COLOR;
           break;
         case BookStatus.NULL:
-        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
-        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
+          fgColor = Style.GREEN_STATUS_FOREGROUND_COLOR;
+          bgColor = Style.GREEN_STATUS_BACKGROUND_COLOR;
+//        fgColor = Style.PURPLE_STATUS_FOREGROUND_COLOR;
+//        bgColor = Style.PURPLE_STATUS_BACKGROUND_COLOR;
           break;
       }
 

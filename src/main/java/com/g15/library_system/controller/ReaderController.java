@@ -32,7 +32,7 @@ public class ReaderController {
     return this.readerFacade.getAllEmailAcceptNotifyNewBook();
   }
 
-  public void sendEmailAddMemberSuccessful(String email) {
-    readerFacade.sendEmailAddMemberSuccessful(email);
+  public void sendEmailAddMemberSuccessful(String fullName, String email) {
+    readerFacade.sendEmailAddMemberSuccessful(fullName, email);
   }
 }

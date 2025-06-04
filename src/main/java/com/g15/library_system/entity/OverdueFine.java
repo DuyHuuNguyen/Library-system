@@ -1,6 +1,6 @@
 package com.g15.library_system.entity;
 
-import com.g15.library_system.entity.strategies.OverdueFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.OverdueFineStrategy;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

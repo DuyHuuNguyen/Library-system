@@ -1,10 +1,13 @@
 package com.g15.library_system.view.managementView.readers;
 
+import com.g15.library_system.dto.returnBookDTOs.ReturnBookDTO;
 import com.g15.library_system.entity.Book;
 import com.g15.library_system.entity.LibraryCard;
 import com.g15.library_system.entity.Reader;
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.enums.TransactionType;
+import com.g15.library_system.mapper.IReturnTransactionMapper;
+import com.g15.library_system.mapper.impl.ReturnTransactionMapper;
 import com.g15.library_system.util.DateUtil;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +17,8 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 
 public class ReaderMapper {
+  private static IReturnTransactionMapper transactionMapper = new ReturnTransactionMapper();
+  private static ReturnBookDTO returnBookDTOs;
   private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
   // Nếu danh sách kết quả đã được tạo checkbox thì
@@ -41,7 +46,16 @@ public class ReaderMapper {
     String readerType = "Student";
 
     // Số lượng sách đang mượn (giả sử 0 nếu chưa có dữ liệu)
-    int borrowedBooks = 0;
+    try {
+      reader.getLibraryCard().getReturnTransactions().stream()
+          .filter(transaction -> transaction.getTransactionType() == TransactionType.RETURNED)
+          .forEach(
+              transaction ->
+                  returnBookDTOs = transactionMapper.toReturnBookDTO(reader, transaction));
+
+    } catch (NullPointerException e) {
+      System.out.println("Reader " + reader.getId() + " doesn't have library card data");
+    }
 
     return (!hasCheckbox)
         ? new Object[] {
@@ -58,7 +72,7 @@ public class ReaderMapper {
           reader.getEmail(),
           reader.getAddress(),
           createdStr,
-          borrowedBooks
+          returnBookDTOs.getTotalFine()
         }
         : new Object[] {
           reader.getId(), // ID hiển thị
@@ -73,7 +87,7 @@ public class ReaderMapper {
           reader.getEmail(),
           reader.getAddress(),
           createdStr,
-          borrowedBooks
+          returnBookDTOs.getTotalFine()
         };
   }
 

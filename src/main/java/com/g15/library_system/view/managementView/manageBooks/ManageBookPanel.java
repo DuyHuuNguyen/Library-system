@@ -24,7 +24,7 @@ import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
+public class ManageBookPanel extends JPanel implements ObserverNotifyNewBook {
   private static final Logger log = LoggerFactory.getLogger(ManageBookPanel.class);
   private JPanel panelContent;
 
@@ -97,8 +97,13 @@ public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
 
     RoundedShadowPanel roundedShadowPanelForAddNewBook = new RoundedShadowPanel();
     this.addNewBookPanel = new AddNewBookPanel(500, 500);
-    roundedShadowPanelForAddNewBook.add(this.addNewBookPanel);
-    roundedShadowPanelForAddNewBook.setPreferredSize(new Dimension(700, 650));
+    this.addNewBookPanel.setMaximumSize(new Dimension(700, 700));
+    Box box = Box.createHorizontalBox();
+    box.add(Box.createHorizontalGlue());
+    box.add(this.addNewBookPanel);
+    box.add(Box.createHorizontalGlue());
+    roundedShadowPanelForAddNewBook.add(box);
+    roundedShadowPanelForAddNewBook.setPreferredSize(new Dimension(500, 500));
     roundedShadowPanelForAddNewBook.setBackground(Style.BLUE_HEADER_TABLE_AND_BUTTON);
 
     this.panelContent.add(roundedShadowPanelForAddNewBook, CONSTRAINT_ADD_NEW_BOOK);
@@ -107,15 +112,22 @@ public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
     this.panelContent.add(notifyNewBookPanel, CONSTRAINT_NOTIFY);
 
     RoundedShadowPanel roundedShadowPanelForModifyBook = new RoundedShadowPanel();
-    this.modifyBookPanel = new ModifyBookPanel(700, 650);
+    this.modifyBookPanel = new ModifyBookPanel(500, 500);
+    this.modifyBookPanel.setMaximumSize(new Dimension(700, 700));
     roundedShadowPanelForModifyBook.add(modifyBookPanel);
-    roundedShadowPanelForModifyBook.setPreferredSize(new Dimension(700, 650));
+
+    Box boxModify = Box.createHorizontalBox();
+    boxModify.add(Box.createHorizontalGlue());
+    boxModify.add(this.modifyBookPanel);
+    boxModify.add(Box.createHorizontalGlue());
+    roundedShadowPanelForModifyBook.add(boxModify);
+    roundedShadowPanelForModifyBook.setPreferredSize(new Dimension(500, 500));
 
     this.panelContent.add(roundedShadowPanelForModifyBook, CONSTRAINT_MODIFY_BOOK);
 
     add(panelContent, BorderLayout.CENTER);
     this.setBackground(Style.LIGHT_WHITE_BACKGROUND);
-    
+
     this.addNewBookPanel.addObserverNotifyNewBook(this.notifyNewBookPanel);
     this.addNewBookPanel.addObserverNotifyNewBook(this);
   }
@@ -146,6 +158,13 @@ public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
       this.modifyBookPanel.addOldBook(bookModify.get());
       log.info("selected book {}", bookModify.toString());
     } catch (NullPointerException e) {
+      ToastNotification panel =
+          new ToastNotification(
+              JOptionPane.getFrameForComponent(this),
+              ToastNotification.Type.WARNING,
+              ToastNotification.Location.TOP_CENTER,
+              "Please select book to modify");
+      panel.showNotification();
       log.error("You do not select row | In manager book feature modify book");
     }
   }
@@ -219,7 +238,7 @@ public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
       this.bookController.importExcel(ImportExcelRequest.builder().url(path).build());
 
     } else {
-      log.error("😒😒😒😒 error import file excel");
+      log.error("error import file excel");
     }
   }
 

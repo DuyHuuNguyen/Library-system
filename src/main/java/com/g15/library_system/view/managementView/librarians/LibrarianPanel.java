@@ -1,5 +1,6 @@
 package com.g15.library_system.view.managementView.librarians;
 
+import com.g15.library_system.controller.LibrarianController;
 import com.g15.library_system.entity.Librarian;
 import com.g15.library_system.entity.User;
 import com.g15.library_system.enums.ApiKey;
@@ -17,20 +18,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.swing.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LibrarianPanel extends JPanel {
   private static final Logger log = LoggerFactory.getLogger(LibrarianPanel.class);
   private CheckboxTablePanel checkbox;
   private String[] coloums = {
-          "",
-          "First name",
-          "Last name",
-          "Email",
-          "Password",
-          "Phone number",
-          "Avatar Key",
-          "Date of birth",
-          "Address"
+    "",
+    "First name",
+    "Last name",
+    "Email",
+    "Password",
+    "Phone number",
+    "Avatar Key",
+    "Date of birth",
+    "Address"
   };
   private Object[][] data;
   private JPanel panelContent;
@@ -44,21 +48,23 @@ public class LibrarianPanel extends JPanel {
 
   private List<Librarian> librarians;
 
-  private LibrarianController librarianController = ApplicationContextProvider.getBean(LibrarianController.class);
-  private LibrarianMapper librarianMapper = ApplicationContextProvider.getBean(LibrarianMapper.class);
+  private LibrarianController librarianController =
+      ApplicationContextProvider.getBean(LibrarianController.class);
+  private LibrarianMapper librarianMapper =
+      ApplicationContextProvider.getBean(LibrarianMapper.class);
 
   private Map<ApiKey, Runnable> mapAPIs =
-          Map.of(
-                  ApiKey.SELECTED_TABLE,
-                  () -> this.findLibrarianModifySelected(),
-                  ApiKey.ADD,
-                  () -> this.addNewLibrarian(),
-                  ApiKey.RELOAD,
-                  () -> this.loadDataTable(),
-                  ApiKey.SEARCH,
-                  () -> this.findByTextOfTextFieldSearchOptionUpDataToTable());
+      Map.of(
+          ApiKey.SELECTED_TABLE,
+          () -> this.findLibrarianModifySelected(),
+          ApiKey.ADD,
+          () -> this.addNewLibrarian(),
+          ApiKey.RELOAD,
+          () -> this.loadDataTable(),
+          ApiKey.SEARCH,
+          () -> this.findByTextOfTextFieldSearchOptionUpDataToTable());
 
-  public static final String CONSTRAINT_TABLE= "librarian_table";
+  public static final String CONSTRAINT_TABLE = "librarian_table";
   public static final String CONSTRAINT_ADD_NEW_LIBRARIAN = "add_new_librarian";
   public static final String CONSTRAINT_MODIFY_LIBRARIAN = "modify_librarian";
 
@@ -83,6 +89,7 @@ public class LibrarianPanel extends JPanel {
 
     add(panelContent);
   }
+
   private void initData() {
     this.librarians = librarianController.findALl();
     this.data = this.librarianMapper.toLibrarianData(librarians);
@@ -101,17 +108,17 @@ public class LibrarianPanel extends JPanel {
     loadDataTable();
   }
 
-//  private void loadDataTable() {
-//      this.removeAllDataTable();
-//      var data = librarianController.findALl();
-//
-//      this.librarians.clear();
-//
-//      this.librarians.addAll(data);
-//      this.checkbox.addDataToTable(this.librarianMapper.toLibrarianData(this.librarians));
-//  }
-private void loadDataTable() {
-  List<Librarian> newData = librarianController.findALl();
+  //  private void loadDataTable() {
+  //      this.removeAllDataTable();
+  //      var data = librarianController.findALl();
+  //
+  //      this.librarians.clear();
+  //
+  //      this.librarians.addAll(data);
+  //      this.checkbox.addDataToTable(this.librarianMapper.toLibrarianData(this.librarians));
+  //  }
+  private void loadDataTable() {
+    List<Librarian> newData = librarianController.findALl();
 
   this.librarians = new ArrayList<>(newData);
 
@@ -120,8 +127,8 @@ private void loadDataTable() {
 }
 
   private void removeAllDataTable() {
-        this.checkbox.removeAllDataTable();
-    }
+    this.checkbox.removeAllDataTable();
+  }
 
     private void findByTextOfTextFieldSearchOptionUpDataToTable() {
         String keyword = this.toolPanel.getTextOfTextFieldSearchOption().trim().toLowerCase();

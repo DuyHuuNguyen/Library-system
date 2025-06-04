@@ -265,7 +265,7 @@ public class ButtonPanel extends JPanel {
             // Gửi mail xác nhận đăng kí thành công qua gmail của reader
             // ---------------------------------------------------------
 
-            readerController.sendEmailAddMemberSuccessful(reader.getEmail());
+            readerController.sendEmailAddMemberSuccessful(reader.getFullName() ,reader.getEmail());
 
             // ---------------------------------------------------------
 

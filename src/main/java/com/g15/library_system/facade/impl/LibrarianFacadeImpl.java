@@ -7,23 +7,21 @@ import com.g15.library_system.dto.request.LoginRequest;
 import com.g15.library_system.dto.request.ResetPasswordRequest;
 import com.g15.library_system.dto.request.SendOTPRequest;
 import com.g15.library_system.dto.request.VerifyOTPRequest;
-import com.g15.library_system.facade.LibrarianFacade;
-import com.g15.library_system.service.EmailProducerService;
-
 import com.g15.library_system.entity.Librarian;
+import com.g15.library_system.facade.LibrarianFacade;
 import com.g15.library_system.mapper.LibrarianMapper;
+import com.g15.library_system.service.EmailProducerService;
 import com.g15.library_system.service.LibrarianService;
 import com.g15.library_system.util.RandomizationHelper;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import java.awt.*;
+import java.util.List;
+import java.util.Optional;
 import javax.swing.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -125,12 +123,19 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
   }
 
   @Override
-  public void modify(Librarian librarian) {
-    this.librarianService.modify(librarian);
+  public List<Librarian> findByTextOfTextFieldSearchOption(String text) {
+    return this.librarianService.findAll().stream()
+        .filter(librarian -> librarian.isSameInfo(text))
+        .map(librarian -> this.librarianMapper.toLibrarian(librarian))
+        .toList();
   }
 
   @Override
   public List<Librarian> searchLibrarians(String keyword) {
     return this.librarianService.searchLibrarians(keyword);
   }
+    @Override
+    public void modify(Librarian librarian) {
+        this.librarianService.modify(librarian);
+    }
 }

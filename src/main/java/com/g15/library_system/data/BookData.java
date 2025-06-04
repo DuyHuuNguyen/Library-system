@@ -7,8 +7,7 @@ import com.g15.library_system.observers.BookObserver;
 import com.g15.library_system.observers.BookSubject;
 import com.g15.library_system.util.DateUtil;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class BookData implements Data<Book>, BookSubject {
   private static final BookData INSTANCE = new BookData();
-  private final List<Book> books = new ArrayList<>();
+  private final Set<Book> books = new HashSet<>();
   private List<BookObserver> observers = new ArrayList<>();
 
   private BookData() {
@@ -24,39 +23,50 @@ public class BookData implements Data<Book>, BookSubject {
   }
 
   @Override
-  public void add(Book book) {
+  public synchronized void add(Book book) {
     log.error("is add {}", this.books.add(book));
     notifyObservers();
   }
 
   @Override
-  public void add(List<Book> books) {
+  public synchronized void add(List<Book> books) {
     this.books.addAll(books);
     notifyObservers();
   }
 
   @Override
-  public void remove(Book book) {
+  public synchronized void remove(Book book) {
     this.books.remove(book);
     notifyObservers();
   }
 
   @Override
-  public void remove(int index) {
+  public synchronized void remove(int index) {
     if (index >= 0 && index < books.size()) {
       this.books.remove(index);
       notifyObservers();
     }
   }
 
-  public void update(Book book) {
-    for (int i = 0; i < this.books.size(); i++) {
-      Book existingBook = this.books.get(i);
-      if (existingBook.hasSameId(book.getId())) {
-        this.books.set(i, book);
-        break;
+  public synchronized void update(Book book) {
+    //    for (int i = 0; i < this.books.size(); i++) {
+    //      Book existingBook = this.books.get(i);
+    //      if (existingBook.hasSameId(book.getId())) {
+    //        this.books.set(i, book);
+    //        break;
+    //      }
+    //    }
+    boolean isRemoved = false;
+    Iterator<Book> bookIterator = this.books.iterator();
+    while (bookIterator.hasNext()) {
+      var item = bookIterator.next();
+      if (item.hasSameId(book.getId())) {
+        bookIterator.remove();
+        isRemoved = true;
       }
     }
+    if (isRemoved) this.books.add(book);
+
     notifyObservers();
   }
 
@@ -402,17 +412,17 @@ public class BookData implements Data<Book>, BookSubject {
 
   // observer
   @Override
-  public void registerObserver(BookObserver o) {
+  public synchronized void registerObserver(BookObserver o) {
     observers.add(o);
   }
 
   @Override
-  public void removeObserver(BookObserver o) {
+  public synchronized void removeObserver(BookObserver o) {
     observers.remove(o);
   }
 
   @Override
-  public void notifyObservers() {
+  public synchronized void notifyObservers() {
     for (BookObserver o : observers) {
       o.updateBookData();
     }

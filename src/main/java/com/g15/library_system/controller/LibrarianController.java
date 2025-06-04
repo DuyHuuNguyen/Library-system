@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class LibrarianController {
   public boolean verifyOTP(VerifyOTPRequest verifyOTPRequest) {
     return this.librarianFacade.verifyOTP(verifyOTPRequest);
   }
+
   public List<Librarian> findALl() {
     return this.librarianFacade.findAll();
   }
@@ -42,7 +45,7 @@ public class LibrarianController {
   }
 
   public void addNewLibrarian(Librarian newLibrarian) {
-      this.librarianFacade.add(newLibrarian);
+    this.librarianFacade.add(newLibrarian);
   }
 
   public void updateLibrarian(Librarian librarian) {

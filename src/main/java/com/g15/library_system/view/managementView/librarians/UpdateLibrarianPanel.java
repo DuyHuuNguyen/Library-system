@@ -7,128 +7,135 @@ import com.g15.library_system.view.Style;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import com.g15.library_system.view.swingComponentBuilders.CustomButtonBuilder;
 import com.g15.library_system.view.swingComponentGenerators.TextFieldGenerator;
-
-import javax.swing.*;
 import java.awt.*;
 import java.util.Optional;
+import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class UpdateLibrarianPanel extends JPanel {
-    private JTextField txtLibrarianFirstName, txtLibrarianLastName, txtEmail, txtPassword, txtPhoneNum,
-            txtAvatarKey, txtDateOfBirth, txtAddress;
+  private JTextField txtLibrarianFirstName,
+      txtLibrarianLastName,
+      txtEmail,
+      txtPassword,
+      txtPhoneNum,
+      txtAvatarKey,
+      txtDateOfBirth,
+      txtAddress;
 
-    private LibrarianController librarianController = ApplicationContextProvider.getBean(LibrarianController.class);
+  private LibrarianController librarianController =
+      ApplicationContextProvider.getBean(LibrarianController.class);
 
-    private Optional<Librarian> librarian;
+  private Optional<Librarian> librarian;
 
-    private int width;
-    private int height;
+  private int width;
+  private int height;
 
-    public UpdateLibrarianPanel(int width, int height) {
-        this.width = width;
-        this.height = height;
-        initPanel();
-    }
-    public void initPanel() {
-        this.setPreferredSize(new Dimension(width, height));
-        setLayout(new BorderLayout());
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+  public UpdateLibrarianPanel(int width, int height) {
+    this.width = width;
+    this.height = height;
+    initPanel();
+  }
 
-        JPanel librarianInfoPanel = new JPanel(new GridLayout(4, 2, 10, 10));
-        librarianInfoPanel.setBorder(BorderFactory.createTitledBorder("Librarian Information"));
+  public void initPanel() {
+    this.setPreferredSize(new Dimension(width, height));
+    setLayout(new BorderLayout());
+    JPanel panel = new JPanel(new BorderLayout(10, 10));
+    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        txtLibrarianFirstName =
-                TextFieldGenerator.createTextField(
-                        "",
-                        Style.FONT_PLAIN_13,
-                        Style.WORD_COLOR_BLACK,
-                        Style.BLUE_HEADER_TABLE_AND_BUTTON,
-                        new Dimension(200, 25));
-        txtLibrarianLastName =
-                TextFieldGenerator.createTextField(
-                        "",
-                        Style.FONT_PLAIN_13,
-                        Style.WORD_COLOR_BLACK,
-                        Style.BLUE_HEADER_TABLE_AND_BUTTON,
-                        new Dimension(200, 25));
-        txtEmail =
-                TextFieldGenerator.createTextField(
-                        "",
-                        Style.FONT_PLAIN_13,
-                        Style.WORD_COLOR_BLACK,
-                        Style.BLUE_HEADER_TABLE_AND_BUTTON,
-                        new Dimension(200, 25));
-        txtPassword =
-                TextFieldGenerator.createTextField(
-                        "",
-                        Style.FONT_PLAIN_13,
-                        Style.WORD_COLOR_BLACK,
-                        Style.BLUE_HEADER_TABLE_AND_BUTTON,
-                        new Dimension(200, 25));
-        txtPhoneNum =
-                TextFieldGenerator.createTextField(
-                        "",
-                        Style.FONT_PLAIN_13,
-                        Style.WORD_COLOR_BLACK,
-                        Style.BLUE_HEADER_TABLE_AND_BUTTON,
-                        new Dimension(200, 25));
-        txtAvatarKey =
-                TextFieldGenerator.createTextField(
-                        "",
-                        Style.FONT_PLAIN_13,
-                        Style.WORD_COLOR_BLACK,
-                        Style.BLUE_HEADER_TABLE_AND_BUTTON,
-                        new Dimension(200, 25));
-        txtDateOfBirth =
-                TextFieldGenerator.createTextField(
-                        "",
-                        Style.FONT_PLAIN_13,
-                        Style.WORD_COLOR_BLACK,
-                        Style.BLUE_HEADER_TABLE_AND_BUTTON,
-                        new Dimension(200, 25));
-        txtAddress =
-                TextFieldGenerator.createTextField(
-                        "",
-                        Style.FONT_PLAIN_13,
-                        Style.WORD_COLOR_BLACK,
-                        Style.BLUE_HEADER_TABLE_AND_BUTTON,
-                        new Dimension(200, 25));
+    JPanel librarianInfoPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+    librarianInfoPanel.setBorder(BorderFactory.createTitledBorder("Librarian Information"));
 
-        var panelFirstName = createFieldPanel("First Name *", txtLibrarianFirstName);
-        panelFirstName.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    txtLibrarianFirstName =
+        TextFieldGenerator.createTextField(
+            "",
+            Style.FONT_PLAIN_13,
+            Style.WORD_COLOR_BLACK,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
+            new Dimension(200, 25));
+    txtLibrarianLastName =
+        TextFieldGenerator.createTextField(
+            "",
+            Style.FONT_PLAIN_13,
+            Style.WORD_COLOR_BLACK,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
+            new Dimension(200, 25));
+    txtEmail =
+        TextFieldGenerator.createTextField(
+            "",
+            Style.FONT_PLAIN_13,
+            Style.WORD_COLOR_BLACK,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
+            new Dimension(200, 25));
+    txtPassword =
+        TextFieldGenerator.createTextField(
+            "",
+            Style.FONT_PLAIN_13,
+            Style.WORD_COLOR_BLACK,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
+            new Dimension(200, 25));
+    txtPhoneNum =
+        TextFieldGenerator.createTextField(
+            "",
+            Style.FONT_PLAIN_13,
+            Style.WORD_COLOR_BLACK,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
+            new Dimension(200, 25));
+    txtAvatarKey =
+        TextFieldGenerator.createTextField(
+            "",
+            Style.FONT_PLAIN_13,
+            Style.WORD_COLOR_BLACK,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
+            new Dimension(200, 25));
+    txtDateOfBirth =
+        TextFieldGenerator.createTextField(
+            "",
+            Style.FONT_PLAIN_13,
+            Style.WORD_COLOR_BLACK,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
+            new Dimension(200, 25));
+    txtAddress =
+        TextFieldGenerator.createTextField(
+            "",
+            Style.FONT_PLAIN_13,
+            Style.WORD_COLOR_BLACK,
+            Style.BLUE_HEADER_TABLE_AND_BUTTON,
+            new Dimension(200, 25));
 
-        var panelLastName = createFieldPanel("Last Name", txtLibrarianLastName);
-        panelLastName.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    var panelFirstName = createFieldPanel("First Name *", txtLibrarianFirstName);
+    panelFirstName.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-        var panelEmail = createFieldPanel("Email *", txtEmail);
-        panelEmail.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    var panelLastName = createFieldPanel("Last Name", txtLibrarianLastName);
+    panelLastName.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-        var panelPassword = createFieldPanel("Password *", txtPassword);
-        panelPassword.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    var panelEmail = createFieldPanel("Email *", txtEmail);
+    panelEmail.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-        var panelQPhoneNum = createFieldPanel("Phone Number", txtPhoneNum);
-        panelQPhoneNum.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    var panelPassword = createFieldPanel("Password *", txtPassword);
+    panelPassword.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-        var panelAvartaKey = createFieldPanel("Avatar Key", txtAvatarKey);
-        panelAvartaKey.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    var panelQPhoneNum = createFieldPanel("Phone Number", txtPhoneNum);
+    panelQPhoneNum.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-        var panelDateOfBirth = createFieldPanel("Date of birth", txtDateOfBirth);
-        panelDateOfBirth.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    var panelAvartaKey = createFieldPanel("Avatar Key", txtAvatarKey);
+    panelAvartaKey.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-        var panelAddress = createFieldPanel("Address", txtAddress);
-        panelAddress.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    var panelDateOfBirth = createFieldPanel("Date of birth", txtDateOfBirth);
+    panelDateOfBirth.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-        librarianInfoPanel.add(panelFirstName);
-        librarianInfoPanel.add(panelLastName);
-        librarianInfoPanel.add(panelEmail);
-        librarianInfoPanel.add(panelPassword);
-        librarianInfoPanel.add(panelQPhoneNum);
-        librarianInfoPanel.add(panelAvartaKey);
-        librarianInfoPanel.add(panelDateOfBirth);
-        librarianInfoPanel.add(panelAddress);
-        librarianInfoPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    var panelAddress = createFieldPanel("Address", txtAddress);
+    panelAddress.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+
+    librarianInfoPanel.add(panelFirstName);
+    librarianInfoPanel.add(panelLastName);
+    librarianInfoPanel.add(panelEmail);
+    librarianInfoPanel.add(panelPassword);
+    librarianInfoPanel.add(panelQPhoneNum);
+    librarianInfoPanel.add(panelAvartaKey);
+    librarianInfoPanel.add(panelDateOfBirth);
+    librarianInfoPanel.add(panelAddress);
+    librarianInfoPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton btnSave = CustomButtonBuilder.builder().text("Add");
@@ -138,38 +145,38 @@ public class UpdateLibrarianPanel extends JPanel {
                     this.librarianController.addNewLibrarian(librarian.get());
                     this.clearDataInPanel();
 
-                    ToastNotification notification =
-                            new ToastNotification(
-                                    JOptionPane.getFrameForComponent(this),
-                                    ToastNotification.Type.INFO,
-                                    ToastNotification.Location.TOP_CENTER,
-                                    "Add librarian successful");
-                    notification.showNotification();
-                });
+          ToastNotification notification =
+              new ToastNotification(
+                  JOptionPane.getFrameForComponent(this),
+                  ToastNotification.Type.INFO,
+                  ToastNotification.Location.TOP_CENTER,
+                  "Add librarian successful");
+          notification.showNotification();
+        });
 
-        JButton btnCancel = CustomButtonBuilder.builder().text("Cancel");
-        btnCancel.addActionListener(
-                e -> {
-                    this.clearDataInPanel();
-                    ToastNotification notification =
-                            new ToastNotification(
-                                    JOptionPane.getFrameForComponent(this),
-                                    ToastNotification.Type.INFO,
-                                    ToastNotification.Location.TOP_CENTER,
-                                    "Cancel successful");
-                    notification.showNotification();
-                });
+    JButton btnCancel = CustomButtonBuilder.builder().text("Cancel");
+    btnCancel.addActionListener(
+        e -> {
+          this.clearDataInPanel();
+          ToastNotification notification =
+              new ToastNotification(
+                  JOptionPane.getFrameForComponent(this),
+                  ToastNotification.Type.INFO,
+                  ToastNotification.Location.TOP_CENTER,
+                  "Cancel successful");
+          notification.showNotification();
+        });
 
-        buttonPanel.add(btnSave);
-        buttonPanel.add(btnCancel);
-        buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    buttonPanel.add(btnSave);
+    buttonPanel.add(btnCancel);
+    buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-        panel.add(librarianInfoPanel, BorderLayout.NORTH);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        panel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
-        add(panel);
-        setVisible(true);
-    }
+    panel.add(librarianInfoPanel, BorderLayout.NORTH);
+    panel.add(buttonPanel, BorderLayout.SOUTH);
+    panel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
+    add(panel);
+    setVisible(true);
+  }
 
     private JPanel createFieldPanel(String label, JTextField textField) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));

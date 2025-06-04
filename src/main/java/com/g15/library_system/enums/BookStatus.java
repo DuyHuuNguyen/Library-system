@@ -9,6 +9,7 @@ public enum BookStatus {
   AVAILABLE("available"),
   BORROWED("borrowed"),
   RETURNED("returned"),
+  ON_TIME("on time"),
   LOST("lost"),
   DAMAGED("damaged"),
   OVERDUE("overdue"),

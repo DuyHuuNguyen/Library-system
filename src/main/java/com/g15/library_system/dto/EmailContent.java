@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
   @JsonSubTypes.Type(value = ContentSendOTP.class, name = "apply"),
+  @JsonSubTypes.Type(value = SuccessfulAddMemberEmailContentDTO.class, name = "apply2"),
 })
 @NoArgsConstructor
 public abstract class EmailContent {

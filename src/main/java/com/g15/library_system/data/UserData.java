@@ -17,21 +17,21 @@ public class UserData implements Data<User> {
     this.initializeData();
   }
 
-  @Override
-  public void add(User user) {}
-
-  @Override
-  public void add(List<User> t) {}
-
-  @Override
-  public void remove(User user) {}
-
-  @Override
-  public void remove(int index) {}
-
   public static UserData getInstance() {
     return INSTANCE;
   }
+
+  @Override
+  public synchronized void add(User user) {}
+
+  @Override
+  public synchronized void add(List<User> t) {}
+
+  @Override
+  public synchronized void remove(User user) {}
+
+  @Override
+  public synchronized void remove(int index) {}
 
   private void initializeData() {
     this.users.addAll(readers.stream().filter(Reader::getIsSubscribe).toList());

@@ -1,11 +1,11 @@
 package com.g15.library_system.view.managementView.returnBooks.controllers;
 
 import com.g15.library_system.controller.ReaderController;
+import com.g15.library_system.data.BookData;
 import com.g15.library_system.data.CacheData;
+import com.g15.library_system.data.ReaderData;
 import com.g15.library_system.dto.returnBookDTOs.BorrowBookDTO;
 import com.g15.library_system.entity.*;
-import com.g15.library_system.entity.strategies.FineStrategyType;
-import com.g15.library_system.entity.strategies.OverdueFineStrategy;
 import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.mapper.IReturnTransactionMapper;
@@ -14,55 +14,56 @@ import com.g15.library_system.provider.ApplicationContextProvider;
 import com.g15.library_system.util.DateUtil;
 import com.g15.library_system.util.TransactionIdGenerator;
 import com.g15.library_system.view.managementView.returnBooks.AddReturnBookPanel;
+import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
 import com.g15.library_system.view.managementView.returnBooks.commands.CancelCommand;
 import com.g15.library_system.view.managementView.returnBooks.commands.ConfirmReturnCommand;
+import com.g15.library_system.view.managementView.returnBooks.commands.ReturnBookInvoker;
 import com.g15.library_system.view.managementView.returnBooks.factories.*;
-import com.g15.library_system.view.managementView.returnBooks.factories.simpleFactory.FineStrategyFactory;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
+import com.g15.library_system.view.managementView.returnBooks.strategies.OverdueFineStrategy;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import java.time.LocalDate;
 import java.util.*;
 import javax.swing.*;
 
-public class AddReturnBookController {
+public class AddReturnBookController implements IAddReturnController {
   private AddReturnBookPanel addReturnBookPanel;
-  private ReturnManagementController returnManagementController;
+  private ReturnBookPanel returnBookPanel;
+  private IReturnController returnManagementController;
 
   private IReturnTransactionMapper transactionMapper = new ReturnTransactionMapper();
   private Librarian currentLibrarian = CacheData.getCURRENT_LIBRARIAN();
-
+  private Set<Book> books = BookData.getInstance().getBooks();
+  private LocalDate today = LocalDate.now();
   // controller
   private ReaderController readerController =
       ApplicationContextProvider.getBean(ReaderController.class);
 
-  // temp var
+  // temp data
   private Reader readerFound;
   private List<Transaction> borrowTransactions = new ArrayList<>();
-  private Map<Book, Integer> borrowingBooks = new HashMap<>();
-  private LocalDate today = LocalDate.now();
 
   // strategy factory
-  private IFineStrategyFactory factory;
-  private List<IFineStrategyFactory> factories =
-      List.of(
-          new YearBasedFineFactory(),
-          new FixedDailyFineFactory(),
-          new PerBookFineFactory(),
-          new MaxFineLimitFactory(),
-          new NoFineFactory());
+  private Map<FineStrategyType, IFineStrategyFactory> factories =
+      Map.of(
+          FineStrategyType.BOOK_AGE, new YearBasedFineFactory(),
+          FineStrategyType.DAILY_FINE, new FixedDailyFineFactory(),
+          FineStrategyType.PER_BOOK, new PerBookFineFactory(),
+          FineStrategyType.MAX_FINE, new MaxFineLimitFactory(),
+          FineStrategyType.NO_FINE, new NoFineFactory());
 
   // command
-  private ConfirmReturnCommand confirmReturnCommand;
-  private CancelCommand cancelCommand;
+  private ReturnBookInvoker returnBookInvoker;
 
   public AddReturnBookController(
-      ReturnManagementController returnManagementController,
+      IReturnController returnManagementController,
+      ReturnBookPanel returnBookPanel,
       AddReturnBookPanel addReturnBookPanel) {
     this.returnManagementController = returnManagementController;
     this.addReturnBookPanel = addReturnBookPanel;
+    this.returnBookPanel = returnBookPanel;
 
-    this.confirmReturnCommand = new ConfirmReturnCommand(this, addReturnBookPanel);
-    this.cancelCommand =
-        new CancelCommand(returnManagementController.getReturnBookPanel(), addReturnBookPanel);
+    this.returnBookInvoker = new ReturnBookInvoker();
 
     setupCancelBtListener();
     setupConfirmBtListener();
@@ -72,23 +73,19 @@ public class AddReturnBookController {
     setupStaffLabel();
   }
 
-  // =========================== returning book
+  // process return book
+  @Override
   public void processReturnTransaction() {
     Map<Book, Integer> returningBooks = new HashMap<>();
     Map<Book, Integer> lostBooks = new HashMap<>();
+    List<Object[]> selectedRowsData = addReturnBookPanel.getSelectedRowsData();
 
-    // Ghi nhận sách được chọn để trả
-    for (var rowData : addReturnBookPanel.getSelectedRowsData()) {
-      Long bookId = (Long) rowData[0];
-      int quantity = Integer.parseInt(rowData[3].toString());
-      BookStatus status = BookStatus.get((String) rowData[6]);
+    for (var rowData : selectedRowsData) {
+      Long bookId = (Long) rowData[1];
+      int quantity = Integer.parseInt(rowData[7].toString());
+      BookStatus status = BookStatus.get((String) rowData[8]);
 
-      Book book =
-          findBookInTransaction(bookId)
-              .orElseThrow(
-                  () ->
-                      new IllegalStateException(
-                          "Borrow transaction not found for book ID: " + bookId));
+      Book book = findBookInTransaction(bookId).orElseThrow();
 
       if (status == BookStatus.LOST) {
         lostBooks.put(book, quantity);
@@ -98,7 +95,8 @@ public class AddReturnBookController {
       }
     }
 
-    // Tạo transaction trả mới
+    FineStrategyType selectedStrategy = addReturnBookPanel.getSelectedStrategy();
+
     Transaction returnTransaction =
         Transaction.builder()
             .id(TransactionIdGenerator.generateId())
@@ -108,62 +106,26 @@ public class AddReturnBookController {
             .createdAt(DateUtil.convertToEpochMilli(today))
             .actualReturnAt(DateUtil.convertToEpochMilli(today))
             .overdueFine(
-                new OverdueFine(
-                    Double.parseDouble(addReturnBookPanel.getLateFeeText()),
-                    FineStrategyFactory.createStrategy(addReturnBookPanel.getSelectedStrategy())))
+                addReturnBookPanel.getStatusFieldText().equals("Overdue")
+                    ? new OverdueFine(
+                        Double.parseDouble(addReturnBookPanel.getLateFeeText()),
+                        factories.get(selectedStrategy).createStrategy())
+                    : null)
             .librarian(currentLibrarian)
             .description(addReturnBookPanel.getNotesText())
             .build();
 
     readerFound.getLibraryCard().addReturnTransaction(returnTransaction);
 
-    // check borrowTransaction -> set actualReturnAt
-    for (Transaction borrowTx : readerFound.getLibraryCard().getBorrowTransactions()) {
-      if (isAllBooksReturned(
-          borrowTx, readerFound.getLibraryCard().getReturnTransactions(), returningBooks)) {
-        borrowTx.setActualReturnAt(DateUtil.convertToEpochMilli(today));
-      }
-    }
+    updateBookCurrentQuantity(returningBooks);
 
-    System.out.println(returnTransaction);
+    updateBorrowTransaction(selectedRowsData);
+
+    //    System.out.println(returnTransaction);
+    ReaderData.getInstance().notifyObservers();
   }
 
-  private boolean isAllBooksReturned(
-      Transaction borrowTx,
-      List<Transaction> returnTransactions,
-      Map<Book, Integer> currentReturn) {
-    Map<Book, Integer> totalReturned = new HashMap<>();
-
-    for (Transaction returnTx : returnTransactions) {
-      for (Map.Entry<Book, Integer> entry : returnTx.getBooks().entrySet()) {
-        Book book = entry.getKey();
-        int qty = entry.getValue();
-        if (borrowTx.getBooks().containsKey(book)) {
-          totalReturned.merge(book, qty, Integer::sum);
-        }
-      }
-    }
-
-    for (Map.Entry<Book, Integer> entry : currentReturn.entrySet()) {
-      Book book = entry.getKey();
-      if (borrowTx.getBooks().containsKey(book)) {
-        totalReturned.merge(book, entry.getValue(), Integer::sum);
-      }
-    }
-
-    for (Map.Entry<Book, Integer> entry : borrowTx.getBooks().entrySet()) {
-      Book book = entry.getKey();
-      int borrowedQty = entry.getValue();
-      int returnedQty = totalReturned.getOrDefault(book, 0);
-
-      if (returnedQty < borrowedQty) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
+  @Override
   public boolean validateDataAndProcessReturn() {
     if (addReturnBookPanel.isSearchFieldEmpty(readerFound)) {
       return false;
@@ -179,7 +141,6 @@ public class AddReturnBookController {
     if (result == JOptionPane.YES_OPTION) {
       try {
         this.processReturnTransaction();
-
         addReturnBookPanel.clearFormAndTableData();
         return true;
       } catch (Exception e) {
@@ -191,6 +152,65 @@ public class AddReturnBookController {
     return false;
   }
 
+  private void updateBookCurrentQuantity(Map<Book, Integer> returningBooks) {
+    for (Map.Entry<Book, Integer> entry : returningBooks.entrySet()) {
+      Book returnBook = entry.getKey();
+      int quantity = entry.getValue();
+      for (Book book : books) {
+        if (book.getId().equals(returnBook.getId())) {
+          book.setCurrentQuantity(book.getCurrentQuantity() + quantity);
+          break;
+        }
+      }
+    }
+  }
+
+  private void updateBorrowTransaction(List<Object[]> returningBooksData) {
+    Map<Long, List<Object[]>> groupedByTransactionId = new HashMap<>();
+
+    for (Object[] rowData : returningBooksData) {
+      Long transactionId = Long.parseLong(rowData[0].toString());
+      groupedByTransactionId.computeIfAbsent(transactionId, k -> new ArrayList<>()).add(rowData);
+    }
+
+    for (Map.Entry<Long, List<Object[]>> transactionGroup : groupedByTransactionId.entrySet()) {
+      Long transactionId = transactionGroup.getKey();
+      List<Object[]> booksForThisTransaction = transactionGroup.getValue();
+
+      Transaction matchingBorrowTrans =
+          borrowTransactions.stream()
+              .filter(
+                  trans -> trans.getId().equals(transactionId) && trans.getActualReturnAt() == null)
+              .findFirst()
+              .orElse(null);
+
+      if (matchingBorrowTrans != null) {
+        boolean allBooksReturned = true;
+
+        for (Map.Entry<Book, Integer> borrowedEntry : matchingBorrowTrans.getBooks().entrySet()) {
+          Book book = borrowedEntry.getKey();
+          int borrowedQty = borrowedEntry.getValue();
+
+          int totalReturnQty =
+              booksForThisTransaction.stream()
+                  .filter(rowData -> book.getId().equals(Long.parseLong(rowData[1].toString())))
+                  .mapToInt(rowData -> Integer.parseInt(rowData[7].toString()))
+                  .sum();
+
+          if (totalReturnQty < borrowedQty) {
+            allBooksReturned = false;
+            break;
+          }
+        }
+
+        if (allBooksReturned) {
+
+          matchingBorrowTrans.setActualReturnAt(DateUtil.convertToEpochMilli(today));
+        }
+      }
+    }
+  }
+
   private Optional<Book> findBookInTransaction(Long bookId) {
     return borrowTransactions.stream()
         .flatMap(tx -> tx.getBooks().keySet().stream())
@@ -198,18 +218,39 @@ public class AddReturnBookController {
         .findFirst();
   }
 
+  private void mappingTableData() {
+    List<BorrowBookDTO> borrowBookDTOs = new ArrayList<>();
+    Map<Book, Integer> unreturnedBooks = readerFound.getLibraryCard().getUnreturnedBooks();
+
+    for (Transaction transaction : borrowTransactions) {
+      for (Map.Entry<Book, Integer> entry : transaction.getBooks().entrySet()) {
+        Book book = entry.getKey();
+
+        if (unreturnedBooks.containsKey(book)) {
+          Integer remainingQuantity = unreturnedBooks.get(book);
+
+          BookStatus status =
+              DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()).isAfter(today)
+                  ? BookStatus.RETURNED
+                  : BookStatus.OVERDUE;
+
+          borrowBookDTOs.add(
+              transactionMapper.toBorrowBookDTO(transaction, book, remainingQuantity, status));
+        }
+      }
+    }
+
+    Object[][] bookBorrowData = transactionMapper.toBorrowBookTableData(borrowBookDTOs);
+    addReturnBookPanel.setNewBorrowDataForTable(bookBorrowData);
+  }
+
+  // setup all components action listeners in view
   private void setComboBoxAction() {
     double totalFine = 0;
     FineStrategyType selectedStrategy = addReturnBookPanel.getSelectedStrategy();
-    if (selectedStrategy != null) {
-      for (IFineStrategyFactory fac : factories) {
-        if (fac.getStrategyType() == selectedStrategy) {
-          factory = fac;
-          break;
-        }
-      }
 
-      OverdueFineStrategy overdueFineStrategy = factory.createStrategy(selectedStrategy);
+    if (selectedStrategy != null) {
+      OverdueFineStrategy overdueFineStrategy = factories.get(selectedStrategy).createStrategy();
 
       for (Transaction transaction : borrowTransactions) {
         LocalDate expectedReturnDate =
@@ -221,25 +262,6 @@ public class AddReturnBookController {
 
       addReturnBookPanel.setLateFeeText(String.valueOf(totalFine));
     }
-  }
-
-  // setup all components action listeners in view
-  public void setupCancelBtListener() {
-    addReturnBookPanel.setCancelBtListener(
-        e -> {
-          cancelCommand.execute();
-        });
-  }
-
-  public void setupConfirmBtListener() {
-    addReturnBookPanel.setConfirmBtListener(
-        e -> {
-          confirmReturnCommand.execute();
-        });
-  }
-
-  public void refreshTable() {
-    returnManagementController.refreshTable();
   }
 
   public void setupStrategyComboBoxListener() {
@@ -271,7 +293,6 @@ public class AddReturnBookController {
       readerFound = reader;
 
       borrowTransactions.clear();
-      borrowingBooks.clear();
       List<Transaction> allTrans = reader.getLibraryCard().getBorrowTransactions();
       borrowTransactions.addAll(
           allTrans.stream()
@@ -281,7 +302,7 @@ public class AddReturnBookController {
                           && tran.getActualReturnAt() == null)
               .toList());
 
-      mappingTableData();
+      this.mappingTableData();
 
       addReturnBookPanel.setReaderFields(
           String.valueOf(reader.getId()),
@@ -291,6 +312,7 @@ public class AddReturnBookController {
 
       String status =
           borrowTransactions.stream()
+                  .filter(tran -> tran.getActualReturnAt() == null)
                   .anyMatch(
                       tran ->
                           DateUtil.convertToLocalDate(tran.getExpectedReturnAt()).isBefore(today))
@@ -313,29 +335,20 @@ public class AddReturnBookController {
     addReturnBookPanel.setCurrentStaff(currentLibrarian.getFullName());
   }
 
-  private void mappingTableData() {
-    List<BorrowBookDTO> borrowBookDTOs = new ArrayList<>();
-    Map<Book, Integer> unreturnedBooks = readerFound.getLibraryCard().getUnreturnedBooks();
+  public void setupCancelBtListener() {
+    addReturnBookPanel.setCancelBtListener(
+        e -> {
+          this.returnBookInvoker.setCommand(new CancelCommand(returnBookPanel, addReturnBookPanel));
+          this.returnBookInvoker.executeCommand();
+        });
+  }
 
-    for (Transaction transaction : borrowTransactions) {
-      for (Map.Entry<Book, Integer> entry : transaction.getBooks().entrySet()) {
-        Book book = entry.getKey();
-
-        if (unreturnedBooks.containsKey(book)) {
-          Integer quantity = entry.getValue();
-          BookStatus status =
-              DateUtil.convertToLocalDate(transaction.getExpectedReturnAt()).isAfter(today)
-                  ? BookStatus.RETURNED
-                  : BookStatus.OVERDUE;
-
-          borrowBookDTOs.add(
-              transactionMapper.toBorrowBookDTO(transaction, book, quantity, status));
-          borrowingBooks.put(book, borrowingBooks.getOrDefault(book, 0) + quantity);
-        }
-      }
-    }
-
-    Object[][] bookBorrowData = transactionMapper.toBorrowBookTableData(borrowBookDTOs);
-    addReturnBookPanel.setNewBorrowDataForTable(bookBorrowData);
+  public void setupConfirmBtListener() {
+    addReturnBookPanel.setConfirmBtListener(
+        e -> {
+          this.returnBookInvoker.setCommand(
+              new ConfirmReturnCommand(this, returnManagementController, addReturnBookPanel));
+          this.returnBookInvoker.executeCommand();
+        });
   }
 }

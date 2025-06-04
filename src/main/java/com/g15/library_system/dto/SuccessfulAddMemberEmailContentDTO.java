@@ -12,11 +12,11 @@ public class SuccessfulAddMemberEmailContentDTO extends EmailContent {
 
   @Override
   public String toString() {
-    return "Xin thông báo đến "
-        + fullName
-        + " rằng bạn đã đăng kí thành công thẻ thành viên của thư viện!"
-        + "\nBạn sẽ được nhận các thông báo khi có sách mới thuộc thể loại bạn hay mượn!"
-        + "\nXin cám ơn!";
+    return "Please be informed "
+            + fullName
+            + ", that you have successfully registered for the library membership card!"
+            + "\nYou will receive notifications when new books in your favorite genres are available!"
+            + "\nThank you!";
   }
 
   public void setFullName(String fullName) {

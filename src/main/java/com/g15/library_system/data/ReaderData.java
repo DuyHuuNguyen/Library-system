@@ -1,7 +1,6 @@
 package com.g15.library_system.data;
 
 import com.g15.library_system.entity.*;
-import com.g15.library_system.entity.strategies.FineStrategyType;
 import com.g15.library_system.enums.LibraryCardStatus;
 import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.observers.ReaderObserver;
@@ -10,6 +9,7 @@ import com.g15.library_system.util.DateUtil;
 import com.g15.library_system.util.ReaderIdGenerator;
 import com.g15.library_system.util.TransactionIdGenerator;
 import com.g15.library_system.view.managementView.returnBooks.factories.simpleFactory.FineStrategyFactory;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
 import java.time.LocalDate;
 import java.util.*;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   private PriorityQueue<Long> availableIds = new PriorityQueue<>();
 
   private final List<Librarian> librarians = LibrarianData.getInstance().getLibrarians();
-  private final List<Book> books = BookData.getInstance().getBooks();
+  private final Set<Book> books = BookData.getInstance().getBooks();
 
   private final List<Reader> readers = new ArrayList<>();
   private final List<Transaction> borrowTransactions = new ArrayList<>();
@@ -33,8 +33,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   }
 
   @Override
-  public void add(Reader reader) {
-    // Gán ID nếu chưa có
+  public synchronized void add(Reader reader) {
     if (reader.getId() == null || reader.getId() == 0) {
       if (!availableIds.isEmpty()) {
         reader.setId(availableIds.poll()); // Dùng ID bị xoá trước đó
@@ -50,20 +49,20 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
   }
 
   @Override
-  public void add(List<Reader> readers) {
+  public synchronized void add(List<Reader> readers) {
     this.readers.addAll(readers);
     notifyObservers();
   }
 
   @Override
-  public void remove(Reader reader) {
+  public synchronized void remove(Reader reader) {
     this.readers.remove(reader);
     availableIds.add(reader.getId());
     notifyObservers();
   }
 
   @Override
-  public void remove(int index) {
+  public synchronized void remove(int index) {
     if (index >= 0 && index < readers.size()) {
       this.readers.remove(index);
       notifyObservers();
@@ -147,7 +146,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                         3)))
             .overdueFine(
                 new OverdueFine(
-                    1200, FineStrategyFactory.createStrategy(FineStrategyType.YEAR_BASED)))
+                    1200, FineStrategyFactory.createStrategy(FineStrategyType.BOOK_AGE)))
             .librarian(librarians.get(0))
             .build();
 
@@ -199,9 +198,9 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                                 .filter(b -> b.getTitle().equals("To Kill a Mockingbird"))
                                 .findFirst()
                                 .orElseThrow(),
-                            2)))
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 15)))
-                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 20)))
+                            6)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 22)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 6, 1)))
                 .build(),
             Transaction.builder()
                 .id(TransactionIdGenerator.generateId())
@@ -215,9 +214,10 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 9, 10)))
-                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 10)))
-                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 5)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 20)))
+                //                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024,
+                // 10, 5)))
                 .description("Borrowed 'Pride and Prejudice'")
                 .build());
     libCard2.addBorrowTransactions(transactions2);
@@ -261,8 +261,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 20)))
-                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 20)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 20)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 6, 1)))
                 .description("borrow The Hobbit")
                 .build(),
             Transaction.builder()
@@ -277,8 +277,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 1, 10)))
-                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 10)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 20)))
                 .description("Returned 'I Believe'")
                 .build());
     libCard3.addBorrowTransactions(transactions3);
@@ -321,12 +321,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                             .findFirst()
                             .orElseThrow(),
                         1)))
-            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 28)))
-            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 3, 28)))
-            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 4, 28)))
-            .overdueFine(
-                new OverdueFine(
-                    100000, FineStrategyFactory.createStrategy(FineStrategyType.YEAR_BASED)))
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 6, 2)))
+            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 6, 16)))
             .description("Borrowed 'The Catcher in the Rye'")
             .build();
 
@@ -343,8 +339,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                             .findFirst()
                             .orElseThrow(),
                         1)))
-            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 10, 25)))
-            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 2)))
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 10)))
             .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 10)))
             .description("Borrowed 'I Believe'")
             .build();
@@ -367,7 +362,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .description("Returned 'The Odyssey'")
             .overdueFine(
                 new OverdueFine(
-                    6500, FineStrategyFactory.createStrategy(FineStrategyType.YEAR_BASED)))
+                    6500, FineStrategyFactory.createStrategy(FineStrategyType.BOOK_AGE)))
             .build();
     libCard4.addBorrowTransaction(borrowTransaction);
     libCard4.addReturnTransaction(returnTransaction2);
@@ -414,9 +409,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                             .findFirst()
                             .orElseThrow(),
                         1)))
-            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 10)))
-            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 10)))
-            .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 5)))
+            .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 10)))
+            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 5, 20)))
             .description("Borrowed 'Moby-Dick'")
             .build();
     libCard5.addBorrowTransaction(transactions5);
@@ -462,9 +456,8 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                                 .findFirst()
                                 .orElseThrow(),
                             1)))
-                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 5, 20)))
-                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 20)))
-                .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 6, 18)))
+                .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 10)))
+                .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 2, 20)))
                 .description("The Old Man and the Sea'")
                 .build(),
             Transaction.builder()
@@ -515,7 +508,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
             .build();
     Transaction returnTransactionEthan =
         Transaction.builder()
-            .id(ReaderIdGenerator.generateId())
+            .id(TransactionIdGenerator.generateId())
             .transactionType(TransactionType.RETURNED)
             .librarian(librarians.get(0))
             .books(
@@ -527,7 +520,6 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                             .orElseThrow(),
                         1)))
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 10)))
-            .expectedReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 20)))
             .actualReturnAt(DateUtil.convertToEpochMilli(LocalDate.of(2024, 12, 18)))
             .description("Returned 'Moby Dick'")
             .overdueFine(
@@ -1039,17 +1031,17 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
 
   // observer methods for sign up trends chart
   @Override
-  public void registerObserver(ReaderObserver o) {
+  public synchronized void registerObserver(ReaderObserver o) {
     this.observers.add(o);
   }
 
   @Override
-  public void removeObserver(ReaderObserver o) {
+  public synchronized void removeObserver(ReaderObserver o) {
     this.observers.remove(o);
   }
 
   @Override
-  public void notifyObservers() {
+  public synchronized void notifyObservers() {
     for (ReaderObserver observer : observers) {
       observer.updateReaderData();
     }

@@ -1,8 +1,8 @@
 package com.g15.library_system.view.managementView.returnBooks.factories;
 
-import com.g15.library_system.entity.strategies.FineStrategyType;
-import com.g15.library_system.entity.strategies.NoFineStrategy;
-import com.g15.library_system.entity.strategies.OverdueFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
+import com.g15.library_system.view.managementView.returnBooks.strategies.NoFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.OverdueFineStrategy;
 
 public class NoFineFactory implements IFineStrategyFactory {
 
@@ -12,7 +12,7 @@ public class NoFineFactory implements IFineStrategyFactory {
   }
 
   @Override
-  public OverdueFineStrategy createStrategy(FineStrategyType type) {
+  public OverdueFineStrategy createStrategy() {
     return new NoFineStrategy();
   }
 }
