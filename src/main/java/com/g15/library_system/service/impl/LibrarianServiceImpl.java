@@ -31,4 +31,15 @@ public class LibrarianServiceImpl implements LibrarianService {
   public void save(Librarian newLibrarian) {
     this.librarianRepository.save(newLibrarian);
   }
+
+  @Override
+  public void modify(Librarian librarian) {
+    this.librarianRepository.modify(librarian);
+  }
+
+  @Override
+  public List<Librarian> searchLibrarians(String keyword) {
+    return this.librarianRepository.searchLibrarians(keyword);
+  }
+
 }

@@ -4,6 +4,7 @@ import com.g15.library_system.dto.request.LoginRequest;
 import com.g15.library_system.dto.request.ResetPasswordRequest;
 import com.g15.library_system.dto.request.SendOTPRequest;
 import com.g15.library_system.dto.request.VerifyOTPRequest;
+
 import com.g15.library_system.entity.Librarian;
 import java.util.List;
 import java.util.Optional;
@@ -23,5 +24,9 @@ public interface LibrarianFacade {
 
   void add(Librarian newLibrarian);
 
+  void modify(Librarian librarian);
+
+  List<Librarian> searchLibrarians(String keyword);
   List<Librarian> findByTextOfTextFieldSearchOption(String text);
 }
+

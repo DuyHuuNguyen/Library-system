@@ -12,4 +12,8 @@ public interface LibrarianRepository {
   Optional<Librarian> findByName(String name);
 
   void save(Librarian newLibrarian);
+
+  void modify(Librarian librarian);
+
+  List<Librarian> searchLibrarians(String keyword);
 }

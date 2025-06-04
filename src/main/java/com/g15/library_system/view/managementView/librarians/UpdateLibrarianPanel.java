@@ -137,13 +137,13 @@ public class UpdateLibrarianPanel extends JPanel {
     librarianInfoPanel.add(panelAddress);
     librarianInfoPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
-    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    JButton btnSave = CustomButtonBuilder.builder().text("Save");
-    btnSave.addActionListener(
-        e -> {
-          var librarian = this.getNewLibrarian();
-          this.librarianController.addNewLibrarian(librarian.get());
-          this.clearDataInPanel();
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton btnSave = CustomButtonBuilder.builder().text("Add");
+        btnSave.addActionListener(
+                e -> {
+                    var librarian = this.getNewLibrarian();
+                    this.librarianController.addNewLibrarian(librarian.get());
+                    this.clearDataInPanel();
 
           ToastNotification notification =
               new ToastNotification(
@@ -178,53 +178,40 @@ public class UpdateLibrarianPanel extends JPanel {
     setVisible(true);
   }
 
-  private JPanel createFieldPanel(String label, JTextField textField) {
-    JPanel panel = new JPanel(new BorderLayout(5, 5));
-    JLabel jLabel = new JLabel(label);
-    jLabel.setPreferredSize(new Dimension(90, 22));
-    panel.add(jLabel, BorderLayout.WEST);
-    panel.add(textField, BorderLayout.CENTER);
-    return panel;
-  }
-
-  public void addData(Optional<Librarian> librarianModify) {
-    txtLibrarianFirstName.setText(librarianModify.get().getFirstName());
-    txtLibrarianLastName.setText(librarianModify.get().getLastName());
-    txtEmail.setText(librarianModify.get().getEmail());
-    txtPassword.setText(librarianModify.get().getPassword());
-    txtPhoneNum.setText(librarianModify.get().getPhoneNumber());
-    txtAvatarKey.setText(librarianModify.get().getAvatarKey());
-    txtDateOfBirth.setText(librarianModify.get().getDateOfBirth() + " ");
-    txtAddress.setText(librarianModify.get().getAddress());
-  }
-
-  public void clearDataInPanel() {
-    txtLibrarianFirstName.setText("");
-    txtLibrarianLastName.setText("");
-    txtEmail.setText("");
-    txtPassword.setText("");
-    txtPhoneNum.setText("");
-    txtAvatarKey.setText("");
-    txtDateOfBirth.setText("");
-    txtAddress.setText("");
-  }
-
-  public Optional<Librarian> getNewLibrarian() {
-    if (librarian == null || librarian.isEmpty()) {
-      var newLibrarian =
-          Librarian.builder()
-              .firstName(txtLibrarianFirstName.getText())
-              .lastName(txtLibrarianLastName.getText())
-              .email(txtEmail.getText())
-              .password(txtPassword.getText())
-              .phoneNumber(txtPhoneNum.getText())
-              .avatarKey(txtAvatarKey.getText())
-              .dateOfBirth(Long.parseLong(txtDateOfBirth.getText()))
-              .address(txtAddress.getText())
-              .build();
-      log.info("new librarian {}", newLibrarian.toString());
-      return this.librarian = Optional.of(newLibrarian);
+    private JPanel createFieldPanel(String label, JTextField textField) {
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        JLabel jLabel = new JLabel(label);
+        jLabel.setPreferredSize(new Dimension(90, 22));
+        panel.add(jLabel, BorderLayout.WEST);
+        panel.add(textField, BorderLayout.CENTER);
+        return panel;
     }
-    return this.librarian;
-  }
+    public void clearDataInPanel() {
+        txtLibrarianFirstName.setText("");
+        txtLibrarianLastName.setText("");
+        txtEmail.setText("");
+        txtPassword.setText("");
+        txtPhoneNum.setText("");
+        txtAvatarKey.setText("");
+        txtDateOfBirth.setText("");
+        txtAddress.setText("");
+    }
+    public Optional<Librarian> getNewLibrarian() {
+        if(librarian == null || librarian.isEmpty()) {
+            var newLibrarian =
+                    Librarian.builder()
+                            .firstName(txtLibrarianFirstName.getText())
+                            .lastName(txtLibrarianLastName.getText())
+                            .email(txtEmail.getText())
+                            .password(txtPassword.getText())
+                            .phoneNumber(txtPhoneNum.getText())
+                            .avatarKey(txtAvatarKey.getText())
+                            .dateOfBirth(Long.valueOf(txtDateOfBirth.getText()))
+                            .address(txtAddress.getText())
+                            .build();
+            log.info("new librarian {}", newLibrarian.toString());
+            return this.librarian = Optional.of(newLibrarian);
+        }
+        return this.librarian;
+    }
 }

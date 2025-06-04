@@ -6,6 +6,10 @@ import com.g15.library_system.dto.request.SendOTPRequest;
 import com.g15.library_system.dto.request.VerifyOTPRequest;
 import com.g15.library_system.entity.Librarian;
 import com.g15.library_system.facade.LibrarianFacade;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +48,11 @@ public class LibrarianController {
     this.librarianFacade.add(newLibrarian);
   }
 
-  public List<Librarian> findByTextOfTextFieldSearchOption(String text) {
-    return this.librarianFacade.findByTextOfTextFieldSearchOption(text);
+  public void updateLibrarian(Librarian librarian) {
+    this.librarianFacade.modify(librarian);
   }
+
+    public List<Librarian> searchLibrarians(String keyword) {
+      return this.librarianFacade.searchLibrarians(keyword);
+    }
 }

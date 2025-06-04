@@ -129,4 +129,13 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
         .map(librarian -> this.librarianMapper.toLibrarian(librarian))
         .toList();
   }
+
+  @Override
+  public List<Librarian> searchLibrarians(String keyword) {
+    return this.librarianService.searchLibrarians(keyword);
+  }
+    @Override
+    public void modify(Librarian librarian) {
+        this.librarianService.modify(librarian);
+    }
 }

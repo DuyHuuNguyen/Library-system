@@ -34,4 +34,8 @@ public class Librarian extends User {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // định dạng ngày tháng
     return sdf.format(date);
   }
+
+  public boolean isSameLibrarian(Librarian librarian) {
+    return true;
+  }
 }
