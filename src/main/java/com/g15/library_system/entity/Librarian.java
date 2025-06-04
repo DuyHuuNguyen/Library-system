@@ -4,13 +4,11 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @ToString(callSuper = true)
 @SuperBuilder
 @Getter
 public class Librarian extends User {
+
   public boolean isSamePassword(String password) {
     return this.password.equals(password);
   }
@@ -28,10 +26,8 @@ public class Librarian extends User {
                 this.lastName.toLowerCase().contains(text.toLowerCase()) ||
                 this.phoneNumber.contains(text);
     }
-    public String getDateOfBirthAsString() {
-        if (dateOfBirth == null) return null;
-        Date date = new Date(dateOfBirth); // dateOfBirth được tính bằng milliseconds từ epoch
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // định dạng ngày tháng
-        return sdf.format(date);
-    }
+  public boolean isSameLibrarian(Librarian other) {
+    return this.getId() == other.getId();
+  }
+
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class LibrarianRepositoryImpl implements LibrarianRepository {
@@ -32,5 +33,23 @@ public class LibrarianRepositoryImpl implements LibrarianRepository {
     public void save(Librarian newLibrarian) {
         this.librarianData.add(newLibrarian);
     }
+
+  @Override
+  public void modify(Librarian librarian) { this.librarianData.modify(librarian);
+  }
+
+  @Override
+  public List<Librarian> searchLibrarians(String keyword) {
+    String lowerKeyword = keyword.toLowerCase();
+    return librarianData.getLibrarians().stream()
+            .filter(l ->
+                    l.getFirstName().toLowerCase().contains(lowerKeyword) ||
+                            l.getLastName().toLowerCase().contains(lowerKeyword) ||
+                            l.getEmail().toLowerCase().contains(lowerKeyword) ||
+                            l.getPhoneNumber().toLowerCase().contains(lowerKeyword) ||
+                            l.getAddress().toLowerCase().contains(lowerKeyword)
+            )
+            .collect(Collectors.toList());
+  }
 
 }

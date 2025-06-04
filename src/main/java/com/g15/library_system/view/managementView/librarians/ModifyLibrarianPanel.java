@@ -14,7 +14,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class UpdateLibrarianPanel extends JPanel {
+public class ModifyLibrarianPanel extends JPanel {
     private JTextField txtLibrarianFirstName, txtLibrarianLastName, txtEmail, txtPassword, txtPhoneNum,
             txtAvatarKey, txtDateOfBirth, txtAddress;
 
@@ -25,7 +25,7 @@ public class UpdateLibrarianPanel extends JPanel {
     private int width;
     private int height;
 
-    public UpdateLibrarianPanel(int width, int height) {
+    public ModifyLibrarianPanel(int width, int height) {
         this.width = width;
         this.height = height;
         initPanel();
@@ -131,11 +131,11 @@ public class UpdateLibrarianPanel extends JPanel {
         librarianInfoPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton btnSave = CustomButtonBuilder.builder().text("Add");
-        btnSave.addActionListener(
+        JButton btnModify = CustomButtonBuilder.builder().text("Save");
+        btnModify.addActionListener(
                 e -> {
-                    var librarian = this.getNewLibrarian();
-                    this.librarianController.addNewLibrarian(librarian.get());
+                    var modifiedLibrarian = this.getModifiedLibrarian();
+                    this.librarianController.updateLibrarian(modifiedLibrarian.get());
                     this.clearDataInPanel();
 
                     ToastNotification notification =
@@ -143,7 +143,7 @@ public class UpdateLibrarianPanel extends JPanel {
                                     JOptionPane.getFrameForComponent(this),
                                     ToastNotification.Type.INFO,
                                     ToastNotification.Location.TOP_CENTER,
-                                    "Add librarian successful");
+                                    "Save librarian successful");
                     notification.showNotification();
                 });
 
@@ -160,7 +160,7 @@ public class UpdateLibrarianPanel extends JPanel {
                     notification.showNotification();
                 });
 
-        buttonPanel.add(btnSave);
+        buttonPanel.add(btnModify);
         buttonPanel.add(btnCancel);
         buttonPanel.setBackground(Style.LIGHT_WHITE_BACKGROUND);
 
@@ -189,9 +189,19 @@ public class UpdateLibrarianPanel extends JPanel {
         txtDateOfBirth.setText("");
         txtAddress.setText("");
     }
-    public Optional<Librarian> getNewLibrarian() {
+    public void addData(Optional<Librarian> librarianModify) {
+        txtLibrarianFirstName.setText(librarianModify.get().getFirstName());
+        txtLibrarianLastName.setText(librarianModify.get().getLastName());
+        txtEmail.setText(librarianModify.get().getEmail());
+        txtPassword.setText(librarianModify.get().getPassword());
+        txtPhoneNum.setText(librarianModify.get().getPhoneNumber());
+        txtAvatarKey.setText(librarianModify.get().getAvatarKey());
+        txtDateOfBirth.setText(String.valueOf(librarianModify.get().getDateOfBirth()));
+        txtAddress.setText(librarianModify.get().getAddress());
+    }
+    public Optional<Librarian> getModifiedLibrarian() {
         if(librarian == null || librarian.isEmpty()) {
-            var newLibrarian =
+            var modifyLibrarian =
                     Librarian.builder()
                             .firstName(txtLibrarianFirstName.getText())
                             .lastName(txtLibrarianLastName.getText())
@@ -202,9 +212,10 @@ public class UpdateLibrarianPanel extends JPanel {
                             .dateOfBirth(Long.valueOf(txtDateOfBirth.getText()))
                             .address(txtAddress.getText())
                             .build();
-            log.info("new librarian {}", newLibrarian.toString());
-            return this.librarian = Optional.of(newLibrarian);
+            log.info("modify librarian {}", modifyLibrarian.toString());
+            return this.librarian = Optional.of(modifyLibrarian);
         }
         return this.librarian;
     }
+
 }

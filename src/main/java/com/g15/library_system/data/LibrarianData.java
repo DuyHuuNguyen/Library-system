@@ -73,6 +73,7 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
                 .id(2L)
                 //                            .libraryCard(lc2)
                 .email("duynguyenavg@gmail.com")
+                .password("2")
                 .firstName("Jane")
                 .lastName("Smith")
                 .address("456 Elm St")
@@ -84,11 +85,11 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
                 .id(2L)
                 //                            .libraryCard(lc2)
                 .email("librarian3@gmail.com")
+                .password("3")
                 .firstName("David")
                 .lastName("Beckham")
                 .address("456 Elm St")
                 .dateOfBirth(3487562934876L)
-                .avatarKey("avatar2")
                 .phoneNumber("0987654321")
                 .avatarKey("avatar3")
                 .phoneNumber("987654321")
@@ -113,4 +114,15 @@ public class LibrarianData implements Data<Librarian>, LibrarianSubject {
       observer.updateLibrarianData();
     }
   }
+
+    public void modify(Librarian librarian) {
+        for (int i = 0; i < librarians.size(); i++) {
+            Librarian current = librarians.get(i);
+            if (current.isSameLibrarian(librarian) == true) {
+                librarians.set(i, librarian);
+                notifyObservers();
+                return;
+            }
+        }
+    }
 }

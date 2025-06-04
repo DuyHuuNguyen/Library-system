@@ -24,7 +24,8 @@ public interface LibrarianFacade {
 
     void add(Librarian newLibrarian);
 
-    List<Librarian> findByTextOfTextFieldSearchOption(String text);
+    void modify(Librarian librarian);
 
+  List<Librarian> searchLibrarians(String keyword);
 }
 

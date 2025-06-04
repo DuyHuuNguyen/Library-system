@@ -14,4 +14,7 @@ public interface LibrarianService {
 
     void save(Librarian newLibrarian);
 
+    void modify(Librarian librarian);
+
+    List<Librarian> searchLibrarians(String keyword);
 }

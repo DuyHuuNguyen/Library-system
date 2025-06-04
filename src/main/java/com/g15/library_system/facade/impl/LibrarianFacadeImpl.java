@@ -11,7 +11,6 @@ import com.g15.library_system.facade.LibrarianFacade;
 import com.g15.library_system.service.EmailProducerService;
 
 import com.g15.library_system.entity.Librarian;
-import com.g15.library_system.facade.LibrarianFacade;
 import com.g15.library_system.mapper.LibrarianMapper;
 import com.g15.library_system.service.LibrarianService;
 import com.g15.library_system.util.RandomizationHelper;
@@ -126,11 +125,12 @@ public class LibrarianFacadeImpl implements LibrarianFacade {
   }
 
   @Override
-  public List<Librarian> findByTextOfTextFieldSearchOption(String text) {
-    return this.librarianService.findAll().stream()
-            .filter(librarian -> librarian.isSameInfo(text))
-            .map(librarian -> this.librarianMapper.toLibrarian(librarian))
-            .toList();
+  public void modify(Librarian librarian) {
+    this.librarianService.modify(librarian);
   }
 
+  @Override
+  public List<Librarian> searchLibrarians(String keyword) {
+    return this.librarianService.searchLibrarians(keyword);
+  }
 }

@@ -28,7 +28,7 @@ public class LibrarianToolPanel extends JPanel {
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         txtSearch = new TextFieldSearchOption();
         txtSearch.setPreferredSize(new Dimension(350, 40));
-        txtSearch.popupMenu(name -> null, null); // placeholder
+        txtSearch.popupMenu(null, null); // placeholder
         txtSearch.addOption(new SearchOption("First name", new ImageIcon(getClass().getResource("/icons/searchOptionIcons/user.png"))));
         txtSearch.addOption(new SearchOption("Last name", new ImageIcon(getClass().getResource("/icons/searchOptionIcons/user.png"))));
         txtSearch.addOption(new SearchOption("Email", new ImageIcon(getClass().getResource("/icons/searchOptionIcons/email.png"))));
@@ -122,13 +122,9 @@ public class LibrarianToolPanel extends JPanel {
         setBorder(BorderFactory.createTitledBorder("Application"));
     }
 
-    public void setCardLayoutAndPanel(CardLayout layout, JPanel panel) {
-        this.cardLayout = layout;
-        this.panelContent = panel;
-    }
-
     public String getTextOfTextFieldSearchOption() {
         return this.txtSearch.getText();
     }
+
 }
 

@@ -45,8 +45,11 @@ public class LibrarianController {
       this.librarianFacade.add(newLibrarian);
   }
 
-  public List<Librarian> findByTextOfTextFieldSearchOption(String text) {
-    return this.librarianFacade.findByTextOfTextFieldSearchOption(text);
+  public void updateLibrarian(Librarian librarian) {
+    this.librarianFacade.modify(librarian);
   }
 
+    public List<Librarian> searchLibrarians(String keyword) {
+      return this.librarianFacade.searchLibrarians(keyword);
+    }
 }

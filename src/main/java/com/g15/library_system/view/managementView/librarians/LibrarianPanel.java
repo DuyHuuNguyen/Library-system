@@ -38,7 +38,7 @@ public class LibrarianPanel extends JPanel {
   private LibrarianToolPanel toolPanel;
 
   private UpdateLibrarianPanel addLibrarian;
-  private UpdateLibrarianPanel modifyLibrarian;
+  private ModifyLibrarianPanel modifyLibrarian;
 
   private Optional<Librarian> librarianModify;
 
@@ -78,10 +78,8 @@ public class LibrarianPanel extends JPanel {
     this.addLibrarian = new UpdateLibrarianPanel(1000, 500);
     this.panelContent.add(addLibrarian, CONSTRAINT_ADD_NEW_LIBRARIAN);
     
-    this.modifyLibrarian = new UpdateLibrarianPanel(100, 500);
+    this.modifyLibrarian = new ModifyLibrarianPanel(100, 500);
     this.panelContent.add(modifyLibrarian, CONSTRAINT_MODIFY_LIBRARIAN);
-
-    toolPanel.setCardLayoutAndPanel(cardLayout, panelContent); // Gán cardLayout và panelContent
 
     add(panelContent);
   }
@@ -115,11 +113,9 @@ public class LibrarianPanel extends JPanel {
 private void loadDataTable() {
   List<Librarian> newData = librarianController.findALl();
 
-  // Khởi tạo danh sách có thể chỉnh sửa
   this.librarians = new ArrayList<>(newData);
 
-  // Làm mới bảng
-  checkbox.removeAllDataTable(); // nếu bạn có phương thức này
+  checkbox.removeAllDataTable();
   checkbox.addDataToTable(librarianMapper.toLibrarianData(librarians));
 }
 
@@ -128,16 +124,18 @@ private void loadDataTable() {
     }
 
     private void findByTextOfTextFieldSearchOptionUpDataToTable() {
-      var text = this.toolPanel.getTextOfTextFieldSearchOption();
-      this.removeAllDataTable();
+        String keyword = this.toolPanel.getTextOfTextFieldSearchOption().trim().toLowerCase();
 
-      this.librarians.clear();
+        log.info("Searching keyword: {}", keyword);
 
-      this.librarians.addAll(this.librarianController.findByTextOfTextFieldSearchOption(text));
-      for (var item : this.librarians) {
-        log.info("data {}", item);
-      }
-      this.checkbox.addDataToTable(this.librarianMapper.toLibrarianData(this.librarians));
-  }
+        this.removeAllDataTable();
+        this.librarians.clear();
+
+        // Gọi hàm search chung
+        List<Librarian> results = librarianController.searchLibrarians(keyword);
+
+        this.librarians.addAll(results);
+        this.checkbox.addDataToTable(this.librarianMapper.toLibrarianData(this.librarians));
+    }
 
 }
