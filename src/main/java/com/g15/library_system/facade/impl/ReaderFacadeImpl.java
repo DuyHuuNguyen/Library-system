@@ -57,12 +57,15 @@ public class ReaderFacadeImpl implements ReaderFacade {
   }
 
   @Override
-  public void sendEmailAddMemberSuccessful(String email) {
+  public void sendEmailAddMemberSuccessful(String fullName, String email) {
+    SuccessfulAddMemberEmailContentDTO content = SuccessfulAddMemberEmailContentDTO.builder().build();
+    content.setFullName(fullName);
+
     EmailMessageDTO emailMessage =
         EmailMessageDTO.<SuccessfulAddMemberEmailContentDTO>builder()
             .to(email)
-            .subject("Đăng ki thành công")
-            .content(SuccessfulAddMemberEmailContentDTO.builder().build())
+            .subject("Registration successful")
+            .content(content)
             .build();
     emailProducerService.send(emailMessage);
   }
