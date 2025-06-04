@@ -128,4 +128,29 @@ public class RabbitMQConfig {
         .to(exchange())
         .with(sendEmailLendBookRouter);
   }
+
+
+  @Value("${rabbitmq.newReaderQueue}")
+  private String newReaderQueue;
+
+  @Value("${rabbitmq.exchangeNewReader}")
+  private String exchangeNewReader;
+
+  @Value("${rabbitmq.routerNewReader}")
+  private String routerReader;
+
+  @Bean
+  public Queue newReaderQueue(){
+    return new Queue(this.newReaderQueue);
+  }
+
+  @Bean
+  public TopicExchange newReaderExchange(){
+    return new TopicExchange(this.exchangeNewReader);
+  }
+
+  @Bean
+  public Binding newReaderBinding(){
+    return BindingBuilder.bind(this.newReaderQueue()).to(this.newReaderExchange()).with(this.routerReader);
+  }
 }
