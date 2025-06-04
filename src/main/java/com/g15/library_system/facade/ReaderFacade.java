@@ -15,5 +15,5 @@ public interface ReaderFacade {
 
   String[] getAllEmailAcceptNotifyNewBook();
 
-  void sendEmailAddMemberSuccessful(String email);
+  void sendEmailAddMemberSuccessful(String fullName, String email);
 }
