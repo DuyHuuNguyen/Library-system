@@ -214,8 +214,8 @@ public class LendedBookPanel extends JPanel {
                         "Borrow successfully!!")
                     .showNotification();
                 containerPn.showTablePanel();
-                formPn.cancel();
                 formPn.sendEmail(transactionMapper.convertToContentDTO(transaction));
+                formPn.cancel();
               }
             }
           });

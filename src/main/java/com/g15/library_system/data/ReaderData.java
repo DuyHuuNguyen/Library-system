@@ -87,9 +87,9 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
     var james =
         Reader.builder()
             .id(ReaderIdGenerator.generateId())
-            .email("nguyenvoquoctuan2104@gmail.com")
-            .firstName("John")
-            .lastName("Doe")
+            .email("23130075@st.hcmuaf.edu.vn")
+            .firstName("Duy")
+            .lastName("Nguyen")
             .address("123 Main St")
             .dateOfBirth(978307200000L) // 2001-01-01
             .createdAt(1746988800000L) // 2025-05-11
@@ -154,16 +154,16 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
     libCard1.addReturnTransaction(returnTransaction1);
     james.addLibraryCard(libCard1);
 
-    var emma =
+    var tuan =
         Reader.builder()
             .id(ReaderIdGenerator.generateId())
-            .email("23130075@st.hcmuaf.edu.vn")
-            .firstName("Emma")
-            .lastName("Wilson")
+            .email("nguyenvoquoctuan2104@gmail.com")
+            .firstName("Tuan")
+            .lastName("Nguyen")
             .address("456 Oak Ave, Apt 2B")
             .createdAt(DateUtil.convertToEpochMilli(LocalDate.of(2025, 2, 21)))
             .dateOfBirth(1009843200000L) // 2002-01-01
-            .avatarKey("/images/Emma.jpg")
+            .avatarKey("/images/John_Doe.png")
             .phoneNumber("234567890")
             .isSubscribe(true)
             .readerType(
@@ -221,7 +221,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
                 .description("Borrowed 'Pride and Prejudice'")
                 .build());
     libCard2.addBorrowTransactions(transactions2);
-    emma.addLibraryCard(libCard2);
+    tuan.addLibraryCard(libCard2);
 
     var michael =
         Reader.builder()
@@ -774,7 +774,7 @@ public class ReaderData implements Data<Reader>, ReaderSubject {
     isabella.addLibraryCard(libCard10);
 
     readers.add(james);
-    readers.add(emma);
+    readers.add(tuan);
     readers.add(michael);
     readers.add(sophia);
     readers.add(william);
