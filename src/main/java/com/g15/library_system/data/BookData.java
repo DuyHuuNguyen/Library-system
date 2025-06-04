@@ -7,8 +7,7 @@ import com.g15.library_system.observers.BookObserver;
 import com.g15.library_system.observers.BookSubject;
 import com.g15.library_system.util.DateUtil;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class BookData implements Data<Book>, BookSubject {
   private static final BookData INSTANCE = new BookData();
-  private final List<Book> books = new ArrayList<>();
+  private final Set<Book> books = new HashSet<>();
   private List<BookObserver> observers = new ArrayList<>();
 
   private BookData() {
@@ -50,13 +49,24 @@ public class BookData implements Data<Book>, BookSubject {
   }
 
   public synchronized void update(Book book) {
-    for (int i = 0; i < this.books.size(); i++) {
-      Book existingBook = this.books.get(i);
-      if (existingBook.hasSameId(book.getId())) {
-        this.books.set(i, book);
-        break;
+    //    for (int i = 0; i < this.books.size(); i++) {
+    //      Book existingBook = this.books.get(i);
+    //      if (existingBook.hasSameId(book.getId())) {
+    //        this.books.set(i, book);
+    //        break;
+    //      }
+    //    }
+    boolean isRemoved = false;
+    Iterator<Book> bookIterator = this.books.iterator();
+    while (bookIterator.hasNext()) {
+      var item = bookIterator.next();
+      if (item.hasSameId(book.getId())) {
+        bookIterator.remove();
+        isRemoved = true;
       }
     }
+    if (isRemoved) this.books.add(book);
+
     notifyObservers();
   }
 

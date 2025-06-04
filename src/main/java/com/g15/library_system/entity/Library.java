@@ -1,6 +1,7 @@
 package com.g15.library_system.entity;
 
 import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ public class Library extends BaseEntity implements Subject {
   private List<Observer> users;
   private String name;
   private String event;
-  private List<Book> books;
+  private Set<Book> books;
   private List<Reader> readers;
   private List<Librarian> librarians;
   private List<Transaction> transactions;

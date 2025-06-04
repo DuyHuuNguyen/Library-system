@@ -5,6 +5,7 @@ import com.g15.library_system.enums.BookStatus;
 import com.g15.library_system.enums.GenreType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.g15.library_system.enums.UpdateMethod;
 import lombok.*;
@@ -90,6 +91,19 @@ public class Book extends BaseEntity implements Comparable<Book> {
     this.totalQuantity = changeInfoBookDTO.getTotalQuantity();
     this.images.clear();
     this.images.add(changeInfoBookDTO.getImage());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Book book = (Book) o;
+    return publishYear == book.publishYear && Objects.equals(title, book.title) && Objects.equals(author, book.author) && Objects.equals(publisher, book.publisher) && genreType == book.genreType ;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(title, author, publisher, publishYear, genreType, currentQuantity, totalQuantity, images, isNewBook, bookStatus);
   }
 
   public void addImage(String image) {

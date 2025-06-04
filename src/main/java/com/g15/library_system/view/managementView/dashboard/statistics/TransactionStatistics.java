@@ -1,6 +1,7 @@
 package com.g15.library_system.view.managementView.dashboard.statistics;
 
 import com.g15.library_system.data.ReaderData;
+import com.g15.library_system.data.TransactionData;
 import com.g15.library_system.enums.TransactionType;
 import com.g15.library_system.util.DateUtil;
 import java.time.Month;
@@ -13,6 +14,95 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class TransactionStatistics {
+
+  // borrow Overview Chart-------------------------------------------
+  public Map<String, Long> countBorrowStatusDistribution(int year) {
+    return ReaderData.getInstance().getBorrowTransactions().stream()
+        .filter(tran -> tran.getTransactionType() == TransactionType.BORROW)
+        .filter(tran -> tran.getCreatedYear().orElse(-1) == year)
+        .collect(
+            Collectors.groupingBy(
+                trans -> trans.getReturnStatus().getValue(), Collectors.counting()));
+  }
+
+  public Map<String, Long> countBorrowStatusDistribution(String selectedMonth, int year) {
+    Month targetMonth = Month.valueOf(selectedMonth.toUpperCase());
+
+    return ReaderData.getInstance().getBorrowTransactions().stream()
+        .filter(tran -> tran.getTransactionType() == TransactionType.BORROW)
+        .filter(tran -> tran.getCreatedYear().orElse(-1) == year)
+        .filter(tran -> tran.getCreatedMonth().map(month -> month == targetMonth).orElse(false))
+        .collect(
+            Collectors.groupingBy(
+                tran -> tran.getReturnStatus().getValue(), Collectors.counting()));
+  }
+
+  // Book borrow by genre chart---------------------------------------------
+  public Map<String, Map<String, Long>> aggregateGenreBorrowData(int year) {
+    return TransactionData.getInstance().getTransactions().stream()
+        .filter(
+            trans ->
+                trans.getTransactionType() == TransactionType.BORROW
+                    && trans.getCreatedYear().orElse(-1) == year)
+        .flatMap(
+            trans ->
+                trans
+                    .getGenreWithQuantities()
+                    .flatMap(
+                        entry ->
+                            trans.getCreatedMonth().stream()
+                                .map(
+                                    month ->
+                                        new AbstractMap.SimpleEntry<>(
+                                            month.getDisplayName(
+                                                TextStyle.FULL, Locale.ENGLISH), // Key: month
+                                            new AbstractMap.SimpleEntry<>(
+                                                entry.getKey(),
+                                                entry.getValue()) // Value: (genre, quantity)
+                                            ))))
+        .collect(
+            Collectors.groupingBy(
+                Map.Entry::getKey,
+                () ->
+                    new TreeMap<>(
+                        Comparator.comparingInt(m -> Month.valueOf(m.toUpperCase()).getValue())),
+                Collectors.groupingBy(
+                    e -> e.getValue().getKey(), // genre
+                    Collectors.summingLong(e -> e.getValue().getValue()))));
+  }
+
+  public Map<String, Map<String, Long>> aggregateGenreBorrowData(String selectedMonth, int year) {
+    Month targetMonth = Month.valueOf(selectedMonth.toUpperCase());
+
+    return TransactionData.getInstance().getTransactions().stream()
+        .filter(
+            trans ->
+                trans.getTransactionType() == TransactionType.BORROW
+                    && trans.getCreatedYear().orElse(-1) == year
+                    && trans.getCreatedMonth().map(m -> m == targetMonth).orElse(false))
+        .flatMap(
+            trans ->
+                trans
+                    .getGenreWithQuantities()
+                    .flatMap(
+                        entry ->
+                            trans.getCreatedDayString().stream()
+                                .map(
+                                    dayStr ->
+                                        new AbstractMap.SimpleEntry<>(
+                                            dayStr,
+                                            new AbstractMap.SimpleEntry<>(
+                                                entry.getKey(),
+                                                entry.getValue()) // value: (genre, quantity)
+                                            ))))
+        .collect(
+            Collectors.groupingBy(
+                Map.Entry::getKey,
+                TreeMap::new,
+                Collectors.groupingBy(
+                    e -> e.getValue().getKey(),
+                    Collectors.summingLong(e -> e.getValue().getValue()))));
+  }
 
   // Late Book return chart
   public Map<String, Long> aggregateLateReturnTrend(int year) {
@@ -48,94 +138,5 @@ public class TransactionStatistics {
         .collect(
             Collectors.groupingBy(
                 date -> date.format(formatter), TreeMap::new, Collectors.counting()));
-  }
-
-  // borrow Overview Chart-------------------------------------------
-  public Map<String, Long> countReturnStatusDistribution(int year) {
-    return ReaderData.getInstance().getBorrowTransactions().stream()
-        .filter(tran -> tran.getTransactionType() == TransactionType.BORROW)
-        .filter(tran -> tran.getCreatedYear().orElse(-1) == year)
-        .collect(
-            Collectors.groupingBy(
-                trans -> trans.getReturnStatus().getValue(), Collectors.counting()));
-  }
-
-  public Map<String, Long> countReturnStatusDistribution(String selectedMonth, int year) {
-    Month targetMonth = Month.valueOf(selectedMonth.toUpperCase());
-
-    return ReaderData.getInstance().getBorrowTransactions().stream()
-        .filter(tran -> tran.getTransactionType() == TransactionType.BORROW)
-        .filter(tran -> tran.getCreatedYear().orElse(-1) == year)
-        .filter(tran -> tran.getCreatedMonth().map(month -> month == targetMonth).orElse(false))
-        .collect(
-            Collectors.groupingBy(
-                tran -> tran.getReturnStatus().getValue(), Collectors.counting()));
-  }
-
-  // Book borrow by genre chart---------------------------------------------
-  public Map<String, Map<String, Long>> aggregateGenreBorrowData(int year) {
-    return ReaderData.getInstance().getBorrowTransactions().stream()
-        .filter(
-            trans ->
-                trans.getTransactionType() == TransactionType.BORROW
-                    && trans.getCreatedYear().orElse(-1) == year)
-        .flatMap(
-            trans ->
-                trans
-                    .getGenreWithQuantities()
-                    .flatMap(
-                        entry ->
-                            trans.getCreatedMonth().stream()
-                                .map(
-                                    month ->
-                                        new AbstractMap.SimpleEntry<>(
-                                            month.getDisplayName(
-                                                TextStyle.FULL, Locale.ENGLISH), // Key: month
-                                            new AbstractMap.SimpleEntry<>(
-                                                entry.getKey(),
-                                                entry.getValue()) // Value: (genre, quantity)
-                                            ))))
-        .collect(
-            Collectors.groupingBy(
-                Map.Entry::getKey,
-                () ->
-                    new TreeMap<>(
-                        Comparator.comparingInt(m -> Month.valueOf(m.toUpperCase()).getValue())),
-                Collectors.groupingBy(
-                    e -> e.getValue().getKey(), // genre
-                    Collectors.summingLong(e -> e.getValue().getValue()))));
-  }
-
-  public Map<String, Map<String, Long>> aggregateGenreBorrowData(String selectedMonth, int year) {
-    Month targetMonth = Month.valueOf(selectedMonth.toUpperCase());
-
-    return ReaderData.getInstance().getBorrowTransactions().stream()
-        .filter(
-            trans ->
-                trans.getTransactionType() == TransactionType.BORROW
-                    && trans.getCreatedYear().orElse(-1) == year
-                    && trans.getCreatedMonth().map(m -> m == targetMonth).orElse(false))
-        .flatMap(
-            trans ->
-                trans
-                    .getGenreWithQuantities()
-                    .flatMap(
-                        entry ->
-                            trans.getCreatedDayString().stream()
-                                .map(
-                                    dayStr ->
-                                        new AbstractMap.SimpleEntry<>(
-                                            dayStr,
-                                            new AbstractMap.SimpleEntry<>(
-                                                entry.getKey(),
-                                                entry.getValue()) // value: (genre, quantity)
-                                            ))))
-        .collect(
-            Collectors.groupingBy(
-                Map.Entry::getKey,
-                TreeMap::new,
-                Collectors.groupingBy(
-                    e -> e.getValue().getKey(),
-                    Collectors.summingLong(e -> e.getValue().getValue()))));
   }
 }

@@ -1,4 +1,4 @@
-package com.g15.library_system.entity.strategies;
+package com.g15.library_system.view.managementView.returnBooks.strategies;
 
 import com.g15.library_system.entity.Transaction;
 import com.g15.library_system.util.DateUtil;

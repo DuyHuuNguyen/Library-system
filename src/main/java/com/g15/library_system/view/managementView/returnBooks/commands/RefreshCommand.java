@@ -1,32 +1,23 @@
 package com.g15.library_system.view.managementView.returnBooks.commands;
 
-import com.g15.library_system.mapper.IReturnTransactionMapper;
 import com.g15.library_system.view.managementView.returnBooks.ReturnBookPanel;
-import com.g15.library_system.view.managementView.returnBooks.controllers.ReturnManagementController;
+import com.g15.library_system.view.managementView.returnBooks.controllers.IReturnController;
 import com.g15.library_system.view.overrideComponent.toast.ToastNotification;
 import javax.swing.*;
 
-public class RefreshCommand implements Command {
-  private final ReturnManagementController returnManagementController;
+public class RefreshCommand implements ICommand {
+  private final IReturnController returnManagementController;
   private final ReturnBookPanel returnBookPanel;
-  private final IReturnTransactionMapper transactionMapper;
 
   public RefreshCommand(
-      ReturnManagementController returnManagementController,
-      ReturnBookPanel returnBookPanel,
-      IReturnTransactionMapper transactionMapper) {
+      IReturnController returnManagementController, ReturnBookPanel returnBookPanel) {
     this.returnManagementController = returnManagementController;
     this.returnBookPanel = returnBookPanel;
-    this.transactionMapper = transactionMapper;
   }
 
   @Override
   public void execute() {
-    returnManagementController.getReturnBookDTOs().clear();
-    returnManagementController.initTableData();
-    returnBookPanel.setTableData(
-        transactionMapper.toReturnBookTableData(returnManagementController.getReturnBookDTOs()));
-    returnBookPanel.showPanel(ReturnBookPanel.TABLE_PANEL);
+    returnManagementController.refreshTable();
 
     new ToastNotification(
             JOptionPane.getFrameForComponent(returnBookPanel),

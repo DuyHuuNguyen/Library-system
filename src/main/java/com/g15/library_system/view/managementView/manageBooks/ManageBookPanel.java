@@ -24,7 +24,7 @@ import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
+public class ManageBookPanel extends JPanel implements ObserverNotifyNewBook {
   private static final Logger log = LoggerFactory.getLogger(ManageBookPanel.class);
   private JPanel panelContent;
 
@@ -159,11 +159,11 @@ public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
       log.info("selected book {}", bookModify.toString());
     } catch (NullPointerException e) {
       ToastNotification panel =
-              new ToastNotification(
-                      JOptionPane.getFrameForComponent(this),
-                      ToastNotification.Type.WARNING,
-                      ToastNotification.Location.TOP_CENTER,
-                      "Please select book to modify");
+          new ToastNotification(
+              JOptionPane.getFrameForComponent(this),
+              ToastNotification.Type.WARNING,
+              ToastNotification.Location.TOP_CENTER,
+              "Please select book to modify");
       panel.showNotification();
       log.error("You do not select row | In manager book feature modify book");
     }
@@ -238,7 +238,7 @@ public class ManageBookPanel extends JPanel  implements ObserverNotifyNewBook {
       this.bookController.importExcel(ImportExcelRequest.builder().url(path).build());
 
     } else {
-      log.error("😒😒😒😒 error import file excel");
+      log.error("error import file excel");
     }
   }
 

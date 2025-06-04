@@ -1,4 +1,4 @@
-package com.g15.library_system.entity.strategies.tiers;
+package com.g15.library_system.view.managementView.returnBooks.strategies.tiers;
 
 import lombok.Getter;
 

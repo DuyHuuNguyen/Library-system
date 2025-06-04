@@ -1,8 +1,8 @@
 package com.g15.library_system.view.managementView.returnBooks.factories;
 
-import com.g15.library_system.entity.strategies.FineStrategyType;
-import com.g15.library_system.entity.strategies.OverdueFineStrategy;
-import com.g15.library_system.entity.strategies.PerBookFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.FineStrategyType;
+import com.g15.library_system.view.managementView.returnBooks.strategies.OverdueFineStrategy;
+import com.g15.library_system.view.managementView.returnBooks.strategies.PerBookFineStrategy;
 
 public class PerBookFineFactory implements IFineStrategyFactory {
 
@@ -12,7 +12,7 @@ public class PerBookFineFactory implements IFineStrategyFactory {
   }
 
   @Override
-  public OverdueFineStrategy createStrategy(FineStrategyType type) {
+  public OverdueFineStrategy createStrategy() {
     return new PerBookFineStrategy(1000);
   }
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -34,11 +35,12 @@ public class EmailConsumerServiceImpl implements EmailConsumerService {
     this.mailService.sendTransactionContent(transaction);
   }
 
+
   @Override
   @RabbitHandler
-  @RabbitListener(queues = {"${rabbitmq.sendEmailTextQueue}"})
+  @RabbitListener(queues = {"${rabbitmq.newReaderQueue}"})
   public <T extends EmailContent> void receive(EmailMessageDTO<T> emailMessageDTO) {
-    log.info("send only text queue .... received message");
+    log.info("👌👌send only text queue .... received message");
     this.mailService.send(emailMessageDTO);
   }
 }
